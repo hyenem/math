@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6장 거리화와 완비성 — 위상수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="topology" data-chapter="ch06.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§34, §43, §48)</p>
+  <h1><span class="ch-num">6</span> 거리화와 완비성</h1>
+  <p class="ch-source">여정의 완결 — “어떤 위상공간이 사실은 거리공간인가?”(우리손
+  거리화 정리), 그리고 해석학의 완비성이 위상의 무대에서 마지막으로 한 번 더
+  일합니다 (베어 범주 정리).</p>
+</div>
+
+<p>1장에서 거리를 버렸습니다. 마지막 장의 질문은 그 여정의 자연스러운 매듭입니다 —
+<strong>언제 거리를 되찾을 수 있는가?</strong> 즉, 어떤 위상공간 $(X, \mathcal{T})$에
+대해 $\mathcal{T}$를 만들어내는 거리 $d$가 존재하는가 (<strong>거리화 가능</strong>).
+필요조건은 이미 압니다 — 거리공간은 하우스도르프이고 정규이며 제1가산이니까,
+그중 하나라도 깨지면 탈락 (밀착위상, 여유한위상, $\mathbb{R}_\ell$…).
+놀라운 것은 충분조건이 생각보다 싸다는 것입니다.</p>
+
+<h2 id="sec-metrization">1. 우리손 거리화 정리</h2>
+
+<div class="box box-thm" id="def-metrizable"><span class="box-label">정리 · 우리손 거리화 정리 <span class="label-en">Urysohn metrization theorem</span> (문크레스 §34)</span>
+  <p><strong>이 정리가 하는 일:</strong> 위상적 조건 두 개로 거리의 존재를 보증한다 —
+  이 과목 전반부의 최종 보스.</p>
+  <p style="text-align:center;"><strong>정칙($T_3$) + 제2가산 $\Rightarrow$ 거리화 가능</strong></p>
+  <p><em>증명의 설계도</em> (아이디어만 — 상세는 문크레스):
+  ① 정칙 + 제2가산 $\Rightarrow$ 정규 (가산 기저로 우리손의 층 쌓기가 가능해짐)
+  ② 가산 기저의 쌍 $B_1 \subset B_2$마다 <a class="term" data-term="urysohn-lemma">우리손
+  보조정리</a>로 연속함수 $f_n$을 뽑아 <strong>가산 함수족</strong>을 만들고
+  ③ $F(x) = (f_1(x), f_2(x), \dots)$로 $X$를 <strong>힐베르트 큐브</strong>
+  $[0,1]^{\mathbb{N}}$ (거리공간!)에 <strong>묻는다</strong>(embedding) —
+  거리공간의 부분공간은 거리공간이므로 끝.</p>
+  <p>— “위상에서 함수를 만든다(우리손)”가 “함수로 공간을 좌표화한다(묻기)”로
+  승격되는 구조. 선형대수 2장에서 기저가 공간을 $F^n$에 좌표화했던 것의 위상판이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① 역은 성립하지 않는다 — 거리화 가능하다고 제2가산인 것은 아니다
+  (비가산 이산공간: 이산거리로 거리화되지만 기저가 비가산).
+  완전한 동치(나가타-스미르노프 정리, 문크레스 §40)는 “$\sigma$-국소유한 기저”라는
+  더 섬세한 조건을 쓴다 — 우리손 정리는 “가분 거리공간”의 완전한 특징화
+  (정칙 + 제2가산 $\iff$ 가분 거리화 가능)로 기억하는 것이 정확하다.
+  ② 거리화 가능성은 “어떤 거리인지”를 말해주지 않는다 — 같은 위상을 주는 거리는
+  무한히 많다 ($d$와 $\min(d, 1)$은 같은 위상 — “유계”가 위상 개념이 아닌 이유의
+  재확인).</p>
+</div>
+
+<h2 id="sec-complete">2. 완비성 — 해석학과의 재회</h2>
+
+<div class="box box-def" id="def-complete-revisit">
+  <span class="box-label">정의 · 완비 거리공간 (재회) <span class="label-en">complete metric space</span></span>
+  <p>모든 코시 수열이 수렴하는 거리공간 (해석학 3장 —
+  <a class="term" data-term="complete-space">완비 거리공간</a>).
+  주의: <strong>완비성은 위상 불변량이 아니다!</strong>
+  $(0, 1) \approx \mathbb{R}$ (위상동형)인데 $\mathbb{R}$은 완비, $(0,1)$은
+  (표준 거리로) 아니다 — 완비성은 거리의 성질이지 위상의 성질이 아니다.
+  (그래서 “완비 거리화 가능”이라는 위상적 개념을 따로 쓴다 — $(0,1)$도 다른 거리로는
+  완비 거리화 가능.)</p>
+  <p>중요 사실: <strong>컴팩트 거리공간은 완비</strong> (해석학 3장 — 부분수열 극한으로
+  코시 수열 전체가 끌려감), $C(X, \mathbb{R})$ (컴팩트 $X$ 위 연속함수 공간, 균등거리)도
+  완비 — 해석학 7장 “균등 코시 $\Rightarrow$ 균등수렴”이 정확히 이 완비성이었다.</p>
+</div>
+
+<div class="box box-thm" id="def-baire-category"><span class="box-label">정리 · 베어 범주 정리 <span class="label-en">Baire category theorem</span> (문크레스 §48)</span>
+  <p><strong>이 정리가 하는 일:</strong> 완비 공간은 “얇은 조각 가산 개”로 덮을 수 없다 —
+  존재 증명의 강력한 엔진.</p>
+  <p>완비 거리공간(또는 컴팩트 하우스도르프 공간) $X$에서:
+  조밀한 열린집합 가산 개의 교집합은 여전히 조밀하다.
+  동치 표현: $X$가 공집합이 아니면, $X$를 <strong>내부가 빈 닫힌집합</strong>(“얇은”
+  집합) 가산 개의 합집합으로 쓸 수 없다.</p>
+  <p><em>증명의 아이디어:</em> 얇은 집합들을 피해 가며 반지름이 줄어드는 닫힌 공들을
+  중첩시키고 — 중심들이 코시 수열 — <strong>완비성으로 극한점을 얻는다</strong>
+  (해석학 2장 구간축소법의 직계 후손).</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 베어 정리의 열매들</span>
+  <p><strong>(a) $\mathbb{Q}$는 완비 거리화 불가능:</strong> $\mathbb{Q} = \bigcup_{q} \{q\}$
+  — 한 점 집합 가산 개의 합인데, 각 $\{q\}$는 ($\mathbb{Q}$에서) 내부가 빈 닫힌집합.
+  베어 정리 위반이므로 어떤 거리로도 완비가 될 수 없다.
+  ($\mathbb{R}$은 비가산이어서 같은 논증이 통하지 않는다 — 실제로 베어 정리에서
+  “완비 공간 $\mathbb{R}$은 비가산”이 따라 나온다: 해석학 2장 비가산성의 세 번째
+  증명이다!)</p>
+  <p><strong>(b) 연속인데 처처 미분불능인 함수의 “흔함”:</strong> 해석학 7장에서
+  바이어슈트라스 함수를 손수 지었지만, 베어 정리는 더 강한 말을 한다 —
+  $C[0,1]$ (완비!) 안에서 “어딘가 미분가능한 함수”들은 얇은 집합 가산 합에 들어가므로,
+  <strong>“전형적인” 연속함수는 처처 미분불능</strong>이다. 반례가 예외가 아니라
+  일반이었던 것.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 위상수학의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">6장의 줄거리</span>
+  <p><a class="term" data-term="metrizable">우리손 거리화 정리</a>:
+  정칙 + 제2가산 $\Rightarrow$ 거리화 가능 — 우리손 보조정리로 가산 함수족을 만들어
+  힐베르트 큐브에 묻는다 (역은 나가타-스미르노프의 몫)
+  → 완비성은 위상 불변량이 아니다 ($(0,1) \approx \mathbb{R}$!)
+  → <a class="term" data-term="baire-category">베어 범주 정리</a>:
+  완비 공간은 얇은 조각 가산 개로 못 덮는다 — $\mathbb{Q}$의 완비화 불가능,
+  $\mathbb{R}$의 비가산성, “전형적 연속함수는 처처 미분불능”.</p>
+  <p><strong>과목 전체 되돌아보기:</strong> 위상 공리(1) → 연속·곱(2) → 연결(3) →
+  컴팩트(4) → 가산·분리공리(5) → 거리화·완비성(6). 한 문장으로:
+  <em>해석학에서 거리로 했던 모든 일을 열린집합만으로 다시 하고, 마지막에 “언제
+  거리를 되찾는가”까지 답했다.</em> 임용 최중요 축은 2장 원상 정의 · 3장 연결 논증 ·
+  4장 컴팩트-하우스도르프 콤보다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 공간의 거리화 가능 여부를 판정하고 근거를 서술하라.</p>
+  <p>(1) 밀착위상을 준 두 점 이상의 집합
+  (2) 여유한위상을 준 무한집합
+  (3) 이산위상을 준 임의의 집합</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>거리공간이면 반드시 갖는 성질(하우스도르프) 하나로 (1), (2)가 탈락한다.
+    (3)은 1장에서 거리를 이미 만들었다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1), (2) <strong>불가능.</strong> 거리공간은 하우스도르프인데 (해석학 —
+    반지름 절반 공), 밀착위상은 두 점을 가를 열린집합이 아예 없고, 여유한위상은
+    서로소 열린쌍이 없다 (1장). 필요조건 위반.</p>
+    <p>(3) <strong>가능.</strong> 이산거리 $d(x, y) = 1$ ($x \neq y$)가 이산위상을 만든다
+    (1장 문제). — 거리화 가능성 판정의 1차 필터는 언제나 분리공리다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 완비성은 위상동형으로 보존된다.<br>
+  (2) $\mathbb{R}_\ell$은 거리화 가능하다.<br>
+  (3) 컴팩트 거리화 가능 공간은 완비 거리화 가능하다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $(0,1)$과 $\mathbb{R}$. (2) 5장의 가산공리 논증. (3) 컴팩트 거리공간은 완비
+    (해석학 3장).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $(0, 1) \approx \mathbb{R}$ ($\tan$ 변환)인데 표준 거리에서
+    한쪽만 완비. 완비성은 거리의 성질 — 위상동형은 거리를 운반하지 않는다.</p>
+    <p>(2) <strong>거짓.</strong> $\mathbb{R}_\ell$은 가분($\mathbb{Q}$ 조밀)인데 제2가산이
+    아니다 (5장). 거리공간에서는 가분 $\Rightarrow$ 제2가산이므로 — 거리화 불가.
+    (분리공리로는 안 걸러진다 — $\mathbb{R}_\ell$은 정규다! 가산공리가 잡아내는 반례.)</p>
+    <p>(3) <strong>참.</strong> 거리화하는 거리 $d$를 잡으면 $(X, d)$는 컴팩트 거리공간 —
+    해석학 3장(루딘 3.11)에 의해 완비다. 즉 그 거리 자체가 완비 거리.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §48 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>베어 범주 정리를 이용하여, 완비 거리공간 $X$ (공집합 아님)가
+  고립점 없이 가산이면 모순임을 보여라 — 즉 <strong>고립점 없는 공집합 아닌 완비
+  거리공간은 비가산</strong>임을 증명하라 (해석학 2장 완전집합 정리의 재증명).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$X = \bigcup_{x \in X} \{x\}$로 쓰고, 고립점이 없으면 각 $\{x\}$가 내부가 빈
+    닫힌집합임을 확인하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$X$가 가산이라 하자: $X = \{x_1, x_2, \dots\} = \bigcup_n \{x_n\}$.</p>
+    <p>각 $\{x_n\}$은 닫혀 있다 (거리공간은 하우스도르프 — $T_1$).
+    내부가 비어 있다: $\{x_n\}$이 내부를 가지면 어떤 열린 공이 $\{x_n\}$에 담겨
+    $x_n$이 고립점이 된다 — 가정 위반.</p>
+    <p>그러면 $X$가 “내부 빈 닫힌집합 가산 개의 합” — 베어 범주 정리에 모순
+    ($X$는 완비이고 공집합이 아니므로). 그러므로 $X$는 비가산이다. $\blacksquare$</p>
+    <p>(해석학 2장 “완전집합은 비가산”(루딘 2.43)의 위상 버전 — 그때는 중첩 구간
+    구성을 손으로 했지만, 베어 정리가 그 구성을 한 번에 포장해 준다. 같은 정리의
+    세 번째 조우: 대각선 논법 → 완전집합 → 베어.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>종합 판정 서술형</span>
+  </div>
+  <p>다음 각 공간 쌍이 위상동형인지 판정하고, 판정에 사용한 위상 불변량을 명시하라.</p>
+  <p>(1) $[0, 1]$과 $S^1$ &nbsp;&nbsp; (2) $\mathbb{Q}$와 $\mathbb{Z}$ (표준 부분공간
+  위상) &nbsp;&nbsp; (3) $(0, 1)$과 $\mathbb{R}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 점 빼기 (3장). (2) 고립점 유무 — $\mathbb{Z}$는 이산, $\mathbb{Q}$는 고립점이
+    하나도 없다. (3) 위상동형 사상을 직접 제시.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>아니다.</strong> 불변량: 비절단점 개수 (3장). $[0,1]$은 내부점을 빼면
+    비연결이 되지만, $S^1$은 <em>어느</em> 점을 빼도 연결 (호는 구간과 위상동형).</p>
+    <p>(2) <strong>아니다.</strong> 불변량: 고립점의 존재. $\mathbb{Z}$는 모든 점이 고립점
+    (부분공간 위상이 이산 — $(n - \frac12, n + \frac12) \cap \mathbb{Z} = \{n\}$)이지만,
+    $\mathbb{Q}$는 조밀해서 고립점이 하나도 없다. 위상동형은 고립점을 고립점으로
+    보낸다. (둘 다 가산·완전비연결·비컴팩트라 다른 불변량으로는 안 갈린다 — 정밀한
+    자가 필요했던 예.)</p>
+    <p>(3) <strong>위상동형이다.</strong> $h(x) = \tan\left( \pi x - \frac{\pi}{2} \right)$가
+    $(0,1) \to \mathbb{R}$의 전단사이고 양방향 연속 (연속 전단사 + 연속 역함수 $\arctan$
+    변환). — “유계/완비”가 위상 불변량이 아님을 함께 언급하면 만점 답안.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

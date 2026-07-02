@@ -489,6 +489,25 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/topology/ch05.html#def-urysohn-lemma"
   },
 
+  "metrizable": {
+    "ko": "거리화 가능 / 우리손 거리화 정리",
+    "en": "metrizable, Urysohn metrization",
+    "short": "위상을 만들어내는 거리가 존재하는 것. 우리손 정리: 정칙 + 제2가산 $\\Rightarrow$ 거리화 가능 (우리손 함수족으로 힐베르트 큐브에 묻기). 1차 필터는 분리공리, 2차 필터는 가산공리($\\mathbb{R}_\\ell$).",
+    "href": "subjects/topology/ch06.html#def-metrizable"
+  },
+  "baire-category": {
+    "ko": "베어 범주 정리",
+    "en": "Baire category theorem",
+    "short": "완비 거리공간은 내부가 빈 닫힌집합 가산 개로 덮을 수 없다 (조밀 열린집합 가산 교집합은 조밀). 열매: $\\mathbb{Q}$ 완비화 불가, $\\mathbb{R}$ 비가산, 전형적 연속함수는 처처 미분불능.",
+    "href": "subjects/topology/ch06.html#def-baire-category"
+  },
+  "complete-revisit": {
+    "ko": "완비성 (위상의 눈으로)",
+    "en": "completeness revisited",
+    "short": "완비성은 위상 불변량이 아니다 — $(0,1) \\approx \\mathbb{R}$인데 표준 거리로는 한쪽만 완비. 거리의 성질이지 위상의 성질이 아니며, 컴팩트 거리공간은 항상 완비다.",
+    "href": "subjects/topology/ch06.html#def-complete-revisit"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {

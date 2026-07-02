@@ -99,7 +99,7 @@ window.MATH_TOC = [
       { file: "ch03.html", num: 3, title: "연결성", ready: true },
       { file: "ch04.html", num: 4, title: "컴팩트성", ready: true },
       { file: "ch05.html", num: 5, title: "가산공리와 분리공리", ready: true },
-      { file: "ch06.html", num: 6, title: "거리화와 완비성", ready: false }
+      { file: "ch06.html", num: 6, title: "거리화와 완비성", ready: true }
     ]
   },
   {
