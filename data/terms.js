@@ -475,7 +475,7 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "ko": "그람-슈미트 직교화",
     "en": "Gram–Schmidt process",
     "short": "독립집합을 직교집합으로 바꾸는 기계: $u_k = w_k - \\sum_{j \\lt k} \\frac{\\langle w_k, u_j \\rangle}{\\|u_j\\|^2} u_j$ — \"앞 방향 그림자 빼기\"의 반복. 정규직교기저의 존재를 구성적으로 증명한다.",
-    "href": "subjects/linear-algebra/ch06.html#def-orthonormal-basis"
+    "href": "subjects/linear-algebra/ch06.html#def-gram-schmidt"
   },
   "orthogonal-complement": {
     "ko": "직교여공간",
