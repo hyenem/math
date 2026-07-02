@@ -339,5 +339,44 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "equicontinuity",
     "short": "하나의 $\\delta$가 모든 지점과 족의 모든 함수를 동시에 감당하는 것. 점별 유계 + 동등연속이면 컴팩트 위에서 균등수렴 부분수열이 존재한다 (아르젤라-아스콜리, Rudin 7.25).",
     "href": "subjects/analysis/ch07.html#def-equicontinuity"
+  },
+
+  /* ---------- 해석학 8장: 특수 함수 ---------- */
+
+  "power-series": {
+    "ko": "멱급수",
+    "en": "power series",
+    "short": "$\\sum c_n x^n$. 수렴반지름 $R = 1/\\limsup \\sqrt[n]{|c_n|}$ 안에서 절대수렴하고, 컴팩트 부분구간에서 균등수렴하며, 항별 미분이 정당하다 (Rudin 8.1).",
+    "href": "subjects/analysis/ch08.html#def-power-series"
+  },
+  "exp-function": {
+    "ko": "지수함수",
+    "en": "exponential function",
+    "short": "$E(z) = \\sum z^n/n!$ (수렴반지름 $\\infty$)이 정의. 코시 곱으로 $E(z)E(w) = E(z+w)$, 항별 미분으로 $E' = E$. 로그는 그 역함수, $x^\\alpha = E(\\alpha \\ln x)$가 일반 거듭제곱의 정의다.",
+    "href": "subjects/analysis/ch08.html#def-exp-function"
+  },
+  "log-function": {
+    "ko": "로그함수",
+    "en": "logarithm",
+    "short": "순증가 전단사 $E : \\mathbb{R} \\to (0,\\infty)$의 역함수. $\\ln'(y) = 1/y$이고 $\\ln y = \\int_1^y dt/t$와 일치. 일반 거듭제곱 $x^\\alpha = E(\\alpha \\ln x)$의 재료.",
+    "href": "subjects/analysis/ch08.html#def-log-function"
+  },
+  "trig-functions": {
+    "ko": "삼각함수 (해석적 정의)",
+    "en": "trigonometric functions",
+    "short": "$C(x) = \\frac{E(ix)+E(-ix)}{2}$, $S(x) = \\frac{E(ix)-E(-ix)}{2i}$ — 오일러 공식이 정의가 된다. $C^2 + S^2 = 1$, $C' = -S$, $S' = C$이고, $\\pi/2$는 $C$의 가장 작은 양의 영점으로 정의된다.",
+    "href": "subjects/analysis/ch08.html#def-trig-functions"
+  },
+  "gamma-function": {
+    "ko": "감마 함수",
+    "en": "Gamma function",
+    "short": "$\\Gamma(x) = \\int_0^\\infty t^{x-1}e^{-t}dt$. $\\Gamma(n+1) = n!$ — 팩토리얼의 연속 확장이며, 로그볼록성 조건이 이 확장을 유일하게 결정한다 (보어-몰레루프).",
+    "href": "subjects/analysis/ch08.html#def-gamma-function"
+  },
+  "fourier-series": {
+    "ko": "푸리에 급수",
+    "en": "Fourier series",
+    "short": "$c_n = \\frac{1}{2\\pi}\\int f e^{-inx}dx$로 계수를 뽑아 $f \\sim \\sum c_n e^{inx}$. 직교성이 근거이고, 파세발 정리 $\\frac{1}{2\\pi}\\int |f|^2 = \\sum |c_n|^2$가 하이라이트 ($\\Rightarrow \\sum 1/n^2 = \\pi^2/6$).",
+    "href": "subjects/analysis/ch08.html#def-fourier-series"
   }
 });

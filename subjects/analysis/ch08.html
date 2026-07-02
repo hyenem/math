@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8장 특수 함수 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch08.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin, Principles of Mathematical Analysis</p>
+  <h1><span class="ch-num">8</span> 특수 함수</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다. 앞 7개 장의 도구가 총출동해
+  $e^x, \ln x, \sin x$를 <em>엄밀하게 처음부터</em> 짓는 장입니다.</p>
+</div>
+
+<p>고등학교부터 써 온 $e^x$, $\ln x$, $\sin x$ — 그런데 정확히 <em>정의</em>가 뭐였나요?
+“$e$를 $x$번 곱한다”는 $x$가 무리수면 무의미하고, “빗변분의 높이”는 각도가 뭔지부터
+다시 물어야 합니다. 이 장의 프로그램: <strong>멱급수로 이 함수들을 정의하고, 알던 성질
+전부를 정리로 되찾는다.</strong> 재료는 3장(급수) + 7장(균등수렴)입니다.</p>
+
+<h2 id="sec-power">1. 멱급수 — 해석학의 만능 건축 자재</h2>
+
+<div class="box box-def" id="def-power-series">
+  <span class="box-label">정의 8.1 이전 · 멱급수와 수렴반지름 <span class="label-en">power series, radius of convergence</span></span>
+  <p><strong>멱급수</strong>는 $\displaystyle f(x) = \sum_{n=0}^{\infty} c_n x^n$ 꼴의 함수급수다.
+  3장의 근판정법을 적용하면, 수렴 영역이 언제나 <strong>구간</strong>임이 나온다:</p>
+  $$R = \frac{1}{\limsup_{n \to \infty} \sqrt[n]{|c_n|}} \quad (\text{수렴반지름})$$
+  <p>$|x| \lt R$이면 절대수렴, $|x| \gt R$이면 발산.
+  끝점 $x = \pm R$은 급수마다 따로 조사해야 한다.
+  (<a class="term" data-term="limsup-liminf">상극한</a>이라서 항상 정의된다는 것이 요점 —
+  3장에서 예고한 실전 투입이다.)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 8.1 · 멱급수의 해석적 성질</span>
+  <p><strong>이 정리가 하는 일:</strong> 수렴반지름 안에서 멱급수는 “다항식처럼” 다뤄도
+  된다는 종합 면허.</p>
+  <p>$\sum c_n x^n$이 $|x| \lt R$에서 수렴하면:</p>
+  <p>① 임의의 $\varepsilon \gt 0$에 대해 $[-R + \varepsilon, R - \varepsilon]$에서
+  <strong>균등수렴</strong>한다. 따라서 $f$는 $(-R, R)$에서 연속이다.<br>
+  ② $f$는 $(-R, R)$에서 미분가능하고, <strong>항별 미분</strong>이 정당하다:
+  $f'(x) = \sum n c_n x^{n-1}$ — 게다가 수렴반지름이 같다.
+  (반복하면: 멱급수는 무한 번 미분가능하고 $c_n = \frac{f^{(n)}(0)}{n!}$ — 테일러 계수.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— ①은 M-판정법($M_n = |c_n|(R-\varepsilon)^n$), ②는 $\sum nc_nx^{n-1}$의 수렴반지름이 같음($\sqrt[n]{n} \to 1$)을 확인한 뒤 7.17을 적용.</span></summary>
+  <p>① $|x| \le R - \varepsilon$이면 $|c_n x^n| \le |c_n| (R - \varepsilon)^n = M_n$이고,
+  $R - \varepsilon \lt R$에서 절대수렴하므로 $\sum M_n \lt \infty$ —
+  <a class="term" data-term="m-test">M-판정법</a>으로 균등수렴. 연속성은 정리 7.12.</p>
+  <p>② $\limsup \sqrt[n]{n|c_n|} = \limsup \sqrt[n]{|c_n|}$ ($\sqrt[n]{n} \to 1$이므로) —
+  항별 미분한 급수의 수렴반지름도 $R$. 컴팩트 부분구간마다 도함수 급수가 균등수렴하므로
+  정리 7.17에 의해 항별 미분이 정당하다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 8.2 · 아벨의 정리 <span class="label-en">Abel's theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 끝점에서 수렴하면, 함숫값이 끝점까지 연속으로
+  이어진다.</p>
+  <p>$\sum c_n$이 수렴하면 $\displaystyle\lim_{x \to 1^-} \sum_{n=0}^{\infty} c_n x^n = \sum_{n=0}^{\infty} c_n$.</p>
+  <p>고전 응용: $\ln(1+x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots$ ($|x| \lt 1$)에서
+  우변은 $x = 1$에서 수렴(교대급수)하므로, 아벨 정리로</p>
+  $$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots = \ln 2$$
+  <p>— 3장에서 “수렴한다”고만 했던 교대조화급수의 합이 드디어 계산된다.</p>
+</div>
+
+<h2 id="sec-exp">2. 지수·로그·삼각함수를 처음부터 짓기</h2>
+
+<div class="box box-def" id="def-exp-function">
+  <span class="box-label">정의 8.6 이전 · 지수함수 <span class="label-en">exponential function</span></span>
+  $$E(z) = \sum_{n=0}^{\infty} \frac{z^n}{n!}$$
+  <p>비판정법으로 수렴반지름 $R = \infty$ — 모든 복소수에서 절대수렴한다.
+  급수의 코시 곱(3.50)으로 <strong>지수법칙</strong>이 계산으로 나온다:</p>
+  $$E(z)E(w) = \sum_n \sum_k \frac{z^k w^{n-k}}{k!(n-k)!} = \sum_n \frac{(z+w)^n}{n!} = E(z + w)$$
+  <p>(가운데 등호가 이항정리다.)</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — “되찾기”의 목록</span>
+  <p>정의는 급수 한 줄이지만, 알던 성질이 전부 <em>정리로</em> 복구됩니다:
+  $E(0) = 1$, $E(-z) = 1/E(z)$ (지수법칙에서), $E(x) \gt 0$ (실수에서),
+  항별 미분으로 $E'(x) = E(x)$, 순증가, $E(1) = e$ (3장의 그 $e$와 일치, 정리 3.31),
+  유리수 $p/q$에서 $E(p/q) = e^{p/q}$ — 그리고 연속성으로 <strong>무리수 지수까지 확장</strong>
+  (4장 연습에서 예고했던 “조밀집합 위의 값이 전체를 결정한다”가 실제로 쓰이는 곳).
+  $x$가 무리수일 때 $e^x$의 정의가 비로소 완성됩니다.</p>
+</div>
+
+<div class="box box-def" id="def-log-function">
+  <span class="box-label">정리 8.6(f) 근방 · 로그 <span class="label-en">logarithm</span></span>
+  <p>$E : \mathbb{R} \to (0, \infty)$는 순증가 전단사이므로 <strong>역함수</strong>가 존재한다 —
+  그것이 $\ln$이다 (5장 역함수 미분 정리로 $\ln'(y) = \frac{1}{y}$, 따라서
+  $\ln y = \int_1^y \frac{dt}{t}$와도 일치).
+  일반 거듭제곱도 이제 정의된다: $x^\alpha = E(\alpha \ln x)$ ($x \gt 0$) —
+  “$x$를 $\alpha$번 곱한다”가 아니라 이것이 <em>정의</em>다.</p>
+</div>
+
+<div class="box box-def" id="def-trig-functions">
+  <span class="box-label">정의 8.7 이전 · 삼각함수 <span class="label-en">trigonometric functions</span></span>
+  <p>기하 없이, 오일러의 방식으로 정의한다:</p>
+  $$C(x) = \frac{E(ix) + E(-ix)}{2}, \qquad S(x) = \frac{E(ix) - E(-ix)}{2i}$$
+  <p>즉 $E(ix) = C(x) + iS(x)$ (오일러 공식이 <em>정의</em>가 된다).
+  항별 계산으로 익숙한 급수가 나오고 ($C(x) = 1 - \frac{x^2}{2!} + \cdots$,
+  $S(x) = x - \frac{x^3}{3!} + \cdots$), $|E(ix)| = 1$에서 $C^2 + S^2 = 1$,
+  항별 미분으로 $C' = -S$, $S' = C$.</p>
+  <p><strong>$\pi$의 정의:</strong> $C(x) = 0$의 가장 작은 양의 해를 $\frac{\pi}{2}$로
+  <em>정의</em>한다 (해의 존재는 중간값 정리 — $C(0) = 1 \gt 0$, $C(2) \lt 0$을 급수로 추정).
+  주기성 $E(z + 2\pi i) = E(z)$이 따라 나온다. 원주율이 “원둘레/지름”이 아니라
+  코사인의 첫 영점으로 정의되는 것 — 기하를 해석학이 역수입하는 순간이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>“테일러 급수가 수렴하면 원래 함수로 수렴한다” — 거짓입니다. 반례 (루딘 연습 8.1):</p>
+  $$f(x) = e^{-1/x^2} \ (x \neq 0), \quad f(0) = 0$$
+  <p>은 무한 번 미분가능하고 모든 $n$에서 $f^{(n)}(0) = 0$ — 테일러 급수는 항등적으로
+  $0$으로 수렴하지만 $f \not\equiv 0$입니다. <em>매끄러움($C^\infty$)과
+  해석성(멱급수 표현 가능)은 다른 개념</em>이고, 그 간극을 보여주는 표준 반례예요.
+  (이 함수는 미분기하에서 “부드러운 절단 함수”의 재료로 재활용됩니다.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $e$는 무리수다 (정리 3.32 회수)</span>
+  <p>$e = \sum \frac{1}{n!}$이 유리수 $\frac{p}{q}$라 가정하자. 꼬리 추정</p>
+  $$0 \lt e - \sum_{n=0}^{q} \frac{1}{n!} = \sum_{n \gt q} \frac{1}{n!} \lt \frac{1}{q!} \cdot \frac{1}{q}$$
+  <p>(기하급수 비교)에서 양변에 $q!$을 곱하면 $0 \lt q!\,e - (\text{정수}) \lt \frac{1}{q} \le 1$ —
+  정수와 정수 사이에 낀 비정수 정수라는 모순. $e$의 급수가 “너무 빨리” 수렴한다는 것이
+  무리성의 원인이다.</p>
+</div>
+
+<h2 id="sec-fourier">3. 푸리에 급수 — 삼각함수로 함수를 분해하기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>멱급수가 함수를 “$1, x, x^2, \dots$의 무한 결합”으로 쓰는 것이라면,
+  푸리에 급수는 주기함수를 “진동수별 사인·코사인의 무한 결합”으로 씁니다.
+  핵심 관점 전환: 삼각함수들 $\{e^{inx}\}$를 <strong>서로 직교하는 좌표축</strong>처럼
+  다루는 것 — 계수는 “내적”(적분)으로 뽑아냅니다. 1장 코시-슈바르츠에서 시작한
+  “내적” 관점이 무한차원으로 승격되는 장면입니다.</p>
+</div>
+
+<div class="box box-def" id="def-fourier-series">
+  <span class="box-label">정의 8.9–8.10 · 푸리에 급수 <span class="label-en">Fourier series</span></span>
+  <p>주기 $2\pi$의 적분가능한 $f$에 대해 <strong>푸리에 계수</strong>와
+  <strong>푸리에 급수</strong>를 정의한다:</p>
+  $$c_n = \frac{1}{2\pi} \int_{-\pi}^{\pi} f(x)\, e^{-inx}\, dx, \qquad f \sim \sum_{n=-\infty}^{\infty} c_n e^{inx}$$
+  <p>($\sim$은 “대응시킨다”일 뿐 — 수렴하는지, $f$로 수렴하는지는 별도의 (어려운)
+  질문이라서 등호를 쓰지 않는다.)
+  직교성이 계수 공식의 근거다:
+  $\frac{1}{2\pi}\int_{-\pi}^{\pi} e^{inx} e^{-imx} dx = \delta_{nm}$ ($n = m$이면 $1$, 아니면 $0$).</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 8.11–8.16 · 세 개의 큰 사실</span>
+  <p><strong>① 최적 근사 (8.11):</strong> 차수 $N$의 삼각다항식 중 $f$를
+  평균제곱 오차로 가장 잘 근사하는 것은 정확히 푸리에 부분합 $s_N$이다.</p>
+  <p><strong>② 베셀 부등식과 파세발 정리 (8.16):</strong></p>
+  $$\frac{1}{2\pi} \int_{-\pi}^{\pi} |f(x)|^2\, dx = \sum_{n=-\infty}^{\infty} |c_n|^2$$
+  <p>— “함수의 에너지 = 계수 에너지의 합” (피타고라스 정리의 무한차원판.
+  부등호($\ge$, 베셀)는 쉽고, 등호(파세발)는 7장의 삼각다항식 균등 근사가 필요하다).</p>
+  <p><strong>③ 점별 수렴 (8.14, 립시츠 조건):</strong> $f$가 $x$에서 립시츠 조건을
+  만족하면 ($|f(x+t) - f(x)| \le M|t|$ 근방에서) 푸리에 급수는 $x$에서 $f(x)$로 수렴한다.
+  — 일반 연속함수의 푸리에 급수는 발산할 수도 있다(!). 수렴 이론의 섬세함이 여기서 시작된다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 파세발로 $\sum 1/n^2$ 계산</span>
+  <p>$f(x) = x$ ($-\pi \le x \lt \pi$, 주기 연장)의 푸리에 계수를 계산하면
+  (부분적분 한 번) $c_0 = 0$, $c_n = \frac{(-1)^{n+1}}{in}$ ($n \neq 0$), 즉 $|c_n|^2 = \frac{1}{n^2}$.
+  파세발 정리에 넣으면:</p>
+  $$\frac{1}{2\pi} \int_{-\pi}^{\pi} x^2\, dx = \frac{\pi^2}{3} \cdot \frac{1}{2}\cdot 2 = \frac{\pi^2}{3} \cdot 1 \; \Longrightarrow\; \frac{\pi^2}{3} = 2 \sum_{n=1}^{\infty} \frac{1}{n^2}$$
+  <p>따라서 <strong>$\displaystyle\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}$</strong> —
+  바젤 문제. ($p$-급수가 수렴한다는 것(3장)에서 그 <em>값</em>까지 온 여정이다.
+  계산 확인: $\frac{1}{2\pi}\int_{-\pi}^{\pi} x^2 dx = \frac{1}{2\pi} \cdot \frac{2\pi^3}{3} = \frac{\pi^2}{3}$,
+  우변은 $\sum_{n \neq 0} \frac{1}{n^2} = 2\sum_{n \ge 1} \frac{1}{n^2}$.)</p>
+</div>
+
+<h2 id="sec-gamma">4. 감마 함수 — 팩토리얼의 연속화 (간보기)</h2>
+
+<div class="box box-def" id="def-gamma-function">
+  <span class="box-label">정의 8.17 · 감마 함수 <span class="label-en">Gamma function</span></span>
+  $$\Gamma(x) = \int_0^{\infty} t^{x-1} e^{-t}\, dt \quad (x \gt 0)$$
+  <p>부분적분으로 $\Gamma(x + 1) = x\,\Gamma(x)$, $\Gamma(1) = 1$이므로
+  $\Gamma(n + 1) = n!$ — 팩토리얼의 실수 확장이다.
+  루딘의 백미 (정리 8.19, 보어-몰레루프): <em>$\log \Gamma$가 볼록</em>하다는 조건이
+  이 확장을 <strong>유일하게</strong> 결정한다. “자연스러운 확장이 왜 하필 이것인가”에 대한
+  드문 완전한 답 — 여기서는 존재만 알아 두고, 상세는 필요할 때 돌아온다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 해석학 전반부의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">8장의 줄거리</span>
+  <p><a class="term" data-term="power-series">멱급수</a>: 수렴반지름($\limsup$!), 컴팩트
+  구간 균등수렴(M-판정법), 항별 미분, 아벨 정리(끝점 연속)
+  → 그 자재로 <a class="term" data-term="exp-function">지수함수</a> $E(z) = \sum z^n/n!$을
+  짓고 지수법칙·미분·역함수(로그)·무리수 지수를 <em>정리로</em> 되찾음
+  → $C, S$ (오일러 공식이 정의), $\pi$ = 코사인의 첫 영점, $C^\infty \neq$ 해석적
+  ($e^{-1/x^2}$)
+  → <a class="term" data-term="fourier-series">푸리에 급수</a>: 직교성으로 계수 추출,
+  최적 평균제곱 근사, 파세발 ($\Rightarrow \sum 1/n^2 = \pi^2/6$)
+  → 감마 함수: $n!$의 유일한 로그볼록 연속화.</p>
+  <p><strong>돌아보기:</strong> 1장 완비성 → 2장 컴팩트 → 3장 수렴 → 4장 연속 →
+  5장 MVT → 6장 적분 → 7장 균등수렴 → 8장에서 전부 사용. 여기까지가 임용 해석학의
+  본체입니다. (9장 이후 다변수·르베그는 필요해지면 확장.)</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 멱급수의 수렴반지름을 구하고, 끝점에서의 수렴 여부까지 판정하라.</p>
+  <p>(1) $\displaystyle\sum_{n=1}^{\infty} \frac{x^n}{n}$ &nbsp;&nbsp;
+  (2) $\displaystyle\sum_{n=1}^{\infty} \frac{x^n}{n^2}$ &nbsp;&nbsp;
+  (3) $\displaystyle\sum_{n=0}^{\infty} n!\, x^n$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1), (2)는 $\sqrt[n]{1/n}, \sqrt[n]{1/n^2} \to 1$. 끝점은 $p$-급수와 교대급수로.
+    (3)은 비판정법이 빠르다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $R = 1$. $x = 1$: 조화급수 — 발산. $x = -1$: 교대조화급수 — 수렴 (라이프니츠).
+    수렴 구간 $[-1, 1)$. (아벨 정리로 $x \to -1^+$ 값이 $-\ln 2$와 이어진다.)</p>
+    <p>(2) $R = 1$. 양 끝점 모두 $\sum \frac{(\pm1)^n}{n^2}$이 절대수렴 — 수렴 구간 $[-1, 1]$.</p>
+    <p>(3) $\left| \frac{(n+1)!\,x^{n+1}}{n!\,x^n} \right| = (n+1)|x| \to \infty$ ($x \neq 0$) —
+    $R = 0$. $x = 0$에서만 수렴하는 멱급수도 있다.</p>
+    <p>(세 예가 보여주듯 끝점 행동은 제각각 — $R$ 계산과 끝점 조사는 항상 별도 단계다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$E'(x) = E(x)$를 멱급수의 항별 미분(정리 8.1)으로 유도하고,
+  이로부터 $E$가 $\mathbb{R}$에서 순증가임을 논하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\left( \frac{x^n}{n!} \right)' = \frac{x^{n-1}}{(n-1)!}$ — 급수가 한 칸 밀릴 뿐이다.
+    양수성: $x \ge 0$은 급수에서 자명, $x \lt 0$은 $E(x)E(-x) = 1$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$R = \infty$이므로 정리 8.1에 의해 임의 구간에서 항별 미분이 정당하다:</p>
+    $$E'(x) = \sum_{n=1}^{\infty} \frac{n x^{n-1}}{n!} = \sum_{n=1}^{\infty} \frac{x^{n-1}}{(n-1)!} = E(x)$$
+    <p>$x \ge 0$이면 급수의 모든 항이 $\ge 0$이고 첫 항이 $1$이라 $E(x) \ge 1 \gt 0$.
+    $x \lt 0$이면 지수법칙에서 $E(x) = 1/E(-x) \gt 0$.
+    그러므로 $E' = E \gt 0$ 이 모든 실수에서 성립 — 정리 5.11에 의해 순증가. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 8장 연습 1 기반</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f(x) = e^{-1/x^2}$ ($x \neq 0$), $f(0) = 0$에 대해 $f'(0) = 0$임을 증명하라.
+  (모든 $n$에서 $f^{(n)}(0) = 0$이 되는 이유의 첫 단계다.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\frac{f(t)}{t} = \frac{e^{-1/t^2}}{t}$에서 $u = 1/t^2$로 치환하면 “지수가 다항식을
+    이긴다” 꼴이 된다: $e^u \gt u$ (급수에서) 같은 조잡한 부등식이면 충분하다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$t \neq 0$에 대해 $\left| \frac{f(t) - f(0)}{t} \right| = \frac{e^{-1/t^2}}{|t|}$.
+    $u = \frac{1}{t^2}$로 놓으면 이는 $\sqrt{u}\, e^{-u}$이고, 급수에서 $e^u \gt \frac{u^2}{2}$
+    ($u \gt 0$)이므로</p>
+    $$\sqrt{u}\, e^{-u} \lt \frac{2\sqrt{u}}{u^2} = \frac{2}{u^{3/2}} \xrightarrow{u \to \infty} 0$$
+    <p>$t \to 0 \iff u \to \infty$이므로 몫이 $0$으로 수렴 — $f'(0) = 0$. $\blacksquare$</p>
+    <p>(귀납적으로 $f^{(n)}(x) = P_n(1/x)\, e^{-1/x^2}$ ($P_n$ 다항식) 꼴임을 보이면
+    같은 논법으로 모든 $f^{(n)}(0) = 0$ — 테일러 급수가 $0$인데 함수는 $0$이 아닌
+    “비해석적 $C^\infty$ 함수”가 완성된다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 8장 연습 12 유형 (파세발 응용)</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f(x) = x^2$ ($-\pi \le x \le \pi$, 주기 연장)의 푸리에 급수가</p>
+  $$x^2 = \frac{\pi^2}{3} + 4 \sum_{n=1}^{\infty} \frac{(-1)^n}{n^2} \cos nx$$
+  <p>임을 받아들이고, $x = \pi$를 대입하여 $\sum \frac{1}{n^2} = \frac{\pi^2}{6}$을 유도하라.
+  (이 대입이 정당한 이유도 한 줄로 언급할 것.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\cos n\pi = (-1)^n$이므로 $(-1)^n \cdot (-1)^n = 1$. 정당성: 이 급수는
+    $M$-판정법으로 균등수렴하므로 합이 연속 — 점 대입이 허용된다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>급수는 $\left| \frac{4(-1)^n \cos nx}{n^2} \right| \le \frac{4}{n^2}$로
+    M-판정법에 의해 $\mathbb{R}$에서 균등수렴하고, 따라서 합 함수는 연속이며
+    (주기 연장한 $x^2$도 $x = \pi$에서 연속이므로) 점 $x = \pi$ 대입이 정당하다.</p>
+    $$\pi^2 = \frac{\pi^2}{3} + 4 \sum_{n=1}^{\infty} \frac{(-1)^n (-1)^n}{n^2} = \frac{\pi^2}{3} + 4 \sum_{n=1}^{\infty} \frac{1}{n^2}$$
+    <p>정리하면 $\sum_{n \ge 1} \frac{1}{n^2} = \frac{1}{4}\left( \pi^2 - \frac{\pi^2}{3} \right) = \frac{\pi^2}{6}$. $\blacksquare$</p>
+    <p>(본문의 파세발 방법과 다른 경로로 같은 값 — 바젤 문제는 도구 시험장으로 애용된다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>멱급수 연산</span>
+  </div>
+  <p>$f(x) = \displaystyle\sum_{n=1}^{\infty} \frac{x^n}{n}$ ($|x| \lt 1$)에 대해
+  $f'(x)$를 구하고, 이를 적분하여 $f(x) = -\ln(1 - x)$임을 보여라.
+  각 단계에서 사용한 정리를 명시하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>항별 미분(8.1) → 기하급수 → “도함수가 같고 한 점에서 값이 같으면 같은 함수”(5.11의
+    따름).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>수렴반지름은 $1$. 정리 8.1②(항별 미분)에 의해 $|x| \lt 1$에서</p>
+    $$f'(x) = \sum_{n=1}^{\infty} x^{n-1} = \frac{1}{1 - x} \quad (\text{기하급수, 정리 3.26})$$
+    <p>$g(x) = -\ln(1 - x)$로 놓으면 $g'(x) = \frac{1}{1-x} = f'(x)$이고
+    $f(0) = 0 = g(0)$. $(f - g)' \equiv 0$이므로 정리 5.11에 의해 $f - g$는 상수이고,
+    $0$에서의 값이 $0$이므로 $f \equiv g$: $f(x) = -\ln(1 - x)$. $\blacksquare$</p>
+    <p>(끝점 보너스: $x = -1$에서 급수가 수렴하므로 아벨 정리(8.2)로
+    $\sum \frac{(-1)^n}{n} = -\ln 2$ — 교대조화급수의 값이 또 한 번 확인된다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>급수-적분 종합 서술형</span>
+  </div>
+  <p>다음을 증명하라:</p>
+  $$\int_0^1 \frac{\ln(1+x)}{x}\, dx = \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n^2}$$
+  <p>(급수와 적분의 교환을 정당화하는 부분이 채점 포인트다.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\frac{\ln(1+x)}{x} = \sum \frac{(-1)^{n+1} x^{n-1}}{n}$ ($0 \lt x \le 1$).
+    $[0, 1]$ 전체에서 균등수렴을 보이려면 교대급수의 나머지 추정
+    ($|R_N| \le$ 첫 버림항)을 쓰는 것이 깔끔하다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$|x| \lt 1$에서 $\ln(1 + x) = \sum_{n \ge 1} \frac{(-1)^{n+1} x^n}{n}$이므로
+    ($x \neq 0$에서 나누어)</p>
+    $$\frac{\ln(1+x)}{x} = \sum_{n=1}^{\infty} \frac{(-1)^{n+1} x^{n-1}}{n} \quad (0 \lt x \lt 1,\ x = 0\text{은 } 1\text{로 연속 확장})$$
+    <p><strong>균등수렴:</strong> 고정된 $x \in [0, 1]$에서 이 급수는 항의 절댓값
+    $\frac{x^{n-1}}{n}$이 감소하며 $0$으로 가는 교대급수다. 교대급수의 나머지 추정에 의해</p>
+    $$\left| \sum_{n \gt N} \frac{(-1)^{n+1} x^{n-1}}{n} \right| \le \frac{x^N}{N+1} \le \frac{1}{N+1}$$
+    <p>— 상계가 $x$와 무관하므로 부분합이 $[0, 1]$에서 <strong>균등수렴</strong>한다.
+    (끝점 $x = 1$ 포함! M-판정법은 $\sum \frac{1}{n}$이 발산해 여기서 못 쓴다 —
+    교대 구조가 대신 일한다.)</p>
+    <p><strong>교환:</strong> 각 부분합은 다항식(연속)이므로 정리 7.16에 의해 항별 적분이
+    정당하다:</p>
+    $$\int_0^1 \frac{\ln(1+x)}{x} dx = \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} \int_0^1 x^{n-1} dx = \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n^2} \quad \blacksquare$$
+    <p>(값은 $\frac{\pi^2}{12}$ — 바젤 값에서 $\sum \frac{(-1)^{n+1}}{n^2} = \frac{\pi^2}{6} - 2 \cdot \frac{\pi^2}{24}$…
+    보다 빠르게는 $\sum \frac{1}{n^2} - 2\sum \frac{1}{(2n)^2} = \frac{\pi^2}{6} - \frac{\pi^2}{12}$.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

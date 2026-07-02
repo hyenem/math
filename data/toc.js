@@ -30,7 +30,7 @@ window.MATH_TOC = [
       { file: "ch05.html", num: 5, title: "미분", ready: true },
       { file: "ch06.html", num: 6, title: "리만-스틸체스 적분", ready: true },
       { file: "ch07.html", num: 7, title: "함수열과 함수급수", ready: true },
-      { file: "ch08.html", num: 8, title: "특수 함수", ready: false }
+      { file: "ch08.html", num: 8, title: "특수 함수", ready: true }
     ]
   },
   {
