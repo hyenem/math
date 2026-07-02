@@ -23,7 +23,7 @@ window.MATH_TOC = [
     desc: "극한, 연속, 수렴을 엄밀하게 — 미적분학을 처음부터 다시 짓는 과목.",
     status: "active",
     chapters: [
-      { file: "ch01.html", num: 1, title: "실수와 복소수 체계", ready: false },
+      { file: "ch01.html", num: 1, title: "실수와 복소수 체계", ready: true },
       { file: "ch02.html", num: 2, title: "기초 위상", ready: false },
       { file: "ch03.html", num: 3, title: "수열과 급수", ready: false },
       { file: "ch04.html", num: 4, title: "연속", ready: false },
