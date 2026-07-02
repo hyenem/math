@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>스타일 가이드 — 여백</title>
+<link rel="stylesheet" href="assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="assets/vendor/katex/katex.min.js"></script>
+<script defer src="assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="data/toc.js"></script>
+<script defer src="data/terms.js"></script>
+<script defer src="assets/site.js"></script>
+<script>
+/* 스타일가이드 전용 데모 용어 — terms.js를 오염시키지 않기 위해
+   여기서 파싱 시점에 동기로 등록한다. defer 스크립트(terms.js)는 이보다
+   늦게 실행되며 Object.assign으로 병합하므로 이 항목이 보존된다.
+   tools/check_site.py는 이 파일의 data-term 검사를 건너뛴다. */
+window.MATH_TERMS = window.MATH_TERMS || {};
+window.MATH_TERMS["demo-supremum"] = {
+  ko: "상한",
+  en: "supremum",
+  short: "위로 유계인 집합 $E$의 상계 중 가장 작은 것. $\\sup E$로 쓴다.",
+  href: "styleguide.html#def-demo-supremum"
+};
+</script>
+</head>
+<body data-page="plain">
+
+<main class="content">
+  <h1>스타일 가이드</h1>
+  <p>이 페이지는 콘텐츠 블록의 표준 사용법을 보여줍니다.
+  새 챕터를 쓸 때 이 페이지를 견본으로 삼으세요.
+  블록의 순서 규칙: <strong>직관(형광펜) → 정의(파란펜) → 예시 → 흔한 오해(빨간펜)</strong>.</p>
+
+  <hr>
+
+  <h2>1. 직관 박스 — 정의보다 먼저</h2>
+
+  <div class="box box-intuition">
+    <span class="box-label">쉽게 말하면</span>
+    <p>“상한”은 <em>천장</em>입니다. 집합의 어떤 원소도 그보다 클 수 없는 값(상계) 중에서,
+    가장 낮게 드리운 천장이 바로 상한이에요. 최댓값과 다른 점: 천장은 집합에
+    <strong>속하지 않아도 됩니다</strong>. 열린구간 $(0,1)$에 최댓값은 없지만 천장 $1$은 있죠.</p>
+  </div>
+
+  <h2>2. 정의 박스</h2>
+
+  <div class="box box-def" id="def-demo-supremum">
+    <span class="box-label">정의 1.8 <span class="label-en">supremum</span></span>
+    <p>$E$가 위로 유계인 집합이라 하자. 다음 두 조건을 만족하는 $\alpha$를
+    $E$의 <strong>상한</strong>(supremum)이라 하고 $\alpha = \sup E$로 쓴다.</p>
+    <p>(i) $\alpha$는 $E$의 상계이다.<br>
+    (ii) $\gamma < \alpha$이면 $\gamma$는 $E$의 상계가 아니다.</p>
+  </div>
+
+  <h2>3. 정리 박스 + 접이식 증명</h2>
+
+  <div class="box box-thm">
+    <span class="box-label">정리 1.11</span>
+    <p><strong>이 정리가 하는 일:</strong> 상한의 존재만 가정하면 하한의 존재는 공짜로 따라온다는 것.</p>
+    <p>$S$가 최소상계성질을 갖는 순서집합이고, $B \subset S$가 공집합이 아니며 아래로 유계이면,
+    $\inf B$가 $S$ 안에 존재한다.</p>
+  </div>
+
+  <details class="proof">
+    <summary>증명 <span class="proof-strategy">— 전략: $B$의 하계들의 집합 $L$을 만들고, $\sup L$이 곧 $\inf B$임을 보인다.</span></summary>
+    <p>$L$을 $B$의 모든 하계의 집합이라 하자. $B$가 아래로 유계이므로 $L \neq \varnothing$이고,
+    $B$의 임의의 원소는 $L$의 상계이므로 $L$은 위로 유계이다.
+    가정에 의해 $\alpha = \sup L$이 존재한다.</p>
+    <p>$\gamma < \alpha$이면 $\gamma$는 $L$의 상계가 아니므로 $\gamma < \ell$인 $\ell \in L$이 존재하고,
+    따라서 $\gamma \notin B$... (이하 생략 — 실제 챕터에서는 완전한 증명을 적는다)</p>
+    <p class="qed"></p>
+  </details>
+
+  <h2>4. 예제 박스</h2>
+
+  <div class="box box-example">
+    <span class="box-label">예제</span>
+    <p>$E = \{1/n : n = 1, 2, 3, \dots\}$이면 $\sup E = 1 \in E$이지만 $\inf E = 0 \notin E$.
+    상한·하한은 집합에 속할 수도, 속하지 않을 수도 있다.</p>
+  </div>
+
+  <h2>5. 흔한 오해 박스</h2>
+
+  <div class="box box-warn">
+    <span class="box-label">흔한 오해</span>
+    <p>“상한 = 최댓값”이 아닙니다. 최댓값은 <em>집합 안에서</em> 가장 큰 원소이고,
+    상한은 집합 밖에 있어도 됩니다. 최댓값이 존재하면 그것이 곧 상한이지만, 역은 성립하지 않아요.</p>
+  </div>
+
+  <h2>6. 용어 링크 (단어장 카드)</h2>
+
+  <p>본문에서 <a class="term" data-term="demo-supremum">상한</a>처럼 점선 밑줄이 있는
+  용어에 마우스를 올리면(모바일: 탭) 단어장 카드가 뜹니다. 이렇게 씁니다:</p>
+  <p><code>&lt;a class="term" data-term="supremum"&gt;상한&lt;/a&gt;</code></p>
+
+  <h2>7. 수식</h2>
+
+  <p>인라인 수식은 <code>$...$</code>: $\varepsilon > 0$. 문단 수식은 <code>$$...$$</code>:</p>
+  $$\sup_{n \ge 1} \left(1 + \frac{1}{n}\right)^n = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n = e$$
+
+  <h2>8. 문제 카드 3종</h2>
+
+  <section class="problems">
+    <div class="problem">
+      <div class="problem-meta">
+        <span class="badge badge-basic">개념 확인</span>
+        <span class="difficulty">●○○</span>
+      </div>
+      <p>$E = \{x \in \mathbb{Q} : x^2 < 2\}$의 상한은 유리수 집합 $\mathbb{Q}$ 안에 존재하는가?</p>
+      <details class="hint">
+        <summary>힌트</summary>
+        <p>상한 후보는 $\sqrt{2}$뿐이다. $\sqrt{2}$는 유리수인가?</p>
+      </details>
+      <details class="solution">
+        <summary>풀이</summary>
+        <p>존재하지 않는다. $\mathbb{Q}$ 안에서 $E$의 상계 중 가장 작은 것을 찾으려 해도,
+        어떤 유리수 상계보다 더 작은 유리수 상계가 항상 존재한다 (1장 본문 참고).
+        이것이 바로 $\mathbb{Q}$에 “구멍”이 있다는 말의 정확한 의미다.</p>
+      </details>
+    </div>
+
+    <div class="problem">
+      <div class="problem-meta">
+        <span class="badge badge-book">Rudin 1장 연습 4 기반</span>
+        <span class="difficulty">●●○</span>
+      </div>
+      <p>순서집합 $S$의 공집합이 아닌 부분집합 $E$가 아래로 유계이고 위로도 유계라 하자.
+      $\alpha = \inf E$, $\beta = \sup E$일 때 $\alpha \le \beta$임을 증명하라.</p>
+      <details class="hint">
+        <summary>힌트</summary>
+        <p>$E$에 원소가 하나는 있다. 그 원소와 $\alpha$, $\beta$의 관계를 각각 적어보자.</p>
+      </details>
+      <details class="solution">
+        <summary>풀이</summary>
+        <p>$E \neq \varnothing$이므로 $x \in E$를 택하자. $\alpha$는 하계이므로 $\alpha \le x$,
+        $\beta$는 상계이므로 $x \le \beta$. 순서의 추이성에 의해 $\alpha \le \beta$. $\blacksquare$</p>
+      </details>
+    </div>
+
+    <div class="problem">
+      <div class="problem-meta">
+        <span class="badge badge-exam">임용 기출</span>
+        <span class="difficulty">●●●</span>
+        <span>연도·문항은 실제 챕터에서 표기</span>
+      </div>
+      <p>임용 기출 문제는 이 배지와 함께 실리고, 어떤 개념을 묻는 문제인지 태그가 붙습니다.</p>
+      <details class="hint">
+        <summary>힌트</summary>
+        <p>힌트를 먼저 열고 스스로 시도한 뒤 풀이를 여세요.</p>
+      </details>
+      <details class="solution">
+        <summary>풀이</summary>
+        <p>풀이는 답만 적지 않고, 어떤 정의·정리를 왜 그 순서로 쓰는지까지 적습니다.</p>
+      </details>
+    </div>
+  </section>
+
+  <h2>9. 팔레트</h2>
+  <ul style="font-family: var(--gothic); font-size: 0.9rem;">
+    <li><span class="legend-pen">파란펜 #2F5DA8</span> — 정의, 링크, 강조</li>
+    <li><span class="legend-red">빨간펜 #B23A31</span> — 흔한 오해, 임용 배지</li>
+    <li><span class="legend-hl">형광펜 #FFE98F</span> — 직관 라벨</li>
+    <li><span class="legend-pencil">연필 #878D99</span> — 보조 텍스트, 예제</li>
+  </ul>
+</main>
+
+</body>
+</html>

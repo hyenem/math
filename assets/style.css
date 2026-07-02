@@ -1,0 +1,630 @@
+/* ============================================================
+ * 여백 — 대학수학 노트 공통 스타일
+ *
+ * 디자인 언어: "한국 학생의 필기도구"
+ *   파란펜  = 정의 (중요한 것은 파란펜으로)
+ *   빨간펜  = 흔한 오해 (채점의 색)
+ *   형광펜  = 직관, "쉽게 말하면" (밑줄 긋는 부분)
+ *   연필    = 부가 설명, 메타 정보
+ * 본문은 명조(리디바탕), UI는 고딕 — 교과서 본문과 여백 메모의 2성부.
+ * ============================================================ */
+
+/* ---------- 토큰 ---------- */
+:root {
+  --paper: #FAFAF7;        /* 종이 */
+  --paper-deep: #F1F1EB;   /* 종이 음영 (사이드바 등) */
+  --ink: #232B3E;          /* 잉크 — 푸른 기 도는 검정 */
+  --ink-soft: #4C5568;     /* 옅은 잉크 */
+  --pencil: #666D7C;       /* 연필 — 보조 텍스트 (paper 위 4.97:1, AA 통과) */
+  --rule: #E2E1D8;         /* 괘선 — 테두리, 구분선 */
+  --pen: #2F5DA8;          /* 파란펜 */
+  --pen-soft: #EDF2FA;     /* 파란펜 연한 배경 */
+  --red: #B23A31;          /* 빨간펜 */
+  --red-soft: #FAF0EE;     /* 빨간펜 연한 배경 */
+  --hl: #FFE98F;           /* 형광펜 */
+  --hl-soft: #FFFAE0;      /* 형광펜 연한 배경 */
+  --card: #FFFEF8;         /* 단어장 카드 */
+
+  --serif: "RIDIBatang", "Noto Serif CJK KR", "Noto Serif KR", "Batang", serif;
+  --gothic: "Pretendard", "Apple SD Gothic Neo", "Noto Sans CJK KR",
+            "Malgun Gothic", system-ui, sans-serif;
+  /* 챕터 번호 등 큰 숫자는 KaTeX의 Computer Modern으로 —
+     수학 조판의 얼굴을 디스플레이 서체로 되울린다 */
+  --display-num: "KaTeX_Main", Georgia, "Times New Roman", serif;
+
+  --measure: 44rem;        /* 본문 최대 폭 */
+}
+
+@font-face {
+  font-family: "RIDIBatang";
+  src: url("fonts/RIDIBatang.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- 기본 ---------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;      /* 17px */
+  line-height: 1.85;
+  word-break: keep-all;      /* 한국어 어절 단위 줄바꿈 */
+  overflow-wrap: break-word;
+}
+
+:focus-visible {
+  outline: 2px solid var(--pen);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a { color: var(--pen); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+
+h1, h2, h3, h4 { line-height: 1.4; font-weight: 700; }
+h2 { font-size: 1.5rem; margin: 3rem 0 1rem; }
+h3 { font-size: 1.2rem; margin: 2.2rem 0 0.8rem; }
+
+hr { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+
+code {
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--paper-deep);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+/* KaTeX 수식 */
+.katex { font-size: 1.06em; }
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.3em 0.1em;
+}
+
+/* ---------- 상단 헤더 (site.js가 주입) ---------- */
+.site-header {
+  grid-area: header;
+  font-family: var(--gothic);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.site-header nav {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.8rem 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.site-header a { text-decoration: none; color: var(--ink-soft); }
+.site-header a:hover { color: var(--pen); }
+.site-header .site-name {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.site-header .crumb-sep { color: var(--pencil); }
+.site-header .crumb-here { color: var(--pencil); }
+
+/* ---------- 레이아웃 ---------- */
+main.content {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 5rem;
+}
+
+/* 챕터 페이지: 데스크톱에서 사이드바 + 본문 그리드 */
+body[data-page="chapter"] {
+  display: block;
+}
+@media (min-width: 960px) {
+  body[data-page="chapter"] {
+    display: grid;
+    grid-template-areas: "header header" "sidebar main" "footer footer";
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+  }
+  body[data-page="chapter"] main.content { grid-area: main; }
+  body[data-page="chapter"] .site-footer { grid-area: footer; }
+}
+
+/* ---------- 사이드바 (site.js가 주입) ---------- */
+.sidebar {
+  grid-area: sidebar;
+  display: none;
+  font-family: var(--gothic);
+  background: var(--paper-deep);
+  border-right: 1px solid var(--rule);
+  padding: 2rem 1.4rem;
+}
+@media (min-width: 960px) {
+  .sidebar { display: block; }
+}
+.sidebar-inner { position: sticky; top: 2rem; }
+.sidebar .sidebar-subject {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
+}
+.sidebar .sidebar-subject a { color: var(--ink); text-decoration: none; }
+.sidebar ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.86rem;
+}
+.sidebar li { margin: 0.15rem 0; }
+.sidebar li a, .sidebar li .chapter-pending {
+  display: flex;
+  gap: 0.55rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.sidebar li a:hover { background: var(--paper); color: var(--pen); }
+.sidebar li.current a {
+  background: var(--paper);
+  color: var(--pen);
+  font-weight: 700;
+}
+.sidebar .chapter-pending { color: var(--pencil); }
+.sidebar .ch-num { font-family: var(--display-num); min-width: 1.1em; text-align: right; }
+
+/* 모바일 목차 (챕터 페이지 상단, site.js가 주입) */
+details.toc-mobile {
+  font-family: var(--gothic);
+  font-size: 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 2rem;
+  background: var(--paper-deep);
+}
+@media (min-width: 960px) {
+  details.toc-mobile { display: none; }
+}
+details.toc-mobile summary { cursor: pointer; font-weight: 700; color: var(--ink-soft); }
+details.toc-mobile ol { list-style: none; padding: 0.4rem 0 0; margin: 0; }
+details.toc-mobile li { margin: 0.3rem 0; }
+details.toc-mobile a { text-decoration: none; }
+details.toc-mobile .chapter-pending { color: var(--pencil); }
+
+/* ---------- 챕터 표제 ---------- */
+.chapter-head { margin-bottom: 3rem; }
+.chapter-head .ch-eyebrow {
+  font-family: var(--gothic);
+  font-size: 0.85rem;
+  color: var(--pencil);
+  margin: 0 0 0.4rem;
+}
+.chapter-head h1 {
+  font-size: 1.9rem;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+.chapter-head h1 .ch-num {
+  font-family: var(--display-num);
+  font-size: 3.2rem;
+  font-weight: 400;
+  color: var(--pen);
+  line-height: 1;
+}
+.chapter-head .ch-source {
+  font-family: var(--gothic);
+  font-size: 0.85rem;
+  color: var(--pencil);
+  margin-top: 0.8rem;
+}
+
+/* ---------- 콘텐츠 블록 ---------- */
+.box {
+  border-left: 3px solid var(--pencil);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.3rem;
+  margin: 1.8rem 0;
+}
+.box > :first-child { margin-top: 0; }
+.box > :last-child { margin-bottom: 0; }
+.box .box-label {
+  display: inline-block;
+  font-family: var(--gothic);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+.box .box-label .label-en {
+  font-weight: 400;
+  color: var(--pencil);
+  margin-left: 0.35em;
+}
+
+/* 라벨 텍스트는 마크업에 실제로 적는다 (스크린리더 접근성):
+   <span class="box-label">정의 1.8 <span class="label-en">supremum</span></span> */
+
+/* 📘 정의 — 파란펜 */
+.box-def { border-color: var(--pen); background: var(--pen-soft); }
+.box-def .box-label { color: var(--pen); }
+
+/* 📐 정리 — 잉크 */
+.box-thm { border-color: var(--ink); background: var(--paper-deep); }
+.box-thm .box-label { color: var(--ink); }
+
+/* 💡 직관 — 형광펜. 좌측 괘선 없이, 라벨에 형광펜 스와이프 */
+.box-intuition {
+  border-left: none;
+  border-radius: 8px;
+  background: var(--hl-soft);
+}
+.box-intuition .box-label {
+  color: var(--ink);
+  background: linear-gradient(transparent 15%, var(--hl) 15% 85%, transparent 85%);
+  padding: 0 0.45em;
+}
+
+/* ⚠️ 흔한 오해 — 빨간펜 */
+.box-warn { border-color: var(--red); background: var(--red-soft); }
+.box-warn .box-label { color: var(--red); }
+
+/* ✏️ 예제 — 연필 */
+.box-example { border-color: var(--pencil); background: #F6F6F1; }
+.box-example .box-label { color: var(--ink-soft); }
+
+/* 정의 앵커에 도착했을 때 잠깐 표시 */
+:target.box, .box:target { animation: target-flash 1.6s ease-out 1; }
+@keyframes target-flash {
+  0%, 35% { box-shadow: 0 0 0 3px var(--hl); }
+  100% { box-shadow: 0 0 0 3px transparent; }
+}
+
+/* ---------- 증명 (접이식) ---------- */
+details.proof {
+  border: 1px dashed var(--rule);
+  border-radius: 8px;
+  padding: 0.7rem 1.1rem;
+  margin: 1.2rem 0 1.8rem;
+  background: #FCFCF9;
+}
+details.proof summary {
+  cursor: pointer;
+  font-family: var(--gothic);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+details.proof summary .proof-strategy {
+  font-weight: 400;
+  color: var(--pencil);
+  margin-left: 0.5em;
+}
+details.proof[open] summary { margin-bottom: 0.6rem; }
+details.proof .qed { text-align: right; }
+details.proof .qed::after { content: "∎"; font-family: var(--display-num); }
+
+/* ---------- 용어 링크 & 단어장 카드 툴팁 ---------- */
+a.term {
+  color: inherit;
+  text-decoration: underline dotted var(--pen);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+a.term:hover { color: var(--pen); }
+a.term-missing {
+  text-decoration: underline wavy var(--red);
+  color: var(--red);
+}
+
+.term-card {
+  position: absolute;
+  z-index: 60;
+  width: min(21rem, calc(100vw - 2rem));
+  font-family: var(--gothic);
+  font-size: 0.86rem;
+  line-height: 1.7;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(35, 43, 62, 0.16);
+  padding: 0.85rem 1.05rem 0.75rem;
+  /* 단어장 카드의 붉은 윗줄 */
+  background-image: linear-gradient(var(--red) 0, var(--red) 0);
+  background-size: calc(100% - 2.1rem) 1px;
+  background-repeat: no-repeat;
+  background-position: center 2.55rem;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+  opacity: 1;
+  transform: none;
+}
+.term-card.hidden {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+}
+.term-card .term-card-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1rem;
+  padding-bottom: 0.55rem;
+  margin-bottom: 0.55rem;
+}
+.term-card .term-card-en {
+  font-family: var(--gothic);
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--pencil);
+  margin-left: 0.4em;
+}
+.term-card .term-card-body { color: var(--ink-soft); }
+.term-card .term-card-go {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.term-card .term-card-go:hover { text-decoration: underline; }
+
+/* ---------- 문제 카드 ---------- */
+section.problems { margin-top: 4rem; }
+.problem {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 1.1rem 1.3rem;
+  margin: 1.4rem 0;
+  background: #FDFDFA;
+}
+.problem > :last-child { margin-bottom: 0; }
+.problem .problem-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--gothic);
+  font-size: 0.78rem;
+  margin-bottom: 0.7rem;
+}
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 99px;
+  font-family: var(--gothic);
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  background: var(--paper-deep);
+}
+.badge-basic { border-color: var(--pen); color: var(--pen); background: var(--pen-soft); }
+.badge-book { border-color: var(--ink-soft); color: var(--ink-soft); background: var(--paper-deep); }
+.badge-exam { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+.problem .difficulty { color: var(--pencil); letter-spacing: 0.15em; }
+
+.problem details {
+  border-top: 1px dashed var(--rule);
+  padding: 0.55rem 0.2rem 0.2rem;
+  margin-top: 0.8rem;
+}
+.problem details summary {
+  cursor: pointer;
+  font-family: var(--gothic);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.problem details[open] summary { margin-bottom: 0.4rem; }
+.problem details.hint summary::before { content: "💡 "; }
+.problem details.solution summary::before { content: "✍️ "; }
+
+/* ---------- 이전/다음 네비 (site.js가 주입) ---------- */
+nav.prev-next {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 4.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--gothic);
+  font-size: 0.9rem;
+}
+nav.prev-next a {
+  text-decoration: none;
+  color: var(--ink-soft);
+  max-width: 48%;
+}
+nav.prev-next a:hover { color: var(--pen); }
+nav.prev-next .pn-dir {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--pencil);
+  margin-bottom: 0.15rem;
+}
+nav.prev-next .pn-next { text-align: right; margin-left: auto; }
+
+/* ---------- 홈 ---------- */
+.masthead {
+  text-align: center;
+  padding: 4.5rem 1.25rem 3rem;
+}
+.masthead h1 {
+  font-size: 3.4rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+  letter-spacing: 0.06em;
+}
+.masthead .tagline {
+  font-family: var(--gothic);
+  color: var(--ink-soft);
+  margin: 0 0 2.4rem;
+}
+.masthead blockquote {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+}
+.masthead blockquote footer {
+  font-family: var(--gothic);
+  font-size: 0.82rem;
+  color: var(--pencil);
+  margin-top: 0.5rem;
+}
+.masthead .margin-thesis {
+  margin-top: 0.8rem;
+  color: var(--ink);
+}
+
+.subject-grid {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1.1rem;
+}
+.subject-card {
+  display: block;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--pen);
+  border-radius: 10px;
+  background: #FDFDFA;
+  padding: 1.2rem 1.4rem;
+  text-decoration: none;
+  color: var(--ink);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+a.subject-card:hover {
+  box-shadow: 0 6px 18px rgba(35, 43, 62, 0.1);
+  transform: translateY(-2px);
+}
+.subject-card.planned {
+  border-left-color: var(--rule);
+  color: var(--pencil);
+  background: transparent;
+}
+.subject-card h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.subject-card .card-en {
+  font-family: var(--gothic);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--pencil);
+}
+.subject-card .card-desc {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin: 0.6rem 0 0.8rem;
+  line-height: 1.7;
+}
+.subject-card.planned .card-desc { color: var(--pencil); }
+.subject-card .card-meta {
+  font-family: var(--gothic);
+  font-size: 0.78rem;
+  color: var(--pencil);
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.subject-card .card-progress { color: var(--pen); font-weight: 700; }
+.subject-card.planned .card-progress { color: var(--pencil); font-weight: 400; }
+
+/* 홈 하단 안내 */
+.home-guide {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+.home-guide h2 { font-size: 1.2rem; }
+.home-guide ul { padding-left: 1.2rem; }
+.home-guide li { margin: 0.4rem 0; }
+.legend-pen { color: var(--pen); font-weight: 700; }
+.legend-red { color: var(--red); font-weight: 700; }
+.legend-hl { background: linear-gradient(transparent 15%, var(--hl) 15% 85%, transparent 85%); padding: 0 0.3em; font-weight: 700; }
+.legend-pencil { color: var(--pencil); font-weight: 700; }
+
+/* ---------- 과목 index ---------- */
+.subject-head { margin-bottom: 2.5rem; }
+.subject-head h1 { font-size: 2rem; margin: 0 0 0.3rem; }
+.subject-head .subject-en {
+  font-family: var(--gothic);
+  color: var(--pencil);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+.subject-head .book-line {
+  font-family: var(--gothic);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  background: var(--paper-deep);
+  display: inline-block;
+}
+
+ol.chapter-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+ol.chapter-list li {
+  border-bottom: 1px solid var(--rule);
+}
+ol.chapter-list li a,
+ol.chapter-list li .chapter-pending {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.85rem 0.5rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+ol.chapter-list li a:hover { background: var(--pen-soft); border-radius: 6px; }
+ol.chapter-list .ch-num {
+  font-family: var(--display-num);
+  font-size: 1.3rem;
+  color: var(--pen);
+  min-width: 1.6rem;
+  text-align: right;
+}
+ol.chapter-list .chapter-pending { color: var(--pencil); }
+ol.chapter-list .chapter-pending .ch-num { color: var(--pencil); }
+ol.chapter-list .badge { margin-left: auto; }
+
+/* ---------- 푸터 ---------- */
+.site-footer {
+  font-family: var(--gothic);
+  font-size: 0.8rem;
+  color: var(--pencil);
+  text-align: center;
+  padding: 2.5rem 1.25rem 3rem;
+  border-top: 1px solid var(--rule);
+}
+.site-footer a { color: var(--pencil); }
