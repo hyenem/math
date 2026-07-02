@@ -457,6 +457,45 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/linear-algebra/ch05.html#def-cayley-hamilton"
   },
 
+  /* ---------- 선형대수 6장: 내적공간 ---------- */
+
+  "inner-product": {
+    "ko": "내적",
+    "en": "inner product",
+    "short": "첫 변수에 선형, 켤레 대칭, 양의 정부호인 $\\langle x, y \\rangle$ — 길이($\\|x\\| = \\sqrt{\\langle x,x\\rangle}$)·각도·직교의 원천. 함수 공간에서는 $\\int f\\bar{g}$.",
+    "href": "subjects/linear-algebra/ch06.html#def-inner-product"
+  },
+  "orthonormal-basis": {
+    "ko": "정규직교기저",
+    "en": "orthonormal basis",
+    "short": "서로 수직이고 길이 1인 기저. 좌표가 내적 한 번으로 나온다: $x = \\sum \\langle x, v_i \\rangle v_i$ — 이 계수가 푸리에 계수의 정체다.",
+    "href": "subjects/linear-algebra/ch06.html#def-orthonormal-basis"
+  },
+  "gram-schmidt": {
+    "ko": "그람-슈미트 직교화",
+    "en": "Gram–Schmidt process",
+    "short": "독립집합을 직교집합으로 바꾸는 기계: $u_k = w_k - \\sum_{j \\lt k} \\frac{\\langle w_k, u_j \\rangle}{\\|u_j\\|^2} u_j$ — \"앞 방향 그림자 빼기\"의 반복. 정규직교기저의 존재를 구성적으로 증명한다.",
+    "href": "subjects/linear-algebra/ch06.html#def-orthonormal-basis"
+  },
+  "orthogonal-complement": {
+    "ko": "직교여공간",
+    "en": "orthogonal complement",
+    "short": "$W^\\perp = \\{x : x \\perp W\\}$. 유한차원이면 $V = W \\oplus W^\\perp$, $(W^\\perp)^\\perp = W$. 정사영 = $W$ 안에서의 최선 근사 (최소제곱법의 원리).",
+    "href": "subjects/linear-algebra/ch06.html#def-orthogonal-complement"
+  },
+  "adjoint": {
+    "ko": "수반연산자",
+    "en": "adjoint",
+    "short": "$\\langle Tx, y \\rangle = \\langle x, T^*y \\rangle$를 만족하는 $T^*$ — 행렬로는 켤레전치. $T^* = T$면 자기수반(대칭/에르미트): 고윳값 실수, 고유벡터 직교.",
+    "href": "subjects/linear-algebra/ch06.html#def-adjoint"
+  },
+  "spectral-theorem": {
+    "ko": "스펙트럼 정리",
+    "en": "spectral theorem",
+    "short": "실대칭행렬 $\\iff$ 직교대각화 가능 ($Q^tAQ = D$, $Q$ 직교) — 대칭이면 고윳값 실수·고유벡터 직교·대각화 보장이 한 번에. 복소에서는 정규 $\\iff$ 유니터리 대각화.",
+    "href": "subjects/linear-algebra/ch06.html#def-spectral-theorem"
+  },
+
   /* ---------- 선형대수 1장: 벡터공간 ---------- */
 
   "vector-space": {
