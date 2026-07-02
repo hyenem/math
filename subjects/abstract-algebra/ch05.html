@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5장 환과 체 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch05.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§18–20)</p>
+  <h1><span class="ch-num">5</span> 환과 체</h1>
+  <p class="ch-source">연산 두 개의 세계 — 그리고 “곱해서 0이 되는 0 아닌 것들”
+  (영인자)이 만드는 위계: 환 ⊃ 정역 ⊃ 체.</p>
+</div>
+
+<p>군은 연산 하나의 구조였습니다. 정수·다항식·행렬은 연산이 <strong>둘</strong>이죠 —
+더하기와 곱하기, 그리고 둘을 잇는 분배법칙. 이 구조가 환(ring)입니다.
+이 장의 중심 질문: <strong>“곱셈이 얼마나 좋은가”</strong> — 영인자가 없는가(정역),
+나눗셈까지 되는가(체) — 로 환들의 위계를 세웁니다.</p>
+
+<h2 id="sec-ring">1. 환 — 두 연산의 공리</h2>
+
+<div class="box box-def" id="def-ring">
+  <span class="box-label">정의 · 환 <span class="label-en">ring</span> (프랄리 §18)</span>
+  <p><strong>환</strong> $\langle R, +, \cdot \rangle$은:</p>
+  <p>($\mathscr{R}_1$) $\langle R, + \rangle$은 <strong>아벨군</strong> (영원소 $0$,
+  덧셈 역원 $-a$)<br>
+  ($\mathscr{R}_2$) 곱셈은 결합적<br>
+  ($\mathscr{R}_3$) 분배법칙: $a(b + c) = ab + ac$, $(a + b)c = ac + bc$</p>
+  <p>곱셈이 교환적이면 <strong>가환환</strong>, 곱셈 항등원 $1$이 있으면
+  <strong>단위원을 갖는 환</strong>. 기본 계산 규칙이 공리에서 나온다:
+  $0 \cdot a = 0$, $(-a)b = -(ab)$ — 증명은 분배법칙 + 덧셈 소거
+  (해석학 1장 체 명제들과 같은 의식).</p>
+  <p>동물원: $\mathbb{Z}$ (가환, 단위원), $2\mathbb{Z}$ (단위원 없음!),
+  $\mathbb{Z}_n$, $M_n(\mathbb{R})$ (비가환), 다항식환 $F[x]$,
+  연속함수환 $C[0,1]$ (점별 연산 — 해석학 4장의 연속성 보존이 닫힘의 근거).</p>
+</div>
+
+<h2 id="sec-domain">2. 영인자와 정역 — 소거할 수 있는가</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$\mathbb{Z}_{12}$에서 $3 \cdot 4 = 0$ — <strong>$0$이 아닌 둘을 곱했는데 $0$</strong>이
+  됩니다. 이런 “영인자”가 있으면 익숙한 규칙들이 무너져요:
+  $ab = ac$에서 $b = c$를 소거할 수 없고 ($3 \cdot 4 = 3 \cdot 8$이지만 $4 \neq 8$),
+  이차방정식이 근을 4개 가질 수도 있습니다 ($x^2 = 1$이 $\mathbb{Z}_8$에서
+  $1, 3, 5, 7$ — 네 개!).
+  “영인자 없음”이 곧 “소거 가능”이고, 그런 가환환(단위원 포함)이
+  <strong>정역</strong>입니다 — 정수(整數)처럼 얌전한 곱셈의 세계.</p>
+</div>
+
+<div class="box box-def" id="def-integral-domain">
+  <span class="box-label">정의 · 영인자와 정역 <span class="label-en">zero divisor, integral domain</span> (프랄리 §19)</span>
+  <p>$a \neq 0$인데 $ab = 0$인 $b \neq 0$이 존재하면 $a$를 <strong>영인자</strong>라 한다.
+  <strong>정역</strong> = 영인자가 없는, 단위원($1 \neq 0$)을 갖는 가환환.
+  동치: 곱셈 소거법칙이 성립하는 (같은 조건의) 가환환.</p>
+  <p>판정 예: $\mathbb{Z}$ 정역 ✓. $\mathbb{Z}_n$은 —
+  <strong>$n$이 소수일 때만 정역</strong> ($n = ab$ 합성수면 $a \cdot b = 0$이 영인자
+  쌍; $\mathbb{Z}_n$에서 $a$가 영인자 $\iff \gcd(a, n) \neq 1$).
+  $M_2(\mathbb{R})$: 비가환이기도 하지만 영인자도 있다 —
+  $\begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{pmatrix}\begin{pmatrix} 0 &amp; 0 \\ 0 &amp; 1 \end{pmatrix} = O$.
+  $C[0,1]$: 반쪽씩 $0$인 두 연속함수의 곱이 $0$ — 영인자 존재 (함수환은 정역이
+  아니다!).</p>
+</div>
+
+<div class="box box-def" id="def-field-hierarchy">
+  <span class="box-label">정의 + 위계 · 체 <span class="label-en">field</span> (프랄리 §18–19)</span>
+  <p><strong>체</strong> = $0$ 아닌 모든 원소가 곱셈 역원을 갖는 정역 —
+  즉 사칙연산이 전부 되는 세계 (해석학 1장에서 만난
+  <a class="term" data-term="field">그 체</a>).</p>
+  <p style="text-align:center;"><strong>체 $\Rightarrow$ 정역 $\Rightarrow$ 가환환</strong>
+  (역은 각각 거짓: $\mathbb{Z}$는 정역이지만 체가 아니고, $\mathbb{Z}_6$은 가환환이지만
+  정역이 아니다)</p>
+  <p>그리고 유한 세계에서의 반전 (프랄리 §19의 백미):</p>
+  <p style="text-align:center;"><strong>유한 정역은 체다.</strong></p>
+</div>
+
+<details class="proof">
+  <summary>증명 (유한 정역 ⇒ 체) <span class="proof-strategy">— “$a$ 곱하기” 함수가 단사(소거법칙) + 유한집합에서 단사 = 전사 → $ab = 1$인 $b$가 상 안에 있다.</span></summary>
+  <p>$a \neq 0$을 잡고 $\lambda_a : R \to R$, $\lambda_a(x) = ax$를 보자.
+  단사다: $ax = ay$이면 소거법칙(정역!)으로 $x = y$.
+  $R$이 <strong>유한</strong>이므로 단사 $\Rightarrow$ 전사 (비둘기집 —
+  선형대수 2장의 “차원 같으면 단사 = 전사”와 같은 유한성 논법).
+  전사이므로 $ax = 1$인 $x$가 존재 — $a$의 역원. $\blacksquare$</p>
+  <p>따름정리: <strong>$\mathbb{Z}_p$ ($p$ 소수)는 체다</strong> — 소수면 정역, 유한
+  정역이면 체. 3장 페르마 소정리에서 쓴 $\mathbb{Z}_p^*$가 군이었던 진짜 이유.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-char">3. 표수 — 환의 “시계 주기”</h2>
+
+<div class="box box-def" id="def-characteristic">
+  <span class="box-label">정의 · 표수 <span class="label-en">characteristic</span> (프랄리 §19)</span>
+  <p>$n \cdot 1 = \underbrace{1 + \cdots + 1}_{n} = 0$이 되는 최소 양의 정수 $n$을
+  환의 <strong>표수</strong>라 한다 (없으면 표수 $0$).
+  $\operatorname{char} \mathbb{Z} = 0$, $\operatorname{char} \mathbb{Z}_n = n$.</p>
+  <p><strong>정역의 표수는 $0$ 아니면 소수다</strong> — $n = ab$ ($1 \lt a, b \lt n$)이면
+  $(a \cdot 1)(b \cdot 1) = n \cdot 1 = 0$인데 정역엔 영인자가 없으므로 둘 중 하나가
+  $0$, $n$의 최소성 모순.
+  표수 $p$ 세계의 명물 — <strong>신입생의 꿈</strong>(freshman's dream):
+  $(a + b)^p = a^p + b^p$ (이항계수 $\binom{p}{k}$가 $0 \lt k \lt p$에서 $p$의 배수이므로
+  전부 소멸). 유한체 이론(7장)과 정수론의 핵심 도구다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① “$ab = 0$이면 $a = 0$ 또는 $b = 0$” — 일반 환에서는 <strong>쓸 수 없는</strong>
+  규칙이다. $\mathbb{Z}_n$ 방정식 풀이에서 인수분해 후 이 규칙을 쓰려면 “$n$이
+  소수”(정역)임을 먼저 말해야 한다 — 임용 답안 감점 1순위.
+  ② 단위원 없는 환($2\mathbb{Z}$)과 비가환환($M_n$)도 어엿한 환 — “환”이라고 하면
+  무엇까지 가정하는지(가환? 단위원?) 교재마다 다르니 답안에서 명시.
+  ③ 체의 표수는 $0$ 또는 소수 — “표수 4인 체”는 존재하지 않는다 (위 정리 + 체는
+  정역). 반면 표수 4인 <em>환</em>은 있다: $\mathbb{Z}_4$.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">5장의 줄거리</span>
+  <p><a class="term" data-term="ring">환</a> = 아벨군(덧셈) + 결합 곱셈 + 분배
+  ($\mathbb{Z}$, $\mathbb{Z}_n$, $M_n$, $F[x]$, $C[0,1]$)
+  → <a class="term" data-term="integral-domain">영인자와 정역</a>:
+  영인자 없음 = 소거 가능; $\mathbb{Z}_n$ 정역 $\iff n$ 소수;
+  함수환·행렬환은 영인자투성이
+  → 체 ⇒ 정역 ⇒ 가환환, 그리고 <strong>유한 정역 = 체</strong>
+  (비둘기집 — $\mathbb{Z}_p$가 체인 이유)
+  → <a class="term" data-term="characteristic">표수</a>: 정역이면 $0$ 또는 소수,
+  표수 $p$에서는 $(a+b)^p = a^p + b^p$ (신입생의 꿈).</p>
+  <p><strong>단 하나만 기억한다면:</strong> $\mathbb{Z}_n$ 세 얼굴 —
+  $n$ 합성수면 영인자 있는 가환환, $n$ 소수면 체. 환론 단답의 8할이 이 판정이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$\mathbb{Z}_{15}$에서 (1) 영인자를 모두 찾아라. (2) 가역원(단원)을 모두 찾아라.
+  (3) $5x = 5y$인데 $x \neq y$인 예를 들어라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>영인자 $\iff \gcd(a, 15) \neq 1$ (단, $a \neq 0$); 가역원 $\iff \gcd(a, 15) = 1$
+    — 둘이 $\mathbb{Z}_{15} \setminus \{0\}$을 정확히 분할한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\gcd \neq 1$: $3, 5, 6, 9, 10, 12$ — 예: $3 \cdot 5 = 15 = 0$.</p>
+    <p>(2) $\gcd = 1$: $1, 2, 4, 7, 8, 11, 13, 14$ — $\varphi(15) = 8$개.
+    (유한 가환환에서 $0$ 아닌 원소는 영인자 아니면 가역 — 둘의 분할.)</p>
+    <p>(3) $5 \cdot 3 = 15 = 0 = 5 \cdot 0$인데 $3 \neq 0$ — 영인자 $5$로는 소거 불가.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 정역의 부분환(단위원 공유)은 정역이다.<br>
+  (2) 체의 표수가 $p$이면 $|F| = p$다.<br>
+  (3) $\mathbb{Z}_n$에서 $x^2 = x$인 원소(멱등원)가 $0, 1$뿐이면 $n$은 소수의
+  거듭제곱이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) 위수 4인 체가 존재한다 (7장 예고). (3) $n = ab$ ($\gcd(a,b) = 1$)이면
+    중국인의 나머지 정리로 멱등원이 더 생긴다 — 대우.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 영인자 없음은 부분집합으로 유전된다 (큰 세계에 없던
+    영인자 쌍이 작은 세계에 생길 수 없다).</p>
+    <p>(2) <strong>거짓.</strong> 표수는 “$1$을 몇 번 더하면 $0$인가”이지 크기가 아니다 —
+    위수 $4 = 2^2$인 체 $\mathbb{F}_4$는 표수 2 (7장에서 건설).
+    유한체의 크기는 항상 $p^k$이고 표수는 그 $p$다.</p>
+    <p>(3) <strong>참 (대우로).</strong> $n = ab$, $\gcd(a, b) = 1$, $a, b \gt 1$이면
+    중국인의 나머지 정리($\mathbb{Z}_n \cong \mathbb{Z}_a \times \mathbb{Z}_b$ —
+    2장 순환군 문제의 환 버전)에서 $(1, 0)$에 해당하는 원소가 $0, 1$ 아닌 멱등원이
+    된다. 그러므로 멱등원이 둘뿐이면 서로소 분해가 없다 — $n = p^k$. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §19 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\mathbb{Z}_p$ ($p$ 소수)에서 <strong>윌슨의 정리</strong>를 증명하라:
+  $(p-1)! \equiv -1 \pmod p$.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\mathbb{Z}_p^*$의 원소들을 역원끼리 짝지어라 — 자기 자신이 역원인 것
+    ($x^2 = 1$의 해)만 짝 없이 남는다. 체에서 $x^2 = 1$의 해는 몇 개인가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$(p-1)! = 1 \cdot 2 \cdots (p-1)$ — $\mathbb{Z}_p^*$의 모든 원소의 곱이다.
+    각 원소를 역원과 짝지으면 짝끼리 곱이 $1$. 짝이 없는 것은 $x = x^{-1}$,
+    즉 $x^2 = 1$인 원소들.</p>
+    <p>$\mathbb{Z}_p$는 <strong>체(정역)</strong>이므로
+    $x^2 - 1 = (x-1)(x+1) = 0 \Rightarrow x = \pm 1$ — 해가 정확히 $1$과 $p - 1$
+    (여기서 “$ab = 0 \Rightarrow a = 0$ 또는 $b = 0$”을 쓸 자격이 정역성이다!).</p>
+    <p>그러므로 곱 전체 $= 1 \cdot (p-1) \cdot (\text{짝들의 곱 } 1) = p - 1 \equiv -1$.
+    $\blacksquare$ (합성수 $n \gt 4$에서는 $(n-1)! \equiv 0$ — 정역이 아니면 짝짓기
+    논증 자체가 무너진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>정역 판정 서술</span>
+  </div>
+  <p>$R = \{ a + b\sqrt{2} : a, b \in \mathbb{Z} \}$ (실수의 부분환)가 정역임을 보이고,
+  체는 아님을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>정역: $\mathbb{R}$의 부분환 + 문제 (1)의 유전 원리. 체 아님: $2$의 역원
+    $\frac{1}{2}$이 $R$에 있는가 — $a + b\sqrt2 = \frac12$이 정수 $a, b$로 가능한지.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>부분환:</strong> 덧셈·곱셈에 닫힘 —
+    $(a + b\sqrt2)(c + d\sqrt2) = (ac + 2bd) + (ad + bc)\sqrt2$ ✓, $1 = 1 + 0\sqrt2 \in R$.</p>
+    <p><strong>정역:</strong> $R \subset \mathbb{R}$이고 $\mathbb{R}$은 체(따라서 정역) —
+    영인자 없음은 부분환에 유전되므로 $R$은 정역.</p>
+    <p><strong>체 아님:</strong> $2 \in R$의 역원은 $\frac{1}{2}$뿐인데
+    $\frac{1}{2} = a + b\sqrt2$라면 $\sqrt2$가 무리수이므로 $b = 0$, $a = \frac12$ —
+    정수가 아니다. 역원이 $R$ 밖에 있으므로 체가 아니다. $\blacksquare$</p>
+    <p>(계수를 $\mathbb{Q}$로 바꾼 $\mathbb{Q}(\sqrt2)$는 체가 된다 —
+    $\frac{1}{a + b\sqrt2} = \frac{a - b\sqrt2}{a^2 - 2b^2}$ 유리화. 7장 체의 확대의
+    첫 예제다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>표수 논증 서술형</span>
+  </div>
+  <p>표수 $p$인 가환환 $R$ (단위원 포함)에서 사상 $\phi : R \to R$,
+  $\phi(a) = a^p$가 환 준동형사상임을 증명하라 (<strong>프로베니우스 사상</strong>).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>곱 보존은 가환성에서 자명. 합 보존이 “신입생의 꿈” —
+    이항정리에서 $\binom{p}{k}$ ($0 \lt k \lt p$)가 $p$의 배수임을 보여라
+    ($p$ 소수: 분자에 $p$가 있는데 분모에는 없다).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>곱:</strong> $\phi(ab) = (ab)^p = a^p b^p = \phi(a)\phi(b)$ (가환).
+    <strong>단위원:</strong> $\phi(1) = 1$.</p>
+    <p><strong>합:</strong> 이항정리 (가환환에서 유효)로</p>
+    $$(a + b)^p = \sum_{k=0}^{p} \binom{p}{k} a^k b^{p-k}$$
+    <p>$0 \lt k \lt p$에서 $\binom{p}{k} = \frac{p!}{k!(p-k)!}$의 분자에는 소인수 $p$가
+    있고 분모 $k!(p-k)!$에는 없다 ($k, p-k \lt p$이고 $p$ 소수) — 따라서
+    $p \mid \binom{p}{k}$. 표수 $p$이므로 이 항들은 전부 $0$:
+    $(a+b)^p = a^p + b^p$, 즉 $\phi(a + b) = \phi(a) + \phi(b)$. $\blacksquare$</p>
+    <p>(프로베니우스는 유한체 이론의 왕 — $\mathbb{Z}_p$ 위에서는 항등사상
+    (페르마 소정리!)이고, $\mathbb{F}_{p^k}$에서는 갈루아 군을 생성한다. 7장과
+    정수론에서 재회.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

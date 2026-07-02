@@ -598,6 +598,25 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/abstract-algebra/ch04.html#def-first-isomorphism"
   },
 
+  "ring": {
+    "ko": "환",
+    "en": "ring",
+    "short": "덧셈 아벨군 + 결합 곱셈 + 분배법칙. 가환/단위원은 추가 옵션. $\\mathbb{Z}$, $\\mathbb{Z}_n$, 행렬환 $M_n$(비가환), 다항식환 $F[x]$, 연속함수환이 대표.",
+    "href": "subjects/abstract-algebra/ch05.html#def-ring"
+  },
+  "integral-domain": {
+    "ko": "정역 / 영인자",
+    "en": "integral domain, zero divisor",
+    "short": "영인자($a, b \\neq 0$인데 $ab = 0$)가 없는 단위원 있는 가환환 — 곱셈 소거가 되는 세계. $\\mathbb{Z}_n$ 정역 $\\iff n$ 소수. 유한 정역은 체다 (비둘기집).",
+    "href": "subjects/abstract-algebra/ch05.html#def-integral-domain"
+  },
+  "characteristic": {
+    "ko": "표수",
+    "en": "characteristic",
+    "short": "$n \\cdot 1 = 0$인 최소 양의 정수 (없으면 0). 정역·체의 표수는 0 또는 소수. 표수 $p$에서는 $(a+b)^p = a^p + b^p$ (신입생의 꿈) — 프로베니우스 사상의 근거.",
+    "href": "subjects/abstract-algebra/ch05.html#def-characteristic"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {
