@@ -373,6 +373,51 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "short": "$\\Gamma(x) = \\int_0^\\infty t^{x-1}e^{-t}dt$. $\\Gamma(n+1) = n!$ — 팩토리얼의 연속 확장이며, 로그볼록성 조건이 이 확장을 유일하게 결정한다 (보어-몰레루프).",
     "href": "subjects/analysis/ch08.html#def-gamma-function"
   },
+  /* ---------- 선형대수 1장: 벡터공간 ---------- */
+
+  "vector-space": {
+    "ko": "벡터공간",
+    "en": "vector space",
+    "short": "체 $F$ 위에서 덧셈과 스칼라배가 8개 공리(교환·결합·영벡터·역벡터·$1x=x$·결합·분배 2개)를 만족하는 집합. $F^n$, 행렬, 다항식, 함수 공간이 모두 예다.",
+    "href": "subjects/linear-algebra/ch01.html#def-vector-space"
+  },
+  "subspace": {
+    "ko": "부분공간",
+    "en": "subspace",
+    "short": "그 자체로 벡터공간인 부분집합. 판정은 3가지만: $0$ 포함, 덧셈에 닫힘, 스칼라배에 닫힘 (Friedberg 1.3). 교집합은 항상 부분공간, 합집합은 일반적으로 아니다.",
+    "href": "subjects/linear-algebra/ch01.html#def-subspace"
+  },
+  "linear-combination": {
+    "ko": "일차결합",
+    "en": "linear combination",
+    "short": "$a_1 u_1 + \\cdots + a_n u_n$ 꼴 — \"재료를 늘이고 더해서 만들 수 있는 것\". 유한 개의 벡터와 스칼라만 쓴다.",
+    "href": "subjects/linear-algebra/ch01.html#def-linear-combination"
+  },
+  "span": {
+    "ko": "생성공간",
+    "en": "span",
+    "short": "$S$의 일차결합 전체 $\\operatorname{span}(S)$ — $S$를 포함하는 가장 작은 부분공간 (Friedberg 1.5). $\\operatorname{span}(S) = V$이면 \"$S$가 $V$를 생성한다\".",
+    "href": "subjects/linear-algebra/ch01.html#def-span"
+  },
+  "linear-independence": {
+    "ko": "일차독립",
+    "en": "linear independence",
+    "short": "$0$을 만드는 일차결합이 자명한 것(계수 전부 $0$)뿐인 것 — \"군더더기 없는 재료\". $0$을 포함하면 무조건 종속이고, 독립성은 부분집합에 유전된다.",
+    "href": "subjects/linear-algebra/ch01.html#def-linear-independence"
+  },
+  "basis": {
+    "ko": "기저",
+    "en": "basis",
+    "short": "$V$를 생성하는 일차독립 집합 — 빠짐없고(생성) 군더더기 없는(독립) 재료 목록. 기저가 있으면 모든 벡터가 유일한 좌표를 갖는다 (Friedberg 1.8).",
+    "href": "subjects/linear-algebra/ch01.html#def-basis"
+  },
+  "dimension": {
+    "ko": "차원",
+    "en": "dimension",
+    "short": "기저의 크기 — 대체정리(Friedberg 1.10)가 모든 기저의 크기가 같음을 보증해서 잘 정의된다. $\\dim F^n = n$, $\\dim P_n = n+1$, $\\dim M_{m\\times n} = mn$. 체에 따라 달라질 수 있다 ($\\mathbb{C}$는 $\\mathbb{R}$ 위에서 2차원).",
+    "href": "subjects/linear-algebra/ch01.html#def-dimension"
+  },
+
   "fourier-series": {
     "ko": "푸리에 급수",
     "en": "Fourier series",
