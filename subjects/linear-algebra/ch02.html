@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2장 선형변환과 행렬 — 선형대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="linear-algebra" data-chapter="ch02.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">선형대수학 · Friedberg, Insel &amp; Spence, Linear Algebra</p>
+  <h1><span class="ch-num">2</span> 선형변환과 행렬</h1>
+  <p class="ch-source">이 장의 심장은 차원정리(정리 2.3)입니다.
+  그리고 “행렬 곱셈이 왜 그렇게 괴상하게 정의되는가”의 답이 여기 있습니다.</p>
+</div>
+
+<p>1장이 무대(벡터공간)라면 2장은 배우입니다 — 공간에서 공간으로 가는 함수 중
+<strong>구조를 보존하는 것</strong>, 즉 선형변환. 선형대수의 진짜 주인공은 행렬이
+아니라 선형변환이고, 행렬은 선형변환의 “좌표 표기”일 뿐이라는 것이 이 장의
+관점 전환입니다.</p>
+
+<h2 id="sec-lt">1. 선형변환 — 구조를 보존하는 함수</h2>
+
+<div class="box box-def" id="def-linear-transformation">
+  <span class="box-label">정의 · 선형변환 <span class="label-en">linear transformation</span></span>
+  <p>벡터공간 $V, W$ (같은 체 $F$ 위)에 대해, 함수 $T : V \to W$가</p>
+  <p style="text-align:center;">$T(x + y) = T(x) + T(y)$, \qquad $T(cx) = c\,T(x)$</p>
+  <p>를 만족하면 <strong>선형변환</strong>(또는 선형사상)이라 한다.
+  (합쳐서 $T(cx + y) = cT(x) + T(y)$ 하나로 검사해도 된다.
+  즉시 따라오는 것: $T(0) = 0$ — 선형변환은 원점을 원점으로 보낸다.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 선형변환 동물원</span>
+  <p><strong>(a)</strong> 회전, 반사, 투영 ($\mathbb{R}^2 \to \mathbb{R}^2$) — 기하 변환들.</p>
+  <p><strong>(b)</strong> $T(a_1, a_2) = (2a_1 + a_2,\ a_1)$ 같은 “일차식 변환” — 행렬 곱으로
+  쓸 수 있는 것들.</p>
+  <p><strong>(c)</strong> <strong>미분</strong> $D : P_n(\mathbb{R}) \to P_{n-1}(\mathbb{R})$,
+  $D(f) = f'$ — 해석학 5장의 미분 규칙 $(f+g)' = f' + g'$, $(cf)' = cf'$이 정확히
+  선형성이다. <strong>적분</strong> $f \mapsto \int_0^x f$도 마찬가지 (해석학 6장 정리 6.12).
+  미적분의 두 연산이 선형대수의 배우였던 것.</p>
+  <p><strong>(반례)</strong> $T(x) = x + 1$ (평행이동): $T(0) = 1 \neq 0$이라 탈락.
+  $T(x) = x^2$: $T(2x) = 4x^2 \neq 2T(x)$. “일차 <em>동차</em>”만 선형이다.</p>
+</div>
+
+<h2 id="sec-nullrange">2. 영공간과 상 — 그리고 차원정리</h2>
+
+<div class="box box-def" id="def-null-space">
+  <span class="box-label">정의 · 영공간과 상 <span class="label-en">null space, range</span></span>
+  <p>선형변환 $T : V \to W$에 대해</p>
+  $$N(T) = \{ x \in V : T(x) = 0 \}, \qquad R(T) = \{ T(x) : x \in V \}$$
+  <p>을 각각 <strong>영공간</strong>(null space, kernel)과 <strong>상</strong>(range, image)이라
+  한다. <span id="thm-2-1"></span>둘 다 부분공간이다 (정리 2.1 — 판정법 1.3으로 즉시).
+  차원에 이름을 붙인다:
+  <strong>nullity</strong>$(T) = \dim N(T)$, <strong>rank</strong>$(T) = \dim R(T)$.</p>
+  <p><span id="thm-2-2"></span>(정리 2.2) $\beta = \{v_1, \dots, v_n\}$이 $V$의 기저이면
+  $R(T) = \operatorname{span}\{T(v_1), \dots, T(v_n)\}$ — 상은 “기저가 가는 곳”으로 결정된다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — 차원정리 읽는 법</span>
+  <p>$T$는 $V$의 차원 $n$을 두 몫으로 나눠 씁니다:
+  <strong>찌부러뜨리는 데 쓴 차원</strong>(영공간 — $0$으로 뭉개진 방향들)과
+  <strong>살아남은 차원</strong>(상). 낭비도 창조도 없어요 — 뭉갠 것과 남은 것을 합치면
+  정확히 원래 차원입니다. 예: $\mathbb{R}^3$을 평면에 투영하면 한 방향(법선)이 뭉개지고
+  두 방향이 살아남는다: $1 + 2 = 3$.</p>
+</div>
+
+<div class="box box-thm" id="thm-2-3"><span class="box-label">정리 2.3 · <span id="def-rank-nullity">차원정리</span> <span class="label-en">dimension theorem, rank–nullity</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 이 책에서 가장 많이 인용될 등식.</p>
+  <p>$V$가 유한차원이고 $T : V \to W$가 선형이면</p>
+  $$\operatorname{nullity}(T) + \operatorname{rank}(T) = \dim V$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $N(T)$의 기저를 $V$의 기저로 확장하고, “확장분의 상”이 $R(T)$의 기저임을 보인다. 1장의 도구(확장·대체·정리 1.7)가 총출동한다.</span></summary>
+  <p>$\dim V = n$, $\operatorname{nullity}(T) = k$라 하자. $N(T)$의 기저
+  $\{v_1, \dots, v_k\}$를 잡고, 1장 차원 따름정리로 $V$의 기저
+  $\beta = \{v_1, \dots, v_k, v_{k+1}, \dots, v_n\}$으로 확장한다.
+  주장: $S = \{T(v_{k+1}), \dots, T(v_n)\}$이 $R(T)$의 기저다 (그러면
+  $\operatorname{rank} = n - k$로 끝).</p>
+  <p><strong>생성:</strong> 정리 2.2로 $R(T) = \operatorname{span}\{T(v_1), \dots, T(v_n)\}$인데
+  $T(v_1) = \cdots = T(v_k) = 0$이므로 $R(T) = \operatorname{span}(S)$.</p>
+  <p><strong>독립:</strong> $\sum_{i=k+1}^{n} a_i T(v_i) = 0$이라 하자. 선형성으로
+  $T\left( \sum a_i v_i \right) = 0$, 즉 $\sum_{i \gt k} a_i v_i \in N(T)$.
+  그러면 이것을 $N(T)$의 기저로 쓸 수 있다: $\sum_{i \gt k} a_i v_i = \sum_{j \le k} b_j v_j$.
+  이항하면 $\beta$의 비자명한 영결합이 되므로 ($\beta$ 독립) 모든 계수가 $0$ —
+  특히 $a_i = 0$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-2-4"><span class="box-label">정리 2.4–2.5 · 단사·전사의 문법</span>
+  <p><strong>이 정리가 하는 일:</strong> 단사 검사를 “$N(T) = \{0\}$인가” 한 가지로 줄이고,
+  차원이 같으면 단사와 전사가 한 몸임을 밝힌다.</p>
+  <p>(2.4) $T$가 단사 $\iff$ $N(T) = \{0\}$.<br>
+  <span id="thm-2-5"></span>(2.5) $\dim V = \dim W \lt \infty$이면:
+  $T$ 단사 $\iff$ 전사 $\iff$ 전단사.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— (2.4) $T(x)=T(y) \iff T(x-y)=0$. (2.5) 차원정리로 nullity=0 ⟺ rank = dim W를 오간다.</span></summary>
+  <p>(2.4) 단사이면 $T(x) = 0 = T(0)$에서 $x = 0$. 역으로 $N(T) = \{0\}$이고
+  $T(x) = T(y)$이면 $T(x - y) = 0$이므로 $x - y \in N(T) = \{0\}$, 즉 $x = y$.</p>
+  <p>(2.5) 차원정리에 의해:
+  $T$ 단사 $\iff$ $\operatorname{nullity} = 0$ $\iff$ $\operatorname{rank} = \dim V = \dim W$
+  $\iff$ $R(T) = W$ (정리 1.11 — 차원이 꽉 차면 전체) $\iff$ 전사.</p>
+  <p><em>주의:</em> 무한차원에서는 거짓이다. 미분 $D : P(\mathbb{R}) \to P(\mathbb{R})$은
+  전사지만 단사가 아니다 (상수를 뭉갬).</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-2-6"><span class="box-label">정리 2.6 · 기저에서의 값이 전부다</span>
+  <p><strong>이 정리가 하는 일:</strong> 선형변환의 “자유도”를 정확히 잰다 —
+  기저 벡터들을 어디로 보낼지만 정하면 (그리고 아무 데나 보내도 된다)
+  변환 전체가 유일하게 결정된다.</p>
+  <p>$\{v_1, \dots, v_n\}$이 $V$의 기저이고 $w_1, \dots, w_n \in W$가 (중복 허용)
+  임의로 주어지면, $T(v_i) = w_i$인 선형변환 $T : V \to W$가 <strong>정확히 하나</strong>
+  존재한다.</p>
+  <p>(존재: $v = \sum a_i v_i$의 유일 표현(정리 1.8)을 타고 $T(v) = \sum a_i w_i$로 정의.
+  유일성: 선형성이 기저에서의 값을 전체로 퍼뜨린다. — 해석학 4장의 “조밀집합 위의
+  값이 연속함수를 결정한다”와 같은 정신이다.)</p>
+</div>
+
+<h2 id="sec-matrix">3. 행렬표현 — 행렬 곱셈의 정체</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>기저 $\beta$를 고르면 벡터는 좌표(숫자 기둥) $[v]_\beta$가 되고 —
+  선형변환도 숫자 상자가 될 수 있습니다: <strong>$j$번째 기저 벡터가 가는 곳의
+  좌표를 $j$번째 열에 적으면</strong> 됩니다. 정리 2.6이 이 정보만으로 충분함을
+  보증하죠. 그리고 행렬 곱셈의 그 괴상한 “행 × 열” 규칙은 외울 규칙이 아니라
+  <strong>“합성 변환의 표현”을 계산하면 저절로 나오는 결과</strong>입니다.</p>
+</div>
+
+<div class="box box-def" id="def-matrix-representation">
+  <span class="box-label">정의 · 행렬표현 <span class="label-en">matrix representation</span></span>
+  <p>$\beta = \{v_1, \dots, v_n\}$, $\gamma = \{w_1, \dots, w_m\}$가 $V, W$의 순서기저라
+  하자. $T(v_j) = \sum_{i=1}^{m} a_{ij} w_i$로 쓸 때 (유일 — 정리 1.8),
+  행렬 $[T]_\beta^\gamma = (a_{ij})$를 $T$의 <strong>행렬표현</strong>이라 한다.
+  — <strong>$j$번째 열 = $T(v_j)$의 $\gamma$-좌표.</strong></p>
+  <p>핵심 등식 (좌표로 변환 실행하기):
+  $\big[ T(u) \big]_\gamma = [T]_\beta^\gamma \, [u]_\beta$.</p>
+</div>
+
+<div class="box box-thm" id="thm-2-11"><span class="box-label">정리 2.11 · 합성 = 곱셈</span>
+  <p><strong>이 정리가 하는 일:</strong> 행렬 곱셈 정의의 존재 이유.</p>
+  <p>$T : V \to W$, $U : W \to Z$가 선형이고 $\alpha, \beta, \gamma$가 각 공간의
+  순서기저이면</p>
+  $$[UT]_\alpha^\gamma = [U]_\beta^\gamma \, [T]_\alpha^\beta$$
+  <p>— 변환의 합성이 행렬의 곱. “$(i,k)$ 성분 = $\sum_j a_{ij} b_{jk}$”라는 곱셈 공식은
+  합성 $U(T(v_k))$를 좌표로 풀어 쓰면 저절로 나온다. 행렬 곱셈이 결합법칙을
+  만족하지만 교환법칙은 안 되는 이유도 여기서 투명해진다 — 함수 합성이 원래 그러니까.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 미분을 행렬로</span>
+  <p>$D : P_2(\mathbb{R}) \to P_2(\mathbb{R})$, $D(f) = f'$을 기저
+  $\beta = \{1, x, x^2\}$로 표현하자. $D(1) = 0$, $D(x) = 1$, $D(x^2) = 2x$이므로
+  각각의 좌표를 열로 세우면:</p>
+  $$[D]_\beta = \begin{pmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 2 \\ 0 &amp; 0 &amp; 0 \end{pmatrix}$$
+  <p>“다항식 미분”이 행렬 곱 한 번이 됐다. $[D]_\beta^3 = O$ (세 번 미분하면 소멸)도
+  행렬 계산으로 확인된다 — 추상 연산의 성질이 숫자 계산으로 번역되는 것,
+  이것이 행렬표현의 존재 이유다.</p>
+</div>
+
+<h2 id="sec-iso">4. 동형사상 — “사실상 같은 공간”</h2>
+
+<div class="box box-def" id="def-isomorphism">
+  <span class="box-label">정의 · 동형사상 <span class="label-en">isomorphism</span></span>
+  <p>전단사 선형변환 $T : V \to W$를 <strong>동형사상</strong>이라 하고, 그런 $T$가
+  존재하면 $V$와 $W$는 <strong>동형</strong>($V \cong W$)이라 한다.
+  — 이름만 다르지 벡터공간으로서는 구별 불가능하다는 뜻.</p>
+</div>
+
+<div class="box box-thm" id="thm-2-19"><span class="box-label">정리 2.19 · 차원이 전부다</span>
+  <p><strong>이 정리가 하는 일:</strong> 유한차원 벡터공간의 완전한 분류 —
+  “벡터공간의 종류는 차원 하나로 끝난다.”</p>
+  <p>유한차원 $V, W$에 대해: $V \cong W$ $\iff$ $\dim V = \dim W$.
+  특히 $\dim V = n$이면 $V \cong F^n$ (좌표 사상 $v \mapsto [v]_\beta$가 동형사상).</p>
+  <p>그래서 $P_3(\mathbb{R})$, $M_{2\times2}(\mathbb{R})$, $\mathbb{R}^4$는 “같은 공간”이다 —
+  이후 어떤 정리든 $F^n$에서 증명하면 모든 유한차원 공간에서 성립한다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① “행렬 = 선형변환”이 아니라 <strong>행렬 = 선형변환 + 기저 선택</strong>입니다.
+  같은 변환도 기저를 바꾸면 행렬이 달라져요. 기저 $\beta$에서 $\beta'$으로 바꾸면
+  $[T]_{\beta'} = Q^{-1} [T]_\beta Q$ ($Q$는 좌표변환 행렬) — 이 관계에 있는 두 행렬을
+  <strong>닮음</strong>(similar)이라 합니다. “기저에 무관한 성질”(rank, 행렬식, 고윳값…)만이
+  변환 자체의 성질이고, 5장 대각화는 “$T$의 행렬이 가장 단순해지는 기저 찾기”입니다.
+  ② $V \cong W$라고 “원소가 같다”는 뜻이 아닙니다 — 다항식과 행렬은 다른 물건이지만
+  구조가 같을 뿐. 동형은 “구조의 같음”입니다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">2장의 줄거리</span>
+  <p><a class="term" data-term="linear-transformation">선형변환</a> = 덧셈·스칼라배 보존
+  (미분·적분도 포함!)
+  → <a class="term" data-term="null-space">영공간</a>(뭉갠 방향)과 상(살아남은 방향)
+  → <strong><a class="term" data-term="rank-nullity">차원정리</a></strong>:
+  nullity + rank = $\dim V$
+  → 단사 $\iff N(T) = \{0\}$; 차원 같으면 단사 $=$ 전사 (2.5)
+  → 기저에서의 값이 변환을 결정 (2.6)
+  → <a class="term" data-term="matrix-representation">행렬표현</a>: $j$열 = $T(v_j)$의 좌표,
+  합성 = 곱셈 (2.11 — 행렬 곱셈 정의의 정체)
+  → <a class="term" data-term="isomorphism">동형사상</a>: $V \cong W \iff \dim V = \dim W$
+  (2.19) — 모든 $n$차원 공간은 $F^n$이다.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 차원정리. 임용에서 “rank를 구하라/추정하라”가
+  보이면 십중팔구 nullity를 세는 문제고, 그 역도 마찬가지다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$T : \mathbb{R}^3 \to \mathbb{R}^2$, $T(a_1, a_2, a_3) = (a_1 - a_2,\ 2a_3)$에 대해
+  $N(T)$와 $R(T)$의 기저를 구하고 차원정리를 확인하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$N(T)$: $a_1 = a_2$, $a_3 = 0$인 벡터들. $R(T)$: 표준기저의 상들이 생성 (정리 2.2).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$N(T)$: $a_1 - a_2 = 0$, $2a_3 = 0$에서 $(t, t, 0)$ 꼴 —
+    기저 $\{(1, 1, 0)\}$, nullity $= 1$.</p>
+    <p>$R(T)$: $T(e_1) = (1, 0)$, $T(e_2) = (-1, 0)$, $T(e_3) = (0, 2)$가 생성.
+    $(1,0)$과 $(0,2)$만으로 충분하고 독립이므로 rank $= 2$ (즉 $R(T) = \mathbb{R}^2$,
+    전사).</p>
+    <p>확인: $1 + 2 = 3 = \dim \mathbb{R}^3$ ✓. (전사이지만 단사가 아니다 —
+    차원이 줄어드는 방향으로는 반드시 뭉개짐이 있다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례. ($V, W$는 유한차원.)</p>
+  <p>(1) $\dim V \gt \dim W$이면 단사인 선형변환 $T : V \to W$는 없다.<br>
+  (2) $\dim V \lt \dim W$이면 전사인 선형변환 $T : V \to W$는 없다.<br>
+  (3) $T : V \to V$가 $T^2 = T$ (사영 성질)를 만족하면 $V = N(T) + R(T)$... 정확히는
+  $N(T) \cap R(T) = \{0\}$이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1), (2)는 차원정리에서 rank의 상한 두 개 — rank ≤ dim V, rank ≤ dim W — 를 쓴다.
+    (3) $x \in N(T) \cap R(T)$이면 $x = T(y)$이고 $T(x) = 0$인데, $T^2 = T$를 쓰면?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 단사이면 nullity $= 0$이므로 차원정리에서
+    rank $= \dim V \gt \dim W$. 그런데 $R(T) \subset W$이므로 rank $\le \dim W$ — 모순.
+    (“큰 공간을 작은 공간에 구겨 넣으면 반드시 뭉개진다” — 비둘기집의 선형대수판.)</p>
+    <p>(2) <strong>참.</strong> rank $\le \dim V \lt \dim W$이므로 $R(T) \neq W$ (정리 1.11).</p>
+    <p>(3) <strong>참.</strong> $x \in N(T) \cap R(T)$라 하자. $x = T(y)$인 $y$가 있고,
+    $T^2 = T$이므로 $x = T(y) = T^2(y) = T(T(y)) = T(x) = 0$ ($x \in N(T)$).
+    그러므로 교집합은 $\{0\}$. (차원정리와 합치면 $V = N(T) \oplus R(T)$ — 사영은
+    공간을 “뭉개는 방향 ⊕ 남는 방향”으로 쪼갠다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Friedberg 2.1절 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$T : P_2(\mathbb{R}) \to P_3(\mathbb{R})$을 $T(f)(x) = 2f'(x) + \int_0^x 3f(t)\, dt$로
+  정의하자. $T$가 선형임을 보이고, rank$(T)$와 nullity$(T)$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>미분과 적분이 각각 선형이므로 그 결합도 선형. 기저 $\{1, x, x^2\}$의 상을 직접
+    계산해 독립성을 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>선형성:</strong> $D$와 $f \mapsto \int_0^x f$가 선형이고(해석학 5·6장의 미분·적분
+    규칙), 선형변환의 스칼라배와 합은 선형이므로 $T = 2D + 3\,\mathrm{Int}$도 선형.</p>
+    <p><strong>기저의 상:</strong> $T(1) = 0 + 3x = 3x$, &nbsp;
+    $T(x) = 2 + \frac{3}{2}x^2$, &nbsp; $T(x^2) = 4x + x^3$.</p>
+    <p><strong>독립성:</strong> $a \cdot 3x + b\left(2 + \tfrac{3}{2}x^2\right) + c(4x + x^3) = 0$
+    → 상수항 $2b = 0$, $x^3$항 $c = 0$, $x$항 $3a + 4c = 0 \Rightarrow a = 0$.
+    셋이 독립이므로 rank $= 3$, 차원정리에서 nullity $= 3 - 3 = 0$ — 단사다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Friedberg 2.2절 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$T : \mathbb{R}^2 \to \mathbb{R}^2$를 “직선 $y = x$에 대한 반사”라 하자.
+  표준기저 $\sigma$에 대한 $[T]_\sigma$와, 기저 $\beta = \{(1,1), (1,-1)\}$에 대한
+  $[T]_\beta$를 각각 구하라. 어느 쪽이 “$T$의 본색”을 보여주는가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>반사는 $(a, b) \mapsto (b, a)$. $\beta$의 두 벡터는 반사축 위의 벡터와 축에 수직인
+    벡터다 — 각각 어디로 가는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>표준기저: $T(e_1) = (0,1)$, $T(e_2) = (1,0)$이므로
+    $[T]_\sigma = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}$.</p>
+    <p>$\beta$: $T(1,1) = (1,1)$ (축 위 — 그대로), $T(1,-1) = (-1,1) = -(1,-1)$
+    (축에 수직 — 뒤집힘). 좌표로 쓰면
+    $[T]_\beta = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix}$.</p>
+    <p>$[T]_\beta$가 본색이다 — “한 방향은 보존, 한 방향은 반전”이라는 반사의 기하가
+    대각행렬로 그대로 드러난다. 두 행렬은 닮음이고($Q^{-1} [T]_\sigma Q = [T]_\beta$),
+    <strong>좋은 기저를 고르면 변환이 투명해진다</strong>는 것 — 이것이 5장 대각화의 전부다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>차원정리 논증</span>
+  </div>
+  <p>$T : V \to W$, $U : W \to Z$가 유한차원 공간들 사이의 선형변환일 때,
+  다음을 증명하라: $\operatorname{rank}(UT) \le \min\{\operatorname{rank}(U),\ \operatorname{rank}(T)\}$.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$R(UT) = U(R(T)) \subset R(U)$ — 한쪽은 포함 관계로, 다른 쪽은 “$U$를 $R(T)$에
+    제한한 변환”에 차원정리(또는 정리 1.11)를 적용.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>먼저 $R(UT) = \{U(T(x)) : x \in V\} = U(R(T)) \subset R(U)$이므로
+    (정리 1.11) $\operatorname{rank}(UT) \le \operatorname{rank}(U)$.</p>
+    <p>다음, $U' : R(T) \to Z$를 $U$의 제한이라 하면 $R(U') = U(R(T)) = R(UT)$이고,
+    차원정리를 $U'$에 적용하면
+    $\operatorname{rank}(UT) = \operatorname{rank}(U') \le \dim R(T) = \operatorname{rank}(T)$.</p>
+    <p>합치면 $\operatorname{rank}(UT) \le \min\{\operatorname{rank} U, \operatorname{rank} T\}$. $\blacksquare$
+    (행렬 언어로: 곱하면 rank는 늘지 않는다 — 정보는 합성을 거치며 잃기만 한다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>차원정리 서술형</span>
+  </div>
+  <p>$T : V \to V$가 유한차원 공간 위의 선형변환이고 $T^2 = T_0$ (영변환)이라 하자.
+  $\operatorname{rank}(T) \le \frac{1}{2} \dim V$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$T^2 = T_0$은 $R(T) \subset N(T)$와 같은 말이다 — 왜인지부터 확인하고,
+    양변의 차원을 차원정리로 잇자.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>핵심 관찰:</strong> 임의의 $x$에 대해 $T(T(x)) = 0$이므로, $R(T)$의 모든
+    원소 $T(x)$는 $N(T)$에 속한다: $R(T) \subset N(T)$.</p>
+    <p>정리 1.11에 의해 $\operatorname{rank}(T) = \dim R(T) \le \dim N(T) = \operatorname{nullity}(T)$.
+    이제 차원정리:</p>
+    $$\dim V = \operatorname{rank}(T) + \operatorname{nullity}(T) \ge \operatorname{rank}(T) + \operatorname{rank}(T) = 2\operatorname{rank}(T)$$
+    <p>그러므로 $\operatorname{rank}(T) \le \frac{1}{2} \dim V$. $\blacksquare$</p>
+    <p>(“$T^k = 0$이면 rank $\le \frac{k-1}{k} \dim V$”로 일반화된다 — 7장 멱영변환의
+    예고편. 서술의 뼈대: 조건을 부분공간 포함으로 번역 → 차원 부등식 → 차원정리로 마감.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

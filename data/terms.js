@@ -373,6 +373,39 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "short": "$\\Gamma(x) = \\int_0^\\infty t^{x-1}e^{-t}dt$. $\\Gamma(n+1) = n!$ — 팩토리얼의 연속 확장이며, 로그볼록성 조건이 이 확장을 유일하게 결정한다 (보어-몰레루프).",
     "href": "subjects/analysis/ch08.html#def-gamma-function"
   },
+  /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
+
+  "linear-transformation": {
+    "ko": "선형변환",
+    "en": "linear transformation",
+    "short": "$T(x+y) = T(x)+T(y)$, $T(cx) = cT(x)$를 만족하는 함수 — 벡터공간의 구조를 보존한다. $T(0) = 0$은 자동. 미분과 적분도 선형변환이다.",
+    "href": "subjects/linear-algebra/ch02.html#def-linear-transformation"
+  },
+  "null-space": {
+    "ko": "영공간 (핵)",
+    "en": "null space, kernel",
+    "short": "$N(T) = \\{x : T(x) = 0\\}$ — $T$가 $0$으로 뭉개는 방향들의 부분공간. $T$가 단사 $\\iff N(T) = \\{0\\}$ (Friedberg 2.4). $\\dim N(T)$를 nullity라 한다.",
+    "href": "subjects/linear-algebra/ch02.html#def-null-space"
+  },
+  "rank-nullity": {
+    "ko": "차원정리",
+    "en": "dimension theorem, rank–nullity",
+    "short": "$\\operatorname{nullity}(T) + \\operatorname{rank}(T) = \\dim V$ (Friedberg 2.3) — 뭉갠 차원과 살아남은 차원의 합은 원래 차원. 선형대수에서 가장 많이 인용되는 등식.",
+    "href": "subjects/linear-algebra/ch02.html#def-rank-nullity"
+  },
+  "matrix-representation": {
+    "ko": "행렬표현",
+    "en": "matrix representation",
+    "short": "순서기저를 고르면 선형변환이 행렬이 된다: $j$번째 열 = $T(v_j)$의 좌표. $[T(u)]_\\gamma = [T]_\\beta^\\gamma [u]_\\beta$이고, 합성은 행렬 곱 (Friedberg 2.11) — 행렬 곱셈 정의의 기원.",
+    "href": "subjects/linear-algebra/ch02.html#def-matrix-representation"
+  },
+  "isomorphism": {
+    "ko": "동형사상",
+    "en": "isomorphism",
+    "short": "전단사 선형변환. $V \\cong W \\iff \\dim V = \\dim W$ (Friedberg 2.19) — 유한차원 벡터공간은 차원 하나로 완전히 분류되고, 모든 $n$차원 공간은 $F^n$과 같다.",
+    "href": "subjects/linear-algebra/ch02.html#def-isomorphism"
+  },
+
   /* ---------- 선형대수 1장: 벡터공간 ---------- */
 
   "vector-space": {
