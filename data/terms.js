@@ -1138,5 +1138,89 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "quadratic reciprocity",
     "short": "서로 다른 홀소수에서 $\\left(\\frac p q\\right)\\left(\\frac q p\\right)=(-1)^{\\frac{p-1}{2}\\frac{q-1}{2}}$ — 둘 다 $\\equiv3\\pmod4$면 부호 반대, 아니면 같음. 보충법칙 $\\left(\\frac{-1}p\\right)=(-1)^{(p-1)/2}$, $\\left(\\frac2p\\right)=(-1)^{(p^2-1)/8}$. 가우스의 황금정리.",
     "href": "subjects/number-theory/ch07.html#def-quadratic-reciprocity"
+  },
+
+  /* ---------- 해석학 9–11장 (다변수·미분형식·르베그) ---------- */
+
+  "total-derivative": {
+    "ko": "전미분",
+    "en": "total derivative",
+    "short": "$f:\\mathbb{R}^n\\to\\mathbb{R}^m$의 미분을 최선의 일차근사 선형변환 $f'(x)$로 정의: $\\lim_{h\\to0}|f(x+h)-f(x)-f'(x)h|/|h|=0$. 그 행렬이 야코비 $[\\partial f_i/\\partial x_j]$이며, 편도함수 존재만으론 부족하고 연속이면 $C^1$=전미분가능.",
+    "href": "subjects/analysis/ch09.html#def-total-derivative"
+  },
+  "inverse-function-theorem": {
+    "ko": "역함수 정리",
+    "en": "inverse function theorem",
+    "short": "$f\\in C^1$이고 $f'(a)$가 가역이면 $a$ 근방에서 $f$가 국소적으로 $C^1$ 가역이고 $(f^{-1})'=[f'\\circ f^{-1}]^{-1}$. 증명은 완비성 위의 축약사상 원리(부동점). 국소 결론이지 대역이 아니다 — $e^z$가 반례.",
+    "href": "subjects/analysis/ch09.html#def-inverse-function-theorem"
+  },
+  "implicit-function-theorem": {
+    "ko": "음함수 정리",
+    "en": "implicit function theorem",
+    "short": "$F(x,y)=0$에서 $\\partial F/\\partial y$가 가역이면 $y=g(x)$가 국소적으로 유일하게 풀리고 $g'=-(\\partial F/\\partial y)^{-1}(\\partial F/\\partial x)$. 역함수 정리의 따름 — 등위집합이 국소적으로 그래프가 된다.",
+    "href": "subjects/analysis/ch09.html#def-implicit-function-theorem"
+  },
+  "change-of-variables": {
+    "ko": "변수변환 정리",
+    "en": "change of variables",
+    "short": "$\\int_{g(A)} f = \\int_A (f\\circ g)\\,|\\det g'|$ — 좌표를 바꾸면 야코비 행렬식의 절댓값이 부피 환율로 곱해진다. 1차원 치환적분의 $n$차원판이며, 절댓값을 쓰는 이유는 방향이 없는 다중적분의 부피가 항상 양수여야 하기 때문.",
+    "href": "subjects/analysis/ch10.html#def-change-of-variables"
+  },
+  "differential-form": {
+    "ko": "미분형식",
+    "en": "differential form",
+    "short": "$k$-형식 $\\sum a_I\\,dx_{i_1}\\wedge\\cdots\\wedge dx_{i_k}$ — 방향에 반응하도록 반대칭 쐐기곱($dx\\wedge dy=-dy\\wedge dx$, 따라서 $dx\\wedge dx=0$)을 내장한, 적분당하기 위해 태어난 대상. 외미분 $d$가 grad·curl·div를 한 연산으로 묶고 $d^2=0$을 만족.",
+    "href": "subjects/analysis/ch10.html#def-differential-form"
+  },
+  "stokes-theorem": {
+    "ko": "스토크스 정리",
+    "en": "Stokes' theorem",
+    "short": "$\\int_{\\partial c}\\omega = \\int_c d\\omega$ — 경계에서의 적분 = 내부에서 미분한 것의 적분. 미적분학의 기본정리·그린 정리·발산 정리·고전 스토크스 정리를 단 하나의 등식으로 통합하며, 방향(orientation)이 부호를 결정한다.",
+    "href": "subjects/analysis/ch10.html#def-stokes-theorem"
+  },
+  "lebesgue-measure": {
+    "ko": "르베그 측도",
+    "en": "Lebesgue measure",
+    "short": "외측도(가산 구간 덮개 길이의 하한)로 시작해, 카라테오도리 조건을 통과한 가측집합의 $\\sigma$-대수 위에서 가산가법이 되는 크기 함수. 구간에서는 길이 $b-a$와 일치한다. 영집합과 ‘거의 어디서나’의 토대이며, 선택공리로 비가측집합이 존재한다.",
+    "href": "subjects/analysis/ch11.html#def-lebesgue-measure"
+  },
+  "lebesgue-integral": {
+    "ko": "르베그 적분",
+    "en": "Lebesgue integral",
+    "short": "치역을 쪼개 단순함수로 근사하는 적분: 비음함수는 $\\sup$(단조극한), 일반은 $f=f^{+}-f^{-}$. 가측함수에 정의되고 리만적분을 포함·확장한다(리만 가능 $\\Rightarrow$ 르베그 가능·값 일치). 리만이 못 하던 $\\mathbf{1}_{\\mathbb{Q}}$도 적분값 $0$으로 처리.",
+    "href": "subjects/analysis/ch11.html#def-lebesgue-integral"
+  },
+  "convergence-theorems": {
+    "ko": "수렴 정리 (MCT·파투·DCT)",
+    "en": "convergence theorems",
+    "short": "극한과 적분의 교환을 보증하는 세 정리: 단조수렴정리(비음·증가 $\\to$ 등식), 파투 보조정리(비음 $\\to \\le$), 지배수렴정리($L^1$ 지배함수 $\\to$ 등식). 균등수렴 없이 점별 수렴만으로 $\\lim\\int=\\int\\lim$을 얻는 르베그 이론의 하이라이트.",
+    "href": "subjects/analysis/ch11.html#def-convergence-theorems"
+  },
+
+  /* ---------- 위상수학 7–8장 (기본군·피복공간) ---------- */
+
+  "homotopy": {
+    "ko": "호모토피",
+    "en": "homotopy",
+    "short": "두 연속함수 사이의 연속 변형 $H:X\\times[0,1]\\to Y$ ($H(\\cdot,0)=f$, $H(\\cdot,1)=g$) — 시간 $t$로 찍은 변형 필름. 끝점을 고정하면 경로 호모토피이고, 그 동치류(호모토피류)가 기본군의 원소가 된다.",
+    "href": "subjects/topology/ch07.html#def-homotopy"
+  },
+  "fundamental-group": {
+    "ko": "기본군",
+    "en": "fundamental group",
+    "short": "기준점 $x_0$의 고리들의 경로호모토피류에 연접 연산을 준 군 $\\pi_1(X,x_0)$ (항등원=상수 고리, 역원=거꾸로 고리). 위상 불변량이며 $\\pi_1(S^1)\\cong\\mathbb{Z}$, 자명하면 단순연결.",
+    "href": "subjects/topology/ch07.html#def-fundamental-group"
+  },
+  "covering-space": {
+    "ko": "피복공간",
+    "en": "covering space",
+    "short": "$p:E\\to B$가 각 점에 균등피복(evenly covered) 근방을 갖는 연속 전사 — 밑공간을 국소적으로 여러 겹의 똑같은 복사본으로 덮는다. 올 $p^{-1}(b)$는 이산이고, 국소 자명이지 대역 자명이 아니다. 예: $\\mathbb{R}\\to S^1$, $z\\mapsto z^n$($n$겹), $S^n\\to\\mathbb{RP}^n$.",
+    "href": "subjects/topology/ch08.html#def-covering-space"
+  },
+  "lifting-theorem": {
+    "ko": "올림 정리",
+    "en": "lifting theorem",
+    "short": "피복 $p:E\\to B$ 위로 경로·호모토피가 시작점을 정하면 유일하게 올라간다(유일성엔 정의역 연결 필요). 감는 수 $=$ 올림의 끝점이라는 원리로 $\\pi_1(S^1)\\cong\\mathbb{Z}$를 증명. 일반 사상 $f:Y\\to B$는 $f_*\\pi_1(Y)\\subseteq p_*\\pi_1(E)$일 때만 올림이 존재.",
+    "href": "subjects/topology/ch08.html#def-lifting-theorem"
   }
 });

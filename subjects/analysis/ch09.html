@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9장 다변수 함수의 미분 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch09.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin (9장)</p>
+  <h1><span class="ch-num">9</span> 다변수 함수의 미분</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다. 5장의 “미분 = 최선의 일차 근사”가
+  이 장의 유일한 아이디어 — 다만 이제 그 “일차”가 스칼라가 아니라 <strong>선형변환</strong>입니다.</p>
+</div>
+
+<p>일변수에서 미분계수 $f'(x)$는 <em>수</em>였습니다. 다변수에서 $f : \mathbb{R}^n \to \mathbb{R}^m$의
+미분은 무엇이어야 할까요? 편미분을 죽 늘어놓은 표(야코비 행렬)라고 답하고 싶겠지만,
+그건 결과이지 정의가 아닙니다. 이 장의 핵심 이동은 이것 하나예요 —
+<strong>미분 $f'(x)$를 “$x$ 근방에서 $f$를 가장 잘 흉내 내는 선형변환”으로 정의한다.</strong>
+그러면 5장의 정리들이($f' = 0 \Rightarrow$ 상수, 연쇄법칙, …) 거의 그대로 살아나고,
+마지막에 이 장의 두 왕관 — <strong>역함수 정리</strong>와 <strong>음함수 정리</strong> — 이
+“선형에서 참인 것은 국소적으로 비선형에서도 참”이라는 형태로 등장합니다.
+그래서 시작은 선형대수입니다.</p>
+
+<h2 id="sec-linear-norm">1. 선형변환과 작용소 노름 — 미분이 살 무대</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>다변수 미분값 $f'(x)$는 <em>행렬</em>이 될 것이고, 행렬은 <a class="term" data-term="linear-transformation">선형변환</a>입니다.
+  그런데 “$f'$이 연속이다”, “$f'(x)$가 $f'(a)$에 가깝다” 같은 말을 하려면
+  <strong>선형변환들 사이의 거리</strong>가 있어야 해요. 그 거리를 재는 자가
+  <strong>작용소 노름</strong> $\lVert A \rVert$입니다 — “$A$가 단위벡터를 최대 얼마나 늘이는가”.
+  이걸 갖추면 $L(\mathbb{R}^n, \mathbb{R}^m)$ 자체가 하나의 <a class="term" data-term="metric-space">거리공간</a>이 되고,
+  “미분의 미분”, “$C^1$” 같은 개념이 말이 됩니다.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 9.6 · 작용소 노름 <span class="label-en">operator norm</span></span>
+  <p>선형변환 $A : \mathbb{R}^n \to \mathbb{R}^m$에 대해</p>
+  $$\lVert A \rVert = \sup \{\, |A\mathbf{x}| : \mathbf{x} \in \mathbb{R}^n,\ |\mathbf{x}| \le 1 \,\}$$
+  <p>로 정의한다. 이 값은 유한하고, 정의에서 곧바로 <strong>가장 쓸모 있는 부등식</strong>이 나온다:</p>
+  $$|A\mathbf{x}| \le \lVert A \rVert\, |\mathbf{x}| \qquad (\text{모든 } \mathbf{x} \in \mathbb{R}^n)$$
+  <p>또한 $\lVert A + B \rVert \le \lVert A \rVert + \lVert B \rVert$,
+  $\lVert BA \rVert \le \lVert B \rVert\, \lVert A \rVert$가 성립하므로,
+  $d(A, B) = \lVert A - B \rVert$는 선형변환 공간 $L(\mathbb{R}^n, \mathbb{R}^m)$에
+  <a class="term" data-term="metric-space">거리</a>를 준다. 특히 모든 선형변환은
+  ($|A\mathbf{x} - A\mathbf{y}| \le \lVert A \rVert |\mathbf{x} - \mathbf{y}|$이므로) <strong>립시츠 연속</strong>이다.</p>
+</div>
+
+<div class="box box-thm" id="thm-9-8"><span class="box-label">정리 9.8 · 가역 작용소의 열림과 역의 연속</span>
+  <p><strong>이 정리가 하는 일:</strong> “가역성은 작은 흔들림에 견딘다.” 역함수 정리에서
+  $f'(x)$가 $f'(a)$ 근처에 있기만 하면 여전히 가역임을 보장하는, 그 정리의 숨은 엔진.</p>
+  <p>$\Omega \subset L(\mathbb{R}^n)$를 가역 선형변환 전체라 하자.</p>
+  <p>(a) $A \in \Omega$이고 $\lVert B - A \rVert \cdot \lVert A^{-1} \rVert \lt 1$이면 $B \in \Omega$이다.</p>
+  <p>(b) 따라서 $\Omega$는 $L(\mathbb{R}^n)$에서 <a class="term" data-term="open-set">열린집합</a>이고,
+  사상 $A \mapsto A^{-1}$은 $\Omega$ 위에서 연속이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— (a) $B$가 단사임을 아래에서 밀어 보인다: $|B\mathbf{x}|$가 $|\mathbf{x}|$보다 작아질 수 없다. 유한차원에서 단사 = 가역.</span></summary>
+  <p>(a) $\lVert A^{-1} \rVert = 1/\alpha$, $\lVert B - A \rVert = \beta$로 두면 가정은 $\beta \lt \alpha$.
+  임의의 $\mathbf{x}$에 대해</p>
+  $$\alpha |\mathbf{x}| = \alpha |A^{-1} A \mathbf{x}| \le \alpha \lVert A^{-1} \rVert\, |A\mathbf{x}| = |A\mathbf{x}| \le |B\mathbf{x}| + |(A - B)\mathbf{x}| \le |B\mathbf{x}| + \beta |\mathbf{x}|$$
+  <p>이므로 $(\alpha - \beta)|\mathbf{x}| \le |B\mathbf{x}|$. $\alpha - \beta \gt 0$이라 $B\mathbf{x} = 0 \Rightarrow \mathbf{x} = 0$,
+  즉 $B$는 단사다. <a class="term" data-term="rank-nullity">차원정리</a>(선형대수)에 의해
+  유한차원에서 단사 선형변환은 전단사 — $B \in \Omega$.</p>
+  <p>(b) $A$를 중심으로 반지름 $1/\lVert A^{-1} \rVert$인 공이 통째로 $\Omega$에 들어가므로 $\Omega$는 열림.
+  역의 연속성은 항등식 $B^{-1} - A^{-1} = B^{-1}(A - B)A^{-1}$과 노름의 곱 부등식에서
+  $\lVert B^{-1} - A^{-1} \rVert \le \lVert B^{-1} \rVert\, \lVert A - B \rVert\, \lVert A^{-1} \rVert$로 통제된다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 선형대수와의 접점</span>
+  <p>“가역”은 선형대수의 여러 얼굴이 전부 같은 것을 가리킵니다:
+  $A$ 가역 $\iff$ 단사 $\iff$ 전사 $\iff \operatorname{rank} A = n$ $\iff \det A \neq 0$ $\iff$
+  $A$가 <a class="term" data-term="isomorphism">동형사상</a>. <strong>단, 이 동치들은 유한차원에서만 성립합니다</strong> —
+  무한차원(예: 함수 공간)에서는 단사인데 전사가 아닌 선형변환이 흔하죠.
+  이 장이 $\mathbb{R}^n$(유한차원)에 머무는 한, “단사면 가역”을 마음껏 써도 됩니다.
+  또 하나: $\lVert A \rVert$는 $\det A$와 무관합니다 — $\det$은 부피 배율, $\lVert A \rVert$는 최대 늘임 배율.</p>
+</div>
+
+<h2 id="sec-total-derivative">2. 전미분 — 미분값이 선형변환이 되다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>5장에서 미분가능은 “$f(t) \approx f(x) + f'(x)(t - x)$, 오차는 간격보다 빨리 죽는다”였습니다.
+  다변수에서도 문장은 똑같아요 — $f'(x)(t-x)$에서 <strong>수 곱하기</strong> $f'(x) \cdot (t-x)$를
+  <strong>선형변환 먹이기</strong> $f'(\mathbf{x})\mathbf{h}$로 바꾸기만 하면 됩니다.
+  즉 “증분 $\mathbf{h}$를 넣으면 증분 $f(\mathbf{x}+\mathbf{h}) - f(\mathbf{x})$가 나오는데,
+  그 대응이 <em>거의 선형</em>이다.” 그 선형 부분이 미분 $f'(\mathbf{x})$이고,
+  나머지가 $|\mathbf{h}|$보다 빨리 사라진다는 것이 전미분의 정의입니다.</p>
+</div>
+
+<div class="box box-def" id="def-total-derivative">
+  <span class="box-label">정의 9.11 · 전미분 <span class="label-en">total derivative</span></span>
+  <p>$E \subset \mathbb{R}^n$이 열린집합, $f : E \to \mathbb{R}^m$, $\mathbf{x} \in E$라 하자.
+  어떤 <a class="term" data-term="linear-transformation">선형변환</a> $A : \mathbb{R}^n \to \mathbb{R}^m$이 존재하여</p>
+  $$\lim_{\mathbf{h} \to \mathbf{0}} \frac{\big|\, f(\mathbf{x} + \mathbf{h}) - f(\mathbf{x}) - A\mathbf{h} \,\big|}{|\mathbf{h}|} = 0$$
+  <p>이면 $f$는 $\mathbf{x}$에서 <strong>(전)미분가능</strong>하다고 하고, $A$를 $f$의 <strong>전미분</strong>
+  또는 <strong>미분</strong>이라 부르며 $f'(\mathbf{x}) = A$로 쓴다. (분자는 $\mathbb{R}^m$의 노름,
+  분모는 $\mathbb{R}^n$의 노름.) 이런 $A$는 존재하면 <strong>유일하다</strong>(정리 9.12).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — “$f'(\mathbf{x})$는 수도 벡터도 아니다”</span>
+  <p>$f'(\mathbf{x})$는 <strong>선형변환</strong>(즉 $m \times n$ 행렬)입니다.
+  $f'(\mathbf{x})\mathbf{h}$라고 쓰면 이건 “행렬 $\times$ 벡터”예요.
+  일변수 $m = n = 1$일 때만 그 $1 \times 1$ 행렬을 수처럼 취급할 수 있습니다.
+  또 유일성(9.12)이 없으면 “<em>the</em> 미분”이라 부를 수 없는데, 유일성은
+  두 후보 $A_1, A_2$의 차 $A_1 - A_2$가 $|\mathbf{h}|$보다 빨리 죽는 선형변환이 되어
+  $0$일 수밖에 없다는 데서 나옵니다.</p>
+</div>
+
+<h3 id="sec-jacobian">2.1 편도함수와 야코비 행렬</h3>
+
+<p>전미분은 “$A$가 존재한다”는 <em>추상적</em> 조건입니다. 그 $A$의 성분을 실제로 계산하는 도구가
+편도함수예요. $f = (f_1, \dots, f_m)$의 성분함수와 표준기저 $\mathbf{e}_1, \dots, \mathbf{e}_n$에 대해</p>
+
+$$(D_j f_i)(\mathbf{x}) = \frac{\partial f_i}{\partial x_j}(\mathbf{x}) = \lim_{t \to 0} \frac{f_i(\mathbf{x} + t\mathbf{e}_j) - f_i(\mathbf{x})}{t}$$
+
+<p>가 <strong>편도함수</strong>입니다 — “$x_j$만 움직이고 나머지는 고정”한 일변수 미분.
+$f$가 $\mathbf{x}$에서 전미분가능하면, 선형변환 $f'(\mathbf{x})$를 표준기저로 나타낸
+<a class="term" data-term="matrix-representation">행렬</a>이 바로 <strong>야코비 행렬</strong>입니다:</p>
+
+$$f'(\mathbf{x}) = \big[\, D_j f_i(\mathbf{x}) \,\big]_{\substack{1 \le i \le m \\ 1 \le j \le n}}
+= \begin{pmatrix} \dfrac{\partial f_1}{\partial x_1} & \cdots & \dfrac{\partial f_1}{\partial x_n} \\[1.2ex] \vdots & \ddots & \vdots \\[0.6ex] \dfrac{\partial f_m}{\partial x_1} & \cdots & \dfrac{\partial f_m}{\partial x_n} \end{pmatrix}$$
+
+<p>($j$번째 열 $= f'(\mathbf{x})\mathbf{e}_j = $ $j$번째 좌표 방향의 변화율.)
+일반적인 단위벡터 $\mathbf{u}$ 방향의 <strong>방향도함수</strong>는 $D_{\mathbf{u}} f(\mathbf{x}) = f'(\mathbf{x})\mathbf{u}$ —
+전미분에 방향벡터를 먹인 것일 뿐이다.</p>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 편도함수 존재 ≠ 전미분 가능</span>
+  <p><strong>편도함수가 다 존재해도(심지어 모든 방향도함수가 존재해도) 전미분가능하지 않을 수 있습니다.</strong>
+  표준 반례:</p>
+  $$f(x, y) = \frac{xy}{x^2 + y^2}\ (\text{원점 밖}), \qquad f(0,0) = 0.$$
+  <p>$x$축·$y$축 위에서 $f \equiv 0$이므로 $D_1 f(0,0) = D_2 f(0,0) = 0$ — 두 편도함수 모두 존재.
+  그런데 $y = x$를 따라가면 $f = \tfrac{1}{2}$이라 $f$는 $(0,0)$에서 <strong>연속조차 아니다</strong>.
+  전미분가능하면 연속이어야 하므로(아래 연습문제 6), $f$는 전미분 불가능.
+  <em>편도함수는 좌표축 방향의 정보만 보고, 전미분은 모든 방향에서 동시에 일차근사가 되기를 요구한다</em> —
+  후자가 훨씬 강한 조건이다. 다행히 다음 정리가 “언제 편도함수만으로 충분한가”를 답한다.</p>
+</div>
+
+<h3 id="sec-c1-chain">2.2 연쇄법칙과 $C^1$ 판정</h3>
+
+<div class="box box-thm" id="thm-9-15"><span class="box-label">정리 9.15 · 연쇄법칙 <span class="label-en">chain rule</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 합성함수의 미분 = 미분들의 <strong>합성</strong>(= 야코비 행렬들의 곱).
+  “일차 근사끼리 합성하면 여전히 일차 근사”라는 5장 직관의 다변수판.</p>
+  <p>$f : E \to \mathbb{R}^m$이 $\mathbf{x} \in E$에서 미분가능하고, $g$가 $f(\mathbf{x})$의 근방에서
+  정의되어 $f(\mathbf{x})$에서 미분가능하면, $F = g \circ f$는 $\mathbf{x}$에서 미분가능하고</p>
+  $$F'(\mathbf{x}) = g'\big(f(\mathbf{x})\big)\, f'(\mathbf{x})$$
+  <p>(우변은 <strong>선형변환의 합성</strong> = 야코비 행렬의 <a class="term" data-term="matrix-representation">행렬 곱</a>).</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 두 일차근사 $f(\mathbf{x}+\mathbf{h}) \approx f(\mathbf{x}) + A\mathbf{h}$, $g(\mathbf{y}+\mathbf{k}) \approx g(\mathbf{y}) + B\mathbf{k}$를 포개고, 오차항이 $|\mathbf{h}|$보다 빨리 죽음을 노름 부등식으로 확인.</span></summary>
+  <p>$A = f'(\mathbf{x})$, $B = g'(f(\mathbf{x}))$, $\mathbf{y} = f(\mathbf{x})$라 하자. 미분가능의 정의를
+  “오차 함수”로 쓰면 $f(\mathbf{x}+\mathbf{h}) - \mathbf{y} = A\mathbf{h} + \mathbf{r}(\mathbf{h})$,
+  $g(\mathbf{y}+\mathbf{k}) - g(\mathbf{y}) = B\mathbf{k} + \mathbf{s}(\mathbf{k})$이고
+  $\mathbf{r}(\mathbf{h})/|\mathbf{h}| \to 0$, $\mathbf{s}(\mathbf{k})/|\mathbf{k}| \to 0$.
+  $\mathbf{k} = f(\mathbf{x}+\mathbf{h}) - \mathbf{y} = A\mathbf{h} + \mathbf{r}(\mathbf{h})$로 두면</p>
+  $$F(\mathbf{x}+\mathbf{h}) - F(\mathbf{x}) = B\mathbf{k} + \mathbf{s}(\mathbf{k}) = BA\mathbf{h} + B\mathbf{r}(\mathbf{h}) + \mathbf{s}(\mathbf{k}).$$
+  <p>$|B\mathbf{r}(\mathbf{h})| \le \lVert B \rVert |\mathbf{r}(\mathbf{h})|$은 $|\mathbf{h}|$보다 빨리 죽고,
+  $|\mathbf{k}| \le (\lVert A \rVert + o(1))|\mathbf{h}|$이므로 $\mathbf{s}(\mathbf{k})$도 그렇다.
+  따라서 $F'(\mathbf{x}) = BA$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-9-21"><span class="box-label">정리 9.21 · $C^1$ 판정 (편도함수 연속)</span>
+  <p><strong>이 정리가 하는 일:</strong> “전미분가능”이라는 추상 조건을 <strong>계산 가능한</strong> 조건 —
+  “편도함수가 존재하고 연속” — 으로 바꾼다. 실전에서 미분가능성을 확인하는 유일한 도구.</p>
+  <p>$E \subset \mathbb{R}^n$이 열린집합, $f : E \to \mathbb{R}^m$이라 하자. 다음이 동치이다:</p>
+  <p>$f \in C^1(E)$ (즉 $f$가 미분가능하고 $\mathbf{x} \mapsto f'(\mathbf{x})$가
+  $L(\mathbb{R}^n, \mathbb{R}^m)$로의 <a class="term" data-term="continuous-function">연속</a>사상)
+  $\iff$ 모든 편도함수 $D_j f_i$가 $E$에서 존재하고 연속.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— (⇒)는 쉽다. (⇐) $\mathbf{h}$를 좌표별로 한 성분씩 바꿔 가며 일변수 평균값 정리를 $n$번 적용, 편도함수의 연속성으로 오차를 조인다.</span></summary>
+  <p>($\Rightarrow$) 미분가능하면 $D_j f_i(\mathbf{x}) = \big(f'(\mathbf{x})\mathbf{e}_j\big)_i$이고,
+  $f'$이 연속이라 이 성분들도 연속.</p>
+  <p>($\Leftarrow$) $m = 1$로 충분하다(성분별). $\mathbf{h} = \sum h_j \mathbf{e}_j$를 넣고
+  $\mathbf{v}_0 = \mathbf{0}$, $\mathbf{v}_k = h_1\mathbf{e}_1 + \cdots + h_k\mathbf{e}_k$로 계단을 만들면</p>
+  $$f(\mathbf{x} + \mathbf{h}) - f(\mathbf{x}) = \sum_{j=1}^{n} \big[ f(\mathbf{x} + \mathbf{v}_j) - f(\mathbf{x} + \mathbf{v}_{j-1}) \big].$$
+  <p>각 항은 $x_j$ 한 변수만 변하는 일변수 차이이므로 <a class="term" data-term="mean-value-theorem">평균값 정리</a>(5장)로
+  $= D_j f(\boldsymbol{\xi}_j)\, h_j$인 중간점 $\boldsymbol{\xi}_j$가 있다. 합에서
+  $\sum_j D_j f(\mathbf{x}) h_j$(= 야코비 후보)를 빼면 오차는 $\sum_j [D_j f(\boldsymbol{\xi}_j) - D_j f(\mathbf{x})] h_j$이고,
+  $D_j f$의 연속성으로 $\mathbf{h} \to \mathbf{0}$일 때 $|\boldsymbol{\xi}_j - \mathbf{x}| \to 0$이라
+  괄호가 $0$으로 간다. 따라서 이 야코비 행렬이 실제 전미분이다.</p>
+  <p><em>이 정리가 왜 필요했나:</em> 편도함수만으로는(위 반례) 부족하지만,
+  <strong>연속</strong>이라는 한 단어를 더하면 축 방향 정보가 모든 방향으로 “퍼져” 전미분을 준다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-mean-value">3. 평균값 부등식 — 등식은 죽고 부등식만 산다</h2>
+
+<div class="box box-thm" id="thm-9-19"><span class="box-label">정리 9.19 · 평균값 부등식 <span class="label-en">mean value inequality</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 5장 MVT의 다변수·벡터값 후계자. $m \ge 2$에서는 “$=$”가
+  붕괴하지만 크기 “$\le$”는 살아남아 — 이 부등식이 역함수 정리 증명의 결정타(축약사상)가 된다.</p>
+  <p>$E \subset \mathbb{R}^n$이 <strong>볼록</strong> 열린집합, $f : E \to \mathbb{R}^m$이 미분가능하고
+  모든 $\mathbf{x} \in E$에서 $\lVert f'(\mathbf{x}) \rVert \le M$이라 하자. 그러면 임의의
+  $\mathbf{a}, \mathbf{b} \in E$에 대해</p>
+  $$\big| f(\mathbf{b}) - f(\mathbf{a}) \big| \le M\, |\mathbf{b} - \mathbf{a}|.$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 선분을 매개화해 일변수로 눌러 담고, 스칼라화 트릭(결과 벡터 방향으로 내적)으로 벡터값의 “등식 없음” 문제를 피한다.</span></summary>
+  <p>선분 $\boldsymbol{\gamma}(t) = (1 - t)\mathbf{a} + t\mathbf{b}$ ($t \in [0,1]$, 볼록성으로 $E$ 안에 있음)와
+  상수벡터 $\mathbf{w} = f(\mathbf{b}) - f(\mathbf{a})$를 잡고 $\varphi(t) = \big\langle f(\boldsymbol{\gamma}(t)),\, \mathbf{w} \big\rangle$로 놓자.
+  연쇄법칙으로 $\varphi'(t) = \big\langle f'(\boldsymbol{\gamma}(t))(\mathbf{b} - \mathbf{a}),\, \mathbf{w} \big\rangle$.
+  일변수 MVT로 $\varphi(1) - \varphi(0) = \varphi'(t_0)$인 $t_0$가 있고, 좌변은 $\langle \mathbf{w}, \mathbf{w}\rangle = |\mathbf{w}|^2$.
+  코시–슈바르츠와 노름 부등식으로</p>
+  $$|\mathbf{w}|^2 = \varphi'(t_0) \le \big| f'(\boldsymbol{\gamma}(t_0))(\mathbf{b}-\mathbf{a}) \big|\,|\mathbf{w}| \le M\,|\mathbf{b}-\mathbf{a}|\,|\mathbf{w}|.$$
+  <p>$|\mathbf{w}| = 0$이면 자명, 아니면 $|\mathbf{w}|$로 나눠 $|\mathbf{w}| \le M|\mathbf{b}-\mathbf{a}|$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 벡터값엔 평균값 “등식”이 없다</span>
+  <p>$m \ge 2$이면 “$f(\mathbf{b}) - f(\mathbf{a}) = f'(\mathbf{c})(\mathbf{b} - \mathbf{a})$인 한 점 $\mathbf{c}$”가
+  <strong>일반적으로 존재하지 않습니다.</strong> 반례: $\boldsymbol{\gamma}(t) = (\cos t, \sin t)$를
+  $[0, 2\pi]$에서 보면 $\boldsymbol{\gamma}(2\pi) - \boldsymbol{\gamma}(0) = \mathbf{0}$인데
+  $\boldsymbol{\gamma}'(t) = (-\sin t, \cos t)$는 어디서도 $\mathbf{0}$이 아니다
+  ($|\boldsymbol{\gamma}'| = 1$). 각 성분엔 MVT가 성립하지만 성분마다 $\mathbf{c}$가 달라
+  <em>하나로 맞출 수 없기 때문</em>. 그래서 다변수 해석학은 등식 대신 부등식(9.19)을 씁니다 —
+  실용적으로는 이걸로 충분합니다.</p>
+</div>
+
+<p>따름으로, $E$가 <strong>연결</strong> 열린집합이고 $f' \equiv 0$이면 $f$는 상수다
+(연습문제 3) — 5장 정리 5.11의 다변수판. “도함수가 함수를 결정한다”는 5장의 교훈이
+그대로 이어진다.</p>
+
+<h2 id="sec-inverse">4. 역함수 정리 — 선형의 가역성이 국소적으로 옮는다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>선형변환 $A$는 가역이면($\det A \neq 0$) 전역적으로 역이 있습니다.
+  비선형 $f$에서는 그렇게 강한 걸 바랄 수 없지만, <strong>“일차 근사 $f'(\mathbf{a})$가 가역이면
+  $\mathbf{a}$ 근처에서 $f$도 가역”</strong>이라는 국소 버전은 참입니다.
+  직관: 확대해서 보면 $f$는 자기 미분 $f'(\mathbf{a})$(가역 선형변환)처럼 보이고,
+  가역 선형변환은 근방을 근방으로 <em>일대일</em>로 옮기니까요.
+  증명의 심장은 “$f(\mathbf{x}) = \mathbf{y}$ 풀기”를 <strong>부동점 찾기</strong>로 바꾸고
+  축약사상 원리로 해의 존재·유일을 얻는 것 — 그 원리의 연료가 3장의 완비성입니다.</p>
+</div>
+
+<div class="box box-thm" id="thm-9-23"><span class="box-label">정리 9.23 · 축약사상 원리 <span class="label-en">contraction principle</span></span>
+  <p><strong>이 정리가 하는 일:</strong> “줄이는 사상은 정확히 한 개의 부동점을 갖는다.”
+  역함수 정리·음함수 정리·미분방정식 존재정리를 모두 떠받치는 존재·유일성의 만능 열쇠.</p>
+  <p>$X$가 <a class="term" data-term="complete-space">완비 거리공간</a>이고
+  $\varphi : X \to X$가 상수 $c \lt 1$에 대해 $d(\varphi(x), \varphi(y)) \le c\, d(x, y)$
+  (축약)을 만족하면, $\varphi(x^{*}) = x^{*}$인 부동점 $x^{*}$가 <strong>유일하게</strong> 존재한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 아무 점에서나 반복 $x_{n+1} = \varphi(x_n)$하면 간격이 등비($c^n$)로 줄어 코시 수열, 완비성이 극한을 준다.</span></summary>
+  <p>$x_0$을 아무렇게나 잡고 $x_{n+1} = \varphi(x_n)$이라 하자. 축약성에서
+  $d(x_{n+1}, x_n) \le c^n d(x_1, x_0)$이고, 삼각부등식으로 $m \gt n$일 때</p>
+  $$d(x_m, x_n) \le \sum_{k=n}^{m-1} c^k\, d(x_1, x_0) \le \frac{c^n}{1 - c}\, d(x_1, x_0) \xrightarrow{\ n \to \infty\ } 0.$$
+  <p>따라서 $\{x_n\}$은 <a class="term" data-term="cauchy-sequence">코시 수열</a>(3장)이고,
+  <a class="term" data-term="complete-space">완비성</a>으로 어떤 $x^{*}$로 수렴한다.
+  $\varphi$는 (립시츠라) 연속이므로 $x_{n+1} = \varphi(x_n)$의 극한을 취하면 $x^{*} = \varphi(x^{*})$.
+  유일성: 부동점 둘 $x^{*}, y^{*}$이면 $d(x^{*}, y^{*}) = d(\varphi(x^{*}), \varphi(y^{*})) \le c\, d(x^{*}, y^{*})$이고
+  $c \lt 1$이라 $d = 0$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-def" id="def-inverse-function-theorem">
+  <span class="box-label">정의·서술 9.24 · 역함수 정리 <span class="label-en">inverse function theorem</span></span>
+  <p>“<strong>$C^1$ 함수의 미분이 한 점에서 가역이면, 그 점 근방에서 함수 자체가 $C^1$ 가역이다.</strong>”
+  더 정확히: $f \in C^1$이고 $f'(\mathbf{a})$가 가역이면, $\mathbf{a}$를 담는 열린집합 $U$와
+  $f(\mathbf{a})$를 담는 열린집합 $V$가 있어 $f : U \to V$가 <a class="term" data-term="isomorphism">전단사</a>이며
+  그 역 $f^{-1} : V \to U$도 $C^1$이다. 이때 역의 미분은 미분의 역:
+  $(f^{-1})'(\mathbf{y}) = \big[ f'(f^{-1}(\mathbf{y})) \big]^{-1}$.</p>
+</div>
+
+<div class="box box-thm" id="thm-9-24"><span class="box-label">정리 9.24 · 역함수 정리 <span class="label-en">inverse function theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 비선형 방정식 $f(\mathbf{x}) = \mathbf{y}$를 국소적으로 “풀 수 있음”을
+  보증한다 — 그것도 해가 $\mathbf{y}$에 대해 매끄럽게 움직이도록.</p>
+  <p>$E \subset \mathbb{R}^n$이 열린집합, $f : E \to \mathbb{R}^n$이 $C^1$, 어떤 $\mathbf{a} \in E$에서
+  $f'(\mathbf{a})$가 가역이고 $\mathbf{b} = f(\mathbf{a})$라 하자. 그러면</p>
+  <p>(a) $\mathbf{a} \in U$, $\mathbf{b} \in V$인 <a class="term" data-term="open-set">열린집합</a> $U, V$가 있어
+  $f$는 $U$를 $V$ 위로 전단사시키고,</p>
+  <p>(b) 그 역함수 $g = f^{-1} : V \to U$는 $C^1$이며 $g'(\mathbf{y}) = \big[ f'(g(\mathbf{y})) \big]^{-1}$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 방정식 풀기 → 부동점 찾기로 번역하고, $f'$의 연속성 + 평균값 부등식으로 “축약”을 확보한 뒤 정리 9.23을 쏜다. 역의 매끄러움은 정리 9.8이 마무리.</span></summary>
+  <p>$A = f'(\mathbf{a})$로 두자. $\mathbf{y}$를 고정하고 “$f(\mathbf{x}) = \mathbf{y}$”를 풀기 위해</p>
+  $$\varphi_{\mathbf{y}}(\mathbf{x}) = \mathbf{x} + A^{-1}\big( \mathbf{y} - f(\mathbf{x}) \big)$$
+  <p>를 정의한다. 핵심 관찰: $\mathbf{x}$가 $\varphi_{\mathbf{y}}$의 <strong>부동점</strong>
+  $\iff$ $A^{-1}(\mathbf{y} - f(\mathbf{x})) = \mathbf{0}$ $\iff$ $f(\mathbf{x}) = \mathbf{y}$.
+  방정식이 부동점 문제로 바뀌었다.</p>
+  <p>$\varphi_{\mathbf{y}}'(\mathbf{x}) = I - A^{-1}f'(\mathbf{x}) = A^{-1}\big(A - f'(\mathbf{x})\big)$인데,
+  $f'$이 연속이라 $\mathbf{a}$ 근방(반지름 작은 공)에서 $\lVert A - f'(\mathbf{x}) \rVert$가 아주 작아
+  $\lVert \varphi_{\mathbf{y}}'(\mathbf{x}) \rVert \le \tfrac{1}{2}$로 만들 수 있다.
+  <a href="#thm-9-19">평균값 부등식(9.19)</a>에 의해 $\varphi_{\mathbf{y}}$는 그 공 위에서 축약상수 $\tfrac{1}{2}$인
+  축약사상. 닫힌 공은 <a class="term" data-term="complete-space">완비</a>이므로
+  <a href="#thm-9-23">축약사상 원리(9.23)</a>가 부동점의 <strong>존재·유일</strong>을 준다 —
+  즉 각 $\mathbf{y}$(가까운)에 대해 $f(\mathbf{x}) = \mathbf{y}$의 해 $\mathbf{x} = g(\mathbf{y})$가 유일하게 존재.
+  이로써 국소 전단사(a)를 얻는다.</p>
+  <p>(b) $f(U)$가 열림인 것과 $g$가 연속인 것은 위 축약 추정에서 나오고,
+  $g$의 미분가능성·$g' = (f' \circ g)^{-1}$은 <a href="#thm-9-8">정리 9.8</a>
+  (가역 작용소의 열림과 $A \mapsto A^{-1}$의 연속)이 보증한다. $f' \circ g$가 연속이고
+  역이 연속이므로 $g'$도 연속 — $g \in C^1$.</p>
+  <p><em>구조를 기억하라:</em> 완비성(3장) → 축약사상(9.23) → 역함수 정리(9.24).
+  “해가 있다”는 존재정리는 대개 이 사다리를 탄다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 가역은 “국소적” 결론이다</span>
+  <p>$f'(\mathbf{x})$가 <strong>모든 점</strong>에서 가역이어도 $f$가 <strong>전역적으로</strong> 전단사인 것은 아닙니다.
+  극좌표 사상 $f(x, y) = (e^{x}\cos y,\ e^{x}\sin y)$는 어디서나
+  $\det f'(x,y) = e^{2x} \gt 0$이라 국소적으로 가역이지만, $y \mapsto y + 2\pi$에 대해
+  $f$가 주기적이라 전단사가 아니다(연습문제 4). 역함수 정리는 <strong>“근방에서”</strong>만 약속합니다 —
+  세계 전체가 아니라. 또한 $C^1$ 가정도 필수: 미분가능이지만 $f'$이 불연속이면
+  ($x^2\sin(1/x)$류의 다변수 변형) 이 정리는 보장되지 않습니다.</p>
+</div>
+
+<h2 id="sec-implicit">5. 음함수 정리 — 등위집합은 국소적으로 그래프</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$F(x, y) = 0$ 같은 방정식은 곡선을 정의하지만, 그게 “$y = g(x)$” 꼴 함수의 그래프인지는
+  당장 알 수 없습니다(원 $x^2 + y^2 = 1$은 한 $x$에 $y$가 둘). 음함수 정리는 말합니다:
+  <strong>“$y$에 대한 미분 $\partial F/\partial y$가 가역이면, 그 점 근방에서 방정식을
+  $y = g(x)$로 유일하게 풀 수 있고 $g$는 매끄럽다.”</strong>
+  기하로는 <em>등위집합(방정식의 해집합)이 국소적으로 그래프처럼 보인다</em>는 것 —
+  그 지점에서 접선(접평면)이 “수직”이 아니라는 조건입니다.
+  그리고 이것은 역함수 정리의 <strong>따름정리</strong>예요: 변수 몇 개를 그대로 복사해
+  역함수 정리를 적용하면 곧바로 나옵니다.</p>
+</div>
+
+<div class="box box-def" id="def-implicit-function-theorem">
+  <span class="box-label">정의·서술 9.28 · 음함수 정리 <span class="label-en">implicit function theorem</span></span>
+  <p>“<strong>$F(\mathbf{x}, \mathbf{y}) = \mathbf{0}$에서 $\mathbf{y}$에 대한 편미분
+  $\partial F/\partial \mathbf{y}$가 가역이면, $\mathbf{y}$를 $\mathbf{x}$의 매끄러운 함수 $\mathbf{y} = g(\mathbf{x})$로
+  국소적으로 유일하게 풀 수 있다.</strong>” 이때 그래프 $\{(\mathbf{x}, g(\mathbf{x}))\}$가 등위집합
+  $F = \mathbf{0}$과 국소적으로 일치하고, $g$의 미분은 음함수 미분법
+  $g'(\mathbf{x}) = -\big( \partial F/\partial \mathbf{y} \big)^{-1}\, \big( \partial F/\partial \mathbf{x} \big)$로 주어진다.</p>
+</div>
+
+<div class="box box-thm" id="thm-9-28"><span class="box-label">정리 9.28 · 음함수 정리 <span class="label-en">implicit function theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> “방정식으로 암묵적으로만 주어진 관계를 명시적 함수로 국소 해방한다.”
+  등위집합이 매끄러운 곡면(그래프)임을 보증하는 미분기하·최적화(라그랑주 승수)의 토대.</p>
+  <p>$F : E \to \mathbb{R}^m$이 $C^1$ ($E \subset \mathbb{R}^{n+m}$ 열림), 점을 $(\mathbf{x}, \mathbf{y})$
+  ($\mathbf{x} \in \mathbb{R}^n$, $\mathbf{y} \in \mathbb{R}^m$)로 쓰고, $(\mathbf{a}, \mathbf{b}) \in E$에서
+  $F(\mathbf{a}, \mathbf{b}) = \mathbf{0}$이라 하자. $\mathbf{y}$에 대한 편미분(=마지막 $m$개 변수에 대한
+  $m \times m$ 야코비 블록) $\partial F/\partial \mathbf{y}\,(\mathbf{a}, \mathbf{b})$가 가역이면:</p>
+  <p>$\mathbf{a}$를 담는 열린집합 $U \subset \mathbb{R}^n$과 유일한 $C^1$ 함수 $g : U \to \mathbb{R}^m$이 존재하여</p>
+  $$g(\mathbf{a}) = \mathbf{b}, \qquad F\big(\mathbf{x}, g(\mathbf{x})\big) = \mathbf{0} \ \ (\mathbf{x} \in U).$$
+  <p>또한 연쇄법칙으로 $\dfrac{\partial F}{\partial \mathbf{x}} + \dfrac{\partial F}{\partial \mathbf{y}}\, g'(\mathbf{x}) = 0$,
+  즉 $g'(\mathbf{x}) = -\big( \partial F/\partial \mathbf{y} \big)^{-1} \big( \partial F/\partial \mathbf{x} \big)$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— $\mathbf{x}$를 “그냥 복사”하는 보조사상 $\Phi(\mathbf{x},\mathbf{y}) = (\mathbf{x}, F(\mathbf{x},\mathbf{y}))$를 만들어 역함수 정리를 통째로 재활용한다.</span></summary>
+  <p>$\Phi : E \to \mathbb{R}^{n+m}$, $\Phi(\mathbf{x}, \mathbf{y}) = (\mathbf{x},\, F(\mathbf{x}, \mathbf{y}))$로 정의하자.
+  야코비 행렬은 블록 삼각형</p>
+  $$\Phi'(\mathbf{a}, \mathbf{b}) = \begin{pmatrix} I_n & 0 \\[0.4ex] \partial F/\partial \mathbf{x} & \partial F/\partial \mathbf{y} \end{pmatrix}$$
+  <p>이고 $\det = \det(I_n)\det(\partial F/\partial \mathbf{y}) \neq 0$이라 <strong>$\Phi'(\mathbf{a},\mathbf{b})$가 가역</strong>.
+  <a href="#thm-9-24">역함수 정리(9.24)</a>에 의해 $\Phi$는 $(\mathbf{a}, \mathbf{b})$ 근방에서
+  $C^1$ 역 $\Psi$를 갖는다. $\Phi$가 첫 좌표를 보존하므로 $\Psi(\mathbf{x}, \mathbf{w}) = (\mathbf{x}, \psi(\mathbf{x}, \mathbf{w}))$ 꼴이고,
+  $F(\mathbf{x}, \mathbf{y}) = \mathbf{0}$ $\iff$ $\Phi(\mathbf{x}, \mathbf{y}) = (\mathbf{x}, \mathbf{0})$
+  $\iff$ $\mathbf{y} = \psi(\mathbf{x}, \mathbf{0})$. 따라서 $g(\mathbf{x}) = \psi(\mathbf{x}, \mathbf{0})$이
+  원하던 유일한 $C^1$ 해다. 미분 공식은 $F(\mathbf{x}, g(\mathbf{x})) \equiv \mathbf{0}$을
+  <a href="#thm-9-15">연쇄법칙</a>으로 미분해 얻는다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 원과 “풀 수 없는 점”</span>
+  <p>$F(x, y) = x^2 + y^2 - 1$의 등위집합 $F = 0$은 단위원이다.
+  $\partial F/\partial y = 2y$이므로 $y \neq 0$인 점에서는 음함수 정리가 적용되어
+  국소적으로 $y = g(x) = \pm\sqrt{1 - x^2}$(그 점이 위쪽이냐 아래쪽이냐로 부호 결정).
+  그런데 $(\pm 1, 0)$에서는 $\partial F/\partial y = 0$ — <strong>정리의 가정이 깨진다.</strong>
+  실제로 그 점 근방에서 원은 “$y = g(x)$” 그래프가 아니다(수직 접선, 한 $x$에 $y$가 위아래로 둘).
+  대신 그곳에선 $\partial F/\partial x = 2x = \pm 2 \neq 0$이라 <em>역할을 바꿔</em>
+  $x = h(y)$로는 풀린다. <strong>교훈: 어느 변수로 풀 수 있는지는 어느 편미분이 가역인지가 정한다.</strong></p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">9장의 줄거리</span>
+  <p><a class="term" data-term="linear-transformation">선형변환</a>에 <strong>작용소 노름</strong>을 줘
+  “선형변환들의 거리공간”을 만들고 (가역성은 열림 + 역은 연속, 9.8)
+  → <a class="term" data-term="total-derivative">전미분</a>: $f'(\mathbf{x})$를 최선의 일차근사 <em>선형변환</em>으로 정의,
+  그 행렬이 야코비 $[\partial f_i/\partial x_j]$
+  → 편도함수 존재만으론 부족(반례 $xy/(x^2+y^2)$), <strong>연속</strong>이면 $C^1$ = 전미분가능(9.21),
+  합성은 야코비 곱(연쇄법칙 9.15)
+  → 벡터값엔 평균값 <em>등식</em>이 없고 부등식만 (9.19, 반례 $(\cos t, \sin t)$), 그 부등식이 축약을 만든다
+  → <a class="term" data-term="total-derivative">전미분</a>이 가역이면:
+  <a class="term" data-term="inverse-function-theorem">역함수 정리</a>(9.24, 국소 $C^1$ 역) —
+  증명 = 방정식을 부동점으로 바꿔 <strong>축약사상 원리</strong>(9.23, 완비성·코시수열)
+  → 그 따름으로 <a class="term" data-term="implicit-function-theorem">음함수 정리</a>(9.28):
+  $\partial F/\partial \mathbf{y}$ 가역이면 등위집합이 국소적으로 그래프 $\mathbf{y} = g(\mathbf{x})$.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 이 장의 모든 것은 “미분 = 선형변환”이라는 재정의에서 나오고,
+  두 왕관 정리(역함수·음함수)는 “선형에서 가역이면 국소적으로 비선형에서도 가역”을
+  <em>완비성 → 축약사상</em>의 사다리로 옮긴 것이다. 5장이 MVT의 세계였다면
+  9장은 축약사상의 세계다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$f : \mathbb{R}^2 \to \mathbb{R}^2$, $f(x, y) = (x^2 - y^2,\ 2xy)$에 대해
+  야코비 행렬 $f'(x, y)$를 구하고, $f'(x, y)$가 가역인 점들을 모두 판정하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>각 성분함수의 편도함수를 $2 \times 2$로 배열하라. 가역 $\iff \det \neq 0$.
+    (이 $f$는 복소수 $z \mapsto z^2$이다.)</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f_1 = x^2 - y^2$, $f_2 = 2xy$이므로</p>
+    $$f'(x, y) = \begin{pmatrix} \partial_x f_1 & \partial_y f_1 \\ \partial_x f_2 & \partial_y f_2 \end{pmatrix}
+    = \begin{pmatrix} 2x & -2y \\ 2y & 2x \end{pmatrix}, \qquad \det f'(x, y) = 4x^2 + 4y^2 = 4(x^2 + y^2).$$
+    <p>따라서 $\det f'(x, y) = 0 \iff (x, y) = (0, 0)$. <strong>원점을 제외한 모든 점에서 $f'$은 가역</strong>이다.
+    (원점 밖에서는 역함수 정리가 국소 역을 보장한다 — 실제로 $z \mapsto z^2$은 $0$ 아닌 곳에서
+    국소적으로 제곱근을 갖는다. 편도함수가 다항식이라 $f \in C^1$도 자동.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 모든 방향도함수 $D_{\mathbf{u}} f(\mathbf{0})$이 존재하면 $f$는 $\mathbf{0}$에서 전미분가능하다.<br>
+  (2) $f$가 $\mathbf{x}$에서 전미분가능하면 모든 편도함수 $D_j f_i(\mathbf{x})$가 존재한다.<br>
+  (3) 편도함수 $D_j f_i$가 존재하고 연속이면 $f$는 전미분가능하다.<br>
+  (4) $f : \mathbb{R} \to \mathbb{R}^2$가 미분가능하고 $f(0) = f(1)$이면 $f'(c) = \mathbf{0}$인 $c \in (0,1)$이 존재한다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $f(x,y) = \frac{x^2 y}{x^4 + y^2}$ 유형 — 모든 직선을 따라선 예쁜데 곡선을 따라가면 무너진다.
+    (2) 편도함수 = 좌표축 방향 방향도함수 = $f'(\mathbf{x})\mathbf{e}_j$. (3) 정리 9.21. (4) 평균값 “등식”의 벡터판.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $f(x, y) = \dfrac{x^2 y}{x^4 + y^2}$ (원점 밖), $f(0,0) = 0$.
+    직선 $(x, y) = t(a, b)$를 따라가면 $t \to 0$에서 극한이 방향마다 잘 존재해
+    <em>모든 방향도함수가 존재</em>한다. 그러나 포물선 $y = x^2$ 위에서 $f = \frac{x^4}{2x^4} = \frac{1}{2}$이라
+    $f$는 $(0,0)$에서 연속조차 아니다 — 전미분 불가(문제 6에 의해 전미분 ⇒ 연속).</p>
+    <p>(2) <strong>참.</strong> 편도함수는 $\mathbf{e}_j$ 방향 방향도함수이고, 전미분가능하면
+    $D_j f_i(\mathbf{x}) = \big(f'(\mathbf{x})\mathbf{e}_j\big)_i$로 야코비 성분으로 존재한다.</p>
+    <p>(3) <strong>참.</strong> 정확히 정리 9.21의 ($\Leftarrow$) 방향 — 편도함수 연속이면 $C^1$, 특히 전미분가능.</p>
+    <p>(4) <strong>거짓.</strong> $f(t) = (\cos 2\pi t, \sin 2\pi t)$이면 $f(0) = f(1) = (1, 0)$이지만
+    $f'(t) = 2\pi(-\sin 2\pi t, \cos 2\pi t)$는 $|f'| = 2\pi \neq 0$이라 어디서도 $\mathbf{0}$이 아니다.
+    <strong>벡터값에는 롤/평균값 “등식”이 없다</strong> — 부등식(9.19)만 성립.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 9장 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$E \subset \mathbb{R}^n$이 <strong>연결</strong> 열린집합이고 $f : E \to \mathbb{R}^m$이 미분가능하며
+  모든 점에서 $f'(\mathbf{x}) = 0$이라 하자. $f$가 $E$에서 상수임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>열린집합은 각 점 둘레에 (볼록한) 공을 담는다. 공 위에서는 평균값 부등식(9.19)을 $M = 0$으로 써라.
+    그다음 “$f = f(\mathbf{a})$인 점들의 집합”이 열림이자 닫힘임을 보여 연결성으로 마무리.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>먼저 <strong>국소 상수</strong>: 임의의 $\mathbf{p} \in E$ 둘레의 열린 공 $B \subset E$(볼록)에서
+    $\lVert f' \rVert \le 0$이므로 <a href="#thm-9-19">평균값 부등식(9.19)</a>에 의해
+    $|f(\mathbf{x}) - f(\mathbf{p})| \le 0 \cdot |\mathbf{x} - \mathbf{p}| = 0$ — $f$는 $B$ 위에서 상수 $f(\mathbf{p})$.</p>
+    <p>이제 $\mathbf{a} \in E$를 고정하고 $S = \{\mathbf{x} \in E : f(\mathbf{x}) = f(\mathbf{a})\}$라 하자.
+    국소 상수성에서 $S$의 각 점 둘레의 공이 통째로 $S$에 들어가므로 <strong>$S$는 열림</strong>.
+    같은 논리로 여집합 $E \setminus S$의 각 점도 공 하나가 통째로 여집합에 있어 <strong>$S$는 닫힘</strong>(상대적).
+    $S \neq \varnothing$($\mathbf{a} \in S$)이고 $E$가 <a class="term" data-term="connected-set">연결</a>이므로 $S = E$ —
+    $f \equiv f(\mathbf{a})$. $\blacksquare$</p>
+    <p>(연결성이 없으면 거짓: 서로 떨어진 두 공에서 값을 다르게 준 함수는 $f' \equiv 0$이지만 상수가 아니다.
+    5장 정리 5.11의 다변수판이며, “도함수가 함수를 (연결 위에서) 결정한다”는 원리의 확장.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 9장 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f : \mathbb{R}^2 \to \mathbb{R}^2$, $f(x, y) = (e^x \cos y,\ e^x \sin y)$에 대해:
+  (a) 모든 점에서 $f'(x, y)$가 가역임을 보여라. (b) 그럼에도 $f$가 전단사가 <em>아님</em>을 보이고,
+  이것이 역함수 정리와 모순되지 않는 이유를 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(a) $\det$을 계산하라 ($e^{2x}$가 나온다). (b) $y$에 대한 주기성을 노려라. 역함수 정리는
+    무엇을 약속하고 무엇을 약속하지 않는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(a) 편도함수를 배열하면</p>
+    $$f'(x, y) = \begin{pmatrix} e^x \cos y & -e^x \sin y \\ e^x \sin y & e^x \cos y \end{pmatrix}, \qquad
+    \det f'(x, y) = e^{2x}(\cos^2 y + \sin^2 y) = e^{2x} \gt 0.$$
+    <p>모든 $(x, y)$에서 $\det \neq 0$ — 어디서나 가역이고, $f \in C^1$이라 <strong>모든 점에서 국소 $C^1$ 역</strong>이 존재한다.</p>
+    <p>(b) $f(x, y + 2\pi) = (e^x \cos(y + 2\pi), e^x \sin(y + 2\pi)) = f(x, y)$이므로 $f$는
+    $y$ 방향으로 주기 $2\pi$ — <strong>전단사가 아니다</strong>(예: $(0,0)$과 $(0, 2\pi)$가 같은 값 $(1,0)$).
+    치역도 원점을 뺀 평면 전체($e^x \gt 0$)라 원점은 상에 없다.</p>
+    <p>모순이 아닌 이유: <strong>역함수 정리는 “각 점의 <em>어떤 근방</em>에서”만 전단사·가역을 약속</strong>한다.
+    폭이 $2\pi$ 미만인 가로 띠 하나에 제한하면 $f$는 실제로 그 위에서 전단사다.
+    “국소적으로 가역”과 “대역적으로 가역”은 완전히 다른 진술 — 전자가 후자를 함의하지 않는다.
+    (이 $f$는 복소지수 $z \mapsto e^z$이며, 복소로그가 여러 값을 갖는(가지, branch) 근본 이유가 바로 이 주기성이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>음함수 정리 계산</span>
+  </div>
+  <p>방정식 $x^2 + xy + y^2 = 3$의 해집합 위의 점 $(1, 1)$을 생각하자.
+  $(1, 1)$ 근방에서 이 방정식을 만족하는 $C^1$ 함수 $y = g(x)$ ($g(1) = 1$)가 유일하게 존재함을
+  근거 정리를 명시하여 보이고, $g'(1)$을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$F(x, y) = x^2 + xy + y^2 - 3$으로 놓고 $\partial F/\partial y$가 $(1,1)$에서 $0$이 아님을 확인하라.
+    $g'(x) = -\dfrac{\partial F/\partial x}{\partial F/\partial y}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$F(x, y) = x^2 + xy + y^2 - 3$은 다항식이라 $C^1$이고 $F(1, 1) = 1 + 1 + 1 - 3 = 0$.
+    편미분은 $\partial F/\partial x = 2x + y$, $\partial F/\partial y = x + 2y$이고</p>
+    $$\frac{\partial F}{\partial y}(1, 1) = 1 + 2 = 3 \neq 0.$$
+    <p><a href="#thm-9-28">음함수 정리(9.28)</a>의 가정이 충족되므로, $(1,1)$ 근방에서
+    $F(x, g(x)) = 0$, $g(1) = 1$인 <strong>유일한 $C^1$ 함수 $y = g(x)$가 존재</strong>한다.
+    미분은</p>
+    $$g'(x) = -\frac{\partial F/\partial x}{\partial F/\partial y} = -\frac{2x + y}{x + 2y}, \qquad
+    g'(1) = -\frac{2 \cdot 1 + 1}{1 + 2 \cdot 1} = -\frac{3}{3} = -1.$$
+    <p>(검산: $F(x, g(x)) \equiv 0$을 직접 미분하면 $2x + y + xy' + 2yy' = 0$, $(1,1)$ 대입 시
+    $2 + 1 + y' + 2y' = 0 \Rightarrow y' = -1$. 음함수 미분법이 곧 연쇄법칙이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>정의 기반 증명 서술형</span>
+  </div>
+  <p>$f : E \to \mathbb{R}^m$ ($E \subset \mathbb{R}^n$ 열림)이 $\mathbf{x}_0$에서 전미분가능하면
+  $\mathbf{x}_0$에서 <a class="term" data-term="continuous-function">연속</a>임을 정의로부터 증명하라.
+  또한 그 역(“편도함수가 다 존재하면 연속”)이 거짓임을 반례로 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>전미분의 정의에서 $|f(\mathbf{x}_0 + \mathbf{h}) - f(\mathbf{x}_0)| \le |f'(\mathbf{x}_0)\mathbf{h}| + (\text{오차})$로 쪼개고,
+    두 항 모두 $\mathbf{h} \to \mathbf{0}$에서 $0$으로 감을 보여라. 반례는 $xy/(x^2+y^2)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>전미분 ⇒ 연속.</strong> $A = f'(\mathbf{x}_0)$라 하자. 정의에서, $\mathbf{h} \to \mathbf{0}$일 때
+    $\mathbf{r}(\mathbf{h}) = f(\mathbf{x}_0 + \mathbf{h}) - f(\mathbf{x}_0) - A\mathbf{h}$은
+    $|\mathbf{r}(\mathbf{h})|/|\mathbf{h}| \to 0$을 만족한다. 특히 어떤 $\delta \gt 0$에 대해
+    $0 \lt |\mathbf{h}| \lt \delta$이면 $|\mathbf{r}(\mathbf{h})| \le |\mathbf{h}|$. 그러면</p>
+    $$|f(\mathbf{x}_0 + \mathbf{h}) - f(\mathbf{x}_0)| = |A\mathbf{h} + \mathbf{r}(\mathbf{h})|
+    \le \lVert A \rVert\,|\mathbf{h}| + |\mathbf{r}(\mathbf{h})| \le \big( \lVert A \rVert + 1 \big)|\mathbf{h}|.$$
+    <p>우변은 $\mathbf{h} \to \mathbf{0}$에서 $0$으로 가므로 $\lim_{\mathbf{h} \to \mathbf{0}} f(\mathbf{x}_0 + \mathbf{h}) = f(\mathbf{x}_0)$ —
+    $f$는 $\mathbf{x}_0$에서 연속. (작용소 노름 부등식 $|A\mathbf{h}| \le \lVert A \rVert |\mathbf{h}|$이 결정적.
+    5장 정리 5.2의 다변수 완전 유비다.)</p>
+    <p><strong>역은 거짓.</strong> $f(x, y) = \dfrac{xy}{x^2 + y^2}$ (원점 밖), $f(0,0) = 0$은
+    $D_1 f(0,0) = D_2 f(0,0) = 0$으로 두 편도함수가 존재하지만, $y = x$ 위에서 $f \equiv \frac{1}{2}$이라
+    $(0,0)$에서 불연속 — 따라서 전미분도 불가능. <strong>편도함수 존재는 연속조차 함의하지 않는다.</strong> $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

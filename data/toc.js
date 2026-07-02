@@ -30,7 +30,10 @@ window.MATH_TOC = [
       { file: "ch05.html", num: 5, title: "미분", ready: true },
       { file: "ch06.html", num: 6, title: "리만-스틸체스 적분", ready: true },
       { file: "ch07.html", num: 7, title: "함수열과 함수급수", ready: true },
-      { file: "ch08.html", num: 8, title: "특수 함수", ready: true }
+      { file: "ch08.html", num: 8, title: "특수 함수", ready: true },
+      { file: "ch09.html", num: 9, title: "다변수 함수의 미분", ready: true },
+      { file: "ch10.html", num: 10, title: "미분형식과 스토크스 정리", ready: true },
+      { file: "ch11.html", num: 11, title: "르베그 이론", ready: true }
     ]
   },
   {
@@ -121,7 +124,9 @@ window.MATH_TOC = [
       { file: "ch03.html", num: 3, title: "연결성", ready: true },
       { file: "ch04.html", num: 4, title: "컴팩트성", ready: true },
       { file: "ch05.html", num: 5, title: "가산공리와 분리공리", ready: true },
-      { file: "ch06.html", num: 6, title: "거리화와 완비성", ready: true }
+      { file: "ch06.html", num: 6, title: "거리화와 완비성", ready: true },
+      { file: "ch07.html", num: 7, title: "호모토피와 기본군", ready: true },
+      { file: "ch08.html", num: 8, title: "피복공간과 응용", ready: true }
     ]
   },
   {

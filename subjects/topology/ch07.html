@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7장 호모토피와 기본군 — 위상수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="topology" data-chapter="ch07.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">위상수학 · Munkres (§51–54)</p>
+  <h1><span class="ch-num">7</span> 호모토피와 기본군</h1>
+  <p class="ch-source">연결성분·컴팩트성이 너무 성긴 불변량이었다면, 이제 공간에
+  <strong>군</strong>을 붙인다 — 고리를 조일 수 있는가 없는가를 대수로 기록하는
+  $\pi_1$, 대수적 위상의 첫 걸음.</p>
+</div>
+
+<p>지금까지의 위상 불변량(연결성분 개수, 컴팩트성)은 “예/아니오”나 “개수” 같은
+거친 정보만 주었습니다. 원판 $D^2$과 원환면, 구 $S^2$는 모두 연결·컴팩트라 이런
+불변량으로는 구별되지 않습니다. 이 장에서는 훨씬 예민한 도구를 만듭니다 —
+공간의 각 점에 걸린 <strong>고리(loop)들의 대수</strong>. 고리를 한 점으로 오므릴 수
+있는지, 몇 번 감기는지가 <a class="term" data-term="group">군</a> 구조로 코드화되고,
+이 군은 <a class="term" data-term="homeomorphism">위상동형사상</a> 아래에서 보존됩니다.
+현대대수에서 벼려 둔 군·<a class="term" data-term="group-homomorphism">준동형사상</a>이
+여기서 기하를 만나 일합니다.</p>
+
+<h2 id="sec-homotopy">1. 호모토피 — 연속으로 변형하기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>두 경로(또는 두 연속함수)가 <strong>호모토픽</strong>하다는 것은, 하나를
+  잡아당기고 구부려 다른 하나로 “찢지 않고 연속으로” 변형할 수 있다는 뜻입니다.
+  변형 과정을 시간 $t \in [0,1]$로 찍은 필름이 곧 호모토피 $H$ — $t=0$ 프레임이
+  출발 함수, $t=1$ 프레임이 도착 함수, 그 사이가 매끄럽게 이어집니다.
+  고무줄을 책상 위에서 미끄러뜨리는 장면을 떠올리면 됩니다.</p>
+</div>
+
+<div class="box box-def" id="def-homotopy">
+  <span class="box-label">정의 · 호모토피와 경로 호모토피 <span class="label-en">homotopy, path homotopy</span> (문크레스 §51)</span>
+  <p>연속함수 $f, g : X \to Y$에 대해, 연속함수</p>
+  $$H : X \times [0, 1] \to Y, \qquad H(x, 0) = f(x), \quad H(x, 1) = g(x)$$
+  <p>가 존재하면 $f$와 $g$는 <strong>호모토픽</strong>(homotopic)하다 하고 $f \simeq g$로
+  쓴다. $H$를 $f$에서 $g$로 가는 <strong>호모토피</strong>라 한다 — 매개변수 $t$가
+  “변형의 시간”이다.</p>
+  <p>이제 $f, g$가 같은 두 끝점을 갖는 <strong>경로</strong>($f(0)=g(0)=x_0$,
+  $f(1)=g(1)=x_1$)라 하자. 호모토피 $H$가 추가로 <strong>끝점을 고정</strong>하면 —
+  즉 모든 $t$에 대해</p>
+  $$H(0, t) = x_0, \qquad H(1, t) = x_1$$
+  <p>— $f$와 $g$는 <strong>경로 호모토픽</strong>(path homotopic)하다 하고 $f \simeq_p g$로
+  쓴다. 자유로운 호모토피는 함수 전체를 자유롭게 움직이지만, 경로 호모토피는
+  <em>양 끝을 못에 박아 둔 채</em> 중간만 흔든다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 호모토피와 경로 호모토피는 동치관계 (문크레스 §51)</span>
+  <p><strong>이 정리가 하는 일:</strong> “변형 가능”이라는 관계가 반사·대칭·추이를
+  만족함을 보장한다 — 그래야 <strong>호모토피류</strong>($\simeq$의 동치류)라는 것을
+  이야기할 수 있고, 다음 절에서 그 동치류들을 원소로 삼아 군을 만들 수 있다.</p>
+  <p>$\simeq$와 $\simeq_p$는 각각 (같은 정의역·공역, 또는 같은 끝점을 갖는) 연속함수들
+  위의 동치관계다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 반사는 정지 필름, 대칭은 필름 거꾸로 돌리기, 추이는 두 필름을 시간축에서 이어 붙이기. 붙임에서 연속성은 붙임 보조정리가 책임진다.</span></summary>
+  <p><strong>반사</strong> ($f \simeq_p f$): $H(s, t) = f(s)$ — $t$에 무관한 상수 필름.
+  끝점도 그대로 고정된다.</p>
+  <p><strong>대칭</strong> ($f \simeq_p g \Rightarrow g \simeq_p f$): $H$가 필름이면
+  $H'(s, t) = H(s, 1-t)$가 시간을 거꾸로 돌린 필름 — $g$에서 $f$로 간다.</p>
+  <p><strong>추이</strong> ($f \simeq_p g$, $g \simeq_p h \Rightarrow f \simeq_p h$):
+  $H$가 $f \to g$, $K$가 $g \to h$의 필름이면 시간축을 반으로 접어 이어 붙인다.</p>
+  $$L(s, t) = \begin{cases} H(s, 2t) & 0 \le t \le \tfrac12 \\ K(s, 2t-1) & \tfrac12 \le t \le 1 \end{cases}$$
+  <p>$t = \tfrac12$에서 두 조각이 모두 $g(s)$로 일치하므로,
+  닫힌 조각 $X \times [0, \tfrac12]$와 $X \times [\tfrac12, 1]$ 위의
+  <a class="term" data-term="continuous-top">연속함수</a>가 겹치는 데서 일치 —
+  <strong>붙임 보조정리</strong>(2장)로 $L$이 연속이다. 끝점 고정도 두 필름에서
+  물려받는다. 자유 호모토피 $\simeq$는 끝점 조건만 빼면 같은 논증. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 직선 호모토피 — 볼록집합에서는 모든 것이 오므라든다</span>
+  <p>$Y \subset \mathbb{R}^n$이 <strong>볼록</strong>집합이라 하자. 임의의 두 연속함수
+  $f, g : X \to Y$에 대해</p>
+  $$H(x, t) = (1-t)\, f(x) + t\, g(x)$$
+  <p>는 $f$에서 $g$로 가는 호모토피다 — 각 $x$마다 $f(x)$와 $g(x)$를 잇는
+  <strong>선분</strong>을 시간 $t$로 따라간다 (볼록성이 $H(x,t) \in Y$를 보장,
+  연속성은 자명). 이것을 <strong>직선 호모토피</strong>(straight-line homotopy)라 한다.</p>
+  <p>따라서 $\mathbb{R}^n$이나 임의의 볼록집합에서는 <strong>어떤 두 함수도, 어떤 두
+  경로도 호모토픽</strong>하다 — 특히 같은 끝점을 가진 두 경로는 경로 호모토픽하다.
+  “구멍이 없는 공간”에서는 변형에 걸림돌이 없다는 첫 신호다. 다음 절에서 이 성질이
+  “$\pi_1$이 자명하다”로 번역된다.</p>
+</div>
+
+<h2 id="sec-fundamental-group">2. 기본군 — 고리들의 대수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>한 점 $x_0$을 정해 두고, 거기서 출발해 거기로 돌아오는 <strong>고리</strong>들만
+  봅니다. 두 고리를 “먼저 첫 고리, 이어서 둘째 고리”로 <strong>이어 붙이면</strong>
+  또 하나의 고리가 되죠 — 이것이 곱셈입니다. 아무 데도 안 가는 상수 고리가
+  항등원, 같은 길을 거꾸로 도는 고리가 역원. 단, 고리 자체가 아니라 “연속 변형으로
+  같은 것”(경로 호모토피류)을 원소로 삼습니다. 그러면 딱 <strong>군</strong>이 됩니다.
+  이 군이 공간의 “구멍”을 셉니다: 오므라들지 않는 고리가 있으면 군이 커집니다.</p>
+</div>
+
+<div class="box box-def" id="def-fundamental-group">
+  <span class="box-label">정의 · 기본군 <span class="label-en">fundamental group</span> (문크레스 §52)</span>
+  <p>$x_0 \in X$를 <strong>기준점</strong>(base point)이라 하자. $x_0$에 기반한
+  <strong>고리</strong>는 $\gamma(0) = \gamma(1) = x_0$인 경로 $\gamma : [0,1] \to X$다.
+  두 고리 $f, g$의 <strong>연접</strong>(concatenation)은</p>
+  $$(f * g)(s) = \begin{cases} f(2s) & 0 \le s \le \tfrac12 \\ g(2s-1) & \tfrac12 \le s \le 1 \end{cases}$$
+  <p>— 앞 절반에 $f$를 두 배 속도로, 뒤 절반에 $g$를 두 배 속도로 (붙임 보조정리로
+  연속). 이 연산을 경로 호모토피류 위로 내려</p>
+  $$[f] \cdot [g] = [f * g]$$
+  <p>로 정의하면 잘 정의된다(대표원 선택에 무관 — 호모토피끼리도 연접할 수 있으므로).
+  기준점 $x_0$에 기반한 고리들의 경로 호모토피류 전체에 이 연산을 준 것이
+  <strong>기본군</strong> $\pi_1(X, x_0)$다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · $\pi_1(X, x_0)$는 군이다 (문크레스 §52)</span>
+  <p><strong>이 정리가 하는 일:</strong> 위에서 “군”이라 이름 붙인 것이 실제로 군
+  공리를 만족함을 확인한다 — 이 확인이 끝나야 현대대수의 모든 무기(라그랑주, 준동형,
+  동형정리)를 위상에 끌어올 수 있다.</p>
+  <p>① <strong>결합법칙:</strong> $([f][g])[h] = [f]([g][h])$.<br>
+  ② <strong>항등원:</strong> 상수 고리 $e_{x_0}(s) \equiv x_0$의 류가 항등원 —
+  $[e_{x_0}][f] = [f] = [f][e_{x_0}]$.<br>
+  ③ <strong>역원:</strong> 거꾸로 도는 고리 $\bar{f}(s) = f(1-s)$가 역원 —
+  $[f][\bar f] = [e_{x_0}] = [\bar f][f]$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 세 공리 모두 “서로 다른 속도로 달린 두 경로는 경로 호모토픽”이라는 한 가지 원리(재매개변수화)로 환원된다. 연속인 재매개변수 $[0,1]\to[0,1]$이 만드는 직선 호모토피가 다리.</span></summary>
+  <p>핵심 보조사실: $\alpha : [0,1] \to [0,1]$이 연속이고 $\alpha(0)=0$, $\alpha(1)=1$이면,
+  임의의 경로 $f$에 대해 $f \circ \alpha \simeq_p f$다. (증명: $[0,1]$이 볼록이므로
+  $\alpha \simeq_p \mathrm{id}$인 직선 호모토피 $\alpha_t = (1-t)\alpha + t\,\mathrm{id}$가
+  있고, $f \circ \alpha_t$가 원하는 호모토피 — 끝점은 $f(0), f(1)$로 고정.)
+  결국 <strong>“어디서 얼마나 빨리 달리느냐”는 경로 호모토피류를 바꾸지 못한다</strong>.</p>
+  <p><strong>② 항등원:</strong> $e_{x_0} * f$는 “앞 절반 멈춰 있다 뒤 절반에 $f$를 두 배로”
+  달리는 고리 — $f$를 재매개변수 $\alpha$($[0,\tfrac12]$에서 $0$, 이후 선형 상승)로
+  달린 $f \circ \alpha$와 같으므로 보조사실로 $\simeq_p f$. $f * e_{x_0}$도 대칭적.</p>
+  <p><strong>① 결합법칙:</strong> $(f*g)*h$와 $f*(g*h)$는 셋을 이어 붙인 같은 경로를
+  <em>구간 분할만 다르게</em>($\tfrac14,\tfrac12$ vs $\tfrac12,\tfrac34$) 달린 것 —
+  하나가 다른 하나의 재매개변수라 보조사실로 경로 호모토픽.</p>
+  <p><strong>③ 역원:</strong> $f * \bar f$는 “갔다가 되돌아오는” 고리. 호모토피
+  $H(s,t) = f(\,\cdots)$를 “되돌아오는 지점을 점점 앞당겨” 상수 고리로 오므린다
+  (문크레스 §51 정리 3의 명시적 필름). $\bar f * f$도 같은 방식. 따라서
+  $[f][\bar f] = [e_{x_0}]$. 세 공리가 모두 성립하므로 $\pi_1(X, x_0)$은 군이다.
+  $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm"><span class="box-label">정리 · 기준점 무관성 (문크레스 §52)</span>
+  <p><strong>이 정리가 하는 일:</strong> “어느 점에 고리를 걸었느냐”가 군의
+  <em>동형류</em>를 바꾸지 않음을 보장한다 — <a class="term" data-term="path-connected">경로연결</a>
+  공간에서는 기준점을 표기에서 떼고 그냥 $\pi_1(X)$라 써도 되는 근거.</p>
+  <p>$x_0$에서 $x_1$로 가는 경로 $\alpha$가 있으면, $\hat\alpha([f]) = [\bar\alpha * f * \alpha]$로
+  정의되는 사상 $\hat\alpha : \pi_1(X, x_0) \to \pi_1(X, x_1)$는 <strong>군 동형사상</strong>이다.
+  따라서 $X$가 경로연결이면 모든 기준점에서 기본군이 서로 동형이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $\hat\alpha$가 준동형임은 사이에 낀 $\alpha\bar\alpha \simeq_p e$가 “약분”되기 때문. 역사상은 거꾸로 간 경로 $\bar\alpha$가 준다.</span></summary>
+  <p><strong>준동형:</strong> $\hat\alpha([f])\,\hat\alpha([g]) = [\bar\alpha * f * \alpha]\,[\bar\alpha * g * \alpha]
+  = [\bar\alpha * f * (\alpha * \bar\alpha) * g * \alpha]$. 가운데
+  $\alpha * \bar\alpha \simeq_p e_{x_0}$(위 정리 ③)이 사라져
+  $[\bar\alpha * f * g * \alpha] = \hat\alpha([f][g])$.</p>
+  <p><strong>동형:</strong> $\hat{\bar\alpha}$가 역사상 —
+  $\hat{\bar\alpha} \circ \hat\alpha([f]) = [\alpha * \bar\alpha * f * \alpha * \bar\alpha]
+  = [f]$ (양쪽에서 $\alpha\bar\alpha$가 소거). 반대 합성도 마찬가지이므로
+  $\hat\alpha$는 전단사 준동형 — 동형. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 단순연결 공간 — 오므라드는 세계</span>
+  <p>경로연결이고 $\pi_1(X, x_0)$이 <strong>자명군</strong>($\{e\}$)인 공간을
+  <strong>단순연결</strong>(simply connected)이라 한다 — “모든 고리가 한 점으로
+  오므라든다”. 기준점 무관성 덕에 한 점에서만 확인하면 된다.</p>
+  <p>· <strong>볼록집합·$\mathbb{R}^n$:</strong> 단순연결. 임의의 고리 $f$가 상수 고리와
+  직선 호모토픽($H(s,t) = (1-t)f(s) + t\,x_0$)이므로 $[f] = [e_{x_0}]$ — 류가 하나뿐.<br>
+  · <strong>구 $S^n$ ($n \ge 2$):</strong> 단순연결 (고차원엔 고리를 걸 “구멍”이 없다;
+  증명은 8장 이후).<br>
+  · <strong>원 $S^1$:</strong> <em>단순연결이 아니다</em> — 4절에서 $\pi_1(S^1) \cong \mathbb{Z}$.
+  가운데 구멍이 고리를 붙잡는다.</p>
+</div>
+
+<h2 id="sec-functorial">3. 함자성 — $\pi_1$이 위상 불변량인 이유</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>연속사상 $f : X \to Y$는 $X$의 고리를 $Y$의 고리로 “밀어” 보냅니다. 이 밀기가
+  고리의 곱(연접)과 호환되므로, 기본군 사이의 <strong>군 준동형</strong>
+  $f_* : \pi_1(X) \to \pi_1(Y)$를 유도합니다. 게다가 합성은 합성으로, 항등은 항등으로
+  옮겨집니다(함자성). 그 결과 위상동형사상은 <strong>군 동형사상</strong>을 낳고 —
+  두 공간의 $\pi_1$이 다르면 두 공간은 위상동형일 수 없습니다. 이것이 $\pi_1$을
+  위상 판별기로 쓰는 원리입니다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 유도 준동형과 함자성 (문크레스 §52)</span>
+  <p><strong>이 정리가 하는 일:</strong> 기하(연속사상)와 대수(군 준동형) 사이에
+  “번역기”를 놓고, 그 번역이 합성을 존중함을 보인다 — 위상동형이면 기본군이 동형이라는
+  <strong>불변성</strong>이 여기서 공짜로 떨어진다.</p>
+  <p>기준점을 보존하는 연속사상 $f : (X, x_0) \to (Y, y_0)$은
+  $f_*([\gamma]) = [f \circ \gamma]$로 정의되는 <strong>군 준동형</strong>
+  $$f_* : \pi_1(X, x_0) \to \pi_1(Y, y_0)$$
+  을 유도한다. 이 대응은 다음 <strong>함자 법칙</strong>을 만족한다:</p>
+  <p>① $(g \circ f)_* = g_* \circ f_*$ &nbsp;&nbsp; ② $(\mathrm{id}_X)_* = \mathrm{id}_{\pi_1(X, x_0)}$.</p>
+  <p><strong>따름정리:</strong> $f$가 위상동형사상이면 $f_*$는 군 동형사상이다.
+  그러므로 <strong>$\pi_1$은 위상 불변량</strong> — $\pi_1(X) \not\cong \pi_1(Y)$이면
+  $X \not\approx Y$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 준동형·함자성은 “합성은 결합적”이라는 한 줄 계산. 따름정리는 그 두 법칙에 $f^{-1}$을 대입해 $f_*$의 양방향 역을 만드는 것.</span></summary>
+  <p><strong>잘 정의됨 &amp; 준동형:</strong> $\gamma \simeq_p \gamma'$이면
+  $f \circ \gamma \simeq_p f \circ \gamma'$ (호모토피 $H$에 $f$를 합성한 $f \circ H$가
+  경로 호모토피). 또 $f \circ (\gamma * \delta) = (f \circ \gamma) * (f \circ \delta)$
+  (연접의 정의를 그대로 밀면 성립)이므로
+  $f_*([\gamma][\delta]) = f_*([\gamma])\, f_*([\delta])$.</p>
+  <p><strong>함자성:</strong> $(g \circ f)_*([\gamma]) = [g \circ f \circ \gamma]
+  = g_*([f \circ \gamma]) = g_*(f_*([\gamma]))$. 항등사상은
+  $[\mathrm{id} \circ \gamma] = [\gamma]$로 명백.</p>
+  <p><strong>따름정리:</strong> $f$가 위상동형이고 $f^{-1}$이 역이면,
+  함자 법칙으로 $f_* \circ (f^{-1})_* = (f \circ f^{-1})_* = (\mathrm{id}_Y)_* = \mathrm{id}$,
+  대칭적으로 $(f^{-1})_* \circ f_* = \mathrm{id}$. 즉 $(f^{-1})_*$가 $f_*$의 양방향 역 —
+  $f_*$는 동형. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 수축과 호모토피 동치 <span class="label-en">retraction, homotopy equivalence</span></span>
+  <p>· <strong>수축</strong>(retraction): 부분공간 $A \subset X$에 대해 연속사상
+  $r : X \to A$가 $A$ 위에서 항등($r|_A = \mathrm{id}_A$)이면 $r$을 $X$의 $A$로의
+  수축, $A$를 <strong>수축핵</strong>이라 한다. 포함사상 $i : A \hookrightarrow X$과
+  $r \circ i = \mathrm{id}_A$.</p>
+  <p>· <strong>호모토피 동치</strong>(homotopy equivalence): $f : X \to Y$에 대해
+  $g : Y \to X$가 있어 $g \circ f \simeq \mathrm{id}_X$, $f \circ g \simeq \mathrm{id}_Y$이면
+  $X$와 $Y$는 같은 <strong>호모토피 형</strong>이라 한다. 위상동형보다 <em>느슨한</em>
+  관계지만, $\pi_1$은 여전히 이 관계에서 보존된다(경로연결이면 동형).</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 수축은 단사를, 변형수축은 동형을 유도 (문크레스 §52·§58)</span>
+  <p><strong>이 정리가 하는 일:</strong> 복잡한 공간의 $\pi_1$을 “납작하게 눌러 붙인”
+  더 간단한 부분공간에서 읽게 해 준다 — 계산의 실전 지렛대이자, 4절 응용(수축
+  불가능성)의 논리 뼈대.</p>
+  <p>① $A$가 $X$의 수축핵이면 포함 유도 준동형 $i_* : \pi_1(A) \to \pi_1(X)$은
+  <strong>단사</strong>다.</p>
+  <p>② $A$가 $X$의 <strong>변형수축핵</strong>(deformation retract: 수축 $r$이 추가로
+  $i \circ r \simeq \mathrm{id}_X$)이면 $i_*$는 <strong>동형</strong>이다.
+  예: $\mathbb{R}^2 \setminus \{0\}$은 $S^1$으로 변형수축 —
+  $\pi_1(\mathbb{R}^2 \setminus \{0\}) \cong \pi_1(S^1) \cong \mathbb{Z}$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (①) <span class="proof-strategy">— 함자성의 즉효약: $r \circ i = \mathrm{id}$에 $(-)_*$를 씌우면 $r_* \circ i_* = \mathrm{id}$, 왼쪽 역을 가진 준동형은 단사.</span></summary>
+  <p>$r \circ i = \mathrm{id}_A$에 함자 법칙을 적용하면
+  $r_* \circ i_* = (\mathrm{id}_A)_* = \mathrm{id}_{\pi_1(A)}$.
+  $i_*([\gamma]) = i_*([\delta])$이면 양변에 $r_*$을 씌워
+  $[\gamma] = [\delta]$ — $i_*$는 단사. (②는 $i \circ r \simeq \mathrm{id}_X$가
+  $i_* \circ r_* = \mathrm{id}_{\pi_1(X)}$까지 주어 $i_*$가 양방향 역을 갖는 것 —
+  “호모토픽한 사상은 같은 유도 준동형”이라는 §58의 사실이 필요하다.) $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-circle">4. 원의 기본군 — $\pi_1(S^1) \cong \mathbb{Z}$</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>원 위의 고리는 “몇 바퀴 감았는가”라는 정수 하나로 요약됩니다 —
+  시계 반대로 두 바퀴면 $+2$, 시계로 한 바퀴면 $-1$, 안 감으면 $0$. 두 고리를 이으면
+  감은 수가 더해지죠. 그래서 $\pi_1(S^1)$은 덧셈군 $\mathbb{Z}$입니다. 감는 수를
+  엄밀히 세는 장치가 <strong>피복</strong> $\mathbb{R} \to S^1$: 원 위의 산책을 곧은
+  실직선 위의 산책으로 “풀어” 올린 뒤, 시작과 끝의 정수 차이를 읽습니다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 원의 기본군 (문크레스 §54)</span>
+  <p><strong>이 정리가 하는 일:</strong> 자명하지 않은 기본군을 <em>처음으로</em> 실제
+  계산한다 — 이 하나의 계산에서 브라우어 고정점 정리와 대수학의 기본정리가 흘러나온다.
+  “구멍이 하나면 $\mathbb{Z}$”라는 원형(prototype).</p>
+  <p>$$\pi_1(S^1, \, x_0) \;\cong\; \mathbb{Z}$$</p>
+  <p>동형사상은 각 고리에 그 <strong>감는 수</strong>(winding number, 회전수)를
+  대응시킨다. 특히 $S^1$은 단순연결이 아니고, 항등 고리(한 바퀴)가 무한위수 생성원이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 개요 (피복 올림) <span class="proof-strategy">— 지수사상 $p : \mathbb{R} \to S^1$로 원 위의 고리를 실직선 위의 경로로 “올린다”. 올림의 끝점(정수)이 감는 수. 올림의 존재·유일성이 열쇠 — 자세한 피복 이론은 8장.</span></summary>
+  <p>피복사상 $p : \mathbb{R} \to S^1$, $p(t) = (\cos 2\pi t, \sin 2\pi t)$를 쓴다 —
+  실직선을 원에 무한히 감는 사상, $p^{-1}(x_0) = \mathbb{Z}$.</p>
+  <p><strong>경로 올림 정리:</strong> 기준점 $x_0 = (1,0)$에 기반한 임의의 고리
+  $\gamma : [0,1] \to S^1$에 대해, $\tilde\gamma(0) = 0$이고 $p \circ \tilde\gamma = \gamma$인
+  <strong>올림</strong> $\tilde\gamma : [0,1] \to \mathbb{R}$이 유일하게 존재한다.
+  고리이므로 $\gamma(1) = x_0$, 따라서 $\tilde\gamma(1) \in p^{-1}(x_0) = \mathbb{Z}$.
+  이 정수 $\deg(\gamma) = \tilde\gamma(1)$이 <strong>감는 수</strong>다.</p>
+  <p><strong>호모토피 올림 정리:</strong> 경로 호모피한 두 고리의 올림은 같은 끝점을
+  가진다 — 감는 수는 경로 호모토피류의 불변량. 따라서
+  $\Phi : \pi_1(S^1, x_0) \to \mathbb{Z}$, $\Phi([\gamma]) = \deg(\gamma)$가 잘 정의된다.</p>
+  <p><strong>준동형:</strong> $\gamma * \delta$의 올림은 $\tilde\gamma$ 뒤에
+  ($\tilde\gamma(1)$만큼 밀어 올린) $\tilde\delta$를 이어 붙인 것 — 끝점이
+  $\deg(\gamma) + \deg(\delta)$. 그러므로 $\Phi$는 준동형.</p>
+  <p><strong>전단사:</strong> 전사 — 정수 $n$에 대해 $\gamma_n(s) = p(ns)$가 감는 수 $n$.
+  단사 — $\deg(\gamma) = 0$이면 올림 $\tilde\gamma$가 $0$에서 $0$으로 가는
+  $\mathbb{R}$(볼록!) 안의 고리라 상수와 경로 호모토픽, $p$로 내리면
+  $\gamma \simeq_p e_{x_0}$. 결국 $\Phi$는 동형 — $\pi_1(S^1) \cong \mathbb{Z}$. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\mathbb{Z}$ 하나에서 흘러나오는 두 정리</span>
+  <p><strong>① 원판의 수축 불가능성 → 브라우어 고정점 정리:</strong>
+  원판 $D^2$의 경계 원 $S^1$으로의 수축 $r : D^2 \to S^1$은 <em>존재하지 않는다.</em>
+  있다면 3절 정리 ①로 $i_* : \pi_1(S^1) \to \pi_1(D^2)$이 단사여야 하는데,
+  $D^2$은 볼록이라 $\pi_1(D^2) = 0$ — $\mathbb{Z}$가 자명군에 단사로 들어갈 수 없다
+  (모순). 이로부터 <strong>브라우어 고정점 정리</strong>(연속 $g : D^2 \to D^2$은
+  고정점을 가짐)가 따른다: 고정점이 없다면 $g(x)$에서 $x$로 쏜 반직선이 경계와
+  만나는 점 $r(x)$가 수축을 만들어 모순.</p>
+  <p><strong>② 대수학의 기본정리:</strong> 상수 아닌 복소다항식 $p(z)$는 근을 가진다.
+  근이 없다고 하면, 큰 원 $|z| = R$을 $p$로 보낸 폐곡선의 감는 수가 $\deg p \ne 0$인데,
+  반지름을 $0$으로 줄이면 감는 수가 $0$이 되어야 한다(연속 변형은 감는 수 보존) —
+  모순. 감는 수라는 위상량이 대수의 존재정리를 증명한다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>자유 호모토피 ≠ 경로 호모토피.</strong> $\pi_1$은 <em>끝점 고정</em>
+  경로 호모토피로 만든다. 끝점을 풀면($\simeq$) 상수 고리와 모든 고리가 붙어버려
+  군 구조가 무너진다 — 자유 호모토피류는 “켤레류”에 대응할 뿐 원소 자체가 아니다.</p>
+  <p>② <strong>$\pi_1$은 일반적으로 비아벨.</strong> $\pi_1(S^1)\cong\mathbb{Z}$가 아벨이라
+  기본군이 늘 아벨이라 착각하기 쉽다. 8자 공간(두 원을 한 점에서 붙인 것)의 기본군은
+  두 생성원의 <strong>자유군</strong> $\langle a, b \rangle$ — 비아벨이다
+  ($ab \ne ba$: “왼 고리 다음 오른 고리”와 순서를 바꾼 것이 서로 오므라들지 않는다).</p>
+  <p>③ <strong>기준점 의존성.</strong> 경로연결이 아니면 기준점이 <em>진짜로</em> 중요하다 —
+  $\pi_1$은 기준점이 든 경로성분만 본다. 다른 성분에 아무리 큰 구멍이 있어도
+  $\pi_1(X, x_0)$은 못 느낀다. “$\pi_1(X)$”라는 표기는 경로연결일 때만 안전하다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">7장의 줄거리</span>
+  <p><a class="term" data-term="homotopy">호모토피</a> = 연속 변형 필름($X\times[0,1]\to Y$);
+  끝점 고정이면 <strong>경로 호모토피</strong> — 동치관계라 “호모토피류”가 생긴다
+  (볼록집합에선 직선 호모토피로 모든 것이 붙는다)
+  → 기준점 $x_0$의 고리들의 경로호모토피류 + 연접 =
+  <a class="term" data-term="fundamental-group">기본군</a> $\pi_1(X, x_0)$
+  (항등원=상수 고리, 역원=거꾸로 고리, 결합=재매개변수화; 경로연결이면 기준점 무관)
+  → 연속사상은 준동형 $f_*$를 유도하고 <strong>함자적</strong>($( g f)_* = g_* f_*$) —
+  <a class="term" data-term="homeomorphism">위상동형</a>이면 $\pi_1$ 동형, 즉
+  <strong>위상 불변량</strong>; 수축은 $i_*$ 단사, 변형수축은 동형
+  → 백미: <strong>$\pi_1(S^1) \cong \mathbb{Z}$</strong> (감는 수; 피복
+  $\mathbb{R}\to S^1$의 올림) — 여기서 브라우어 고정점·대수학 기본정리가 흘러나온다.</p>
+  <p><strong>단 하나만 기억한다면:</strong> $\pi_1$은 “고리를 오므릴 수 있는가”를
+  <em>군으로 번역</em>하는 장치다 — 기하의 구멍이 대수의 비자명 원소가 되고,
+  함자성이 그 대수를 위상 판별기로 바꾼다. (구멍의 정밀 계량과 피복 이론은 8장.)</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음을 판정하고 근거를 대라.</p>
+  <p>(1) $\mathbb{R}^2$의 두 경로 $f, g$가 같은 끝점을 가지면 항상 경로 호모토픽하다.<br>
+  (2) $X$가 단순연결이면 $X$의 임의의 두 경로(같은 끝점)는 경로 호모토픽하다.<br>
+  (3) 임의의 연속함수 $f : X \to \mathbb{R}^n$은 상수함수와 호모토픽하다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>세 문항 모두 볼록성과 직선 호모토피가 관건. (2)는 “두 경로가 같은 류”가
+    “$\bar g * f$가 상수와 같은 류”와 동치임을 이용.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> $\mathbb{R}^2$은 볼록 — 직선 호모토피
+    $H(s,t) = (1-t)f(s) + t\,g(s)$가 끝점($f(0)=g(0)$, $f(1)=g(1)$)을 고정한 채 잇는다.</p>
+    <p>(2) <strong>참.</strong> $f, g$가 $x_0 \to x_1$ 경로면 $f * \bar g$는 $x_0$ 고리.
+    단순연결이라 $[f * \bar g] = [e_{x_0}]$, 양변에 $[g]$를 곱해 정리하면
+    $[f] = [g]$ — 즉 $f \simeq_p g$. (기준점 무관성으로 어느 점에서 재도 무방.)</p>
+    <p>(3) <strong>참.</strong> $\mathbb{R}^n$ 볼록 — 아무 점 $c$로 가는 직선 호모토피
+    $H(x,t) = (1-t)f(x) + t\,c$. 여기선 끝점 조건이 없는 <em>자유</em> 호모토피다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 기본군은 항상 아벨군이다.<br>
+  (2) 경로연결 공간에서는 기준점을 바꿔도 기본군이 동형이다.<br>
+  (3) 상수사상 $c : X \to Y$가 유도하는 $c_* : \pi_1(X) \to \pi_1(Y)$은 자명 준동형이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 8자 공간. (3) 상수사상은 모든 고리를 상수 고리로 보낸다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> 8자 공간(쐐기합 $S^1 \vee S^1$)의 기본군은
+    두 생성원의 자유군 $\langle a, b\rangle$ — $ab \ne ba$이므로 비아벨. (원 하나짜리
+    $S^1$은 아벨이지만, 그것이 일반 법칙은 아니다.)</p>
+    <p>(2) <strong>참.</strong> 두 기준점을 잇는 경로 $\alpha$가 동형
+    $\hat\alpha : \pi_1(X, x_0) \to \pi_1(X, x_1)$을 준다(본문 정리). 단, 동형사상
+    자체는 $\alpha$의 선택에 의존할 수 있다(비아벨이면 켤레 차이).</p>
+    <p>(3) <strong>참.</strong> $c \circ \gamma$는 상수 고리 $e_{y_0}$ — 모든 $[\gamma]$가
+    항등원으로 간다. $c_*$는 전체를 $\{e\}$로 보내는 자명 준동형.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §52 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>경로연결 공간 $X, Y$에 대해 곱공간의 기본군이
+  $\pi_1(X \times Y, (x_0, y_0)) \cong \pi_1(X, x_0) \times \pi_1(Y, y_0)$임을 증명하라.
+  이를 이용해 원환면 $T = S^1 \times S^1$의 기본군을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>곱공간으로 가는 사상은 “좌표별 연속”과 동치(2장 곱위상). 사영
+    $p_X, p_Y$가 유도하는 $(p_{X*}, p_{Y*})$를 후보 동형으로 잡아라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\gamma : [0,1] \to X \times Y$가 고리이면 $\gamma(s) = (\alpha(s), \beta(s))$,
+    여기서 $\alpha = p_X \circ \gamma$, $\beta = p_Y \circ \gamma$는 각각 $X, Y$의 고리
+    (곱위상에서 사상이 연속 $\iff$ 각 성분이 연속). 대응</p>
+    $$\Psi([\gamma]) = \big( [\alpha],\, [\beta] \big) = \big(p_{X*}[\gamma],\, p_{Y*}[\gamma]\big)$$
+    <p>를 본다. <strong>준동형:</strong> 사영이 준동형을 유도하므로 성분별로 성립.
+    <strong>전사:</strong> $X$의 고리 $\alpha$와 $Y$의 고리 $\beta$가 주어지면
+    $\gamma(s) = (\alpha(s), \beta(s))$가 $\Psi([\gamma]) = ([\alpha],[\beta])$.
+    <strong>단사:</strong> $\alpha \simeq_p e$, $\beta \simeq_p e$이면 두 성분 호모토피
+    $H, K$를 좌표로 묶은 $(H, K)$가 $\gamma$를 상수 고리로 보내는 경로 호모토피 —
+    $[\gamma] = e$. 따라서 $\Psi$는 동형.</p>
+    <p><strong>원환면:</strong> $\pi_1(T) = \pi_1(S^1 \times S^1) \cong
+    \mathbb{Z} \times \mathbb{Z} = \mathbb{Z}^2$ — 아벨이며 두 생성원(두 방향 고리).
+    이로써 $T \not\approx S^2$($\pi_1(S^2)=0$), $T \not\approx S^1 \vee S^1$(후자는 비아벨).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §55 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$A$가 $X$의 수축핵이고 $r : X \to A$가 수축, $i : A \hookrightarrow X$가 포함일 때,
+  $i_* : \pi_1(A) \to \pi_1(X)$이 단사이고 $r_* : \pi_1(X) \to \pi_1(A)$이 전사임을
+  보여라. 이를 써서 “$S^1$은 $D^2$의 수축핵이 아니다”를 재확인하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$r \circ i = \mathrm{id}_A$에 함자 $(-)_*$를 씌워라. $r_* \circ i_* = \mathrm{id}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>함자성으로 $r_* \circ i_* = (r \circ i)_* = (\mathrm{id}_A)_* = \mathrm{id}_{\pi_1(A)}$.</p>
+    <p>· <strong>$i_*$ 단사:</strong> 왼쪽 역 $r_*$을 가지므로($r_* \circ i_* = \mathrm{id}$),
+    $i_*(u) = i_*(v) \Rightarrow u = r_* i_*(u) = r_* i_*(v) = v$.<br>
+    · <strong>$r_*$ 전사:</strong> 오른쪽 역 $i_*$을 가지므로($r_* \circ i_* = \mathrm{id}$),
+    임의의 $w \in \pi_1(A)$는 $w = r_*(i_*(w))$ — $r_*$의 상에 든다.</p>
+    <p><strong>$D^2$의 재확인:</strong> $S^1$이 $D^2$의 수축핵이라면 $i_*$가 단사여야
+    하는데, $\pi_1(D^2) = 0$이라 $i_* : \mathbb{Z} \to 0$은 단사일 수 없다(무한군을
+    자명군에 심을 수 없음). 모순 — 수축은 없다. (브라우어 고정점 정리의 심장.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>기본군 계산·불변성 서술형</span>
+  </div>
+  <p>다음 물음에 답하라.</p>
+  <p>(1) $\pi_1(S^1) \cong \mathbb{Z}$임을 “감는 수”와 피복 $\mathbb{R} \to S^1$의
+  올림을 이용해 개요를 서술하라.<br>
+  (2) 이를 이용해 $\mathbb{R}^2$와 $\mathbb{R}^2 \setminus \{0\}$이 위상동형이 아님을
+  증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) $\mathbb{R}^2 \setminus \{0\}$은 $S^1$으로 변형수축한다. $\pi_1$은 위상
+    불변량 — 서로 다른 군이면 위상동형이 아니다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1)</strong> ① 피복 $p(t) = (\cos 2\pi t, \sin 2\pi t)$, $p^{-1}(x_0) = \mathbb{Z}$.
+    ② <em>경로 올림 정리</em>로 각 고리 $\gamma$는 $\tilde\gamma(0)=0$인 유일한 올림
+    $\tilde\gamma : [0,1] \to \mathbb{R}$을 갖고, $\gamma(1)=x_0$에서
+    $\deg\gamma := \tilde\gamma(1) \in \mathbb{Z}$. ③ <em>호모토피 올림 정리</em>로
+    $\deg$는 경로 호모토피류의 불변량이라 $\Phi([\gamma]) = \deg\gamma$가 잘 정의됨.
+    ④ 연접의 올림이 이어 붙으므로 $\Phi$는 준동형이고, $\gamma_n(s)=p(ns)$가 전사,
+    $\deg\gamma=0 \Rightarrow$ 올림이 $\mathbb{R}$(볼록)의 고리라 $\gamma \simeq_p e$가
+    단사를 준다. 그러므로 $\Phi : \pi_1(S^1) \xrightarrow{\ \cong\ } \mathbb{Z}$.</p>
+    <p><strong>(2)</strong> $\pi_1(\mathbb{R}^2) = 0$ (볼록 — 단순연결). 반면
+    $\mathbb{R}^2 \setminus \{0\}$은 $r(x) = x/|x|$로 $S^1$에 <strong>변형수축</strong>
+    ($H(x,t) = (1-t)x + t\,x/|x|$가 원점을 피해 감)하므로, 변형수축 정리로
+    $\pi_1(\mathbb{R}^2 \setminus \{0\}) \cong \pi_1(S^1) \cong \mathbb{Z}$.
+    $\pi_1$은 위상 불변량인데 $0 \not\cong \mathbb{Z}$이므로
+    $\mathbb{R}^2 \not\approx \mathbb{R}^2 \setminus \{0\}$. $\blacksquare$</p>
+    <p>(서술의 뼈대: ① 불변량이 $\pi_1$임을 명시 ② 각 공간의 $\pi_1$ 계산(한쪽은
+    직선 호모토피, 한쪽은 변형수축) ③ 두 군이 비동형 ④ 불변성으로 결론. “구멍
+    개수”처럼 직관적 표현만 쓰면 감점 — 반드시 $\pi_1$의 동형/비동형으로 환원할 것.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

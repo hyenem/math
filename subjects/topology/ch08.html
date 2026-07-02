@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8장 피복공간과 응용 — 위상수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="topology" data-chapter="ch08.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">위상수학 · Munkres (§53–54, §58)</p>
+  <h1><span class="ch-num">8</span> 피복공간과 응용</h1>
+  <p class="ch-source">7장에서 세운 기본군 $\pi_1$을 실제로 계산하는 단 하나의 도구가
+  피복공간이다 — 그리고 $\pi_1(S^1) \cong \mathbb{Z}$라는 한 줄에서 브라우어 고정점,
+  보르숙-울람, 대수학의 기본정리가 쏟아진다. 위상수학의 피날레.</p>
+</div>
+
+<p>7장은 <strong>호모토피</strong>(두 경로를 끝점 고정한 채 연속으로 밀어 포갤 수 있음)와
+<strong>기본군</strong> $\pi_1(X, x_0)$ (기준점 $x_0$을 오가는 고리들의 호모토피류가
+이어붙임 $*$으로 이루는 <a class="term" data-term="group">군</a>)을 정의하면서도, 정작
+가장 기본적인 질문 — “원 $S^1$의 기본군은 무엇인가?” — 은 손대지 못한 채 끝났다.
+직관은 “고리가 원을 몇 바퀴 감았는가(<em>감는 수</em>)가 전부일 것”이라고 속삭이지만,
+그 직관을 정리로 바꾸려면 원을 <strong>곧게 펴서</strong> 감는 횟수를 눈금으로 읽어야
+한다. 그 “펴는 장치”가 이 장의 주인공, <strong>피복공간</strong>이다.</p>
+
+<h2 id="sec-covering">1. 피복공간 — 원을 곧게 펴다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 나선 계단</span>
+  <p>실직선 $\mathbb{R}$을 무한히 긴 나선 계단이라 하고, 그것을 원 $S^1$ 위로 수직
+  투영한다고 상상하자 — 한 층 올라갈 때마다 원을 정확히 한 바퀴 돈다.
+  원 위의 작은 호(弧) 하나를 올려다보면, 그 위에는 <strong>서로 겹치지 않는 계단 조각들이
+  층층이</strong> 쌓여 있고, 각 조각은 아래의 호와 똑같이 생겼다(투영이 그 위에서
+  위상동형). 이것이 “<strong>균등피복</strong>(evenly covered)”의 그림이다.
+  피복공간은 이렇게 밑공간을 <em>국소적으로</em> 여러 겹의 똑같은 복사본으로
+  덮는 공간이며, 고리가 원을 감는 횟수는 계단에서 <strong>몇 층 올라갔는가</strong>로
+  정확히 번역된다.</p>
+</div>
+
+<div class="box box-def" id="def-covering-space">
+  <span class="box-label">정의 · 피복공간 (문크레스 §53) <span class="label-en">covering space</span></span>
+  <p>연속 전사 $p : E \to B$를 생각하자. 밑공간 $B$의 열린집합 $U$가
+  <strong>균등피복</strong>된다는 것은, 원상 $p^{-1}(U)$를 서로소인 열린집합들
+  $\{V_\alpha\}$의 합집합으로 쓸 수 있고 — 각 <strong>조각(sheet)</strong> $V_\alpha$을
+  $p$가 $U$ 위로 <a class="term" data-term="homeomorphism">위상동형</a>으로 보내는
+  것이다.</p>
+  <p>$B$의 <strong>모든</strong> 점이 이런 균등피복 열린 근방을 가지면 $p$를
+  <strong>피복사상</strong>, $E$를 $B$의 <strong>피복공간</strong>이라 한다.
+  각 점 $b \in B$의 원상 $p^{-1}(b)$를 $b$ 위의 <strong>올(fiber)</strong>이라 하며,
+  이는 항상 <strong>이산</strong> 집합이다(균등피복 근방 안에서 각 조각과 정확히
+  한 점씩 만나므로).</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 세 개의 표준 피복</span>
+  <p><strong>① 지수 피복 $p : \mathbb{R} \to S^1$, $p(t) = (\cos 2\pi t, \sin 2\pi t) = e^{2\pi i t}$.</strong>
+  나선 계단 그 자체. 올 $p^{-1}(1,0) = \mathbb{Z}$ (정수 전체) — <strong>무한 겹</strong>
+  피복이다. 밑점 $(1,0)$ 근방의 작은 호 $U$를 올리면 $p^{-1}(U) = \bigsqcup_{n}(n-\varepsilon, n+\varepsilon)$,
+  각 구간이 $U$와 위상동형. 감는 수를 읽는 눈금자가 바로 이 올 $\mathbb{Z}$다.</p>
+  <p><strong>② 거듭제곱 피복 $p_n : S^1 \to S^1$, $z \mapsto z^n$</strong>
+  (복소수로 보면 $e^{i\theta}\mapsto e^{in\theta}$). 원을 자기 위로 $n$번 감는다 —
+  <strong>$n$겹</strong> 피복이고, 각 올은 정확히 $n$개의 점($n$제곱근들).</p>
+  <p><strong>③ 대척 피복 $p : S^n \to \mathbb{RP}^n$</strong>, 구면의 대척점 $x, -x$를
+  한 점으로 붙이는 몫사상. 각 올이 두 점 $\{x, -x\}$인 <strong>이중 피복</strong>(double
+  cover)이다. $n=1$이면 ②의 $z\mapsto z^2$와 같은 그림($\mathbb{RP}^1 \approx S^1$).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 ① — 국소 자명이지 대역 자명이 아니다</span>
+  <p>“균등피복이면 $p^{-1}(U) \approx U \times F$ ($F$는 이산 올)”는 <strong>맞다</strong> —
+  하지만 이것은 <em>국소</em> 성질일 뿐이다. 전체가 곱 $E \approx B \times F$가 되는
+  것은 <strong>아니다</strong>. 반례가 바로 나선 계단 $\mathbb{R} \to S^1$:
+  $\mathbb{R}$은 <a class="term" data-term="connected-set">연결</a>인데
+  $S^1 \times \mathbb{Z}$는 가산 개의 조각으로 흩어진 비연결 공간이다.
+  “층층이 쌓인 조각들”이 국소적으로는 분리돼 있어도, 원을 한 바퀴 돌아오면
+  <strong>한 층 위로 이어붙는다</strong> — 이 <em>대역적 꼬임</em>이 곧 피복공간의
+  정보이자, 감는 수가 살아 있는 이유다. 조각들이 아무 데서도 이어붙지 않는(자명한)
+  피복이라면 감는 수는 언제나 $0$일 것이다.</p>
+</div>
+
+<h2 id="sec-lifting">2. 올림 정리 — $\pi_1(S^1) \cong \mathbb{Z}$의 엄밀한 증명</h2>
+
+<p>피복 $p : E \to B$가 있을 때, 밑공간의 사상 $f : X \to B$에 대해
+$p \circ \tilde f = f$인 $\tilde f : X \to E$를 $f$의 <strong>올림(lift)</strong>이라 한다
+— 밑에서 벌어지는 일을 “계단 위로 들어 올린” 것. 감는 수를 읽으려면 원 위의 고리를
+나선 계단 위로 올려 끝점이 몇 층인지 보면 된다. 그러려면 올림이 <strong>존재</strong>하고
+<strong>유일</strong>해야 한다.</p>
+
+<div class="box box-def" id="def-lifting-theorem">
+  <span class="box-label">정의·정리 · 올림 정리 (문크레스 §54) <span class="label-en">lifting theorem</span></span>
+  <p>$p : E \to B$가 피복사상, $p(e_0) = b_0$이라 하자.</p>
+  <p><strong>(경로 올림)</strong> 임의의 경로 $\gamma : [0,1] \to B$, $\gamma(0) = b_0$에
+  대해 $\tilde\gamma(0) = e_0$인 올림 $\tilde\gamma : [0,1] \to E$가
+  <strong>유일하게</strong> 존재한다.</p>
+  <p><strong>(호모토피 올림)</strong> 임의의 연속 $F : [0,1] \times [0,1] \to B$,
+  $F(0,0) = b_0$에 대해 $\tilde F(0,0) = e_0$인 올림
+  $\tilde F : [0,1]\times[0,1] \to E$가 유일하게 존재한다. 특히 $F$가
+  <strong>경로 호모토피</strong>(끝점 고정 호모토피)이면 $\tilde F$도 그러하다.</p>
+  <p><strong>(올림의 유일성, 일반형)</strong> $X$가 <a class="term" data-term="connected-set">연결</a>이고
+  두 올림 $\tilde f_1, \tilde f_2 : X \to E$가 <em>한 점에서라도</em> 일치하면
+  $X$ 전체에서 일치한다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 감는 수의 상자 원리 (경로 올림의 존재)</span>
+  <p><strong>이 정리가 하는 일:</strong> 왜 나선 계단 위로 경로를 “유일하게” 들어
+  올릴 수 있는지를, 원의 <a class="term" data-term="compact">컴팩트</a>성 + 균등피복
+  근방만으로 설명한다. 감는 수 정의의 정당성이 여기에 걸려 있다.</p>
+  <p>$B$의 균등피복 근방들이 밑 경로 $\gamma([0,1])$를 덮는다. 컴팩트성으로 $[0,1]$을
+  유한 개 소구간 $0 = s_0 \lt \cdots \lt s_k = 1$으로 잘라 각 조각
+  $\gamma([s_{i-1}, s_i])$가 한 균등피복 근방 안에 들도록 할 수 있다. 그러면 올림을
+  소구간마다 <strong>한 조각씩</strong> 이어 붙여 만든다 — 각 균등피복 근방 위에서
+  올림은 “지금 서 있는 조각”이 정해지는 순간 유일하게 결정되기 때문이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 컴팩트로 유한 분할, 균등피복 근방 위에서 “현재 조각”을 따라 한 칸씩 올림을 연장. 유일성은 각 칸에서 조각이 이산이라 강제된다는 데서 나온다.</span></summary>
+  <p><strong>존재.</strong> 위처럼 분할 $\{s_i\}$를 잡는다. $\tilde\gamma(s_0) = e_0$으로
+  시작한다. 귀납적으로 $\tilde\gamma(s_{i-1})$이 정해졌다고 하자.
+  $\gamma([s_{i-1}, s_i]) \subset U$ ($U$ 균등피복)이고,
+  $\tilde\gamma(s_{i-1})$은 $p^{-1}(U)$의 어떤 한 조각 $V$에 들어 있다.
+  $p|_V : V \to U$는 위상동형이므로, 이 소구간 위의 올림을
+  $\tilde\gamma(s) = (p|_V)^{-1}(\gamma(s))$로 정의하면 연속이고 앞 조각과 끝점에서
+  이어진다(붙임 보조정리). $s_k = 1$까지 연장하면 완성.</p>
+  <p><strong>유일성.</strong> 각 소구간에서 $\tilde\gamma(s_{i-1})$이 어느 조각 $V$에
+  속하는지가 정해지면, $p^{-1}(U)$의 조각들이 <em>서로소</em>이므로 그 구간 내내 같은
+  $V$에 머물 수밖에 없고 — 위상동형의 역은 유일하므로 — 올림이 그 구간에서 유일하게
+  결정된다. 시작점 $e_0$이 고정돼 있으니 전체가 유일. (호모토피 올림도 정사각형
+  $[0,1]^2$을 작은 격자로 잘라 같은 논법을 쓴다.)</p>
+  <p><em>유일성의 일반형:</em> $X$ 연결일 때 두 올림이 일치하는 집합
+  $A = \{x : \tilde f_1(x) = \tilde f_2(x)\}$가 <strong>열림이자 닫힘</strong>임을 보인다.
+  임의의 $x$에서 $f(x)$의 균등피복 근방 $U$와 그 위의 조각들을 보면,
+  두 올림은 각각 어떤 조각에 들어가는데 — 같은 조각이면 근방 전체에서 같고($A$가
+  열림), 다른 조각이면 서로소라 근방 전체에서 다르다($A^c$가 열림).
+  $A$가 clopen이고 비어 있지 않으니 $X = A$. <strong>연결성이 유일성의 핵심
+  가정</strong>임이 여기서 드러난다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm"><span class="box-label">정리 · 원의 기본군 (문크레스 §54)</span>
+  <p><strong>이 정리가 하는 일:</strong> 7장이 남긴 첫 숙제를 푼다 —
+  “감는 수”라는 직관을 군 동형사상으로 못 박아, 위상수학 최초의 <strong>비자명한
+  기본군 계산</strong>을 완성한다.</p>
+  <p style="text-align:center;">$$\pi_1(S^1, b_0) \cong \mathbb{Z}$$</p>
+  <p>동형사상은 <strong>감는 수</strong>가 준다: 고리 $\gamma$를 나선 계단으로 올린
+  $\tilde\gamma$의 끝점 $\tilde\gamma(1) \in p^{-1}(b_0) = \mathbb{Z}$가 곧
+  $\deg \gamma$이며, $[\gamma] \mapsto \deg\gamma$가 군 동형이다. 생성원은
+  “원을 한 바퀴 도는 고리” $\omega_1(s) = (\cos 2\pi s, \sin 2\pi s)$의 류.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 지수 피복 $p:\mathbb{R}\to S^1$을 자로 쓴다. 잘 정의(호모토피 올림)·준동형(끝점 덧셈)·전사(감기 고리)·단사($\mathbb{R}$의 단순연결)의 네 걸음.</span></summary>
+  <p>$p : \mathbb{R} \to S^1$, $p(t) = e^{2\pi i t}$, $e_0 = 0$, $b_0 = (1,0)$.
+  $b_0$의 고리 $\gamma$에 대해 경로 올림으로 $\tilde\gamma(0) = 0$인 올림을 얻고,
+  $\gamma(1) = b_0$이므로 $\tilde\gamma(1) \in p^{-1}(b_0) = \mathbb{Z}$.
+  $\phi([\gamma]) := \tilde\gamma(1)$로 정의한다.</p>
+  <p><strong>(잘 정의됨)</strong> $\gamma \simeq \gamma'$ (경로 호모토피)이면 호모토피
+  올림 정리로 두 올림 $\tilde\gamma, \tilde\gamma'$은 같은 시작점 $0$에서 출발해
+  <em>끝점이 고정된</em> 호모토피로 연결된다 — 따라서
+  $\tilde\gamma(1) = \tilde\gamma'(1)$. 감는 수는 호모토피류의 불변량.</p>
+  <p><strong>(준동형)</strong> $\phi([\gamma][\delta]) = \phi([\gamma]) + \phi([\delta])$.
+  $\tilde\gamma$가 $\gamma$의 올림($0 \to m$), $\tilde\delta$가 $\delta$의 올림($0 \to n$)이라
+  하자. 평행이동 $t \mapsto t + m$은 $p$를 보존하므로($p(t+m)=p(t)$), $m + \tilde\delta$는
+  $\delta$의 올림이면서 $m$에서 시작한다. 따라서 이어붙임 $\tilde\gamma * (m + \tilde\delta)$가
+  $\gamma * \delta$의 올림이고 끝점은 $m + n$. 즉 $\phi([\gamma*\delta]) = m + n$.</p>
+  <p><strong>(전사)</strong> 각 $n \in \mathbb{Z}$에 대해 $\omega_n(s) = e^{2\pi i n s}$는
+  올림 $\tilde\omega_n(s) = ns$ ($0 \to n$)를 가지므로 $\phi([\omega_n]) = n$.</p>
+  <p><strong>(단사)</strong> $\phi([\gamma]) = 0$이면 올림 $\tilde\gamma$가 $0$에서
+  시작해 $0$에서 끝나는 <strong>$\mathbb{R}$ 안의 고리</strong>다. $\mathbb{R}$은 볼록 —
+  <strong>단순연결</strong>이므로 $\tilde\gamma$는 상수 경로로 경로 호모토피 $\tilde H$를
+  가진다. 이를 $p$로 내리면 $p \circ \tilde H$가 $\gamma$를 상수 고리로 잇는 경로
+  호모토피 — 즉 $[\gamma] = 1$(항등원). 핵이 자명하니 단사.</p>
+  <p>네 성질로 $\phi : \pi_1(S^1, b_0) \to \mathbb{Z}$는 군 동형. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm"><span class="box-label">정리 · 일반 올림 판정 (문크레스 §54의 사상 올림)</span>
+  <p><strong>이 정리가 하는 일:</strong> “경로·호모토피”를 넘어 <em>임의의 사상</em>
+  $f : Y \to B$를 계단 위로 올릴 수 있는지를, 오로지 $\pi_1$의
+  <strong>부분군 포함관계</strong>로 판정한다 — 위상 문제를 대수 문제로 바꾸는
+  이 장의 철학이 결정체로 나타난다.</p>
+  <p>$p : (E, e_0) \to (B, b_0)$ 피복, $f : (Y, y_0) \to (B, b_0)$ 연속, $Y$가
+  경로연결이고 국소 경로연결이라 하자. 그러면 $f(y_0) = b_0$을 지키는 올림
+  $\tilde f : (Y, y_0) \to (E, e_0)$이 존재할
+  <strong>필요충분조건</strong>은
+  $$f_*\big(\pi_1(Y, y_0)\big) \subseteq p_*\big(\pi_1(E, e_0)\big)$$
+  이다(여기서 $f_*, p_*$는 유도 준동형). 존재하면 $Y$ 연결이므로 유일하다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 ② — 유일성엔 연결성이 필요하다</span>
+  <p>“올림은 시작점만 정하면 유일”은 <strong>정의역이 연결일 때만</strong> 참이다.
+  정의역이 두 조각으로 나뉘어 있으면 각 조각에서 <em>독립적으로</em> 다른 층을
+  고를 수 있어 올림이 여럿 생긴다 — 위 증명에서 “$A$가 clopen이고 비지 않으니 전부”가
+  통하려면 반드시 연결이어야 한다. 또한 <strong>존재</strong>는 경로·정사각형처럼
+  단순연결(또는 $\pi_1$ 조건을 만족)인 정의역에서만 공짜다:
+  일반 판정 정리가 말하듯, $\pi_1(Y)$가 $p_*\pi_1(E)$ 안에 들어가지 <em>않으면</em>
+  올림은 <strong>아예 존재하지 않는다</strong>. 예컨대 항등사상 $S^1 \to S^1$을
+  $\mathbb{R} \to S^1$로 올리려는 시도는 $\pi_1(S^1)=\mathbb{Z} \not\subseteq p_*\pi_1(\mathbb{R})=0$
+  때문에 실패한다 — 원 위의 연속 각도함수(전역 $\log$)가 없다는 사실의 재진술이다.</p>
+</div>
+
+<h2 id="sec-applications">3. 응용 — 한 줄의 $\mathbb{Z}$에서 쏟아지는 정리들</h2>
+
+<p>$\pi_1(S^1) \ne 0$ 이라는 사실, 그리고 원판 $D^2$는 단순연결($\pi_1(D^2)=0$)이라는
+대조 — 이 둘의 충돌만으로 세 개의 유명 정리가 증명된다.</p>
+
+<div class="box box-thm"><span class="box-label">정리 · 브라우어 고정점 정리, 2차원 (문크레스 §55)</span>
+  <p><strong>이 정리가 하는 일:</strong> “닫힌 원판을 자기 자신으로 보내는 연속사상은
+  반드시 제자리에 머무는 점을 남긴다”를 보인다 — 경제학의 균형, 미분방정식의
+  해 존재까지 떠받치는 정리다.</p>
+  <p>연속사상 $g : D^2 \to D^2$는 항상 <strong>고정점</strong> $g(x) = x$를 가진다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 개요 <span class="proof-strategy">— 두 걸음: (i) $S^1$은 $D^2$의 수축(retract)이 아니다 — $\pi_1$이 가로막는다. (ii) 고정점이 없다면 수축을 만들 수 있어 모순.</span></summary>
+  <p><strong>(i) 수축 불가능.</strong> <strong>수축</strong>(retraction)이란
+  $r : D^2 \to S^1$ 연속이고 $S^1$ 위에서 항등인 사상이다. 포함
+  $\iota : S^1 \hookrightarrow D^2$과 합성하면 $r \circ \iota = \mathrm{id}_{S^1}$.
+  기본군의 유도 준동형을 취하면
+  $$\pi_1(S^1) \xrightarrow{\ \iota_*\ } \pi_1(D^2) \xrightarrow{\ r_*\ } \pi_1(S^1),
+  \qquad r_* \circ \iota_* = \mathrm{id}.$$
+  그런데 $\pi_1(S^1) = \mathbb{Z}$, $\pi_1(D^2) = 0$이므로 이 합성은
+  $\mathbb{Z} \to 0 \to \mathbb{Z}$ — 항등사상일 수 없다($\mathbb{Z}$의 항등은
+  $0$을 거쳐 갈 수 없다). 따라서 수축 $r$은 <strong>존재하지 않는다</strong>.</p>
+  <p><strong>(ii) 고정점.</strong> $g(x) \ne x$인 $x$가 하나도 없다고 가정하면,
+  각 $x$에서 $g(x)$로부터 $x$를 지나는 반직선을 그어 경계 $S^1$과 만나는 점을
+  $r(x)$라 하자. $g(x) \ne x$ 덕분에 이 반직선이 잘 정의되고 $r : D^2 \to S^1$은
+  연속이며, $x \in S^1$이면 $r(x) = x$ — 바로 (i)에서 불가능하다고 한 수축이다.
+  모순. 그러므로 고정점이 존재한다. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 ③ — 브라우어는 공 $D^n$이지 구면 $S^n$이 아니다</span>
+  <p>정리의 무대는 <strong>닫힌 공(원판) $D^n$</strong>이다. <strong>구면 $S^n$에서는
+  거짓</strong>: 대척사상 $x \mapsto -x$는 $S^n$의 연속 자기사상인데 고정점이 전혀
+  없다($x = -x$인 $x$는 없으므로). 차이의 근원은 $\pi_1$(과 고차 호모토피)에 있다 —
+  공은 단순연결이라 “수축 장벽”이 서지만, 구면은 자기 자신으로 수축될 수 있어
+  같은 논법이 통하지 않는다. “고정점=원판, 반례=구면”을 한 쌍으로 외워 둘 것.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 보르숙-울람 정리 (문크레스 §57)</span>
+  <p><strong>이 정리가 하는 일:</strong> 구면 위의 연속량은 반드시 <strong>대척점에서
+  같은 값</strong>을 갖는 곳이 있음을 보장한다 — “지구상에 기온과 기압이 <em>동시에</em>
+  같은 대척점 두 지점이 존재한다”는 유명한 따름이 여기서 나온다.</p>
+  <p>연속사상 $f : S^2 \to \mathbb{R}^2$에 대해 $f(x) = f(-x)$인 점 $x \in S^2$이
+  존재한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 개요 <span class="proof-strategy">— 대척점 값이 늘 다르다고 가정 → 대척점 보존($h(-x)=-h(x)$) 사상 $S^1\to S^1$을 만들면 감는 수가 홀수(≠0)여야 하는데, 원판으로 확장되면 감는 수 0 — 모순.</span></summary>
+  <p>모든 $x$에서 $f(x) \ne f(-x)$라 가정하자. 그러면
+  $$g(x) = \frac{f(x) - f(-x)}{\lvert f(x) - f(-x)\rvert} : S^2 \to S^1$$
+  이 잘 정의된 연속사상이고 <strong>대척점 보존</strong>이다:
+  $g(-x) = -g(x)$.</p>
+  <p>적도 $S^1 \subset S^2$로 제한한 고리 $g|_{S^1} : S^1 \to S^1$을 보자.
+  대척점 보존 사상 $S^1 \to S^1$은 <strong>감는 수가 홀수</strong>임이 알려져 있다
+  (§57의 보조정리 — 대척점을 보존하면 반 바퀴가 딱 맞아떨어져 짝수가 될 수 없다).
+  홀수는 $0$이 아니므로 $g|_{S^1}$은 $S^1$ 안에서 <strong>영호모토픽이 아니다</strong>.</p>
+  <p>그런데 $g|_{S^1}$은 북반구(원판 $D^2$와 위상동형)를 통해
+  $S^1 = \partial D^2 \to S^1$로 <strong>연속 확장</strong>된다 —
+  즉 $g|_{S^1}$은 원판 위 사상의 경계 제한이므로 영호모토픽이어야 한다
+  (감는 수 $0$). 두 결론이 충돌한다. 따라서 $f(x) = f(-x)$인 $x$가 존재한다.
+  $\blacksquare$</p>
+  <p><em>따름 (햄 샌드위치의 사촌):</em> 기온·기압을 좌표로 갖는 연속사상
+  $f : S^2 \to \mathbb{R}^2$에 적용하면 곧 “대척점에서 두 값이 모두 같은 지점”이 나온다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm"><span class="box-label">정리 · 대수학의 기본정리, 위상적 증명 (문크레스 §56)</span>
+  <p><strong>이 정리가 하는 일:</strong> “복소계수 상수 아닌 다항식은 근을 갖는다”를
+  <em>대수 없이</em> — 오직 감는 수의 연속 변형만으로 — 증명한다. 현대대수에서
+  $\mathbb{C}$가 대수적으로 닫힌 이유를 위상이 대신 말해 준다.</p>
+  <p>차수 $n \ge 1$인 복소다항식
+  $q(z) = z^n + a_{n-1}z^{n-1} + \cdots + a_0$은 $\mathbb{C}$에서 근을 가진다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 개요 <span class="proof-strategy">— 근이 없다고 가정하면 반지름 $r$의 원을 $q$로 보낸 고리의 감는 수가 잘 정의되고 $r$에 연속. $r$을 $0$으로 줄이면 감는 수 0, $r$이 크면 감는 수 $n$ — 정수가 연속으로 변할 수 없으니 $n=0$.</span></summary>
+  <p>$q$에 근이 없다고 가정하자(귀류법). 각 반지름 $r \ge 0$에 대해 고리
+  $$\beta_r(s) = \frac{q(r e^{2\pi i s})}{\lvert q(r e^{2\pi i s})\rvert} : S^1 \to S^1$$
+  을 정의한다(분모가 $0$이 안 됨은 근이 없다는 가정 덕분). 감는 수
+  $\deg \beta_r \in \mathbb{Z}$는 $r$에 대해 <strong>연속</strong>이다(호모토피 불변).
+  정수값이 연속이려면 상수 — 모든 $r$에서 같은 값이다.</p>
+  <p>$r = 0$이면 $\beta_0$은 상수 고리, $\deg \beta_0 = 0$.</p>
+  <p>$r$이 아주 크면 최고차항 $z^n$이 나머지를 압도하여
+  ($\lvert z^n\rvert = r^n \gt \lvert a_{n-1}z^{n-1}+\cdots+a_0\rvert$),
+  $\beta_r$은 $s \mapsto e^{2\pi i n s}$ (원을 $n$번 감는 고리)와 호모토픽 —
+  즉 $\deg \beta_r = n$. (직선 호모토피 $q_t = z^n + t(\text{나머지})$가 큰 원에서
+  $0$을 지나지 않음으로 확인.)</p>
+  <p>상수여야 하는데 $0 = n$이 되어, $n \ge 1$과 모순. 따라서 근이 존재한다.
+  $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-vankampen">4. 반 캄펀 정리 — 조각내어 계산하기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · $\pi_1$의 “마이어-비토리스”</span>
+  <p>공간을 두 열린 조각 $U, V$로 나눠 각각의 기본군을 안다면, 전체의 기본군은
+  <strong>두 조각의 고리를 이어붙여</strong> 만들어진다. 다만 겹치는 부분 $U \cap V$의
+  고리는 “$U$에서 온 것”과 “$V$에서 온 것”이 <em>같은 것</em>으로 취급돼야 한다 —
+  이 “풀칠”이 반 캄펀 정리의 핵심이다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 반 캄펀 정리 (문크레스 §70)</span>
+  <p><strong>이 정리가 하는 일:</strong> 원 하나($S^1$)를 넘어, <strong>붙여 만든 공간</strong>의
+  기본군을 조각들의 기본군으로부터 계산하는 일반 기계를 준다 — 자유곱과
+  합성(amalgamation)이 등장하는 순간이다.</p>
+  <p>$X = U \cup V$, $U, V, U \cap V$가 모두 열린 <a class="term" data-term="path-connected">경로연결</a>
+  이고 기준점 $x_0 \in U \cap V$이면,
+  $$\pi_1(X, x_0) \cong \pi_1(U, x_0) \ast_{\pi_1(U\cap V,\, x_0)} \pi_1(V, x_0)$$
+  (겹침 부분의 고리를 동일시한 <strong>합성 자유곱</strong>).
+  특히 $U \cap V$가 단순연결이면 그냥 자유곱
+  $\pi_1(X) \cong \pi_1(U) \ast \pi_1(V)$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 8자 공간의 기본군은 자유군 $F_2$</span>
+  <p>두 원을 한 점에서 붙인 <strong>8자 공간</strong>(쐐기합 $S^1 \vee S^1$)을 보자.
+  왼쪽 원의 약간 부푼 열린 근방 $U$와 오른쪽 원의 근방 $V$로 덮으면, $U, V$는
+  각각 원과 호모토피 동치라 $\pi_1(U) \cong \pi_1(V) \cong \mathbb{Z}$이고,
+  겹침 $U \cap V$는 붙임점 근방(별 모양)으로 <strong>단순연결</strong>이다.
+  반 캄펀으로
+  $$\pi_1(S^1 \vee S^1) \cong \mathbb{Z} \ast \mathbb{Z} = F_2,$$
+  <strong>생성원 두 개의 자유군</strong> — 두 원을 도는 고리 $a, b$가 아무 관계 없이
+  단어 $a b a^{-1} b \cdots$를 자유롭게 만든다(비아벨!). 원 $n$개의 쐐기합이면
+  $F_n$. 8자 공간이 “관계식 없는 대수”의 위상적 실현인 셈이다.</p>
+  <p><em>보너스 — 구면은 단순연결:</em> $S^2$를 두 개의 (겹치는) 원판으로 덮으면
+  겹침이 띠 모양($S^1 \times \mathbb{R}$)으로 경로연결이고 각 조각은 단순연결이라,
+  반 캄펀으로 $\pi_1(S^2) = 0$. 같은 방식으로 $n \ge 2$이면 $\pi_1(S^n)=0$ —
+  “고차원 구면엔 감을 원이 없다.” 이로써 $S^1 \not\approx S^2$가 $\pi_1$만으로
+  즉시 갈린다($\mathbb{Z} \ne 0$).</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">8장의 줄거리</span>
+  <p><a class="term" data-term="homeomorphism">위상동형</a> 판별의 궁극 도구가 기본군인데,
+  그 첫 계산 $\pi_1(S^1)$을 <strong>피복공간</strong>이 연다:
+  $p : E \to B$가 각 점에 균등피복 근방을 갖는 연속 전사, 올은 이산
+  ($\mathbb{R}\to S^1$ 무한 겹, $z\mapsto z^n$ $n$겹, $S^n\to\mathbb{RP}^n$ 이중)
+  → <strong>올림 정리</strong>: 경로·호모토피가 계단 위로 유일하게 올라가고
+  (컴팩트 분할 + 조각 이산성; 유일성엔 연결 필요)
+  → 감는 수 $=$ 올림의 끝점 $\Rightarrow$
+  $\pi_1(S^1) \cong \mathbb{Z}$ (잘 정의·준동형·전사·단사의 네 걸음)
+  → 일반 올림 판정은 $f_*\pi_1(Y) \subseteq p_*\pi_1(E)$
+  → 응용 폭포: <strong>브라우어 고정점</strong>($S^1$은 $D^2$의 수축 아님 —
+  $\mathbb{Z}\to0\to\mathbb{Z}$ 불가), <strong>보르숙-울람</strong>(대척점 값 일치),
+  <strong>대수학의 기본정리</strong>(감는 수 $0=n$ 모순)
+  → <strong>반 캄펀</strong>으로 조각 계산: 8자 공간 $\pi_1 = F_2$, $S^{n\ge2}$ 단순연결.</p>
+  <p><strong>단 하나만 기억한다면:</strong> $\pi_1(S^1) \cong \mathbb{Z}$ — “감는 수는
+  정수이고, 정수는 연속으로 변하지 않는다.” 이 한 문장이 고정점·대척점·근의 존재를
+  전부 낳는다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">위상수학 전권 회고 — 1장에서 8장까지</span>
+  <p>여정은 <strong>열린집합 목록</strong>이라는 최소 공리(<a class="term" data-term="topology">위상</a>,
+  1장)에서 출발했다. 거리를 지운 자리에 <a class="term" data-term="continuous-top">연속</a>·수렴·
+  <a class="term" data-term="homeomorphism">위상동형</a>을 다시 세우고(1–2장), 해석학의
+  두 기둥 <strong><a class="term" data-term="connected-set">연결성</a></strong>(3장)과
+  <strong><a class="term" data-term="compact">컴팩트성</a></strong>(4장)을 일반 공간으로
+  들어 올렸다 — 여기서 위상 불변량(성분 개수, 컴팩트성)이 위상동형을 판별하기
+  시작했다. 이어 <strong>분리공리</strong>의 사다리($T_1$–$T_4$)와
+  <strong>가산공리</strong>(5장)가 “좋은 공간”의 조건을 재고, <strong>우리손 거리화
+  정리</strong>와 <strong>베어 범주 정리</strong>(6장)가 “언제 위상이 거리에서
+  오는가”와 완비성의 위상적 그림자를 밝혔다.</p>
+  <p>그리고 마지막 두 장에서 위상수학은 <strong>대수와 손을 잡는다</strong>:
+  7장의 <strong>호모토피와 기본군</strong>이 공간에 군을 붙이고, 8장의
+  <strong>피복공간</strong>이 그 군을 실제로 계산해 냈다. 구멍의 개수를 세지 못하던
+  집합론적 위상이, 마침내 $\pi_1$이라는 <em>대수적 불변량</em>으로 $S^1$과 $D^2$를,
+  $S^1$과 $S^2$를 구별한다 — 대수적 위상수학의 문턱이다.
+  <strong>연속으로 변형해도 지워지지 않는 것</strong>을 추적하는 학문, 그 첫 완결된
+  이야기가 여기서 끝난다. 다음 문은 호몰로지와 고차 호모토피 $\pi_n$이 연다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$p_3 : S^1 \to S^1$, $z \mapsto z^3$에 대하여 답하라.</p>
+  <p>(1) 이것이 피복사상임을 확인하고 겹 수(올의 크기)를 구하라.<br>
+  (2) 밑점 $1$의 균등피복 근방 하나를 서술하고 그 위의 조각 개수를 말하라.<br>
+  (3) 이 피복이 “국소 자명이지만 대역 자명이 아님”을 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$z^3 = w$의 해는 세 개의 세제곱근. 작은 호를 원상으로 당기면 서로소인 세 호가
+    나온다. 대역 자명이면 $S^1$이 세 조각으로 흩어져야 한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 각 $w \in S^1$의 원상 $p_3^{-1}(w) = \{$세 세제곱근$\}$ — <strong>3겹</strong>.
+    작은 호 $U$(중심각 $\lt 2\pi/3$)를 잡으면 $p_3^{-1}(U)$는 서로 $120^\circ$ 떨어진
+    세 개의 서로소 호이고, 각각을 $p_3$가 $U$ 위로 위상동형으로 보낸다 — 균등피복.</p>
+    <p>(2) 예: $U = \{e^{i\theta} : |\theta| \lt \pi/3\}$. 조각은 세 호
+    $\{e^{i\theta/3}\}, \{e^{i(\theta+2\pi)/3}\}, \{e^{i(\theta+4\pi)/3}\}$ — <strong>3개</strong>.</p>
+    <p>(3) 국소적으로는 $p_3^{-1}(U) \approx U \times \{1,2,3\}$(세 겹)이지만, 전체
+    $S^1$은 <strong>연결</strong>이라 $S^1 \times \{1,2,3\}$(세 조각)과 위상동형이
+    아니다. 원을 한 바퀴 돌면 세 조각이 서로 <em>순환</em>으로 이어붙는다 — 대역적 꼬임.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 피복 $p : E \to B$에서 올 $p^{-1}(b)$는 항상 이산이다.<br>
+  (2) 정의역이 연결이 아니어도 시작점만 정하면 올림은 유일하다.<br>
+  (3) 모든 연속 $f : S^1 \to S^1$은 나선 계단 $\mathbb{R} \to S^1$ 위로 올라간다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) 두 점짜리 이산공간을 정의역으로. (3) 항등사상의 $\pi_1$ 조건을 확인 —
+    일반 올림 판정.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 균등피복 근방 안에서 각 조각과 올이 정확히 한 점씩
+    만나므로 각 점이 고립점 — 올은 이산.</p>
+    <p>(2) <strong>거짓.</strong> $X = \{0, 1\}$(이산), $p : \mathbb{R} \to S^1$.
+    $f \equiv b_0$의 올림은 각 점을 올 $\mathbb{Z}$의 <em>아무 정수</em>로 보내면 되어
+    무한히 많다 — 연결이 아니면 조각마다 층을 따로 고른다. 유일성엔 연결성이 필수.</p>
+    <p>(3) <strong>거짓.</strong> 항등 $f = \mathrm{id}_{S^1}$이면
+    $f_*\pi_1(S^1) = \mathbb{Z} \not\subseteq p_*\pi_1(\mathbb{R}) = 0$ —
+    일반 올림 판정 위반이라 올림이 없다. (있었다면 원 위의 전역 연속 각도함수가
+    생겨 $\pi_1(S^1)=0$이 되어 모순.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §54 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>피복과 곱 공간의 기본군을 이용해 다음을 계산·증명하라.</p>
+  <p>(1) 원환면 $T = S^1 \times S^1$의 기본군이 $\mathbb{Z} \times \mathbb{Z}$임을 보여라
+  (곱의 $\pi_1$은 $\pi_1$의 곱임을 사용).<br>
+  (2) 이를 이용해 원환면 $T$와 구면 $S^2$가 위상동형이 아님을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $\pi_1(X \times Y) \cong \pi_1(X) \times \pi_1(Y)$ (좌표별 사영으로 유도).
+    (2) $\pi_1$은 위상 불변량 — 본문에서 $\pi_1(S^2) = 0$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 곱 공간의 고리는 좌표별 고리의 쌍과 같고, 호모토피도 좌표별로 이뤄지므로
+    $\pi_1(X \times Y) \cong \pi_1(X) \times \pi_1(Y)$ (사영 $\mathrm{pr}_1, \mathrm{pr}_2$가
+    유도하는 동형). 따라서
+    $\pi_1(T) \cong \pi_1(S^1) \times \pi_1(S^1) \cong \mathbb{Z} \times \mathbb{Z}$ —
+    두 방향(경선·위선)으로 감는 수의 쌍.</p>
+    <p>(2) $\pi_1(T) = \mathbb{Z}^2 \ne 0 = \pi_1(S^2)$ (본문 반 캄펀 예제).
+    기본군은 위상동형에서 보존되는 <strong>불변량</strong>이므로 $T \not\approx S^2$.
+    (연결성·컴팩트성 같은 집합론적 불변량으로는 둘을 못 가른다 — 둘 다 컴팩트 연결
+    곡면. $\pi_1$이 비로소 구멍의 차이를 읽는다.) $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §55 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>“$S^1$은 $D^2$의 수축이 아니다”와 브라우어 고정점 정리가 사실상 <strong>동치</strong>임을
+  두 방향으로 논증하라. 즉 (가정) 수축 불가능 $\Rightarrow$ 고정점 존재, 그리고
+  (역) 고정점 정리 $\Rightarrow$ 수축 불가능.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>순방향은 본문 (ii)의 반직선 구성. 역방향은 수축 $r$이 있다면 $-r$ 또는
+    대척 합성으로 고정점 없는 자기사상을 만든다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(수축 불가 $\Rightarrow$ 고정점)</strong> $g : D^2 \to D^2$에 고정점이
+    없다면, $g(x)$에서 $x$로 향하는 반직선이 $S^1$과 만나는 점 $r(x)$는 연속이고
+    $r|_{S^1} = \mathrm{id}$ — 수축. 대우로 수축이 없으면 고정점이 있다.</p>
+    <p><strong>(고정점 $\Rightarrow$ 수축 불가)</strong> 수축 $r : D^2 \to S^1$이
+    있다고 하자. $a : S^1 \to S^1$, $a(x) = -x$ (대척, 고정점 없음)와 합성하면
+    $a \circ r : D^2 \to S^1 \subset D^2$은 연속 자기사상인데
+    고정점 $x$가 있으면 $x = a(r(x)) \in S^1$이고 $r(x) = x$이므로 $x = -x$ — 불가능.
+    즉 $a \circ r$은 고정점 없는 $D^2$ 자기사상이라 브라우어에 위배. 따라서 수축은
+    존재하지 않는다. $\blacksquare$</p>
+    <p>(두 명제가 같은 동전의 양면 — $\pi_1(S^1) = \mathbb{Z} \ne 0$이 그 동전이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>기본군 서술형</span>
+  </div>
+  <p>$\pi_1(S^1) \cong \mathbb{Z}$임을 지수 피복 $p : \mathbb{R} \to S^1$을 이용해
+  개요를 서술하고, 이 결과가 “원 위에는 전역 연속 각도함수(연속 $\arg$)가 없다”와
+  어떻게 연결되는지 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>감는 수 = 올림의 끝점. 전역 각도함수는 항등사상 $S^1 \to S^1$의 $\mathbb{R}$로의
+    올림과 같다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>동형 개요.</strong> 고리 $\gamma$를 $\tilde\gamma(0)=0$으로 올려
+    $\phi([\gamma]) = \tilde\gamma(1) \in \mathbb{Z}$로 놓는다.
+    ① <em>잘 정의</em>: 호모토피 올림으로 끝점이 류의 불변량.
+    ② <em>준동형</em>: 평행이동 $t\mapsto t+m$이 $p$를 보존해 이어붙임의 끝점이 덧셈.
+    ③ <em>전사</em>: $\omega_n(s)=e^{2\pi i n s}$의 올림 끝점이 $n$.
+    ④ <em>단사</em>: 끝점 $0$이면 올림이 $\mathbb{R}$의 고리 — $\mathbb{R}$ 단순연결이라
+    영호모토픽, 내리면 $\gamma$도 영호모토픽. 넷을 합쳐 $\phi$는 동형. $\blacksquare$</p>
+    <p><strong>각도함수와의 연결.</strong> 전역 연속 각도함수란 항등
+    $\mathrm{id}_{S^1}$의 올림 $\widetilde{\mathrm{id}} : S^1 \to \mathbb{R}$
+    (각 점에 각도 실수를 연속으로 부여)이다. 만약 존재하면 일반 올림 판정에서
+    $\mathbb{Z} = \pi_1(S^1) \subseteq p_*\pi_1(\mathbb{R}) = 0$이 되어 모순 —
+    즉 <strong>존재하지 않는다</strong>. 원을 한 바퀴 돌면 각도가 $2\pi$만큼
+    점프해야 하기 때문이며, 이 “점프의 불가피성”이 곧 $\pi_1(S^1) = \mathbb{Z}$의
+    생성원($1$바퀴 $=$ 감는 수 $1$)이다. 감는 수가 $0$이 아니라는 사실과
+    각도함수의 부재는 <em>같은 명제</em>다.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.
+이로써 위상수학 전권(1–8장)이 마무리됩니다 — 수고하셨습니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

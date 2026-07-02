@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11장 르베그 이론 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch11.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin (11장)</p>
+  <h1><span class="ch-num">11</span> 르베그 이론</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판 11장을 따릅니다. 측도는 직선 $\mathbb{R}$의
+  르베그 측도를 중심으로 서술하고, 추상 측도공간으로의 일반화는 필요한 곳에서만 언급합니다.</p>
+</div>
+
+<p>6장의 <a class="term" data-term="riemann-integral">리만 적분</a>은 강력하지만
+빈틈이 있습니다. 디리클레 함수는 적분되지 않고, 극한과 적분을 바꾸는 일
+($\lim \int = \int \lim$)에는 매번 <em>균등수렴</em>이라는 무거운 통행세가 붙었죠.
+르베그의 발상은 딱 한 줄로 요약됩니다 — <strong>정의역을 쪼개지 말고 치역을 쪼개라.</strong>
+그 한 줄이 “집합의 크기를 재는 법”(측도)을 먼저 요구하고, 그 대가로 우리는
+훨씬 넓은 함수 집합과 훨씬 자유로운 극한 교환을 얻습니다.</p>
+
+<h2 id="sec-motivation">1. 왜 새 적분인가 — 치역을 쪼개는 발상</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>동전이 잔뜩 쌓인 돈을 세는 두 방법을 생각하세요. <strong>리만</strong>은
+  “놓인 순서대로” 앞에서부터 하나씩 더합니다(정의역 $x$를 잘게 쪼갬).
+  <strong>르베그</strong>는 먼저 <em>액면가별로 분류</em>한 뒤 “500원짜리 몇 개, 100원짜리 몇 개”로
+  셉니다(치역 $y$를 쪼갬). 액면가 $y$짜리 동전이 놓인 자리의 집합
+  $E_y = \{x : f(x) \approx y\}$의 “크기”만 알면 $\sum y \cdot (\text{크기}\ E_y)$로 적분이 됩니다.</p>
+  <p>이 관점에서는 $f$가 얼마나 <em>들쭉날쭉</em>한지는 중요하지 않습니다 —
+  같은 값을 갖는 자리들이 아무리 흩어져 있어도 “그 자리들의 크기”만 잴 수 있으면 되니까요.
+  대신 진짜 어려운 질문이 앞으로 옮겨옵니다: <strong>임의의 집합 $E \subset \mathbb{R}$의
+  “크기”를 어떻게 정의하는가?</strong> 이것이 측도(measure)이고, 이 장의 절반입니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 리만이 포기한 함수 — 디리클레</span>
+  <p>$f = \mathbf{1}_{\mathbb{Q}}$, 즉 $f(x) = 1$ ($x \in \mathbb{Q}$), $f(x) = 0$ ($x \notin \mathbb{Q}$)을
+  $[0,1]$에서 보자. 6장에서 보았듯 모든 분할에서 $U(P,f) = 1$, $L(P,f) = 0$이라
+  <a class="term" data-term="riemann-integral">리만 적분</a>이 불가능했다.</p>
+  <p>르베그의 셈법으로는 즉시 끝난다. $f$는 값 $1$을 $\mathbb{Q}\cap[0,1]$에서,
+  값 $0$을 무리수에서 가진다. 뒤에서 볼 것처럼 <strong>$\mathbb{Q}\cap[0,1]$의 르베그 측도는 $0$</strong>
+  (가산집합이므로)이고 무리수 부분의 측도는 $1$이다. 따라서</p>
+  $$\int_{[0,1]} f\, dm = 1\cdot m(\mathbb{Q}\cap[0,1]) + 0\cdot m(\text{무리수}) = 1\cdot 0 + 0\cdot 1 = 0.$$
+  <p>리만이 “틈이 안 좁혀진다”며 탈락시킨 함수가, 치역을 쪼개니 값 $0$으로 깔끔히 적분된다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">두 번째 동기 — 극한과 적분의 교환</span>
+  <p>7장에서 $\lim_n \int f_n = \int \lim_n f_n$은 <em>균등수렴</em>이 있어야 안전했습니다.
+  하지만 균등수렴은 까다롭고, 실제로 필요한 것보다 훨씬 강한 조건이에요.
+  르베그 이론의 하이라이트(4절)는 <strong>점별 수렴만으로</strong> — 단조성(MCT)이나
+  적분가능한 상계(DCT)라는 가벼운 추가 조건 아래 — 이 교환을 보증한다는 것입니다.
+  리만 적분으로는 손도 못 대던 극한들이 르베그 적분에서는 한 줄로 정당화됩니다.</p>
+</div>
+
+<h2 id="sec-measure">2. 측도 — 집합의 크기를 재다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>구간 $[a,b]$의 “길이”는 $b-a$로 자명합니다. 문제는 <em>구간이 아닌</em> 이상한 집합의
+  길이예요. 르베그의 첫걸음(<strong>외측도</strong>)은 소박합니다 — 집합 $E$를 가산개의
+  열린구간으로 <strong>덮고</strong>, 그 길이 총합을 잰 뒤, 가능한 모든 덮개에 대한
+  <em>최선(하한)</em>을 취합니다. “가장 알뜰하게 덮으면 얼마인가?”</p>
+  <p>외측도는 모든 집합에 정의되지만 대가가 있습니다: 서로소인 두 집합의 외측도가
+  더해지지 않을 수 있어요($m^*(A\cup B) \lt m^*(A) + m^*(B)$가 가능). 이 결함을 없애려면
+  “점잖게 행동하는” 집합만 골라내야 합니다 — 그것이 <strong>가측집합</strong>입니다.</p>
+</div>
+
+<div class="box box-def" id="def-lebesgue-measure">
+  <span class="box-label">정의 11.5 · 11.9 · <span id="term-lebesgue-measure">르베그 측도</span> <span class="label-en">Lebesgue measure</span></span>
+  <p><strong>외측도.</strong> $E \subset \mathbb{R}$에 대해 열린구간 가산 덮개들을 훑어</p>
+  $$m^*(E) = \inf\Big\{ \sum_{k=1}^{\infty} \ell(I_k) \ :\ E \subset \bigcup_{k=1}^{\infty} I_k,\ I_k\text{는 열린구간} \Big\}$$
+  <p>로 정의한다($\ell(I) = $ 구간 길이). 외측도는 모든 부분집합에 정의되고, 단조성
+  ($A\subset B \Rightarrow m^*(A)\le m^*(B)$)과 <strong>가산 준가법성</strong>
+  $m^*(\bigcup E_k) \le \sum m^*(E_k)$을 만족한다.</p>
+  <p><strong>카라테오도리 가측.</strong> 집합 $E$가 <strong>(르베그) 가측</strong>이라 함은,
+  임의의 시험집합 $A$를 $E$가 “깔끔히 두 조각으로 가른다”는 뜻이다:</p>
+  $$m^*(A) = m^*(A\cap E) + m^*(A\cap E^{c}) \qquad(\forall A \subset \mathbb{R}).$$
+  <p>가측집합 전체 $\mathfrak{M}$은 <strong>$\sigma$-대수</strong>를 이룬다(여집합·가산합집합·가산교집합에
+  닫힘). $\mathfrak{M}$ 위로 외측도를 제한한 $m = m^*|_{\mathfrak{M}}$을 <strong>르베그 측도</strong>라 하고,
+  이것은 <strong>가산가법적</strong>이다: $\{E_k\}$가 서로소인 가측집합이면</p>
+  $$m\Big(\bigcup_{k=1}^{\infty} E_k\Big) = \sum_{k=1}^{\infty} m(E_k). \qquad(\text{Rudin 11.10})$$
+  <p>구간에 대해서는 $m([a,b]) = b-a$로 길이와 일치하고, 모든 열린집합·닫힌집합
+  (보렐 집합)은 가측이다.</p>
+</div>
+
+<div class="box box-def" id="def-null-set">
+  <span class="box-label">정의 11.11 · 영집합과 “거의 어디서나”</span>
+  <p>$m(E) = 0$인 집합 $E$를 <strong>영집합</strong>(measure zero)이라 한다. 어떤 성질이
+  영집합을 제외한 모든 점에서 성립하면 <strong>거의 어디서나</strong>(almost everywhere, <strong>a.e.</strong>)
+  성립한다고 말한다.</p>
+  <p>핵심 사실 몇 가지: ① 가산집합은 영집합이다($\mathbb{Q}$처럼) — 각 점을 폭 $\varepsilon/2^k$
+  구간으로 덮으면 총길이 $\le\varepsilon$. ② 영집합의 가산합집합은 영집합. ③ 영집합의
+  임의의 부분집합도 가측이며 측도 $0$(완비성). 하지만 ④ 영집합이 반드시 가산은 아니다 —
+  <a class="term" data-term="cantor-set">칸토어 집합</a>은 비가산인데 측도 $0$이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — “거의 어디서나”의 무게</span>
+  <p>“a.e.”는 <em>예외가 유한 개</em>라는 뜻이 아닙니다. 예외집합은 무한할 수도, 심지어
+  <strong>비가산</strong>일 수도 있어요 — 측도만 $0$이면 됩니다. $\mathbf{1}_{\mathbb{Q}} = 0$ a.e.인 것은
+  예외가 유리수 <em>전부</em>(가산 무한)여도 그 측도가 $0$이기 때문입니다.
+  르베그 적분은 “a.e.로 같은 두 함수는 적분값도 같다”를 만족하므로, a.e.의 눈으로 보면
+  $\mathbf{1}_{\mathbb{Q}}$와 상수함수 $0$은 사실상 같은 함수입니다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 비가측집합은 실재한다</span>
+  <p>“모든 집합이 가측 아니냐?”는 착각입니다. <strong>선택공리</strong>를 쓰면
+  가측이 아닌 집합(비탈리 집합)을 만들 수 있습니다 — $[0,1)$을 $\mathbb{Q}$의
+  평행이동으로 잘게 나눈 대표원들의 집합 $V$가 그것이죠. $V$가 가측이라 가정하면
+  가산가법성과 평행이동 불변성이 “$1 = 0$ 또는 $1 = \infty$”라는 모순을 낳습니다.
+  그래서 측도는 <em>모든</em> 집합이 아니라 $\sigma$-대수 $\mathfrak{M}$ <em>위에서만</em> 정의됩니다 —
+  이 신중함이 카라테오도리 조건의 존재 이유입니다.</p>
+</div>
+
+<h2 id="sec-integral">3. 가측함수와 르베그 적분</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>치역을 쪼개려면 각 “가로 띠” $\{a \lt f \le b\}$의 크기를 잴 수 있어야 합니다.
+  그러려면 이런 집합들이 전부 가측이어야 하죠 — 그 조건을 만족하는 함수가
+  <strong>가측함수</strong>입니다. 그다음 전략은 <em>계단으로 근사</em>하는 것:
+  값이 유한 종류뿐인 <strong>단순함수</strong>는 적분이 자명하고(값 × 측도의 합),
+  일반 함수는 단순함수들의 단조 극한으로 잡습니다.</p>
+</div>
+
+<div class="box box-def" id="def-measurable-function">
+  <span class="box-label">정의 11.13 · 가측함수 <span class="label-en">measurable function</span></span>
+  <p>$f : \mathbb{R} \to [-\infty, \infty]$가 <strong>가측</strong>이라 함은, 모든 실수 $a$에 대해</p>
+  $$\{x : f(x) \gt a\} \in \mathfrak{M} \quad(\text{가측집합})$$
+  임을 뜻한다($\gt a$ 대신 $\ge, \lt, \le$ 어느 것으로 해도 동치). <strong>단순함수</strong>는
+  치역이 유한집합인 가측함수로, $s = \sum_{i=1}^{n} c_i\, \mathbf{1}_{E_i}$ ($E_i$ 가측) 꼴이다.
+  <p>가측함수는 연산에 매우 안정적이다: $f+g$, $fg$, $|f|$, $\max(f,g)$가 모두 가측이고,
+  결정적으로 <strong>가측함수열의 $\sup,\ \inf,\ \limsup,\ \liminf,\ \lim$이 전부 가측</strong>이다
+  (Rudin 11.17). 리만 이론과 달리 극한을 취해도 “적분할 자격”을 잃지 않는다.</p>
+</div>
+
+<div class="box box-thm" id="thm-11-20"><span class="box-label">정리 11.20 · 단순함수 근사</span>
+  <p><strong>이 정리가 하는 일:</strong> 모든 가측함수를 “계단 함수의 극한”으로 붙잡아,
+  적분의 정의를 단순함수 하나로 환원한다.</p>
+  <p>$f \ge 0$이 가측이면, 단순함수들의 <strong>증가</strong>수열
+  $0 \le s_1 \le s_2 \le \cdots$이 존재하여 각 점에서 $s_n(x) \to f(x)$.
+  (일반 $f$는 $s_n \to f$이되 $|s_n| \le |f|$.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 치역 $[0,\infty)$을 높이 $2^{-n}$짜리 띠로 쪼개고, 위는 $n$에서 자른다. $n$이 커지면 띠가 얇아지고 천장이 높아진다.</span></summary>
+  <p>각 $n$에 대해 치역을 밑변에서부터 얇게 저민다:</p>
+  $$s_n(x) = \begin{cases} \dfrac{k}{2^n}, & \dfrac{k}{2^n} \le f(x) \lt \dfrac{k+1}{2^n}\ \ (0 \le k \lt n2^n),\\[2mm] n, & f(x) \ge n. \end{cases}$$
+  <p>각 조각의 밑집합 $\{k2^{-n} \le f \lt (k+1)2^{-n}\}$은 가측함수의 정의로 가측이므로
+  $s_n$은 단순함수다. $n \to n+1$이면 각 띠가 반으로 갈리며 $s_n \le s_{n+1}$(증가).
+  $f(x) \lt \infty$인 점에서는 $0 \le f(x) - s_n(x) \le 2^{-n} \to 0$; $f(x) = \infty$인 점에서는
+  $s_n(x) = n \to \infty$. 두 경우 모두 $s_n(x) \to f(x)$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-def" id="def-lebesgue-integral">
+  <span class="box-label">정의 11.22 · 11.23 · <span id="term-lebesgue-integral">르베그 적분</span> <span class="label-en">Lebesgue integral</span></span>
+  <p><strong>1단계 (단순함수).</strong> $s = \sum_{i=1}^{n} c_i\,\mathbf{1}_{E_i} \ge 0$에 대해
+  가측집합 $E$ 위의 적분을 “값 × 크기의 합”으로 정의한다:</p>
+  $$\int_E s\, dm = \sum_{i=1}^{n} c_i\, m(E_i \cap E).$$
+  <p><strong>2단계 (비음 가측함수).</strong> $f \ge 0$ 가측이면, 아래에서 받치는 단순함수들의
+  최선값으로 정의한다:</p>
+  $$\int_E f\, dm = \sup\Big\{ \int_E s\, dm \ :\ 0 \le s \le f,\ s\ \text{단순} \Big\}\ \in [0, \infty].$$
+  <p><strong>3단계 (일반 함수).</strong> $f = f^{+} - f^{-}$ (양의 부분·음의 부분,
+  $f^{\pm} = \max(\pm f, 0) \ge 0$)로 쪼개고</p>
+  $$\int_E f\, dm = \int_E f^{+}\, dm - \int_E f^{-}\, dm$$
+  <p>을, 두 조각 중 적어도 하나가 유한할 때 정의한다. $\int_E |f|\, dm \lt \infty$이면
+  $f$를 <strong>르베그 적분가능</strong>이라 하고 $f \in \mathscr{L}(E)$ (또는 $L^1(E)$)로 쓴다 —
+  $|f| = f^{+} + f^{-}$이므로 이는 두 조각이 <em>모두</em> 유한하다는 뜻이다.</p>
+</div>
+
+<div class="box box-thm" id="thm-11-33"><span class="box-label">정리 11.33 · 리만 적분과의 일치 <span class="label-en">Riemann vs Lebesgue</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 새 적분이 옛 적분의 <em>확장</em>임을 못박는다 —
+  리만이 하던 계산은 그대로 유효하고, 르베그는 그 위에 더 많은 함수를 얹는다.</p>
+  <p>$f$가 $[a,b]$에서 유계라 하자. 그러면</p>
+  <p>① $f \in \mathscr{R}[a,b]$ (리만 적분가능)이면 $f \in \mathscr{L}[a,b]$이고 두 적분값이 일치한다:
+  $\displaystyle \int_{[a,b]} f\, dm = \int_a^b f\, dx.$</p>
+  <p>② (르베그 판정법) $f \in \mathscr{R}[a,b] \iff f$의 불연속점 집합이 <strong>측도 $0$</strong> —
+  즉 $f$가 <strong>거의 어디서나 연속</strong>. 6장에서 예고했던 “리만 적분가능의 정확한 경계”가 이것이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 리만 불가능 ⊋ 르베그 가능</span>
+  <p>다시 $\mathbf{1}_{\mathbb{Q}}$: 불연속점이 $[0,1]$ <em>전체</em>(측도 $1 \neq 0$)라서 정리 11.33②로
+  리만 적분 불가능 — 6장 결론과 정확히 일치한다. 그러나 르베그로는 $\int = 0$
+  (2절 예제). 반대로 <a class="term" data-term="cantor-set">칸토어 집합</a>의 지시함수
+  $\mathbf{1}_{C}$는 불연속점이 $C$(측도 $0$)뿐이라 <em>리만도</em> 적분가능하고
+  $\int_0^1 \mathbf{1}_C = m(C) = 0$. “측도 $0$이면 통과, 아니면 탈락”이 리만의 생사를 가른다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 세 가지</span>
+  <p><strong>(1) 가측 ≠ 연속.</strong> 가측은 연속보다 훨씬 약합니다.
+  $\mathbf{1}_{\mathbb{Q}}$는 어디서도 연속이 아니지만 가측이에요.
+  연속함수는 물론 가측이지만, 가측함수 세계는 그보다 아득히 넓습니다.</p>
+  <p><strong>(2) 역은 거짓.</strong> “리만 가능 $\Rightarrow$ 르베그 가능”은 참(정리 11.33①)이지만
+  그 <em>역</em>은 거짓입니다 — $\mathbf{1}_{\mathbb{Q}}$가 산증인. 르베그가 진짜로 더 넓습니다.
+  (단, <em>이상적분</em>까지 끌어들이면 얘기가 복잡해집니다: 조건수렴하는
+  $\int_0^\infty \frac{\sin x}{x}dx$는 이상 리만적분으로는 존재하지만
+  $\int \frac{|\sin x|}{x} = \infty$라 르베그로는 적분 불가능 — 절대적분이 아니기 때문.)</p>
+  <p><strong>(3) 값이 아니라 크기를 잰다.</strong> 르베그 적분은 $f$의 <em>그래프 아래 넓이</em>를
+  치역 쪼개기로 재는 것이지, 원시함수를 찾는 일이 아닙니다. 미적분학의 기본정리(6장)는
+  여전히 계산의 주력이고, 르베그는 “무엇이 적분되는가”와 “극한을 언제 바꾸는가”를 넓힙니다.</p>
+</div>
+
+<h2 id="sec-convergence">4. 수렴 정리 — 극한과 적분의 교환</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — 이 장의 하이라이트</span>
+  <p>리만 적분에서 $\lim \int f_n = \int \lim f_n$은 균등수렴이라는 값비싼 표를 요구했습니다.
+  르베그 이론의 세 정리는 그 표를 훨씬 싸게 만듭니다 — <strong>점별 수렴</strong>에
+  가벼운 조건 하나만 얹으면 교환이 됩니다.</p>
+  <p>· <strong>MCT</strong>: 함수가 <em>단조로 증가</em>하며 올라가면, 적분도 따라 올라간다.<br>
+  · <strong>파투</strong>: 아무 비음함수열이나 — 적분은 극한에서 “새어 나갈 수는 있어도 늘어날 수는 없다”($\le$).<br>
+  · <strong>DCT</strong>: 적분가능한 <em>지붕</em> $g$ 아래 갇혀 있으면, 교환이 완전히 자유롭다($=$).</p>
+</div>
+
+<div class="box box-def" id="def-convergence-theorems">
+  <span class="box-label">정의 · 개관 · <span id="term-convergence-theorems">수렴 정리 (MCT·파투·DCT)</span> <span class="label-en">convergence theorems</span></span>
+  <p>가측함수열 $\{f_n\}$이 (점별 또는 a.e.로) $f$에 수렴할 때, 언제
+  $\displaystyle \lim_{n} \int f_n = \int f$가 성립하는가를 답하는 세 정리를 묶어
+  <strong>수렴 정리</strong>라 부른다. 이들은 각자 다른 “추가 조건”을 요구한다:
+  <strong>단조수렴정리(MCT)</strong>는 <em>비음 + 증가</em>를, <strong>지배수렴정리(DCT)</strong>는
+  <em>$L^1$ 지배함수의 존재</em>를 요구하고, <strong>파투 보조정리</strong>는 아무 조건 없이
+  대신 등식 대신 부등식($\le$)을 준다. 셋은 서로 유도되며(파투 $\Rightarrow$ DCT,
+  MCT $\Rightarrow$ 파투) 르베그 이론의 계산적 심장이다.</p>
+</div>
+
+<div class="box box-thm" id="thm-11-28"><span class="box-label">정리 11.28 · 단조수렴정리 (MCT) <span class="label-en">monotone convergence</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 밑에서 올라오는 근사에 대해 적분을 극한 안으로
+  자유롭게 밀어 넣는다 — 단순함수 근사(11.20)로 정의된 적분이 잘 작동함을 보장하는 기둥.</p>
+  <p>$0 \le f_1 \le f_2 \le \cdots$이 가측이고 각 점에서 $f_n(x) \to f(x)$이면</p>
+  $$\lim_{n\to\infty} \int_E f_n\, dm = \int_E f\, dm \qquad(\text{양변이 } \infty\text{여도 성립}).$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $\le$는 단조성으로 공짜. $\ge$는 단순함수 $s \le f$를 잡고 $c\lt1$로 살짝 낮춰 $E_n = \{f_n \ge cs\}$가 $E$를 채워 올라감을 측도의 연속성으로 쓴다.</span></summary>
+  <p>$\int f_n$은 증가수열이니 극한 $L = \lim \int f_n$이 존재한다($\infty$ 허용).
+  각 $f_n \le f$이므로 $\int f_n \le \int f$, 따라서 $L \le \int f$.</p>
+  <p>반대 방향: 단순함수 $0 \le s \le f$와 상수 $c \in (0,1)$를 고정하고
+  $E_n = \{x \in E : f_n(x) \ge c\,s(x)\}$라 하자. $f_n$이 증가하고 $f_n \to f \ge s \gt cs$
+  ($s\gt0$인 곳)이므로 $E_1 \subset E_2 \subset \cdots$이고 $\bigcup_n E_n = E$. 그러면</p>
+  $$\int_E f_n\, dm \ \ge\ \int_{E_n} f_n\, dm \ \ge\ c\int_{E_n} s\, dm.$$
+  <p>측도의 연속성(증가집합열)으로 $\int_{E_n} s \to \int_E s$이므로 $n\to\infty$에서
+  $L \ge c\int_E s$. 이제 $c \uparrow 1$하면 $L \ge \int_E s$, 마지막으로 그런 $s$ 전체에 대해
+  상한을 취하면 $L \ge \int_E f$. 두 부등식으로 $L = \int_E f$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-11-29"><span class="box-label">정리 11.29 · 파투 보조정리 <span class="label-en">Fatou's lemma</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 아무 가정 없는 비음함수열에도 성립하는 “안전판” 부등식 —
+  DCT를 비롯한 상위 정리들이 전부 이 한 줄에서 파생된다.</p>
+  <p>$f_n \ge 0$이 가측이면</p>
+  $$\int_E \Big(\liminf_{n\to\infty} f_n\Big)\, dm \ \le\ \liminf_{n\to\infty} \int_E f_n\, dm.$$
+  <p>등호는 일반적으로 성립하지 않는다 — 적분질량이 “무한대로 새어 나갈” 수 있기 때문.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $g_n = \inf_{k\ge n} f_k$는 $\liminf f_n$으로 증가한다. $g_n$에 MCT를 걸고, $g_n \le f_n$을 쓴다.</span></summary>
+  <p>$g_n = \inf_{k \ge n} f_k$로 놓으면 $g_n$은 가측이고 $0 \le g_1 \le g_2 \le \cdots$이며
+  $g_n \uparrow \liminf_n f_n$(정의). MCT(11.28)로</p>
+  $$\int_E \liminf_n f_n\, dm = \lim_n \int_E g_n\, dm.$$
+  <p>한편 $g_n \le f_k$가 모든 $k \ge n$에서 성립하므로 $\int g_n \le \inf_{k\ge n}\int f_k$,
+  따라서 $\lim_n \int g_n \le \liminf_n \int f_n$. 두 식을 이으면 결론.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-11-32"><span class="box-label">정리 11.32 · 지배수렴정리 (DCT) <span class="label-en">dominated convergence</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 균등수렴 없이 극한과 적분을 바꾸는, 응용에서 가장 많이 쓰이는 정리 —
+  $L^1$ 지붕 하나가 모든 것을 허락한다.</p>
+  <p>$f_n$이 가측이고 a.e.로 $f_n \to f$이며, <strong>적분가능한 지배함수</strong> $g \in \mathscr{L}(E)$가 있어
+  모든 $n$에 대해 $|f_n| \le g$ (a.e.)이면, $f \in \mathscr{L}(E)$이고</p>
+  $$\lim_{n\to\infty}\int_E f_n\, dm = \int_E f\, dm, \qquad \text{나아가}\quad \lim_{n\to\infty}\int_E |f_n - f|\, dm = 0.$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $g \pm f_n \ge 0$ 두 개에 파투를 각각 적용하면 $\limsup$과 $\liminf$이 위아래에서 $\int f$를 조여 온다.</span></summary>
+  <p>$|f| \le g$이므로 $f \in \mathscr{L}$. $g + f_n \ge 0$에 파투(11.29):</p>
+  $$\int (g + f) \le \liminf \int (g + f_n) = \int g + \liminf \int f_n
+  \ \Rightarrow\ \int f \le \liminf \int f_n.$$
+  <p>이번엔 $g - f_n \ge 0$에 파투:</p>
+  $$\int (g - f) \le \liminf \int (g - f_n) = \int g - \limsup \int f_n
+  \ \Rightarrow\ \limsup \int f_n \le \int f.$$
+  <p>$\int g \lt \infty$라 소거가 정당하다. 두 부등식을 합치면
+  $\limsup \int f_n \le \int f \le \liminf \int f_n$, 즉 $\lim \int f_n = \int f$.
+  $|f_n - f| \le 2g$에 같은 논법을 쓰면 $\int|f_n - f| \to 0$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 지배함수 조건은 장식이 아니다</span>
+  <p>DCT의 $|f_n| \le g \in L^1$ 조건을 빼면 정리가 <strong>깨집니다</strong>. 표준 반례:
+  $[0,1]$에서 $f_n = n\,\mathbf{1}_{(0,\,1/n)}$. 각 점에서 $f_n(x) \to 0$이지만</p>
+  $$\int_0^1 f_n\, dm = n \cdot \tfrac{1}{n} = 1 \ \not\to\ 0 = \int_0^1 \big(\lim_n f_n\big)\, dm.$$
+  <p>“높이 $n$, 폭 $1/n$짜리 스파이크”가 사라지지 않는 질량 $1$을 실어 나릅니다.
+  지배함수가 있으려면 $g(x) \ge \sup_n f_n(x)$여야 하는데 그 상계는 $\sim 1/x$ 꼴이라
+  $\int_0^1 \frac{dx}{x} = \infty$ — $L^1$이 아닙니다. 파투는 이 예에서도 살아남아
+  $0 = \int \liminf f_n \le \liminf \int f_n = 1$로 <em>부등식</em>만 준다는 점을 확인하세요.
+  “질량이 새어 나갈 수 있다”는 파투의 그 $\le$가 바로 이 현상입니다.</p>
+</div>
+
+<div class="box box-def" id="def-lp-space">
+  <span class="box-label">정의 11.35 · 11.42 · $L^1, L^2$와 완비성</span>
+  <p>$\int |f|\, dm \lt \infty$인 (a.e. 같음으로 동일시한) 가측함수 전체를 $L^1(\mu)$,
+  $\int |f|^2\, dm \lt \infty$인 것을 $L^2(\mu)$라 한다. 각각 노름</p>
+  $$\|f\|_1 = \int |f|\, dm, \qquad \|f\|_2 = \Big(\int |f|^2\, dm\Big)^{1/2}$$
+  을 갖는 노름공간이며, $L^2$는 내적 $\langle f,g\rangle = \int f\bar g\, dm$을 가진
+  <strong>힐베르트 공간</strong>이다. <strong>리스-피셔 정리</strong>(Rudin 11.42): $L^2$(그리고 $L^1$)는
+  <a class="term" data-term="complete-space">완비</a> — 모든 코시 수열이 수렴한다. 3장에서 $\mathbb{Q}$의
+  결함이었던 “구멍”이, 함수공간에서는 <em>르베그 적분 덕분에</em> 메워진다. 이 완비성이야말로
+  르베그가 리만을 대체하는 근본 이유다(리만적분으로 만든 함수공간은 완비가 아니다).</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">11장의 줄거리</span>
+  <p><strong>동기</strong>: 리만은 정의역을 쪼갠다 → 디리클레 함수 탈락, 극한 교환에 균등수렴 필요.
+  르베그는 <em>치역을 쪼갠다</em> → 각 “가로 띠”의 크기만 잴 수 있으면 된다.
+  → <a class="term" data-term="lebesgue-measure">르베그 측도</a>: 외측도(가산 구간 덮개의 하한)로 시작해,
+  카라테오도리 조건을 통과한 가측집합 $\mathfrak{M}$($\sigma$-대수) 위에서 가산가법.
+  영집합·“거의 어디서나”, 그리고 비가측집합의 존재(선택공리).
+  → <a class="term" data-term="lebesgue-integral">르베그 적분</a>: 가측함수를 단순함수로 근사(11.20),
+  비음함수는 단조극한, 일반은 $f = f^+ - f^-$. 리만 가능 $\Rightarrow$ 르베그 가능·값 일치(11.33),
+  게다가 리만 판정법 = “불연속점이 측도 $0$”.
+  → <a class="term" data-term="convergence-theorems">수렴 정리</a>:
+  <strong>MCT</strong>(비음·증가 → $=$), <strong>파투</strong>(비음 → $\le$),
+  <strong>DCT</strong>($L^1$ 지배 → $=$). 균등수렴 없이 극한과 적분을 바꾼다.
+  → $L^1, L^2$의 완비성(리스-피셔).</p>
+  <p><strong>단 하나만 기억한다면:</strong> 리만의 어려움은 “적분되는 함수가 좁고, 극한 교환이 비싸다”였고,
+  르베그의 답은 “측도로 치역을 쪼개 함수 집합을 넓히고, 세 수렴 정리로 극한 교환을 싸게 만든다”.
+  그 대가로 우리는 먼저 <em>집합의 크기</em>를 정의해야 했다 — 이 장의 절반이 측도인 이유.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>디리클레 함수 $f = \mathbf{1}_{\mathbb{Q}}$가 $[0,1]$에서 르베그 적분가능하고
+  $\int_{[0,1]} f\, dm = 0$임을, <em>가산집합의 측도가 $0$</em>이라는 사실로부터 보여라.
+  또 이 함수가 왜 리만 적분은 불가능한지 정리 11.33②로 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$f = 1\cdot\mathbf{1}_{\mathbb{Q}\cap[0,1]} + 0\cdot\mathbf{1}_{\text{무리수}}$는 단순함수다.
+    $m(\mathbb{Q}\cap[0,1]) = 0$을 각 유리수를 폭 $\varepsilon/2^k$ 구간으로 덮어 보여라.
+    리만 쪽은 $f$의 불연속점 집합이 무엇인지 생각하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>측도 $0$.</strong> $\mathbb{Q}\cap[0,1] = \{q_1, q_2, \dots\}$을 나열하고 $q_k$를
+    길이 $\varepsilon/2^k$인 열린구간 $I_k$로 덮으면 $\sum \ell(I_k) = \varepsilon\sum 2^{-k} = \varepsilon$.
+    $\varepsilon$이 임의이므로 $m^*(\mathbb{Q}\cap[0,1]) = 0$, 따라서 측도 $0$(가측).</p>
+    <p><strong>르베그 적분.</strong> $f$는 단순함수이므로 정의 11.22로 곧장</p>
+    $$\int_{[0,1]} f\, dm = 1\cdot m(\mathbb{Q}\cap[0,1]) + 0\cdot m(\text{무리수}) = 0.$$
+    $\int|f| = 0 \lt \infty$이므로 $f \in \mathscr{L}[0,1]$.</p>
+    <p><strong>리만 불가능.</strong> $f$는 <a class="term" data-term="density-of-q">조밀성</a>에 의해
+    $[0,1]$의 <em>모든</em> 점에서 불연속이다. 불연속점 집합이 $[0,1]$ 전체라 측도 $1 \neq 0$,
+    정리 11.33②에 의해 리만 적분 불가능 — 6장 결론과 정확히 일치한다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 리만 적분가능한 함수는 르베그 적분가능하다.<br>
+  (2) 르베그 적분가능한 함수는 리만 적분가능하다.<br>
+  (3) 가측함수는 연속인 점을 적어도 하나 가진다.<br>
+  (4) $f = 0$ a.e.이면 $\int_E f\, dm = 0$이다.<br>
+  (5) 측도 $0$인 집합은 반드시 가산이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) 디리클레 함수. (3) 같은 함수. (5) 칸토어 집합.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 정리 11.33① — 유계이고 리만 가능이면 르베그 가능이고 값도 같다.</p>
+    <p>(2) <strong>거짓.</strong> $\mathbf{1}_{\mathbb{Q}}$가 반례: 르베그 가능($\int = 0$)이나 리만 불가능.
+    르베그가 진짜로 더 넓은 함수 집합을 다룬다.</p>
+    <p>(3) <strong>거짓.</strong> $\mathbf{1}_{\mathbb{Q}}$는 가측이지만 <em>어디서도</em> 연속이 아니다.
+    가측성은 연속성과 거의 무관한, 훨씬 약한 조건이다.</p>
+    <p>(4) <strong>참.</strong> $f$와 $0$은 영집합 밖에서 일치하고, 르베그 적분은 영집합 위의 값을
+    무시하므로 $\int_E f = \int_E 0 = 0$. (a.e. 같은 두 함수는 적분값이 같다.)</p>
+    <p>(5) <strong>거짓.</strong> <a class="term" data-term="cantor-set">칸토어 집합</a>은
+    <em>비가산</em>인데 측도 $0$이다. “측도 $0$”은 “가산”보다 넓은 개념이다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 11장 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>지배수렴정리를 이용하여
+  $\displaystyle \lim_{n\to\infty} \int_0^1 \frac{n\,x}{1 + n^2 x^2}\, dx$
+  를 구하라. 지배함수를 명시하고 조건을 확인하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>각 고정된 $x \in (0,1]$에서 $f_n(x) = \frac{nx}{1+n^2x^2} \to 0$ ($x=0$에서도 $0$).
+    산술-기하 평균으로 $\frac{nx}{1+n^2x^2} \le \frac{nx}{2\,nx} = \frac{1}{2}$ — 상수 지배함수!</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>점별 극한.</strong> 각 $x$ 고정 시 분모가 $n^2$ 차수로 커지므로
+    $f_n(x) = \dfrac{nx}{1+n^2x^2} \to 0$ (모든 $x \in [0,1]$).</p>
+    <p><strong>지배함수.</strong> $1 + n^2x^2 \ge 2\,nx$ (AM–GM)이므로
+    $|f_n(x)| \le \dfrac{nx}{2nx} = \dfrac{1}{2}$. 상수함수 $g \equiv \tfrac12$은
+    $\int_0^1 \tfrac12\, dm = \tfrac12 \lt \infty$이라 $g \in L^1[0,1]$.</p>
+    <p><strong>DCT 적용.</strong> 조건이 모두 충족되므로</p>
+    $$\lim_{n\to\infty} \int_0^1 \frac{nx}{1+n^2x^2}\, dx = \int_0^1 \Big(\lim_{n} f_n\Big)\, dm = \int_0^1 0\, dm = 0.$$
+    <p>(교차 확인: 원시함수로 $\int_0^1 f_n\,dx = \frac{1}{2n}\ln(1+n^2) \to 0$ — 값이 맞다.
+    이렇게 원시함수를 못 찾는 복잡한 경우에도 DCT는 극한값만은 즉시 준다는 점이 위력이다.) $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 11장 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>단조수렴정리를 이용하여 <strong>비음 항별적분 정리</strong>를 증명하라: $f_k \ge 0$이
+  가측이면
+  $\displaystyle \int_E \sum_{k=1}^{\infty} f_k\, dm = \sum_{k=1}^{\infty} \int_E f_k\, dm.$
+  (급수와 적분을 조건 없이 교환할 수 있다 — 비음이기만 하면.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>부분합 $s_N = \sum_{k=1}^{N} f_k$는 $N$에 대해 증가하는 비음 가측함수열이고,
+    $s_N \uparrow \sum_{k=1}^\infty f_k$. 여기에 MCT를 걸어라. 유한합의 적분 선형성은 이미 안다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>부분합 $s_N = \sum_{k=1}^{N} f_k$로 놓자. 각 $f_k \ge 0$이므로
+    $0 \le s_1 \le s_2 \le \cdots$ (증가)이고, 각 점에서
+    $s_N(x) \uparrow \sum_{k=1}^{\infty} f_k(x)$ (비음 급수의 부분합). $s_N$은 유한개
+    가측함수의 합이라 가측이다.</p>
+    <p>유한합에 대한 적분의 선형성(정의에서 직접):
+    $\displaystyle \int_E s_N\, dm = \sum_{k=1}^{N} \int_E f_k\, dm.$
+    이제 <strong>MCT</strong>(11.28)를 $\{s_N\}$에 적용하면</p>
+    $$\int_E \sum_{k=1}^{\infty} f_k\, dm = \int_E \lim_{N} s_N\, dm
+    = \lim_{N} \int_E s_N\, dm = \lim_{N} \sum_{k=1}^{N} \int_E f_k\, dm = \sum_{k=1}^{\infty} \int_E f_k\, dm.$$
+    <p>양변이 $\infty$여도 등식이 유효하다는 점이 MCT의 핵심 — 수렴/발산을 미리 걱정할 필요가 없다.
+    이는 (부호가 있으면 절대수렴을 요구하던) 리만 이론에서는 누리기 힘든 자유다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>지배함수 조건의 필수성</span>
+  </div>
+  <p>$[0,1]$에서 $f_n(x) = n\,\mathbf{1}_{(0,\,1/n)}(x)$라 하자.
+  (a) 각 점에서 $f_n(x) \to 0$임을 보여라.
+  (b) $\lim_n \int_0^1 f_n\, dm$과 $\int_0^1 (\lim_n f_n)\, dm$을 각각 구해 서로 다름을 확인하라.
+  (c) 이것이 DCT에 모순되지 않는 이유를 설명하고, 파투 보조정리는 이 예에서 어떤 부등식을 주는지 쓰라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(a) $x$를 고정하면 $n \gt 1/x$부터 $x \notin (0, 1/n)$이라 $f_n(x) = 0$.
+    (c) $\sup_n f_n(x)$의 적분이 유한한지 따져 지배함수의 존재를 검토하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(a)</strong> $x = 0$이면 모든 $n$에서 $f_n(0) = 0$. $x \in (0,1]$이면 $n \gt 1/x$인 순간부터
+    $1/n \lt x$라 $x \notin (0,1/n)$, 즉 $f_n(x) = 0$. 따라서 모든 $x$에서 $f_n(x) \to 0$.</p>
+    <p><strong>(b)</strong> $\int_0^1 f_n\, dm = n \cdot m\big((0,1/n)\big) = n \cdot \tfrac1n = 1$이므로
+    $\lim_n \int_0^1 f_n = 1$. 반면 $\int_0^1 (\lim_n f_n)\, dm = \int_0^1 0\, dm = 0$.
+    <strong>$1 \neq 0$</strong> — 극한과 적분이 교환되지 않는다.</p>
+    <p><strong>(c)</strong> DCT는 “적분가능한 지배함수 $g$”를 요구한다. 여기서 $|f_n| \le g$이려면
+    $g(x) \ge \sup_n f_n(x)$여야 하는데, $x \in (1/(k{+}1),\,1/k]$에서 $\sup_n f_n(x) = k \sim 1/x$이라
+    $\int_0^1 g\, dm \ge \int_0^1 \tfrac{1}{x}\, dm = \infty$. <strong>지배함수가 $L^1$에 없으므로
+    DCT의 가정이 애초에 성립하지 않는다</strong> — 모순이 아니다.</p>
+    <p>파투는 가정 없이 늘 성립하며 이 예에서</p>
+    $$\int_0^1 \liminf_n f_n\, dm = 0 \ \le\ \liminf_n \int_0^1 f_n\, dm = 1$$
+    <p>즉 <em>등호 없는</em> $0 \le 1$을 준다. “질량 $1$이 폭 $0$의 스파이크로 새어 나가는” 현상이
+    파투의 부등식으로 정확히 포착된다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>리만 vs 르베그 서술형</span>
+  </div>
+  <p>다음 각 함수가 $[0,1]$에서 (i) 리만 적분가능한지, (ii) 르베그 적분가능한지 판정하고
+  근거 정리를 밝혀라.</p>
+  <p>(가) 토메 함수(팝콘 함수): $f(x) = \frac1q$ ($x = \frac pq$ 기약, $q\gt0$), $f(x)=0$ (무리수).<br>
+  (나) $g = \mathbf{1}_{C}$, $C$는 칸토어 집합.<br>
+  (다) $h(x) = \frac{1}{\sqrt{x}}$ ($x \in (0,1]$), $h(0)=0$.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>리만 쪽은 전부 “불연속점 집합의 측도”(정리 11.33②)로 판정하라. (다)는 유계가 아니므로
+    11.33이 직접 적용되지 않는다 — 이상적분과 르베그 적분($\int_0^1 x^{-1/2} = 2$)을 구분하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(가) 토메 함수.</strong> 불연속점은 유리수 전체(가산 → 측도 $0$), 무리수에서는 연속.
+    “불연속점 측도 $0$”이므로 정리 11.33②로 <strong>리만 가능</strong>, 따라서 11.33①로
+    <strong>르베그 가능</strong>이며 두 값 모두 $\int_0^1 f = 0$. (6장에서 손으로 보였던 결과를
+    르베그 판정법이 한 줄로 재확인한다.)</p>
+    <p><strong>(나) $\mathbf{1}_C$.</strong> $C$는 닫힌집합이고 내부가 비어 있어, 불연속점은
+    경계 $\partial C = C$(측도 $0$)뿐. 정리 11.33②로 <strong>리만 가능</strong>,
+    <strong>르베그 가능</strong>이고 $\int_0^1 \mathbf{1}_C = m(C) = 0$.</p>
+    <p><strong>(다) $x^{-1/2}$.</strong> $[0,1]$에서 <em>유계가 아니므로</em> 통상적 리만 적분은
+    불가능하다(리만 적분은 유계함수에만 정의). 정리 11.33은 유계 가정이 필요해 직접 적용 안 됨.
+    <em>이상</em> 리만적분으로는 $\int_0^1 x^{-1/2}dx = \lim_{\varepsilon\to0}[2\sqrt x]_\varepsilon^1 = 2$로
+    존재. 르베그로는 $h \ge 0$ 가측이고 단조근사(또는 MCT로 $\int_\varepsilon^1 \to \int_0^1$)로
+    $\int_{[0,1]} h\, dm = 2 \lt \infty$이라 <strong>르베그 가능</strong>. $h \ge 0$이라
+    이상적분과 르베그값이 일치한다 — 부호가 바뀌지 않아 절대적분성이 자동이기 때문.</p>
+    <p><em>정리:</em> 유계이고 a.e. 연속이면 리만·르베그 둘 다 가능(가·나). 비유계여도 비음이면
+    르베그가 이상 리만적분을 흡수한다(다). 리만이 르베그를 앞서는 유일한 지점은
+    “조건수렴하는 이상적분”뿐이다($\int_0^\infty \frac{\sin x}{x}$처럼). $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

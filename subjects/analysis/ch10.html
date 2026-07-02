@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10장 미분형식과 스토크스 정리 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch10.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin (10장)</p>
+  <h1><span class="ch-num">10</span> 미분형식과 스토크스 정리</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다. 9장(다변수 미분)의
+  야코비 행렬식과 연쇄법칙은 자유롭게 씁니다 — 이 장은 그 위에 “적분할 수 있는 대상”을
+  올려 세우고, 미적분학 전체를 <em>한 줄의 공식</em>으로 닫습니다.</p>
+</div>
+
+<p>여러분은 이미 네 개의 “적분 정리”를 배웠거나 곧 만납니다: 미적분학의 기본정리
+($\int_a^b F' = F(b)-F(a)$), 그린 정리, 발산 정리, 그리고 고전 스토크스 정리.
+겉모습은 다르지만 이 장의 주장은 충격적입니다 — <strong>넷은 같은 정리다.</strong>
+그 하나의 정리를 쓰려면 “무엇을 적분하는가”를 다시 정의해야 합니다. 함수가 아니라
+<a class="term" data-term="determinant">행렬식</a>처럼 <em>부호와 방향을 아는 대상</em> —
+<strong>미분형식</strong> — 을 적분해야 하죠. 그러면 미분 연산 $d$와 경계 연산 $\partial$이
+서로의 거울이 되고, 모든 것이 다음 한 줄로 모입니다:</p>
+
+$$\int_{\partial c} \omega \;=\; \int_c d\omega$$
+
+<h2 id="sec-multiint">1. 다중적분과 변수변환 — 무대를 $\mathbb{R}^n$으로</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$\mathbb{R}^n$의 적분도 아이디어는 1차원과 같습니다 — 작은 상자로 잘게 나누고
+  “부피 × 값”을 더하죠 (<a class="term" data-term="partition">분할</a>의 다차원판).
+  실제 계산은 <strong>반복적분</strong>으로 합니다: 한 변수씩 차례로 적분.
+  그런데 좌표를 바꾸면(극좌표·구면좌표) 작은 상자가 늘어나고 찌그러집니다.
+  그 “부피 배율”이 바로 <a class="term" data-term="determinant">야코비 행렬식</a>의
+  절댓값 $|\det g'|$ — 9장에서 배운 미분(=최선의 일차근사)의 행렬식이 적분에서
+  넓이/부피를 조정하는 환율로 등장합니다.</p>
+</div>
+
+<p>$k$-cell $I = [a_1,b_1]\times\cdots\times[a_k,b_k]$ 위의 연속함수 $f$에 대해 리만 적분
+$\int_I f$는 1차원과 똑같이 상합·하합으로 정의되고, <strong>푸비니 정리</strong>(루딘 10.2)가
+그것을 반복적분으로 계산하게 해 줍니다 — 적분 순서는 바꿔도 됩니다:</p>
+
+$$\int_I f \;=\; \int_{a_1}^{b_1}\!\!\left(\int_{a_2}^{b_2}\!\!\cdots \int_{a_k}^{b_k} f\,dx_k \cdots dx_2\right) dx_1$$
+
+<div class="box box-thm" id="thm-10-9"><span class="box-label">정리 10.9 · <span id="def-change-of-variables">변수변환 정리</span> <span class="label-en">change of variables</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 좌표를 바꿔 적분을 쉬운 영역·쉬운 피적분함수로
+  옮긴다 — 그 대가로 곱해야 할 “환율”이 야코비 행렬식의 절댓값임을 못박는다.
+  1차원 치환적분 $\int f(g(t))g'(t)\,dt$의 $n$차원 정답.</p>
+  <p>$g$가 열린집합 $A\subset\mathbb{R}^n$에서 $\mathbb{R}^n$으로 가는 일대일
+  $C^1$ 사상이고 야코비 행렬식 $\det g'(x)\neq 0$이라 하자.
+  $f$가 $g(A)$ 위에서 연속이고 컴팩트 받침(compact support)을 가지면</p>
+  $$\int_{g(A)} f(y)\,dy \;=\; \int_{A} f\big(g(x)\big)\,\big|\det g'(x)\big|\,dx$$
+  <p>($\det g'$은 미분 $g'(x)$의 행렬식 — 그 점에서 $g$가 부피를 늘리는 비율. 절댓값을
+  쓰는 이유는 아래 오해 상자에서.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 극좌표와 넓이 요소</span>
+  <p>$g(r,\theta) = (r\cos\theta,\; r\sin\theta)$의 미분은</p>
+  $$g'(r,\theta) = \begin{pmatrix} \cos\theta & -r\sin\theta \\ \sin\theta & r\cos\theta \end{pmatrix},
+  \qquad \det g' = r\cos^2\theta + r\sin^2\theta = r$$
+  <p>따라서 $dx\,dy = r\,dr\,d\theta$. “반지름 $r$에서 각도 $d\theta$만큼 벌어진 부채꼴의
+  폭이 $r\,d\theta$”라는 기하가 행렬식 한 번에 담깁니다. 이 $r$이 아래 가우스 적분과
+  넓이 계산을 가능케 하는 마법의 인자예요.</p>
+</div>
+
+<p>증명의 무거운 부분은 두 가지입니다. 하나는 $g$를 국소적으로 <strong>원시 사상</strong>(한 좌표만
+  바꾸는 사상)들의 합성으로 쪼개 한 변수씩 처리하는 것(루딘 10.5–10.7), 다른 하나는 그렇게
+  얻은 국소 결과들을 <strong>1의 분할</strong>(partition of unity, 루딘 10.8)로 이어 붙이는 것.
+  1의 분할은 “$\sum \psi_i \equiv 1$이고 각 $\psi_i$의 받침이 작은” 매끄러운 함수족으로,
+  “국소적으로 참인 등식을 전역으로 꿰매는” 해석학의 표준 바느질입니다.</p>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 왜 절댓값 $|\det g'|$인가</span>
+  <p>1차원 치환 $\int_{g(a)}^{g(b)} f\,dy = \int_a^b f(g)\,g'\,dt$에는 절댓값이 없습니다 —
+  $g' \lt 0$이면 적분 방향(위끝·아래끝)이 <em>뒤집혀서</em> 부호를 알아서 흡수하거든요.
+  하지만 $n\ge 2$의 다중적분은 “영역 위의 적분”이라 방향 개념이 없습니다. 부피는 항상 양수여야
+  하므로 $|\det g'|$로 <strong>절댓값</strong>을 씌워야 합니다. 이 “사라진 부호”가 어디로 갔는지가
+  바로 이 장의 클라이맥스 — 부호를 되살리려면 함수가 아니라 <strong>미분형식</strong>을
+  적분해야 하고, 그때 부호는 <em>방향(orientation)</em>이라는 이름으로 돌아옵니다.</p>
+</div>
+
+<h2 id="sec-forms">2. 미분형식 — 적분당하기 위해 태어난 대상</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>왜 “함수”로는 부족할까요? 곡선을 따라 일($\int \mathbf{F}\cdot d\mathbf{r}$)을,
+  곡면을 지나는 유량($\iint \mathbf{F}\cdot \mathbf{n}\,dS$)을 적분할 때 우리는 방향을
+  붙입니다. 방향을 바꾸면 부호가 뒤집히죠. <strong>미분형식</strong>은 바로 이
+  “방향에 반응하는 부호”를 처음부터 내장한 대상입니다. 핵심 장치가
+  <strong>쐐기곱</strong> $\wedge$: $dx\wedge dy = -\,dy\wedge dx$ — 두 방향을 바꾸면 부호가
+  바뀌는 반대칭성. 이건 바로 <a class="term" data-term="determinant">행렬식</a>의 성질이고,
+  실제로 $dx_{i_1}\wedge\cdots\wedge dx_{i_k}$를 좌표변환하면 야코비 행렬식이 튀어나옵니다.
+  형식은 “행렬식을 적분에 심어 둔 것”이라 봐도 좋습니다.</p>
+</div>
+
+<div class="box box-def" id="def-differential-form">
+  <span class="box-label">정의 10.10 · 미분형식 <span class="label-en">differential form</span></span>
+  <p>열린집합 $E\subset\mathbb{R}^n$ 위의 <strong>$k$-형식</strong>은 증가하는 첨자
+  $i_1 \lt \cdots \lt i_k$에 대한 합</p>
+  $$\omega = \sum_{i_1 \lt \cdots \lt i_k} a_{i_1\cdots i_k}(x)\; dx_{i_1}\wedge \cdots \wedge dx_{i_k}$$
+  <p>이다. 계수 $a_I$는 $E$ 위의 (충분히 매끄러운) 함수. 기본 기호 $dx_i$들은
+  <strong>쐐기곱</strong> $\wedge$로 결합하며 다음 규칙을 따른다:</p>
+  <p>· 반대칭 &nbsp; $dx_i\wedge dx_j = -\,dx_j\wedge dx_i$, &nbsp; 따라서 &nbsp; $dx_i\wedge dx_i = 0$<br>
+  · $k$-형식 $\omega$와 $m$-형식 $\lambda$에 대해 &nbsp; $\omega\wedge\lambda = (-1)^{km}\,\lambda\wedge\omega$</p>
+  <p>$0$-형식은 그냥 함수, $n$-형식은 $a(x)\,dx_1\wedge\cdots\wedge dx_n$ 꼴 하나뿐이다.
+  $k$-형식을 매개변수 곡면 $\Phi:D\to E$ 위에서 적분하는 규칙:</p>
+  $$\int_\Phi \omega = \int_D \sum_I a_I(\Phi(u))\,
+  \frac{\partial(x_{i_1},\dots,x_{i_k})}{\partial(u_1,\dots,u_k)}\;du$$
+  <p>— 계수를 곡면에 당겨오고 야코비 행렬식을 곱해 보통의 리만 적분으로 환원한다.</p>
+</div>
+
+<div class="box box-def" id="box-exterior-derivative">
+  <span class="box-label">정의 10.11 · 외미분 <span class="label-en">exterior derivative</span></span>
+  <p>$k$-형식 $\omega = \sum_I a_I\,dx_I$의 <strong>외미분</strong>은 각 계수를 전미분하여
+  앞에 쐐기로 붙인 $(k+1)$-형식이다:</p>
+  $$d\omega = \sum_I (da_I)\wedge dx_I, \qquad da_I = \sum_{j=1}^{n} \frac{\partial a_I}{\partial x_j}\,dx_j$$
+  <p>예를 들어 $0$-형식(함수) $f$의 외미분은 전미분 $df = \sum_j \dfrac{\partial f}{\partial x_j}\,dx_j$
+  — 기울기(gradient)의 형식판이다.</p>
+</div>
+
+<div class="box box-thm" id="thm-10-20"><span class="box-label">정리 10.20 · 외미분의 대수 (특히 $d^2=0$)</span>
+  <p><strong>이 정리가 하는 일:</strong> 외미분 $d$가 지켜야 할 법칙을 못박고, 그 중
+  가장 깊은 것 — <strong>$d(d\omega)=0$</strong> — 을 확립한다. 이 “두 번 미분하면 사라진다”가
+  스토크스 정리의 대칭짝인 “경계의 경계는 없다”($\partial^2=0$)와 정확히 맞물린다.</p>
+  <p>계수가 $C''$이면 다음이 성립한다:</p>
+  <p>(a) $d(\omega+\lambda) = d\omega + d\lambda$ &nbsp;(같은 차수일 때)<br>
+  (b) $d(\omega\wedge\lambda) = (d\omega)\wedge\lambda + (-1)^{k}\,\omega\wedge(d\lambda)$ &nbsp;($\omega$가 $k$-형식)<br>
+  (c) $\boxed{\,d^2\omega = d(d\omega) = 0\,}$</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— (c)의 핵심은 혼합편도함수의 대칭성(클레로): 대칭인 $\partial^2 a$를 반대칭인 $dx\wedge dx$에 곱하면 항이 쌍쌍이 상쇄된다.</span></summary>
+  <p>$0$-형식 $f$에 대해서만 보이면 충분하다(일반형은 (a),(b)와 선형성으로 환원).
+  $df = \sum_i \dfrac{\partial f}{\partial x_i}\,dx_i$이므로</p>
+  $$d(df) = \sum_i d\!\left(\frac{\partial f}{\partial x_i}\right)\wedge dx_i
+  = \sum_i \sum_j \frac{\partial^2 f}{\partial x_j \,\partial x_i}\; dx_j \wedge dx_i$$
+  <p>이 이중합을 $i \lt j$인 쌍끼리 묶으면, 각 쌍은 $(j,i)$ 항과 $(i,j)$ 항을 함께 갖는다.
+  9장에서 배운 대로 계수가 $C''$이면 <strong>혼합편도함수가 대칭</strong>
+  ($\partial^2 f/\partial x_j\partial x_i = \partial^2 f/\partial x_i\partial x_j$)인데,
+  쐐기는 반대칭 ($dx_j\wedge dx_i = -\,dx_i\wedge dx_j$)이다. 대칭 × 반대칭이니</p>
+  $$\frac{\partial^2 f}{\partial x_j\partial x_i}\,dx_j\wedge dx_i
+  + \frac{\partial^2 f}{\partial x_i\partial x_j}\,dx_i\wedge dx_j = 0$$
+  <p>모든 쌍이 이렇게 지워지므로 $d(df)=0$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-def" id="box-pullback">
+  <span class="box-label">정의 · 당김 <span class="label-en">pullback</span></span>
+  <p>$C''$ 사상 $T:V\to W$ ($V\subset\mathbb{R}^m$, $W\subset\mathbb{R}^n$)와 $W$ 위의
+  $k$-형식 $\omega$가 있을 때, $V$ 위의 $k$-형식 <strong>당김</strong> $\omega_T$는
+  $\omega$의 식에 $y = T(u)$와 $dy_i = \sum_j \dfrac{\partial T_i}{\partial u_j}\,du_j$를 대입하고
+  쐐기 규칙으로 전개해 얻는다. 두 성질이 결정적이다:</p>
+  <p>· $(\omega\wedge\lambda)_T = \omega_T\wedge\lambda_T$ &nbsp; (쐐기와 교환)<br>
+  · $d(\omega_T) = (d\omega)_T$ &nbsp; (<strong>외미분과 교환</strong> — 좌표를 바꿔도 미분은 똑같이 작동)</p>
+  <p>적분과는 $\displaystyle\int_{T\circ\Phi}\omega = \int_\Phi \omega_T$로 맞물린다.
+  이 “$d$와 당김의 교환”이 스토크스 정리를 표준 조각으로 옮기는 열쇠다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · grad·curl·div는 모두 외미분이다 ($\mathbb{R}^3$)</span>
+  <p>$\mathbb{R}^3$에서 형식의 차수를 하나 올릴 때마다 벡터 미적분의 세 연산이 순서대로 나옵니다:</p>
+  <p><strong>① $0$-형식 → $1$-형식 (grad).</strong> $\;df = f_x\,dx + f_y\,dy + f_z\,dz \;\leftrightarrow\; \nabla f$.</p>
+  <p><strong>② $1$-형식 → $2$-형식 (curl).</strong> $\omega = P\,dx+Q\,dy+R\,dz$에 대해</p>
+  $$d\omega = (R_y - Q_z)\,dy\wedge dz + (P_z - R_x)\,dz\wedge dx + (Q_x - P_y)\,dx\wedge dy
+  \;\leftrightarrow\; \nabla\times(P,Q,R)$$
+  <p><strong>③ $2$-형식 → $3$-형식 (div).</strong> $\eta = A\,dy\wedge dz + B\,dz\wedge dx + C\,dx\wedge dy$에 대해</p>
+  $$d\eta = (A_x + B_y + C_z)\,dx\wedge dy\wedge dz \;\leftrightarrow\; \nabla\cdot(A,B,C)$$
+  <p>그리고 $d^2=0$은 벡터해석의 두 항등식을 <em>한꺼번에</em> 말합니다:
+  $\operatorname{curl}(\operatorname{grad} f)=\mathbf 0$과
+  $\operatorname{div}(\operatorname{curl}\mathbf F)=0$ — 둘 다 “두 번 $d$하면 $0$”의 그림자예요.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>$dx\wedge dx = 0$은 오타가 아닙니다.</strong> 반대칭 $dx\wedge dx = -\,dx\wedge dx$에서
+  바로 나오는 결과 — 같은 방향을 두 번 쓰면 “넓이 $0$의 납작한 평행사변형”이라 소멸합니다.
+  덕분에 $\mathbb{R}^n$에는 $0$이 아닌 $k$-형식이 $k\le n$일 때만 존재하죠.</p>
+  <p>② <strong>$d^2=0$은 “두 번 미분하면 0”이 아닙니다.</strong> 보통의 이계도함수 $f''$은 $0$이 아니에요.
+  $d^2=0$은 <em>외미분</em>을 두 번 한 것 — 혼합편도의 대칭이 반대칭 쐐기에서 상쇄되는
+  구조적 사실입니다. “$d\omega=0$(닫힘)이지만 $\omega=d\eta$가 아님(비완전)”이 가능한 것이
+  이 구조의 깊이이고, 그 간극이 공간의 <em>구멍</em>을 잰다는 것이 4절과 위상수학(드람 코호몰로지)의
+  다리입니다.</p>
+</div>
+
+<h2 id="sec-chains">3. 사슬과 경계 — 적분할 “영역”도 대수가 된다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>형식이 “적분당하는 쪽”이라면, <strong>사슬</strong>은 “적분하는 무대(영역)”를 대수로 만든 것입니다.
+  삼각형·사면체 같은 방향 있는 조각(<strong>단체</strong>)을 정수 계수로 형식적으로 더한 $\sum n_i\,\sigma_i$가
+  사슬이죠. 그 위에 <strong>경계 연산자</strong> $\partial$을 두면 — 삼각형의 경계는 세 변,
+  선분의 경계는 두 끝점 — 신기한 일이 일어납니다: <em>경계의 경계는 언제나 없다</em>,
+  $\partial^2 = 0$. 삼각형 변들의 방향을 규칙대로 붙이면 꼭짓점들이 $+$와 $-$로 정확히 상쇄되거든요.
+  이 $\partial^2=0$이 형식 쪽 $d^2=0$의 <strong>거울상</strong>이고, 스토크스 정리는 그 두 거울을 맞세웁니다.</p>
+</div>
+
+<div class="box box-def" id="box-boundary-operator">
+  <span class="box-label">정의 10.26–10.29 · 단체·사슬과 경계 <span class="label-en">simplex, chain, boundary</span></span>
+  <p>방향 있는 <strong>아핀 $k$-단체</strong>는 순서 있는 꼭짓점으로 $\sigma=[p_0,p_1,\dots,p_k]$로 쓴다
+  (꼭짓점 순서를 짝치환하면 같은 방향, 홀치환하면 부호 $-1$). 열린집합 $E$ 안의
+  <strong>특이 $k$-단체</strong>는 표준단체에서 $E$로 가는 $C''$ 사상 $\Phi$이고,
+  <strong>$k$-사슬</strong>은 그런 것들의 형식적 합 $c=\sum \Phi_i$이다. 경계는</p>
+  $$\partial\,[p_0,\dots,p_k] = \sum_{j=0}^{k} (-1)^j\,[p_0,\dots,\widehat{p_j},\dots,p_k]$$
+  <p>($\widehat{p_j}$는 그 꼭짓점을 <strong>뺀다</strong>는 뜻). 사슬에는 선형으로 확장한다:
+  $\partial\big(\sum \Phi_i\big) = \sum \partial\Phi_i$. 그러면 항상</p>
+  $$\partial(\partial c) = 0$$
+  <p>가 성립한다 — 각 꼭짓점이 두 번, 부호가 반대로 나타나 상쇄되기 때문.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 삼각형의 경계, 그리고 경계의 경계</span>
+  <p>삼각형 $\sigma=[p_0,p_1,p_2]$의 경계는 세 변(부호 붙은):</p>
+  $$\partial\sigma = [p_1,p_2] - [p_0,p_2] + [p_0,p_1]$$
+  <p>이제 한 번 더 경계를 취하면, 각 변의 경계는 두 끝점의 차 $\partial[a,b]=[b]-[a]$:</p>
+  $$\partial(\partial\sigma) = ([p_2]-[p_1]) - ([p_2]-[p_0]) + ([p_1]-[p_0]) = 0$$
+  <p>세 꼭짓점 각각이 $+$ 한 번, $-$ 한 번 나와 완전히 지워집니다 —
+  “테두리를 두르고 나면 그 테두리는 시작도 끝도 없다.” 이 소박한 계산이 $\partial^2=0$의 전부이고,
+  스토크스 정리에서 <a class="term" data-term="fundamental-theorem-calculus">기본정리</a>가
+  “끝점에서의 값 차이”로 나타나는 이유입니다.</p>
+</div>
+
+<h2 id="sec-stokes">4. 스토크스 정리 — 네 정리를 한 줄로</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>지금까지의 두 대칭 — 형식의 $d^2=0$과 사슬의 $\partial^2=0$ — 은 우연이 아닙니다.
+  $d$와 $\partial$은 적분을 사이에 두고 <strong>수반(adjoint)</strong> 관계예요:
+  “영역의 <em>경계</em>에서 형식을 적분한 것 = 영역 <em>내부</em>에서 그 형식을 <em>미분한 것</em>을
+  적분한 것.” 미분($d$)은 안으로 들어가고, 경계($\partial$)는 밖으로 나가는데, 적분이 둘을 같게 만듭니다.
+  1차원에서 이건 그냥 “도함수를 쌓으면 양끝 값의 차” — 미적분학의 기본정리입니다.
+  스토크스 정리는 그 문장을 <em>모든 차원, 모든 형식</em>으로 밀어붙인 것이에요.</p>
+</div>
+
+<div class="box box-thm" id="thm-10-33"><span class="box-label">정리 10.33 · <span id="def-stokes-theorem">스토크스 정리</span> <span class="label-en">Stokes' theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 미적분학의 기본정리·그린 정리·발산 정리·고전 스토크스 정리를
+  <em>단 하나의 등식</em>으로 통합한다. 적분과 미분이 “서로의 역”이라는 6장의 통찰을
+  임의 차원의 곡면과 그 경계로 완성하는 정리.</p>
+  <p>$\Psi$가 열린집합 $V\subset\mathbb{R}^m$ 안의 $C''$급 $k$-사슬이고 $\omega$가 $V$ 위의
+  $(k-1)$-형식이면</p>
+  $$\int_{\Psi} d\omega \;=\; \int_{\partial\Psi} \omega$$
+  <p>“내부에서 미분($d\omega$)을 적분한 것”과 “경계($\partial\Psi$)에서 원래 형식($\omega$)을
+  적분한 것”이 같다. 오른쪽은 한 차원 낮은 적분임에 주목 — 스토크스는 <strong>차원을 하나
+  떨어뜨리는</strong> 정리다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— ① 당김으로 표준단체 위의 문제로 옮긴다($d$·$\partial$가 당김과 교환). ② 표준단체에서는 반복적분 + 1차원 기본정리 한 번으로 끝난다.</span></summary>
+  <p>선형성에 의해 $\Psi$가 하나의 특이단체 $\Phi$인 경우만 보이면 된다.
+  당김의 두 성질(<a href="#box-pullback">당김 정의</a>)이 양변을 표준단체 $Q^k$ 위로 옮긴다:</p>
+  $$\int_\Phi d\omega \overset{\int_{T\circ\Phi}=\int\!(\cdot)_T}{=} \int_{Q^k} (d\omega)_\Phi
+  = \int_{Q^k} d(\omega_\Phi), \qquad \int_{\partial\Phi}\omega = \int_{\partial Q^k}\omega_\Phi$$
+  <p>가운데 등식이 결정적 — $(d\omega)_\Phi = d(\omega_\Phi)$, 즉 <strong>$d$와 당김이 교환</strong>하기
+  때문이다. 그러므로 “표준단체 $Q^k$와 그 위의 $(k-1)$-형식”에 대해서만 증명하면 된다.</p>
+  <p>표준단체에서 $(k-1)$-형식은 $f\,dx_1\wedge\cdots\wedge\widehat{dx_r}\wedge\cdots\wedge dx_k$
+  꼴의 합이고, 각 항의 외미분은 $\pm\dfrac{\partial f}{\partial x_r}\,dx_1\wedge\cdots\wedge dx_k$ 하나만
+  살아남는다(나머지는 $dx_i\wedge dx_i=0$). 그 항을 <strong>푸비니</strong>로 반복적분하면 안쪽에서
+  $\int \dfrac{\partial f}{\partial x_r}\,dx_r$가 나오는데, 이것이 바로
+  <a class="term" data-term="fundamental-theorem-calculus">미적분학의 기본정리</a> —
+  한 변수에 대한 $\int F' = F(\text{끝})-F(\text{끝})$. 그 “끝점 값의 차”가 정확히
+  $\partial Q^k$ 위의 적분과 일치한다. 방향 부호까지 맞아떨어지는지가 계산의 요점이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 한 정리의 네 얼굴</span>
+  <p>$\displaystyle\int_{\partial\Psi}\omega = \int_\Psi d\omega$에 차원과 형식을 바꿔 대입하면:</p>
+  <p><strong>· $k=1$, 직선 ($\mathbb{R}^1$).</strong> $\omega=f$ ($0$-형식), $\partial[a,b]=\{b\}-\{a\}$,
+  $d\omega=f'\,dx$:</p>
+  $$\int_a^b f'\,dx = f(b)-f(a) \qquad\text{— 미적분학의 기본정리 (6장, 루딘 6.21).}$$
+  <p><strong>· $k=2$, 평면 영역.</strong> $\omega = P\,dx+Q\,dy$:</p>
+  $$\oint_{\partial D}(P\,dx+Q\,dy) = \iint_D\!\Big(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\Big)\,dx\,dy
+  \qquad\text{— 그린 정리.}$$
+  <p><strong>· $k=2$, $\mathbb{R}^3$ 속 곡면.</strong> $\omega\leftrightarrow\mathbf F$의 $1$-형식,
+  $d\omega\leftrightarrow\operatorname{curl}\mathbf F$의 $2$-형식:</p>
+  $$\oint_{\partial S}\mathbf F\cdot d\mathbf r = \iint_S (\nabla\times\mathbf F)\cdot\mathbf n\,dS
+  \qquad\text{— 고전 스토크스(켈빈–스토크스) 정리.}$$
+  <p><strong>· $k=3$, $\mathbb{R}^3$ 속 입체.</strong> $\omega\leftrightarrow\mathbf F$의 $2$-형식,
+  $d\omega\leftrightarrow\operatorname{div}\mathbf F$의 $3$-형식:</p>
+  $$\iiint_V (\nabla\cdot\mathbf F)\,dV = \iint_{\partial V}\mathbf F\cdot\mathbf n\,dS
+  \qquad\text{— 발산(가우스) 정리.}$$
+  <p>네 줄이 전부 같은 문장 “$\int_{\partial}\omega=\int d\omega$”의 특수화입니다.
+  이것이 이 장, 그리고 어떤 의미에선 미적분학 전체의 종착점이에요.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>방향(orientation)은 장식이 아닙니다.</strong> $\int_{\partial\Psi}\omega$의 부호는
+  경계에 준 방향에 전적으로 의존합니다 — 그린·스토크스에서 “경계를 반시계로 돌라”,
+  발산 정리에서 “법선은 바깥쪽”이라는 규칙이 $\partial$의 부호 규칙 $(-1)^j$에서 자동으로
+  나오는 것이지, 외워야 할 별개 관습이 아니에요. 방향을 뒤집으면 등식이 부호까지 뒤집힙니다.</p>
+  <p>② <strong>$\Psi$는 매끄러운 사슬이어야 합니다.</strong> $C''$ 가정이 필요하고
+  ($d$를 두 번 쓰므로), 경계도 제대로 정의돼야 합니다. 뾰족점·자기교차가 있으면
+  1의 분할과 근사로 처리하지만, 아무 “영역”에나 공짜로 성립하는 것은 아닙니다.</p>
+  <p>③ <strong>$d^2=0 \leftrightarrow \partial^2=0$.</strong> 두 항등식은 스토크스로 얽혀 있습니다:
+  $\int_\Psi d(d\omega)=\int_{\partial\Psi}d\omega=\int_{\partial\partial\Psi}\omega$. 왼쪽은
+  $d^2=0$으로 $0$, 오른쪽은 $\partial^2=0$으로 $0$ — 스토크스가 두 “$=0$”을 같은 사실로 묶습니다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">10장의 줄거리</span>
+  <p><a href="#def-change-of-variables">변수변환 정리</a> — 다중적분은 반복적분(푸비니)으로
+  계산하고, 좌표를 바꾸면 <a class="term" data-term="determinant">야코비 행렬식</a>의 절댓값
+  $|\det g'|$가 부피 환율로 붙는다 (절댓값이 삼킨 부호가 뒷이야기의 씨앗)
+  → <a href="#def-differential-form">미분형식</a> — 방향에 반응하도록 반대칭 쐐기곱
+  $dx\wedge dy=-dy\wedge dx$를 심은 대상. 외미분 $d$는 grad·curl·div를 한 연산으로 묶고,
+  혼합편도의 대칭 덕에 $d^2=0$
+  → <a href="#box-boundary-operator">사슬과 경계</a> — 영역도 대수가 되고, 경계 $\partial$은
+  “경계의 경계는 없다” $\partial^2=0$을 만족 ($d$의 거울)
+  → <a href="#def-stokes-theorem">스토크스 정리</a> $\displaystyle\int_{\partial\Psi}\omega=\int_\Psi d\omega$ —
+  기본정리·그린·발산·고전 스토크스를 한 줄로.</p>
+  <p><strong>단 하나만 기억한다면:</strong> “경계에서의 적분 = 내부에서 미분한 것의 적분.”
+  미분과 적분이 서로의 역이라는 6장의 진실이, 방향을 아는 미분형식을 만나 <em>모든 차원</em>에서
+  단 하나의 식으로 완성된 것 — 그것이 스토크스 정리입니다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$\mathbb{R}^3$에서 $\omega = xy\,dx + z\,dy + x^2\,dz$ 라 하자.
+  (1) $d\omega$를 계산하라. (2) $dx\wedge dy\wedge dx$와 $dy\wedge dx\wedge dz$를 각각
+  표준형 $dx\wedge dy\wedge dz$의 상수배로 정리하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $d\omega=\sum d(\text{계수})\wedge dx_i$를 전개하고 $dx_i\wedge dx_i=0$으로 지워라.
+    (2) 인접한 두 인자를 바꿀 때마다 부호 $-1$, 같은 인자가 두 번이면 $0$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $d(xy)=y\,dx+x\,dy$, $d(z)=dz$, $d(x^2)=2x\,dx$이므로</p>
+    $$d\omega = (y\,dx+x\,dy)\wedge dx + dz\wedge dy + 2x\,dx\wedge dz$$
+    <p>$dx\wedge dx=0$이라 첫 괄호에서 $y\,dx\wedge dx$는 소멸, $x\,dy\wedge dx = -x\,dx\wedge dy$.
+    또 $dz\wedge dy = -\,dy\wedge dz$, $dx\wedge dz = -\,dz\wedge dx$. 정리하면</p>
+    $$d\omega = -x\,dx\wedge dy - dy\wedge dz - 2x\,dz\wedge dx$$
+    <p>(벡터로는 $\operatorname{curl}(xy,z,x^2)=(-1,-2x,-x)$에 대응.)</p>
+    <p>(2) $dx\wedge dy\wedge dx$는 $dx$가 두 번 나오므로 $=0$.
+    $dy\wedge dx\wedge dz = -\,dx\wedge dy\wedge dz$ (앞의 두 인자만 한 번 교환).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+    <span>변수변환</span>
+  </div>
+  <p>극좌표 변수변환을 써서 가우스 적분 $\displaystyle\iint_{\mathbb{R}^2} e^{-(x^2+y^2)}\,dx\,dy = \pi$
+  임을 보이고, 이로부터 $\displaystyle\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}$를 유도하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$x=r\cos\theta,\;y=r\sin\theta$에서 $dx\,dy = r\,dr\,d\theta$, $x^2+y^2=r^2$.
+    $\int_0^\infty e^{-r^2}r\,dr$는 $u=r^2$ 치환.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>변수변환 정리(10.9)로 야코비 $|\det g'|=r$을 곱하면</p>
+    $$\iint_{\mathbb{R}^2} e^{-(x^2+y^2)}\,dx\,dy
+    = \int_0^{2\pi}\!\!\int_0^\infty e^{-r^2}\,r\,dr\,d\theta
+    = \int_0^{2\pi}\!\Big[-\tfrac12 e^{-r^2}\Big]_0^\infty d\theta
+    = \int_0^{2\pi}\tfrac12\,d\theta = \pi$$
+    <p>한편 푸비니로 이 이중적분은
+    $\big(\int_{-\infty}^\infty e^{-x^2}dx\big)\big(\int_{-\infty}^\infty e^{-y^2}dy\big)
+    = \big(\int_{-\infty}^\infty e^{-x^2}dx\big)^2$. 따라서 그 값의 제곱이 $\pi$,
+    피적분함수가 양수이므로 $\int_{-\infty}^\infty e^{-x^2}dx = \sqrt{\pi}$. $\blacksquare$</p>
+    <p>(직교좌표만으로는 $e^{-x^2}$의 부정적분이 초등함수가 아니라 막히지만, 극좌표에서는
+    $r\,dr$의 $r$이 정확히 $e^{-r^2}$을 적분 가능하게 만든다 — 변수변환이 “환율” 하나로
+    문제를 푸는 전형.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 10장 연습 유형</span>
+    <span class="difficulty">●●●</span>
+    <span>닫힘 vs 완전</span>
+  </div>
+  <p>구멍 뚫린 평면 $\mathbb{R}^2\setminus\{0\}$ 위의 $1$-형식
+  $\displaystyle \omega = \frac{-y\,dx + x\,dy}{x^2+y^2}$에 대해,
+  (1) $d\omega = 0$ (닫힘)임을 보이고, (2) 단위원 $C$ 위에서 $\oint_C \omega = 2\pi$임을 계산하라.
+  (3) $\omega$가 완전형식($\omega=df$)이 <strong>아님</strong>을 결론지어라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $P=\frac{-y}{x^2+y^2}$, $Q=\frac{x}{x^2+y^2}$에서 $Q_x-P_y$를 계산.
+    (3) 만약 $\omega=df$라면 스토크스(=기본정리)로 닫힌 곡선 위 적분이 $0$이어야 한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $Q_x = \dfrac{(x^2+y^2)-x\cdot 2x}{(x^2+y^2)^2} = \dfrac{y^2-x^2}{(x^2+y^2)^2}$,
+    $P_y = \dfrac{-(x^2+y^2)+y\cdot 2y}{(x^2+y^2)^2} = \dfrac{y^2-x^2}{(x^2+y^2)^2}$.
+    따라서 $d\omega=(Q_x-P_y)\,dx\wedge dy = 0$ — 닫힘.</p>
+    <p>(2) $x=\cos\theta,\;y=\sin\theta$ ($0\le\theta\le 2\pi$)로 두면 $x^2+y^2=1$,
+    $dx=-\sin\theta\,d\theta$, $dy=\cos\theta\,d\theta$:</p>
+    $$\oint_C \omega = \int_0^{2\pi}\big[(-\sin\theta)(-\sin\theta)+(\cos\theta)(\cos\theta)\big]d\theta
+    = \int_0^{2\pi} 1\,d\theta = 2\pi$$
+    <p>(3) 만약 $\omega=df$였다면, $C$가 닫힌 곡선($\partial C$가 없음, 즉 시작=끝)이므로
+    기본정리로 $\oint_C df = 0$이어야 한다. 그런데 $\oint_C\omega=2\pi\neq 0$ — 모순.
+    그러므로 $\omega$는 닫혀 있으나 완전하지 않다. $\blacksquare$</p>
+    <p>(닫힘과 완전의 간극 $2\pi$는 원점의 <em>구멍</em>이 만든 것이다. 볼록·단순연결
+    영역에서는 “닫힘 ⇒ 완전”(푸앵카레 보조정리)이 성립하지만, 구멍이 있으면 깨진다 —
+    이 간극을 재는 것이 위상수학의 드람 코호몰로지 $H^1$이고, $\omega$는 그 대표원소인
+    “각도 형식 $d\theta$”이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 10장 연습 유형</span>
+    <span class="difficulty">●●○</span>
+    <span>당김·야코비</span>
+  </div>
+  <p>극좌표 사상 $T(r,\theta)=(r\cos\theta,\,r\sin\theta)$에 대해 넓이 형식 $dx\wedge dy$의
+  당김 $(dx\wedge dy)_T$를 직접 계산하여 $r\,dr\wedge d\theta$가 됨을 보여라.
+  이것이 변수변환의 야코비 $|\det g'|=r$과 어떻게 같은 이야기인지 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$dx = \cos\theta\,dr - r\sin\theta\,d\theta$, $dy=\sin\theta\,dr + r\cos\theta\,d\theta$를
+    쐐기로 곱하고 $dr\wedge dr=d\theta\wedge d\theta=0$, $d\theta\wedge dr=-dr\wedge d\theta$를 써라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$x=r\cos\theta$, $y=r\sin\theta$의 전미분:</p>
+    $$dx = \cos\theta\,dr - r\sin\theta\,d\theta, \qquad dy = \sin\theta\,dr + r\cos\theta\,d\theta$$
+    <p>쐐기곱을 전개하면 (같은 인자끼리는 $0$):</p>
+    $$dx\wedge dy = (\cos\theta)(r\cos\theta)\,dr\wedge d\theta + (-r\sin\theta)(\sin\theta)\,d\theta\wedge dr$$
+    <p>$d\theta\wedge dr = -\,dr\wedge d\theta$이므로</p>
+    $$dx\wedge dy = r\cos^2\theta\,dr\wedge d\theta + r\sin^2\theta\,dr\wedge d\theta
+    = r\,(\cos^2\theta+\sin^2\theta)\,dr\wedge d\theta = r\,dr\wedge d\theta$$
+    <p>당김의 계수 $r$이 바로 <a class="term" data-term="determinant">야코비 행렬식</a> $\det T'=r$이다.
+    즉 “형식을 당긴다”는 것은 형식 안에 야코비 행렬식을 <em>자동으로</em> 심는 연산이고 —
+    형식은 부호까지 기억하므로 절댓값이 필요 없다. 형식으로 적분하면 변수변환 정리가
+    공짜로 따라 나오는 이유다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>스토크스 특수화</span>
+  </div>
+  <p>$\mathbf F(x,y,z)=(x,y,z)$의 단위구 $S^2$를 지나는 바깥쪽 유량
+  $\displaystyle\iint_{S^2}\mathbf F\cdot\mathbf n\,dS$를 발산 정리를 써서 구하고,
+  발산 정리가 스토크스 정리 $\int_{\partial\Psi}\omega=\int_\Psi d\omega$의
+  어떤 특수경우인지($k$와 형식의 차수를) 밝혀라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\operatorname{div}\mathbf F = 1+1+1$. 단위공의 부피는 $\frac{4}{3}\pi$.
+    $\mathbf F$에 대응하는 형식은 $2$-형식 $\omega=x\,dy\wedge dz+y\,dz\wedge dx+z\,dx\wedge dy$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>발산 정리로 유량을 부피적분으로 바꾼다:</p>
+    $$\iint_{S^2}\mathbf F\cdot\mathbf n\,dS = \iiint_{B}(\nabla\cdot\mathbf F)\,dV
+    = \iiint_{B} 3\,dV = 3\cdot\frac{4}{3}\pi = 4\pi$$
+    <p>($B$는 단위공). 형식으로 보면 $\mathbf F$는 $2$-형식
+    $\omega = x\,dy\wedge dz + y\,dz\wedge dx + z\,dx\wedge dy$에 대응하고,
+    $d\omega=(1+1+1)\,dx\wedge dy\wedge dz=3\,dx\wedge dy\wedge dz$가 $\operatorname{div}\mathbf F$의
+    $3$-형식이다. 스토크스 $\int_{\partial\Psi}\omega=\int_\Psi d\omega$에서
+    $\Psi=B$ ($k=3$), $\omega$는 $(k-1)=2$-형식, $\partial\Psi=S^2$인 경우가 곧 발산 정리다.
+    좌변(경계 $S^2$ 위의 $2$-형식 적분) = 우변(내부 $B$에서 $3$-형식 적분) = $4\pi$. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>서술형 · 개념 통합</span>
+  </div>
+  <p>“$d^2=0$과 $\partial^2=0$은 스토크스 정리를 통해 같은 사실이다”라는 주장을,
+  임의의 $(k-2)$-형식 $\omega$와 $k$-사슬 $\Psi$에 대해 등식으로 정식화하고 설명하라.
+  또한 이 대칭이 “닫힌 형식이 항상 완전하지는 않다”와 어떻게 연결되는지
+  세 번째 문제($\omega=d\theta$)를 예로 논하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>스토크스를 두 번 적용: $\int_\Psi d(d\omega)$에서 시작해 경계로 두 번 옮겨라.
+    한쪽 끝은 $d^2=0$, 다른 쪽 끝은 $\partial^2=0$이 $0$으로 만든다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$(k-2)$-형식 $\omega$에 스토크스를 두 번 적용하면</p>
+    $$\int_{\Psi} d(d\omega) \;=\; \int_{\partial\Psi} d\omega \;=\; \int_{\partial(\partial\Psi)} \omega$$
+    <p>(각 등호가 스토크스 정리 한 번씩 — 차수와 차원이 한 단계씩 내려간다.)
+    왼쪽 끝은 형식의 항등식 $d^2\omega=0$ 때문에 항상 $0$이고, 오른쪽 끝은 사슬의 항등식
+    $\partial^2\Psi=0$ 때문에 항상 $0$이다. 즉 <strong>두 “$=0$”이 같은 등식의 양끝</strong>이며,
+    스토크스 정리가 형식 쪽 대칭($d^2=0$)과 영역 쪽 대칭($\partial^2=0$)을 하나로 봉합한다.
+    “경계의 경계는 없다”와 “미분의 미분은 없다”는 거울에 비친 한 문장이다.</p>
+    <p>이 대칭은 “$d\omega=0$(닫힘)”과 “$\omega=d\eta$(완전)”의 관계를 지배한다.
+    완전형식은 항상 닫혀 있다($d(d\eta)=0$). 역이 성립하는지 — 닫힌 것이 완전한지 — 는
+    영역의 <em>모양</em>에 달렸다. 세 번째 문제의 각도 형식 $\omega=\dfrac{-y\,dx+x\,dy}{x^2+y^2}$은
+    $\mathbb{R}^2\setminus\{0\}$에서 닫혀 있지만($d\omega=0$), 단위원 위 적분이 $2\pi\neq 0$이라
+    완전할 수 없다(완전이면 닫힌 곡선 적분이 $0$). 그 간극 $2\pi$는 원점의 구멍이 만든 것으로,
+    “닫힘 / 완전”의 몫이 공간의 구멍을 세는 위상 불변량(드람 코호몰로지)이 된다.
+    스토크스 정리는 이렇게 <em>해석(미분·적분)과 위상(구멍)</em>을 잇는 다리다. $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
