@@ -438,6 +438,19 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/topology/ch02.html#def-product-topology"
   },
 
+  "path-connected": {
+    "ko": "경로연결",
+    "en": "path connected",
+    "short": "임의의 두 점을 연속 경로 $\\gamma : [0,1] \\to X$로 이을 수 있는 것. 경로연결 $\\Rightarrow$ 연결이지만 역은 거짓 — 위상수학자의 사인 곡선이 반례.",
+    "href": "subjects/topology/ch03.html#def-path-connected"
+  },
+  "connected-component": {
+    "ko": "연결성분",
+    "en": "connected component",
+    "short": "최대 연결 조각 (동치류). 각 성분은 닫혀 있고, 성분의 개수는 위상 불변량 — \"점 빼기\" 논증으로 $[0,1) \\not\\approx (0,1)$, $\\mathbb{R} \\not\\approx \\mathbb{R}^2$를 가른다.",
+    "href": "subjects/topology/ch03.html#def-connected-component"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {

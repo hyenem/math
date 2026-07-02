@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3장 연결성 — 위상수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="topology" data-chapter="ch03.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§23–25)</p>
+  <h1><span class="ch-num">3</span> 연결성</h1>
+  <p class="ch-source">“한 덩어리”의 두 가지 공식화(연결, 경로연결)와,
+  둘이 다르다는 것을 보여주는 유명한 반례 — 위상수학자의 사인 곡선.</p>
+</div>
+
+<p>해석학 2장에서 연결을 “분리된 두 조각으로 쪼갤 수 없음”으로 정의했습니다(루딘 2.45).
+위상공간에서는 더 깔끔한 형태로 다시 씁니다 — 그리고 연결성은 위상동형을 판별하는
+첫 <strong>불변량</strong>으로 일하기 시작합니다.</p>
+
+<h2 id="sec-connected">1. 연결 — clopen의 언어로</h2>
+
+<div class="box box-def" id="def-separation">
+  <span class="box-label">정의 · 분리와 연결 <span class="label-en">separation, connected</span></span>
+  <p>위상공간 $X$의 <strong>분리</strong>(separation)란, 공집합이 아니고 서로소인
+  <strong>열린</strong>집합 $U, V$로 $X = U \cup V$가 되는 것.
+  분리가 존재하지 않으면 $X$는 <strong>연결</strong>(connected)이라 한다.</p>
+  <p>동치 (한 줄 번역): $X$가 연결 $\iff$ <strong>clopen</strong>(열려 있으면서 닫힌)
+  부분집합이 $\varnothing$과 $X$뿐.
+  ($U$가 clopen이고 $\varnothing \neq U \neq X$이면 $\{U, U^c\}$가 분리 — 역도 같다.)
+  부분집합의 연결성은 부분공간 위상으로 판정하며, 해석학 2장의 정의
+  ($\bar{A} \cap B = A \cap \bar{B} = \varnothing$인 분해 없음)와 일치한다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 연결 판정 연습</span>
+  <p>· $\mathbb{R}$ (표준): 연결 — 연결 부분집합은 정확히 <strong>구간</strong>
+  (해석학 루딘 2.47; 완비성이 증명의 심장이었다).<br>
+  · $\mathbb{R}_\ell$ (하한위상): <strong>비연결</strong> — 1장에서 본 대로 $[0, 1)$이
+  clopen이므로 $(-\infty, 0) \cup [0, \infty)$… 정확히는
+  $\mathbb{R}_\ell = (-\infty, 0) \cup [0, \infty)$가 열린 두 조각의 분리다.
+  사실 $\mathbb{R}_\ell$은 <strong>완전 비연결</strong>(연결 부분집합이 한 점뿐)!
+  같은 집합 $\mathbb{R}$인데 위상이 연결성을 바꾼다.<br>
+  · $\mathbb{Q}$ (표준 부분공간): 완전 비연결 — 두 유리수 사이의 무리수로 항상 자를 수
+  있다 ($\mathbb{Q} = (\mathbb{Q} \cap (-\infty, \sqrt2)) \cup (\mathbb{Q} \cap (\sqrt2, \infty))$).</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 연결성의 보존 법칙들 (문크레스 §23)</span>
+  <p>① <strong>연속상:</strong> $f : X \to Y$ 연속, $X$ 연결 $\Rightarrow$ $f(X)$ 연결
+  (해석학 4장과 같은 증명 — 상이 쪼개지면 원상도 쪼개진다).
+  따름정리가 <strong>일반화된 중간값 정리</strong>: 연결 공간 위의 연속 실함수는
+  두 값 사이를 전부 지난다.</p>
+  <p>② <strong>공통점 붙이기:</strong> 연결 부분공간들이 한 점을 공유하면 합집합도 연결.</p>
+  <p>③ <strong>폐포:</strong> $A$ 연결이면 $A \subset B \subset \bar{A}$인 모든 $B$도 연결
+  — “연결 집합에 그 집적점들을 붙여도 연결”. (이 성질이 아래 반례의 열쇠다.)</p>
+  <p>④ <strong>곱:</strong> 연결 공간들의 (유한) 곱은 연결 — $\mathbb{R}^n$ 연결.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (②) <span class="proof-strategy">— clopen 판정: 분리가 있다면 공통점이 어느 한쪽에 속하고, 각 연결 조각은 통째로 그쪽에 끌려간다 — 반대쪽이 텅 빈다.</span></summary>
+  <p>$Y = \bigcup A_\alpha$, 공통점 $p \in \bigcap A_\alpha$, $Y = U \cup V$가 분리라
+  하자. $p$는 어느 한쪽 — $p \in U$라 하자. 각 $A_\alpha$는 연결인데
+  $A_\alpha = (A_\alpha \cap U) \cup (A_\alpha \cap V)$가 ($A_\alpha$의 부분공간 위상에서)
+  분리 꼴이므로 한쪽이 비어야 하고, $p \in A_\alpha \cap U \neq \varnothing$이므로
+  $A_\alpha \subset U$. 모든 $\alpha$에서 그러하므로 $V = \varnothing$ — 분리가 아니다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-path">2. 경로연결 — 더 직관적인 “한 덩어리”</h2>
+
+<div class="box box-def" id="def-path-connected">
+  <span class="box-label">정의 · 경로연결 <span class="label-en">path connected</span></span>
+  <p>$X$의 임의의 두 점 $x, y$에 대해 <strong>경로</strong> — 연속함수
+  $\gamma : [0, 1] \to X$, $\gamma(0) = x$, $\gamma(1) = y$ — 가 존재하면
+  $X$를 <strong>경로연결</strong>이라 한다.</p>
+  <p><strong>경로연결 $\Rightarrow$ 연결.</strong>
+  (분리 $U \cup V$가 있다면, $U$의 점과 $V$의 점을 잇는 경로의 상 $\gamma([0,1])$은
+  연결인데 — $[0,1]$ 연결 + 연속상 — 분리에 걸린다. 모순.)
+  볼록집합(선분으로 잇기), $\mathbb{R}^n$, 구, 원환면 모두 경로연결.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 위상수학자의 사인 곡선 — 역이 거짓인 증거</span>
+  <p>다음 집합을 보자 ($\mathbb{R}^2$의 부분공간):</p>
+  $$S = \left\{ \left( x, \sin \tfrac{1}{x} \right) : 0 \lt x \le 1 \right\}, \qquad
+  \bar{S} = S \cup \big( \{0\} \times [-1, 1] \big)$$
+  <p>(폐포에 세로 선분이 붙는 이유: $x \to 0^+$에서 $\sin\frac{1}{x}$이 $[-1,1]$의 모든
+  값에 무한히 자주 접근 — 해석학 4장의 그 진동이다.)</p>
+  <p><strong>$\bar{S}$는 연결이다:</strong> $S$는 연결 구간 $(0, 1]$의 연속상이라 연결이고,
+  보존 법칙 ③(폐포)에 의해 $\bar{S}$도 연결.</p>
+  <p><strong>그러나 경로연결이 아니다:</strong> 세로 선분의 점에서 곡선 쪽으로 가는 경로가
+  있다고 하면, 경로가 원점 근처를 지나는 동안 $\sin\frac{1}{x}$의 무한 진동을
+  “연속으로” 통과해야 하는데 — 경로의 $y$-좌표는 연속인데 진동은 $[-1,1]$ 전체를
+  무한 번 오가므로 수렴할 수 없다 (엄밀화는 문크레스 §24 예제 7).
+  <strong>연결 $\not\Rightarrow$ 경로연결</strong> — 위상수학에서 가장 유명한 반례 중
+  하나다.</p>
+</div>
+
+<div class="box box-def" id="def-connected-component">
+  <span class="box-label">정의 · 연결성분 <span class="label-en">connected components</span></span>
+  <p>“같은 연결 부분집합에 속한다”는 동치관계의 동치류들을 <strong>연결성분</strong>이라
+  한다 — 공간이 쪼개지는 “최대 연결 조각”들. 각 성분은 연결이고 닫혀 있다
+  (폐포 법칙 ③ + 최대성).
+  예: $\mathbb{Q}$의 성분은 한 점씩 (완전 비연결), $\mathbb{R} \setminus \{0\}$의 성분은
+  $(-\infty, 0)$과 $(0, \infty)$ 둘.</p>
+  <p><strong>성분 개수는 위상 불변량</strong> — 위상동형이 아님을 보이는 실전 무기:
+  “점 하나를 빼 보라”. $[0, 1)$과 $(0, 1)$: $[0,1)$에서 $0$을 빼면 연결이 유지되는
+  점이 존재하지만, $(0,1)$은 어느 점을 빼도 두 조각 — 그러므로 위상동형이 아니다
+  (2장의 숙제 해결). 같은 수법으로 $\mathbb{R} \not\approx \mathbb{R}^2$
+  (점 빼면: 비연결 vs 연결).</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">3장의 줄거리</span>
+  <p>연결 = 열린 두 조각으로 못 쪼갬 = clopen이 자명한 것뿐
+  ($\mathbb{R}$ 연결, $\mathbb{R}_\ell$·$\mathbb{Q}$는 완전 비연결 — 위상이 결정한다)
+  → 보존 법칙: 연속상(→ 일반화 IVT), 공통점 합집합, <strong>폐포</strong>, 유한 곱
+  → <a class="term" data-term="path-connected">경로연결</a> $\Rightarrow$ 연결이지만
+  역은 거짓 — <strong>위상수학자의 사인 곡선</strong> (연결인데 경로 없음; 폐포 법칙이
+  연결성을, 무한 진동이 경로를 각각 담당)
+  → <a class="term" data-term="connected-component">연결성분</a> = 최대 연결 조각,
+  개수는 위상 불변량 — “점 빼기”로 $[0,1) \not\approx (0,1)$,
+  $\mathbb{R} \not\approx \mathbb{R}^2$.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 연결성은 계산하는 성질이 아니라
+  <em>보존 법칙으로 운반하는</em> 성질이다 — 아는 연결 집합(구간)에서 출발해
+  연속상·합집합·폐포로 나른다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 공간의 연결성분을 구하라.</p>
+  <p>(1) $\{(x, y) \in \mathbb{R}^2 : xy = 1\}$ (쌍곡선)<br>
+  (2) $\mathbb{R} \setminus \mathbb{Z}$<br>
+  (3) 이산위상을 준 $\{1, 2, 3\}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>각 조각이 연결임(구간의 연속상)과, 서로 다른 조각이 한 연결 집합에 못 들어감을
+    확인.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 두 가지: $x \gt 0$ 가지와 $x \lt 0$ 가지. 각각 $(0,\infty) \to \mathbb{R}^2$,
+    $x \mapsto (x, 1/x)$의 연속상이라 연결이고, 두 가지를 담는 연결 집합은 없다
+    ($x$-좌표 사영이 연속인데 상이 $(-\infty,0) \cup (0,\infty)$의 두 조각에 걸치면
+    중간값 정리 위반).</p>
+    <p>(2) 열린구간들 $(n, n+1)$ ($n \in \mathbb{Z}$) — 가산 개의 성분.</p>
+    <p>(3) 한 점씩 $\{1\}, \{2\}, \{3\}$ — 이산위상은 완전 비연결 (모든 부분집합이
+    clopen).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 연결 집합 두 개의 교집합은 연결이다.<br>
+  (2) 연결 집합의 내부는 연결이다.<br>
+  (3) $A$가 연결이면 $\bar{A}$도 연결이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 초승달 두 개(또는 원환 두 개)가 두 점에서 만나게. (2) $\mathbb{R}^2$에서
+    아령(두 원판을 선분으로 연결) — 내부를 취하면 선분이 사라진다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $\mathbb{R}^2$의 두 원호: 위쪽 반원과 아래쪽 반원
+    (같은 원의) — 각각 연결이지만 교집합은 양 끝 두 점 $\{(\pm1, 0)\}$ — 비연결.</p>
+    <p>(2) <strong>거짓.</strong> 두 닫힌 원판을 한 점에서 붙인 집합(∞ 모양)은 연결이지만,
+    내부는 열린 원판 두 개 — 붙임점이 내부에서 탈락해 비연결.</p>
+    <p>(3) <strong>참.</strong> 보존 법칙 ③ ($B = \bar{A}$의 경우). — (1),(2)와 대조:
+    연결성은 폐포로는 운반되지만 교집합·내부로는 운반되지 않는다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §24 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f : S^1 \to \mathbb{R}$가 연속이면 $f(-x) = f(x)$인 점 $x \in S^1$이 존재함을
+  증명하라 (보르수크-울람의 1차원 버전 — “지구 적도 위에는 대척점끼리 기온이 같은
+  두 지점이 있다”).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$g(x) = f(x) - f(-x)$로 놓으면 $g(-x) = -g(x)$ (홀함수).
+    $S^1$은 연결 — 일반화 중간값 정리.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$g : S^1 \to \mathbb{R}$, $g(x) = f(x) - f(-x)$는 연속이고
+    $g(-x) = f(-x) - f(x) = -g(x)$.</p>
+    <p>아무 점 $x_0$을 잡자. $g(x_0) = 0$이면 끝. 아니면 $g(x_0)$과
+    $g(-x_0) = -g(x_0)$이 반대 부호다. $S^1$은 연결이고(원은 구간 $[0, 2\pi]$의 연속상)
+    $g$는 연속이므로, 일반화 중간값 정리에 의해 $g(x) = 0$인 $x$가 존재한다 —
+    즉 $f(x) = f(-x)$. $\blacksquare$</p>
+    <p>(연결성 하나로 “대척점 정리”가 나온다 — 고차원 버전(보르수크-울람)은 대수적
+    위상의 영역이지만, 1차원은 중간값 정리면 충분하다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>위상동형 판별 서술형</span>
+  </div>
+  <p>$[0, 1]$, $(0, 1)$, $[0, 1)$이 서로 위상동형이 아님을 연결성 논증으로 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>위상동형 $h : X \to Y$는 점을 빼도 위상동형을 준다:
+    $X \setminus \{p\} \approx Y \setminus \{h(p)\}$. “빼도 연결이 유지되는 점”의
+    개수를 세라 — 각각 2개, 0개, 1개.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>위상동형 $h : X \to Y$가 있으면 임의의 $p$에 대해
+    $X \setminus \{p\} \approx Y \setminus \{h(p)\}$ (제한도 위상동형).
+    따라서 “제거해도 공간이 연결로 남는 점”(비절단점)의 개수는 위상 불변량이다.</p>
+    <p>· $[0, 1]$: 비절단점은 끝점 $0, 1$ — <strong>2개</strong>
+    (내부점을 빼면 두 조각).<br>
+    · $[0, 1)$: 비절단점은 $0$ 하나 — <strong>1개.</strong><br>
+    · $(0, 1)$: 어느 점을 빼도 두 조각 — <strong>0개.</strong></p>
+    <p>세 값이 서로 다르므로 어떤 쌍도 위상동형이 아니다. $\blacksquare$</p>
+    <p>(서술의 뼈대: ① 불변량 정의 ② 불변량임의 근거(제한 위상동형) ③ 각 공간에서
+    계산 ④ 비교. “유계/길이” 같은 비위상적 성질로 논증하면 감점 — $(-1,1) \approx \mathbb{R}$을
+    기억하라.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
