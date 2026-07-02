@@ -56,7 +56,7 @@ window.MATH_TOC = [
       { file: "ch04.html", num: 4, title: "행렬식", ready: true },
       { file: "ch05.html", num: 5, title: "대각화", ready: true },
       { file: "ch06.html", num: 6, title: "내적공간", ready: true },
-      { file: "ch07.html", num: 7, title: "표준형", ready: false }
+      { file: "ch07.html", num: 7, title: "표준형", ready: true }
     ]
   },
   {

@@ -496,6 +496,27 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/linear-algebra/ch06.html#def-spectral-theorem"
   },
 
+  /* ---------- 선형대수 7장: 표준형 ---------- */
+
+  "jordan-form": {
+    "ko": "조던 표준형",
+    "en": "Jordan canonical form",
+    "short": "특성다항식이 완전 분해되면 모든 행렬은 조던 블록($\\lambda$ 대각 + 윗대각 1)들의 직합과 닮음이고 구성은 유일 — \"늘이기 + 밀기\"로의 분해. 대각화 가능 $\\iff$ 모든 블록이 $1\\times1$. 블록 개수 $= \\dim E_\\lambda$.",
+    "href": "subjects/linear-algebra/ch07.html#def-jordan-form"
+  },
+  "generalized-eigenvector": {
+    "ko": "일반화 고유벡터",
+    "en": "generalized eigenvector",
+    "short": "$(A - \\lambda I)^p v = 0$인 $v$ — 보통 고유공간이 모자랄 때 일반화 고유공간 $K_\\lambda$가 대수적 중복도만큼 정확히 채운다. 사슬 하나가 조던 블록 하나.",
+    "href": "subjects/linear-algebra/ch07.html#def-generalized-eigenvector"
+  },
+  "minimal-polynomial": {
+    "ko": "최소다항식",
+    "en": "minimal polynomial",
+    "short": "$p(A) = O$인 monic 다항식 중 최저 차수. $m \\mid f$(특성다항식), 근은 고윳값 전체, $(t-\\lambda)$의 지수 = 최대 조던 블록 크기. 중근 없음 $\\iff$ 대각화 가능 — $A^2 = A$ 같은 관계식 문제의 지름길.",
+    "href": "subjects/linear-algebra/ch07.html#def-minimal-polynomial"
+  },
+
   /* ---------- 선형대수 1장: 벡터공간 ---------- */
 
   "vector-space": {
