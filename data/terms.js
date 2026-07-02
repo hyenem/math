@@ -1015,5 +1015,128 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "Fourier series",
     "short": "$c_n = \\frac{1}{2\\pi}\\int f e^{-inx}dx$로 계수를 뽑아 $f \\sim \\sum c_n e^{inx}$. 직교성이 근거이고, 파세발 정리 $\\frac{1}{2\\pi}\\int |f|^2 = \\sum |c_n|^2$가 하이라이트 ($\\Rightarrow \\sum 1/n^2 = \\pi^2/6$).",
     "href": "subjects/analysis/ch08.html#def-fourier-series"
+  },
+
+  /* ---------- 정수론 (Burton) ---------- */
+
+  "division-algorithm": {
+    "ko": "나눗셈 정리",
+    "en": "division algorithm",
+    "short": "임의의 정수 $a$와 $b \\gt 0$에 대해 $a = qb + r$, $0 \\le r \\lt b$인 몫 $q$와 나머지 $r$이 유일하게 존재. 나머지가 $0$인 경우가 $b \\mid a$이고, 증명 핵심은 가장 작은 비음 나머지를 고르는 정렬성(well-ordering)이다.",
+    "href": "subjects/number-theory/ch01.html#def-division-algorithm"
+  },
+  "gcd-bezout": {
+    "ko": "최대공약수와 베주 항등식",
+    "en": "gcd, Bézout's identity",
+    "short": "$\\gcd(a,b)=d$는 공약수 중 최대이자 $\\{ax+by\\}$ 중 가장 작은 양의 정수(베주)이며, $ax+by$ 꼴은 정확히 $d$의 배수 전체. 따름: 유클리드 보조정리 $\\gcd(a,b)=1,\\ a\\mid bc\\Rightarrow a\\mid c$와 $p\\mid ab\\Rightarrow p\\mid a$ 또는 $p\\mid b$.",
+    "href": "subjects/number-theory/ch01.html#def-gcd-bezout"
+  },
+  "euclidean-algorithm": {
+    "ko": "유클리드 호제법",
+    "en": "Euclidean algorithm",
+    "short": "$a=qb+r$이면 $\\gcd(a,b)=\\gcd(b,r)$임을 반복 — 마지막 $0$ 아닌 나머지가 $\\gcd$. 각 등식을 역대입하면 베주 계수 $x,y$까지 얻는다. 예: $\\gcd(803,154)=11$.",
+    "href": "subjects/number-theory/ch01.html#def-euclidean-algorithm"
+  },
+  "prime-number": {
+    "ko": "소수와 합성수",
+    "en": "prime number",
+    "short": "$1$보다 큰 정수 중 $1$과 자신만을 양의 약수로 갖는 수 — 정수의 원자. $1$은 소수가 아니다(유일 인수분해 보존). 유클리드가 증명했듯 무한히 많고, 합성수는 $\\le\\sqrt n$인 소인수를 반드시 가진다.",
+    "href": "subjects/number-theory/ch02.html#def-prime-number"
+  },
+  "fundamental-theorem-arithmetic": {
+    "ko": "산술의 기본정리",
+    "en": "fundamental theorem of arithmetic",
+    "short": "$2$ 이상의 모든 정수는 소수들의 곱으로, 순서를 무시하면 유일하게 분해된다. 존재는 강귀납, 유일성은 유클리드 보조정리($p\\mid ab\\Rightarrow p\\mid a$ 또는 $p\\mid b$). 표준형 $n=p_1^{a_1}\\cdots p_r^{a_r}$이 약수·$\\gcd$·$\\tau$를 지배.",
+    "href": "subjects/number-theory/ch02.html#def-fundamental-theorem-arithmetic"
+  },
+  "congruence": {
+    "ko": "합동",
+    "en": "congruence",
+    "short": "$a\\equiv b\\pmod n \\iff n\\mid a-b$ — 나머지가 같음. 동치관계이자 덧셈·곱셈·거듭제곱을 보존하는 합동 산술의 무대이고, 잉여류가 $\\mathbb{Z}_n$을 이룬다. 소거는 $\\gcd(c,n)=1$일 때만 법이 유지된다.",
+    "href": "subjects/number-theory/ch03.html#def-congruence"
+  },
+  "linear-congruence": {
+    "ko": "일차 합동방정식",
+    "en": "linear congruence",
+    "short": "$ax\\equiv b\\pmod n$. $d=\\gcd(a,n)$일 때 $d\\mid b$이면 해가 정확히 $d$개(mod $n$), 아니면 무해. $\\gcd(a,n)=1$이면 역원 $a^{-1}$(유클리드 호제법)로 유일하게 풀린다.",
+    "href": "subjects/number-theory/ch03.html#def-linear-congruence"
+  },
+  "chinese-remainder": {
+    "ko": "중국인의 나머지 정리",
+    "en": "Chinese remainder theorem",
+    "short": "쌍마다 서로소인 $n_i$에 대한 연립합동 $x\\equiv a_i\\pmod{n_i}$은 mod $N=\\prod n_i$에서 유일해($N_iM_i\\equiv1$로 구성). 환 동형 $\\mathbb{Z}_N\\cong\\prod\\mathbb{Z}_{n_i}$의 정수론 판본.",
+    "href": "subjects/number-theory/ch03.html#def-chinese-remainder"
+  },
+  "fermat-little": {
+    "ko": "페르마 소정리",
+    "en": "Fermat's little theorem",
+    "short": "$p$가 소수이고 $p\\nmid a$이면 $a^{p-1}\\equiv1\\pmod p$; 일반형 $a^p\\equiv a$(모든 $a$). 증명은 나머지 재배열 또는 이항정리 귀납. 큰 거듭제곱을 지수 $\\bmod(p-1)$로 접는 도구이자 라그랑주 정리의 정수 버전.",
+    "href": "subjects/number-theory/ch04.html#def-fermat-little"
+  },
+  "euler-phi": {
+    "ko": "오일러 파이 함수",
+    "en": "Euler's totient function",
+    "short": "$\\varphi(n)$ = $1\\le k\\le n$이면서 $\\gcd(k,n)=1$인 $k$의 개수. $\\varphi(p)=p-1$, $\\varphi(p^k)=p^k-p^{k-1}$이고 서로소인 두 수에서 곱셈적. $(\\mathbb{Z}/n\\mathbb{Z})^\\times$의 위수이자 오일러 정리의 지수.",
+    "href": "subjects/number-theory/ch04.html#def-euler-phi"
+  },
+  "euler-theorem": {
+    "ko": "오일러 정리",
+    "en": "Euler's theorem",
+    "short": "$\\gcd(a,n)=1$이면 $a^{\\varphi(n)}\\equiv1\\pmod n$ — 페르마 소정리를 임의의 법으로 일반화. 증명은 기약잉여계 재배열이며 $(\\mathbb{Z}/n\\mathbb{Z})^\\times$에 라그랑주 정리를 적용한 따름. RSA 암호의 심장.",
+    "href": "subjects/number-theory/ch04.html#def-euler-theorem"
+  },
+  "wilson-theorem": {
+    "ko": "윌슨 정리",
+    "en": "Wilson's theorem",
+    "short": "$p$가 소수 $\\iff (p-1)!\\equiv-1\\pmod p$. 증명은 $2,\\dots,p-2$를 역원끼리 짝지어 소거(자기역원은 $\\pm1$뿐). 소수의 필요충분조건이지만 계산 비용 때문에 실용 판정법은 못 된다.",
+    "href": "subjects/number-theory/ch04.html#def-wilson-theorem"
+  },
+  "multiplicative-function": {
+    "ko": "곱셈적 함수",
+    "en": "multiplicative function",
+    "short": "$\\gcd(m,n)=1$이면 $f(mn)=f(m)f(n)$인 수론적 함수 — 소수 거듭제곱 값이 전체를 결정. 서로소 조건 없이 성립하면 완전곱셈적($\\varphi,\\tau,\\sigma,\\mu$는 곱셈적이나 완전곱셈적 아님). 두 곱셈적 함수의 디리클레 합성곱도 곱셈적.",
+    "href": "subjects/number-theory/ch05.html#def-multiplicative-function"
+  },
+  "divisor-functions": {
+    "ko": "약수 함수와 완전수",
+    "en": "divisor functions, perfect numbers",
+    "short": "약수의 개수 $\\tau(n)=\\prod(a_i+1)$와 약수의 합 $\\sigma(n)=\\prod\\frac{p_i^{a_i+1}-1}{p_i-1}$ — 둘 다 곱셈적. 완전수는 $\\sigma(n)=2n$; 짝수 완전수는 유클리드-오일러로 $2^{p-1}(2^p-1)$($2^p-1$ 메르센 소수)와 일대일, 홀수 완전수는 미해결.",
+    "href": "subjects/number-theory/ch05.html#def-divisor-functions"
+  },
+  "mobius-inversion": {
+    "ko": "뫼비우스 함수와 반전공식",
+    "en": "Möbius function and inversion",
+    "short": "$\\mu(1)=1$, 제곱인수가 있으면 $0$, 서로 다른 소수 $k$개면 $(-1)^k$. 초석 $\\sum_{d\\mid n}\\mu(d)=[n{=}1]$에서 반전공식 $F(n)=\\sum_{d\\mid n}f(d)\\iff f(n)=\\sum_{d\\mid n}\\mu(d)F(n/d)$. 응용: $\\varphi=\\mu*\\operatorname{id}$.",
+    "href": "subjects/number-theory/ch05.html#def-mobius-inversion"
+  },
+  "order-mod-n": {
+    "ko": "법 n에 대한 위수",
+    "en": "order modulo n",
+    "short": "$\\gcd(a,n)=1$일 때 $a^k\\equiv 1\\pmod n$을 만족하는 최소 양의 정수 $\\operatorname{ord}_n(a)$. $a^k\\equiv 1\\iff\\operatorname{ord}_n(a)\\mid k$이고 $\\operatorname{ord}_n(a)\\mid\\varphi(n)$. 군 $(\\mathbb{Z}/n\\mathbb{Z})^\\times$에서 원소의 위수와 같은 개념.",
+    "href": "subjects/number-theory/ch06.html#def-order-mod-n"
+  },
+  "primitive-root": {
+    "ko": "원시근",
+    "en": "primitive root",
+    "short": "$\\operatorname{ord}_n(g)=\\varphi(n)$인 $g$ — $(\\mathbb{Z}/n\\mathbb{Z})^\\times$를 순환군으로 생성. 존재 $\\iff n=1,2,4,p^k,2p^k$(홀수 소수 $p$)이며 모든 소수는 원시근을 가진다. 있으면 서로 합동 아닌 원시근이 정확히 $\\varphi(\\varphi(n))$개.",
+    "href": "subjects/number-theory/ch06.html#def-primitive-root"
+  },
+  "quadratic-residue": {
+    "ko": "이차잉여",
+    "en": "quadratic residue",
+    "short": "$\\gcd(a,p)=1$인 홀소수 $p$에서 $x^2\\equiv a\\pmod p$가 풀리면 이차잉여(QR), 아니면 비잉여(QNR). $\\{1,\\dots,p-1\\}$에 각각 정확히 $\\frac{p-1}{2}$개. 오일러 판정법 $a^{(p-1)/2}\\equiv\\pm1$로 판정.",
+    "href": "subjects/number-theory/ch07.html#def-quadratic-residue"
+  },
+  "legendre-symbol": {
+    "ko": "르장드르 기호",
+    "en": "Legendre symbol",
+    "short": "홀소수 $p$에 대해 $\\left(\\frac a p\\right)\\in\\{1,-1,0\\}$ — 이차잉여/비잉여/$p\\mid a$. 완전 곱셈적이고 $\\left(\\frac a p\\right)\\equiv a^{(p-1)/2}\\pmod p$(오일러 판정법).",
+    "href": "subjects/number-theory/ch07.html#def-legendre-symbol"
+  },
+  "quadratic-reciprocity": {
+    "ko": "이차상호법칙",
+    "en": "quadratic reciprocity",
+    "short": "서로 다른 홀소수에서 $\\left(\\frac p q\\right)\\left(\\frac q p\\right)=(-1)^{\\frac{p-1}{2}\\frac{q-1}{2}}$ — 둘 다 $\\equiv3\\pmod4$면 부호 반대, 아니면 같음. 보충법칙 $\\left(\\frac{-1}p\\right)=(-1)^{(p-1)/2}$, $\\left(\\frac2p\\right)=(-1)^{(p^2-1)/8}$. 가우스의 황금정리.",
+    "href": "subjects/number-theory/ch07.html#def-quadratic-reciprocity"
   }
 });

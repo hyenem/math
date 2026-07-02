@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1장 나눗셈 정리와 최대공약수 — 정수론 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="number-theory" data-chapter="ch01.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">정수론 · Burton (§2)</p>
+  <h1><span class="ch-num">1</span> 나눗셈 정리와 최대공약수</h1>
+  <p class="ch-source">“초등학교에서 배운 ‘몫과 나머지’가 정수론 전체를 떠받치는 주춧돌이었다”
+  — 나눗셈 한 줄에서 최대공약수, 베주, 소수의 성질까지 전부 자라난다.</p>
+</div>
+
+<p>정수론은 $1, 2, 3, \dots$이라는 가장 소박한 대상을 다루지만, 그 규칙들은
+결코 소박하지 않습니다. 이 모든 이야기의 출발점은 놀랍게도 우리가 아홉 살에 배운
+<strong>나눗셈</strong>입니다. “$17$을 $5$로 나누면 몫 $3$, 나머지 $2$” — 이 익숙한
+문장을 정확히 진술하고 증명하면, 거기서 <strong>최대공약수</strong>, <strong>베주
+항등식</strong>, <strong>유클리드 호제법</strong>, 그리고 <strong>소수의 근본 성질</strong>이
+차례로 쏟아져 나옵니다. 이 장은 그 연쇄의 첫 도미노를 세우는 장입니다.</p>
+
+<h2 id="sec-division">1. 나눗셈 정리 — 나눗셈의 결과를 ‘정리’하다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$b$짜리 상자에 사탕 $a$개를 담습니다. 상자를 $q$개 채우고 $r$개가 남는다 —
+  이때 <strong>남는 개수 $r$은 반드시 $0$개 이상 $b$개 미만</strong>입니다.
+  ($b$개 이상 남았다면 상자를 하나 더 채울 수 있으니까요.) 게다가 이렇게 담는
+  방법은 <strong>단 하나뿐</strong>. 나눗셈 정리는 이 당연해 보이는 사실이
+  “언제나, 유일하게” 성립함을 못 박는 정리입니다. 정수론의 거의 모든 증명이
+  결국 “$a$를 $b$로 나눠 나머지를 본다”로 귀결하기에, 이것이 첫 도구입니다.</p>
+</div>
+
+<div class="box box-def" id="def-division-algorithm">
+  <span class="box-label">정의 + 정리 · 나눗셈 정리 <span class="label-en">division algorithm</span> (버튼 §2)</span>
+  <p>정수 $a$와 <strong>양의 정수</strong> $b \gt 0$가 주어지면</p>
+  $$a = qb + r, \qquad 0 \le r \lt b$$
+  <p>를 만족하는 정수 $q$(몫, quotient)와 $r$(나머지, remainder)이 <strong>유일하게</strong>
+  존재한다. — 이름은 ‘algorithm(계산법)’이지만 실은 존재·유일성 <strong>정리</strong>다.</p>
+  <p><strong>약수와 배수:</strong> 특별히 $r = 0$, 즉 $a = qb$일 때 “$b$가 $a$를
+  나눈다”고 하고 $b \mid a$로 쓴다 ($b$는 $a$의 <strong>약수</strong>, $a$는 $b$의
+  <strong>배수</strong>). $b \nmid a$는 나누지 <em>못함</em>을 뜻한다. 기본 성질:</p>
+  <p>① $b \mid a$이고 $a \mid c$이면 $b \mid c$ (추이성) &nbsp;
+  ② $b \mid a$이고 $a \neq 0$이면 $|b| \le |a|$ &nbsp;
+  ③ <strong>선형결합 성질</strong>: $b \mid a_1$이고 $b \mid a_2$이면 임의의 정수
+  $x, y$에 대해 $b \mid (a_1 x + a_2 y)$.</p>
+  <p>③이 이 장의 숨은 주인공이다 — “공약수는 선형결합을 나눈다”는 이 한 줄이
+  베주 항등식과 유클리드 호제법의 심장이 된다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 나머지 후보 중 ‘가장 작은 비음수’를 고른다: 정렬성(well-ordering)이 존재를, 나머지끼리의 차가 $b$의 배수인 점이 유일성을 준다.</span></summary>
+  <p><strong>존재:</strong> 집합 $S = \{\, a - qb : q \in \mathbb{Z},\ a - qb \ge 0 \,\}$을
+  보자. $S$는 비어 있지 않다 — 예컨대 $q = -|a|$를 넣으면
+  $a - (-|a|)b = a + |a|\,b \ge a + |a| \ge 0$ ($b \ge 1$). 비음의 정수로 이루어진
+  공집합 아닌 집합은 <strong>정렬성</strong>에 의해 <strong>최솟값</strong> $r = a - qb$을 갖는다.</p>
+  <p>이 $r$이 $0 \le r \lt b$임을 보이면 된다. $r \ge 0$은 $S$의 정의로 자명. 만약
+  $r \ge b$라면 $r - b = a - (q+1)b \ge 0$도 $S$에 속하는데, $r - b \lt r$이라
+  $r$이 최솟값이라는 데 모순. 따라서 $r \lt b$.</p>
+  <p><strong>유일성:</strong> $a = qb + r = q'b + r'$ ($0 \le r, r' \lt b$)라 하자.
+  빼면 $(q - q')b = r' - r$이므로 $b \mid (r' - r)$. 그런데 두 나머지가 모두
+  $[0, b)$에 있으니 $|r' - r| \lt b$. $b$의 배수이면서 절댓값이 $b$보다 작은 정수는
+  $0$뿐이므로 $r' = r$, 이어서 $q' = q$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 음수도 규칙은 하나다</span>
+  <p><strong>(a)</strong> $a = 17$, $b = 5$: $17 = 3\cdot 5 + 2$, 몫 $3$, 나머지 $2$. 당연.</p>
+  <p><strong>(b)</strong> $a = -17$, $b = 5$: 계산기는 “$-3$ 나머지 $-2$”라 답하기 쉽지만,
+  나눗셈 정리는 <strong>나머지가 음수임을 금지</strong>한다. 올바른 답은
+  $-17 = (-4)\cdot 5 + 3$, 즉 몫 $-4$, 나머지 $\boxed{3}$. ($-3\cdot 5 = -15$에서
+  $-2$가 남지만, $-2$는 허용 나머지 $[0,5)$ 밖이다.)</p>
+  <p><strong>(c)</strong> 나머지는 곧 <strong>합동류</strong>의 씨앗이다. $b = 2$로 나눈
+  나머지가 짝수/홀수를, $b = 3$으로 나눈 나머지 $0, 1, 2$가 정수를 세 부류로 가른다 —
+  다음 장의 합동(mod $n$)이 여기서 태어난다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>나머지는 항상 $0 \le r \lt b$</strong>. 음수 $a$에서 무심코 음의
+  나머지를 쓰면 정리가 깨진다 (예제 (b)). “나머지는 비음수”가 유일성을 지탱하는
+  조건임을 잊지 말자.<br>
+  ② $b \gt 0$이 표준 진술이다. $b \neq 0$인 일반형에서는 조건이 $0 \le r \lt |b|$로
+  바뀐다 (Burton은 양의 제수를 기본으로 둔다).<br>
+  ③ $b \mid 0$은 <strong>참</strong>이다 ($0 = 0 \cdot b$). 반면 $0 \mid a$는 $a = 0$일
+  때만 참. “$0$은 모든 수의 배수, $0$의 약수는 자기 자신뿐”을 헷갈리지 말자.</p>
+</div>
+
+<h2 id="sec-gcd">2. 최대공약수와 베주 항등식 — 공약수의 왕, 그리고 그 정체</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$a$와 $b$를 <strong>동시에</strong> 나누는 수들(공약수) 가운데 가장 큰 것이
+  최대공약수 $\gcd(a,b)$입니다. 여기까지는 초등학교 이야기. 그런데 정수론의
+  진짜 폭탄은 이것입니다 — <strong>그 $\gcd$가 사실은 $ax + by$ 꼴로 만들 수 있는
+  가장 작은 양의 정수와 정확히 같다.</strong> “공약수 중 최대”라는 <em>정적인</em>
+  정의와 “선형결합의 최소 양수”라는 <em>동적인</em> 정체가 한 수에서 만납니다.
+  이 이중성(베주 항등식)이 정수론 초반 거의 모든 정리의 만능열쇠입니다.</p>
+</div>
+
+<div class="box box-def" id="def-gcd-bezout">
+  <span class="box-label">정의 + 정리 · 최대공약수와 베주 항등식 <span class="label-en">gcd, Bézout's identity</span> (버튼 §2)</span>
+  <p>둘 다 $0$은 아닌 정수 $a, b$의 <strong>최대공약수</strong> $\gcd(a,b) = d$는
+  ① $d \mid a$이고 $d \mid b$이며(공약수) ② $c \mid a$, $c \mid b$인 모든 $c$에 대해
+  $c \le d$인(그중 최대) 양의 정수다.</p>
+  <p><strong>베주 항등식 (핵심 정리):</strong> $d = \gcd(a,b)$라 하면</p>
+  $$d = ax + by \ \text{인 정수 } x, y \text{가 존재하고,}\qquad
+  \{\, ax + by : x, y \in \mathbb{Z}\,\} = d\mathbb{Z}$$
+  <p>즉 <strong>$d$는 $\{ax+by\}$ 중 가장 작은 양수</strong>이고, $ax+by$로 표현되는
+  수는 <strong>정확히 $d$의 배수 전체</strong>다. 특히 “$c$가 공약수”라는 조건은
+  단순히 $c \le d$가 아니라 더 강한 <strong>$c \mid d$</strong>를 준다.</p>
+  <p><strong>서로소:</strong> $\gcd(a,b) = 1$이면 $a, b$가 <strong>서로소</strong>(coprime)라
+  하고, 이때 $ax + by = 1$인 정수 $x, y$가 존재한다 — 이 한 줄이 아래 보조정리들의
+  엔진이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— $\{ax+by\}$의 최소 양수 $d$를 정렬성으로 뽑고, 나눗셈 정리로 “$d$가 $a$도 $b$도 나눈다”를 증명한다. 최소성이 곧 최대공약성을 낳는 반전.</span></summary>
+  <p><strong>$d$ 잡기:</strong> $S = \{\, ax + by : x, y \in \mathbb{Z}\,\}$의 양의 원소
+  전체는 (예: $a\cdot a + b\cdot b = a^2 + b^2 \gt 0$) 비어 있지 않으므로, 정렬성에
+  의해 <strong>최소 양수</strong> $d = a x_0 + b y_0$가 존재한다.</p>
+  <p><strong>$d \mid a$:</strong> 나눗셈 정리로 $a = qd + r$ ($0 \le r \lt d$). 그러면</p>
+  $$r = a - qd = a - q(a x_0 + b y_0) = a(1 - q x_0) + b(-q y_0) \in S.$$
+  <p>$r$은 $d$보다 작은 비음의 $S$-원소인데 $d$가 최소 양수이므로 $r = 0$, 즉
+  $d \mid a$. 같은 논리로 $d \mid b$. 따라서 $d$는 <strong>공약수</strong>.</p>
+  <p><strong>최대성(사실은 정제성):</strong> $c$가 $a, b$의 임의의 공약수이면
+  선형결합 성질에 의해 $c \mid (a x_0 + b y_0) = d$. 그러므로 $c \le d$ (양수라면),
+  더 나아가 $c \mid d$. 즉 $d$는 공약수 중 최대일 뿐 아니라 <strong>모든 공약수의
+  배수</strong>다.</p>
+  <p><strong>$S = d\mathbb{Z}$:</strong> $d \mid a$, $d \mid b$이므로 모든 $ax + by$는
+  $d$의 배수. 역으로 $d$의 배수 $kd = a(kx_0) + b(k y_0) \in S$. 두 포함으로 등호.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 유클리드 보조정리와 소수의 정제성 <span class="label-en">Euclid's lemma</span> (버튼 §2)</span>
+  <p><strong>이 정리가 하는 일:</strong> “소수는 곱을 나누면 인수 하나를 나눈다”는,
+  소인수분해의 유일성(다음 장의 산술의 기본정리)을 떠받치는 뼈대다. 베주 항등식이
+  이걸 단 두 줄로 증명한다.</p>
+  <p><strong>유클리드 보조정리:</strong> $\gcd(a, b) = 1$이고 $a \mid bc$이면 $a \mid c$.</p>
+  <p><strong>소수판(따름):</strong> $p$가 소수이고 $p \mid ab$이면 $p \mid a$ 또는
+  $p \mid b$. (일반화: $p \mid a_1 a_2 \cdots a_n$이면 어떤 $a_i$를 나눈다.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 베주로 $1 = ax + by$를 얻어 $c$에 곱하는 “곱셈 한 방” 기법.</span></summary>
+  <p><strong>보조정리:</strong> $\gcd(a,b) = 1$이니 베주로 $ax + by = 1$. 양변에 $c$를
+  곱하면 $c = a c x + b c y$. 우변에서 $a \mid acx$는 자명하고, 가정 $a \mid bc$에서
+  $a \mid bcy$. 둘의 합이므로 $a \mid c$.</p>
+  <p><strong>소수판:</strong> $p \mid ab$인데 $p \nmid a$라 하자. $p$가 소수라
+  약수는 $1$과 $p$뿐이므로 $\gcd(p, a) = 1$. 보조정리에 $(p, a, b)$를 적용하면
+  ($p \mid ab$) $p \mid b$. 즉 항상 둘 중 하나. 인수가 여럿일 때는 귀납.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 서로소가 주는 힘</span>
+  <p><strong>(a)</strong> $\gcd(4, 9) = 1$이고 $4 \mid 9 \cdot 8 = 72$. 보조정리는
+  $4 \mid 8$을 보장 — 실제로 성립. 반면 서로소가 깨지면? $\gcd(4, 6) = 2$이고
+  $4 \mid 6 \cdot 2 = 12$지만 $4 \nmid 2$. <strong>서로소 조건이 필수</strong>임을
+  보여주는 반례다.</p>
+  <p><strong>(b)</strong> $\sqrt 2$가 무리수임의 고전 증명이 바로 소수판이다.
+  $\sqrt 2 = a/b$ ($\gcd(a,b)=1$)라면 $a^2 = 2b^2$이라 $2 \mid a^2 = a\cdot a$,
+  소수판으로 $2 \mid a$. 그러면 $4 \mid a^2 = 2b^2$이라 $2 \mid b^2$, 다시 $2 \mid b$ —
+  $a, b$가 둘 다 짝수가 되어 서로소에 모순. 정제성 하나가 무리수를 낳는다.</p>
+</div>
+
+<h2 id="sec-euclid">3. 유클리드 호제법 — 큰 문제를 작은 문제로</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>베주 항등식은 “$x, y$가 존재한다”만 말할 뿐 <strong>어떻게 찾는지</strong>는
+  말해 주지 않습니다. 유클리드 호제법(기원전 300년!)이 그 실전 계산법입니다.
+  핵심 관찰은 딱 하나 — <strong>$a = qb + r$이면 $\gcd(a, b) = \gcd(b, r)$</strong>.
+  큰 쌍 $(a, b)$의 최대공약수가 더 작은 쌍 $(b, r)$의 것과 같으니, 나머지를
+  반복해 취하면 수가 계속 줄고, 나머지가 $0$이 되는 순간의 <strong>마지막
+  $0$ 아닌 나머지</strong>가 답입니다. 게다가 이 계산을 거꾸로 되짚으면
+  베주 계수 $x, y$까지 공짜로 얻습니다.</p>
+</div>
+
+<div class="box box-def" id="def-euclidean-algorithm">
+  <span class="box-label">정의 + 정리 · 유클리드 호제법 <span class="label-en">Euclidean algorithm</span> (버튼 §2)</span>
+  <p><strong>핵심 보조정리:</strong> $a = qb + r$이면 $\gcd(a, b) = \gcd(b, r)$.
+  ($a$와 $b$의 공약수 집합과 $b$와 $r$의 공약수 집합이 <strong>완전히 같기</strong>
+  때문 — $r = a - qb$이고 $a = qb + r$이므로 선형결합 성질이 양방향으로 작동한다.)</p>
+  <p><strong>호제법:</strong> 나눗셈 정리를 연쇄로 적용해 나머지를 줄여 간다:</p>
+  $$a = q_1 b + r_1,\quad b = q_2 r_1 + r_2,\quad r_1 = q_3 r_2 + r_3,\ \dots,\quad
+  r_{k-1} = q_{k+1} r_k + 0.$$
+  <p>나머지는 $b \gt r_1 \gt r_2 \gt \cdots \ge 0$로 <strong>엄격히 감소</strong>하니
+  유한 단계에서 $0$에 도달하고, <strong>마지막 $0$ 아닌 나머지 $r_k$가 $\gcd(a,b)$</strong>다
+  ($\gcd(a,b) = \gcd(b, r_1) = \cdots = \gcd(r_k, 0) = r_k$). 각 식을 뒤에서부터
+  <strong>역대입</strong>하면 $\gcd = ax + by$의 계수 $x, y$가 나온다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\gcd(803, 154)$을 끝까지</span>
+  <p><strong>순방향 (최대공약수):</strong></p>
+  $$\begin{aligned}
+  803 &= 5 \cdot 154 + 33\\
+  154 &= 4 \cdot 33 + 22\\
+  33 &= 1 \cdot 22 + 11\\
+  22 &= 2 \cdot 11 + 0
+  \end{aligned}$$
+  <p>마지막 $0$ 아닌 나머지는 $11$이므로 $\gcd(803, 154) = 11$.</p>
+  <p><strong>역방향 (베주 계수):</strong> 마지막 앞 식부터 나머지를 도로 풀어 올린다.</p>
+  $$\begin{aligned}
+  11 &= 33 - 1\cdot 22\\
+     &= 33 - (154 - 4\cdot 33) = 5\cdot 33 - 154\\
+     &= 5(803 - 5\cdot 154) - 154 = 5\cdot 803 - 26\cdot 154.
+  \end{aligned}$$
+  <p>즉 $11 = 803 \cdot 5 + 154 \cdot (-26)$. 검산: $4015 - 4004 = 11$ ✓ —
+  “존재한다”던 베주 계수 $x = 5$, $y = -26$을 손으로 잡아냈다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① 답은 <strong>마지막 $0$ 아닌</strong> 나머지다. $0$이 나온 <em>직전</em> 나머지를
+  집는 것이지, $0$이 아니다.<br>
+  ② 베주 계수 $(x, y)$는 <strong>유일하지 않다</strong>. 위에서 $(5, -26)$을 얻었지만
+  $(5 + 14, -26 - 73) = (19, -99)$ 등 무한히 많다 (일반형은 4절 참조). “한 조를 찾는
+  것”이 목표.<br>
+  ③ 역대입할 때 <strong>나머지를 대입하지 말고 등식을 대입</strong>하라. $33$이나
+  $22$ 같은 수치를 그대로 곱해 없애 버리면 $803, 154$로 돌아갈 길이 막힌다 — 항상
+  “$r = (\text{앞 수}) - q\cdot(\text{그 앞 수})$” 꼴로 치환해야 한다.</p>
+</div>
+
+<h2 id="sec-diophantine">4. 일차 부정방정식과 최소공배수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$ax + by = c$에서 정수해 $x, y$를 찾는 문제를 <strong>일차 부정방정식</strong>이라
+  합니다 (미지수가 방정식보다 많아 해가 ‘하나로 정해지지 않아서’ 부정). 베주가
+  이 문제를 완전히 끝냅니다 — 좌변 $ax + by$로 만들 수 있는 값은 <strong>정확히
+  $\gcd(a,b)$의 배수 전체</strong>였으니, <strong>해가 있을 조건은 $\gcd(a,b) \mid c$</strong>
+  단 하나. 해가 하나라도 있으면 나머지 해는 규칙적인 격자를 이룹니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 일차 부정방정식의 해 <span class="label-en">linear Diophantine equation</span> (버튼 §2)</span>
+  <p><strong>이 정리가 하는 일:</strong> “언제 정수해가 있는가”와 “있다면 전부 무엇인가”를
+  $\gcd$ 하나로 판정·열거한다.</p>
+  <p>$d = \gcd(a, b)$라 하자. 방정식 $ax + by = c$는</p>
+  $$\text{정수해를 가진다} \iff d \mid c.$$
+  <p>해가 있을 때, 한 특수해 $(x_0, y_0)$를 알면 <strong>모든</strong> 정수해는</p>
+  $$x = x_0 + \frac{b}{d}\,t, \qquad y = y_0 - \frac{a}{d}\,t \qquad (t \in \mathbb{Z}).$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 존재는 베주 그대로. 일반해는 두 해의 차가 만족하는 $a(x-x_0) = -b(y-y_0)$를 $d$로 약분하고 서로소 보조정리를 쓴다.</span></summary>
+  <p><strong>($\Rightarrow$)</strong> 해 $(x, y)$가 있으면 $d \mid a$, $d \mid b$이니
+  $d \mid ax + by = c$.</p>
+  <p><strong>($\Leftarrow$)</strong> $d \mid c$, 즉 $c = d k$라 하자. 베주로
+  $d = a x_0' + b y_0'$이므로 $c = a(k x_0') + b(k y_0')$ — 특수해
+  $(x_0, y_0) = (k x_0', k y_0')$ 확보.</p>
+  <p><strong>일반해:</strong> 제시한 $(x, y)$가 해임은 대입으로 확인:
+  $a\!\left(x_0 + \tfrac{b}{d}t\right) + b\!\left(y_0 - \tfrac{a}{d}t\right)
+  = ax_0 + by_0 + \tfrac{ab - ab}{d}t = c$. 거꾸로 $(x, y)$가 임의의 해이면
+  $ax + by = ax_0 + by_0$에서 $a(x - x_0) = -\,b(y - y_0)$. 양변을 $d$로 나누면</p>
+  $$\frac{a}{d}(x - x_0) = -\,\frac{b}{d}(y - y_0),\qquad \gcd\!\left(\tfrac{a}{d}, \tfrac{b}{d}\right) = 1.$$
+  <p>$\tfrac{b}{d} \mid \tfrac{a}{d}(x - x_0)$인데 $\tfrac{a}{d}$와 서로소이므로
+  유클리드 보조정리로 $\tfrac{b}{d} \mid (x - x_0)$, 즉 $x - x_0 = \tfrac{b}{d}t$.
+  이를 대입하면 $y - y_0 = -\tfrac{a}{d}t$. 두 식이 제시한 꼴과 일치.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 해 세기와 최소공배수</span>
+  <p><strong>(a) 부정방정식:</strong> $6x + 4y = 20$. $d = \gcd(6, 4) = 2$, $2 \mid 20$이라
+  해가 있다. 양변을 $2$로 나눠 $3x + 2y = 10$; 눈으로 특수해 $(x_0, y_0) = (2, 2)$
+  ($6 + 4 = 10$). 일반해는</p>
+  $$x = 2 + \tfrac{4}{2}t = 2 + 2t, \qquad y = 2 - \tfrac{6}{2}t = 2 - 3t.$$
+  <p>$t = 1$이면 $(4, -1)$: $24 - 4 = 20$ ✓. 반면 $6x + 4y = 21$은 좌변이 항상
+  짝수라 ($2 \nmid 21$) <strong>해가 아예 없다</strong>.</p>
+  <p><strong>(b) 최소공배수 관계:</strong> $a, b$의 공배수 중 가장 작은 양수가
+  <strong>최소공배수</strong> $\operatorname{lcm}(a,b)$이며, 핵심 항등식</p>
+  $$\gcd(a, b) \cdot \operatorname{lcm}(a, b) = |a\,b|$$
+  <p>가 성립한다. 예: $\gcd(803, 154) = 11$이었으니
+  $\operatorname{lcm}(803, 154) = \dfrac{803 \cdot 154}{11} = 803 \cdot 14 = 11242$.
+  최소공배수를 직접 세지 않고 $\gcd$만으로 얻는다 — 두 양이 곱으로 묶여 있다는 점이
+  이 절의 마지막 선물이다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">1장의 줄거리</span>
+  <p><a class="term" data-term="division-algorithm">나눗셈 정리</a>
+  ($a = qb + r$, $0 \le r \lt b$, 유일 — 정렬성이 증명, $b \mid a$는 $r = 0$)
+  → 선형결합 성질 “공약수는 $a_1 x + a_2 y$를 나눈다”
+  → <a class="term" data-term="gcd-bezout">최대공약수와 베주 항등식</a>
+  ($\gcd(a,b) = d$는 공약수 중 최대이자 $\{ax+by\}$의 최소 양수, 그리고
+  $ax+by$ 꼴 $=$ $d$의 배수 전체; 서로소면 $ax+by=1$)
+  → 유클리드 보조정리·소수판 ($\gcd=1,\ a\mid bc \Rightarrow a\mid c$;
+  $p \mid ab \Rightarrow p\mid a$ 또는 $p\mid b$ — 다음 장 소인수분해 유일성의 뿌리)
+  → <a class="term" data-term="euclidean-algorithm">유클리드 호제법</a>
+  ($\gcd(a,b)=\gcd(b,r)$ 반복, 역대입으로 베주 계수)
+  → 일차 부정방정식 ($ax+by=c$ 해존재 $\iff \gcd(a,b)\mid c$, 일반해
+  $x = x_0 + \tfrac{b}{d}t$) 과 $\gcd \cdot \operatorname{lcm} = |ab|$.</p>
+  <p><strong>단 하나만 기억한다면:</strong> $\gcd(a,b)$는 “공약수 중 최대”이면서
+  동시에 “$ax + by$로 만들 수 있는 가장 작은 양수”다 — 이 이중 정체(베주)가
+  서로소·유클리드 보조정리·소수판·부정방정식을 전부 여는 정수론의 마스터키다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>나눗셈 정리에 따라 다음의 몫 $q$와 나머지 $r$을 구하라 (반드시 $0 \le r \lt b$).</p>
+  <p>(1) $a = 100,\ b = 7$ &nbsp; (2) $a = -100,\ b = 7$ &nbsp; (3) $a = -45,\ b = 9$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>음수 $a$는 몫을 <strong>더 작은(더 음의)</strong> 쪽으로 잡아야 나머지가
+    비음수가 된다. (2)에서 $-100 = (-15)\cdot 7 + 5$를 노려 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $100 = 14 \cdot 7 + 2$ → $q = 14,\ r = 2$.</p>
+    <p>(2) $-100 = (-15)\cdot 7 + 5$ → $q = -15,\ r = 5$. ($-14 \cdot 7 = -98$에서
+    $-2$가 남지만 음수라 부적격 — 몫을 하나 더 내려 $r = 5$.)</p>
+    <p>(3) $-45 = (-5)\cdot 9 + 0$ → $q = -5,\ r = 0$. 즉 $9 \mid -45$ (나머지 $0$).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>유클리드 호제법으로 $\gcd(1234, 54)$를 구하고, 역대입으로 베주 계수
+  $x, y$ ($1234x + 54y = \gcd$)를 하나 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$1234 = 22\cdot 54 + 46$에서 시작. 나머지가 $0$이 될 때까지 내려간 뒤,
+    각 등식을 뒤에서부터 “나머지 $=$ 앞 수 $-$ 몫 $\times$ 그 앞 수”로 치환.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>순방향:</strong> $1234 = 22\cdot 54 + 46$, &nbsp;$54 = 1\cdot 46 + 8$,
+    &nbsp;$46 = 5\cdot 8 + 6$, &nbsp;$8 = 1\cdot 6 + 2$, &nbsp;$6 = 3\cdot 2 + 0$.
+    마지막 $0$ 아닌 나머지 $\Rightarrow \gcd(1234, 54) = 2$.</p>
+    <p><strong>역방향:</strong>
+    $2 = 8 - 6 = 8 - (46 - 5\cdot 8) = 6\cdot 8 - 46
+    = 6(54 - 46) - 46 = 6\cdot 54 - 7\cdot 46
+    = 6\cdot 54 - 7(1234 - 22\cdot 54) = 160\cdot 54 - 7\cdot 1234$.</p>
+    <p>따라서 $2 = 1234\cdot(-7) + 54\cdot 160$. 검산: $8640 - 8638 = 2$ ✓.
+    ($x = -7,\ y = 160$ — 다른 답도 무한히 많다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §2 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$\gcd(a, b) = 1$이고 $\gcd(a, c) = 1$이면 $\gcd(a, bc) = 1$임을 증명하라
+  (베주 항등식을 이용).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$1 = ax + by$와 $1 = au + cv$ 두 베주 식을 <strong>곱하라</strong>. 우변을
+    전개해 “$a\cdot(\text{정수}) + bc\cdot(\text{정수})$” 꼴로 묶으면 $\gcd(a, bc)$가
+    $1$을 표현하게 된다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>서로소 가정에서 베주로 정수 $x, y, u, v$가 존재해
+    $ax + by = 1$, $au + cv = 1$. 두 식을 곱하면</p>
+    $$1 = (ax + by)(au + cv) = a\underbrace{(xau + xcv + byu)}_{\in\, \mathbb{Z}}
+    + (bc)\underbrace{(yv)}_{\in\, \mathbb{Z}}.$$
+    <p>즉 $a X + (bc) Y = 1$인 정수 $X, Y$가 존재한다. 그런데 $\gcd(a, bc)$는
+    $\{aX + bcY\}$의 최소 양수이자 그것이 만드는 모든 값의 약수이므로
+    $\gcd(a, bc) \mid 1$, 따라서 $\gcd(a, bc) = 1$. $\blacksquare$</p>
+    <p>(교훈: “$1$을 선형결합으로 만들 수 있으면 서로소” — 베주의 역방향도 참이며
+    서로소 판정의 실전 무기다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §2 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>부정방정식 $24x + 138y = 18$의 정수해가 존재하는지 판정하고, 존재하면
+  일반해를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>먼저 $d = \gcd(24, 138)$을 호제법으로 구해 $d \mid 18$인지 확인. 베주로
+    $d$의 표현을 얻은 뒤 $18 / d$배 하면 특수해. 일반해 증분은
+    $\tfrac{138}{d}$와 $\tfrac{24}{d}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$138 = 5\cdot 24 + 18$, $24 = 1\cdot 18 + 6$, $18 = 3\cdot 6 + 0$이므로
+    $d = \gcd(24, 138) = 6$. $6 \mid 18$이라 <strong>해가 존재</strong>.</p>
+    <p>베주: $6 = 24 - 18 = 24 - (138 - 5\cdot 24) = 6\cdot 24 - 138$, 즉
+    $6 = 24\cdot 6 + 138\cdot(-1)$. $18 = 6\cdot 3$이므로 양변에 $3$을 곱해
+    특수해 $x_0 = 18,\ y_0 = -3$: $24\cdot 18 + 138\cdot(-3) = 432 - 414 = 18$ ✓.</p>
+    <p>일반해: $x = 18 + \tfrac{138}{6}t = 18 + 23t$, &nbsp;
+    $y = -3 - \tfrac{24}{6}t = -3 - 4t$ ($t \in \mathbb{Z}$). $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>서로소 성질 서술형</span>
+  </div>
+  <p>정수 $a, b$가 서로소($\gcd(a,b)=1$)이면 $\gcd(a + b,\ ab) = 1$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>귀류법: 소수 $p$가 $a + b$와 $ab$를 동시에 나눈다고 가정. $p \mid ab$에
+    <strong>소수판</strong>을 써 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\gcd(a+b, ab) \gt 1$이라 하면 어떤 소수 $p$가 $p \mid (a+b)$이고 $p \mid ab$.
+    $p \mid ab$에 소수판을 적용하면 $p \mid a$ 또는 $p \mid b$. 일반성을 잃지 않고
+    $p \mid a$라 하자. 그러면 $p \mid (a + b) - a = b$이므로 $p \mid a$이면서
+    $p \mid b$ — 즉 $p \mid \gcd(a, b) = 1$이 되어 $p \le 1$, 소수라는 데 모순.</p>
+    <p>따라서 $a + b$와 $ab$의 공통 소인수가 없어 $\gcd(a + b, ab) = 1$. $\blacksquare$</p>
+    <p>(만점 답안의 뼈대: “공통 소인수 가정 → 소수판으로 $p \mid a$ 또는 $p \mid b$ →
+    $a+b$를 이용해 나머지도 나눔 → 서로소 모순”. 소수판을 명시적으로 인용하는 것이 핵심.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>부정방정식 응용</span>
+  </div>
+  <p>$7x + 11y = 100$을 만족하는 <strong>음이 아닌</strong> 정수해 $(x, y)$를 모두 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\gcd(7, 11) = 1$로 해는 존재. 베주로 특수해를 잡아 일반해
+    $x = x_0 + 11t$, $y = y_0 - 7t$를 쓴 뒤, $x \ge 0$과 $y \ge 0$ 두 부등식이
+    허용하는 $t$의 범위를 좁혀라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\gcd(7, 11) = 1 \mid 100$이라 해가 존재. 호제법 역대입:
+    $11 = 1\cdot 7 + 4$, $7 = 1\cdot 4 + 3$, $4 = 1\cdot 3 + 1$에서
+    $1 = 4 - 3 = 4 - (7 - 4) = 2\cdot 4 - 7 = 2(11 - 7) - 7 = 2\cdot 11 - 3\cdot 7$.
+    즉 $1 = 7\cdot(-3) + 11\cdot 2$. $\times 100$하면 특수해 $x_0 = -300,\ y_0 = 200$.</p>
+    <p>일반해: $x = -300 + 11t$, &nbsp; $y = 200 - 7t$.</p>
+    <p>음이 아닐 조건:
+    $x \ge 0 \Rightarrow t \ge \tfrac{300}{11} = 27.27\ldots \Rightarrow t \ge 28$;
+    $y \ge 0 \Rightarrow t \le \tfrac{200}{7} = 28.57\ldots \Rightarrow t \le 28$.
+    따라서 $t = 28$뿐이고</p>
+    $$x = -300 + 11\cdot 28 = 8, \qquad y = 200 - 7\cdot 28 = 4.$$
+    <p>검산: $7\cdot 8 + 11\cdot 4 = 56 + 44 = 100$ ✓. 음이 아닌 해는 $(x, y) = (8, 4)$
+    <strong>단 하나</strong>. $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

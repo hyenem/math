@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6장 원시근과 지수 — 정수론 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="number-theory" data-chapter="ch06.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">정수론 · Burton (§8)</p>
+  <h1><span class="ch-num">6</span> 원시근과 지수</h1>
+  <p class="ch-source">“$1$로 언젠가 돌아온다”와 “$1$로 가장 늦게 돌아온다”는 다르다 —
+  그 시차가 위수이고, 가장 늦게 돌아오는 특별한 원소가 원시근이다.
+  잉여류 곱셈군 $(\mathbb{Z}/n\mathbb{Z})^\times$의 순환성이 이 장의 주인공.</p>
+</div>
+
+<p>오일러 정리는 $\gcd(a,n)=1$이면 $a^{\varphi(n)}\equiv 1\pmod n$을 보장합니다.
+하지만 이건 “<strong>언젠가는</strong> $1$로 돌아온다”는 말일 뿐 — 거듭제곱
+$a, a^2, a^3, \dots$이 <strong>처음으로</strong> $1$이 되는 순간은 $\varphi(n)$보다 훨씬
+이를 수 있습니다. 그 “첫 귀환 시각”이 <a class="term" data-term="order-mod-n">법
+$n$에 대한 위수</a>이고, 귀환이 최대한 늦어져 $\varphi(n)$과 정확히 같아지는 특별한
+$a$가 <a class="term" data-term="primitive-root">원시근</a>입니다. 원시근은 가역
+잉여류 전체 $(\mathbb{Z}/n\mathbb{Z})^\times$를 혼자서 훑는 원소 — 즉 이 곱셈군이
+<a class="term" data-term="cyclic-group">순환군</a>이라는 증거이자 생성원입니다.
+이 장은 “나머지의 세계에도 로그가 있다”는 놀라운 사실(지수, 이산로그)로 끝납니다.</p>
+
+<h2 id="sec-order">1. 법 $n$에 대한 위수 — 첫 귀환 시각</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 시곗바늘의 주기</span>
+  <p>$a$를 곱하는 행위를 “시곗바늘을 한 칸 돌리기”라고 생각하자. $\gcd(a,n)=1$이면
+  $a$의 거듭제곱은 결코 $0$에 빠지지 않고 유한한 잉여류 위를 빙빙 돈다. 오일러 정리는
+  “늦어도 $\varphi(n)$바퀴 안에 출발점 $1$로 돌아온다”를 뜻하고, <strong>위수</strong>는
+  “정확히 몇 칸 만에 $1$로 처음 되돌아오는가”를 잰다. 어떤 바늘은 몇 칸 만에 제자리로
+  오고(작은 위수), 어떤 바늘은 문자판을 한 바퀴 빠짐없이 밟은 뒤에야 돌아온다(원시근).</p>
+</div>
+
+<div class="box box-def" id="def-order-mod-n">
+  <span class="box-label">정의 · 법 $n$에 대한 위수 <span class="label-en">order modulo n</span> (버튼 §8)</span>
+  <p>$\gcd(a,n)=1$일 때, $a^k\equiv 1\pmod n$을 만족하는 <strong>가장 작은 양의
+  정수</strong> $k$를 $a$의 <strong>법 $n$에 대한 위수</strong>라 하고
+  $\operatorname{ord}_n(a)$로 쓴다. (오일러 정리가 $a^{\varphi(n)}\equiv 1$을 보장하므로
+  그런 $k$는 반드시 존재한다 — 후보 집합이 비어 있지 않다. 여기서 $\varphi$는
+  <a class="term" data-term="euler-phi">오일러 $\varphi$ 함수</a>.)</p>
+  <p>이것은 현대대수에서 배운 <a class="term" data-term="element-order">원소의 위수</a>를
+  군 $(\mathbb{Z}/n\mathbb{Z})^\times$에 그대로 적용한 것이다:
+  $\operatorname{ord}_n(a)=\big|\langle a\rangle\big|$ — $a$가 생성하는 순환 부분군의
+  크기와 같다. 두 과목이 같은 대상을 다른 언어로 부르고 있을 뿐이다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 위수 나눗셈 성질 <span class="label-en">order divides the exponent</span> (버튼 §8)</span>
+  <p><strong>이 정리가 하는 일:</strong> “$a^k\equiv 1$이 되는 $k$는 어떤 것들인가?”라는
+  질문을 단 한 줄로 답한다 — 정확히 위수의 배수들이다. 위수 계산과 원시근 판정의
+  만능 열쇠.</p>
+  <p>$\gcd(a,n)=1$이라 하자. 그러면</p>
+  $$a^k\equiv 1\pmod n \iff \operatorname{ord}_n(a)\mid k.$$
+  <p>특히 $\operatorname{ord}_n(a)\mid \varphi(n)$이다
+  (<a class="term" data-term="euler-theorem">오일러 정리</a>의 $a^{\varphi(n)}\equiv 1$에
+  적용). 이는 <a class="term" data-term="lagrange-theorem">라그랑주 정리</a>(원소의
+  위수는 군의 위수를 나눈다)를 곱셈군 $(\mathbb{Z}/n\mathbb{Z})^\times$에 쓴 정수론 판이다.
+  또한 $a^i\equiv a^j \iff i\equiv j \pmod{\operatorname{ord}_n(a)}$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 나눗셈 정리로 지수를 위수로 나눈 나머지만 남긴다 (원소 위수 정리의 재상영).</span></summary>
+  <p>$d=\operatorname{ord}_n(a)$로 두자.</p>
+  <p>($\Leftarrow$) $d\mid k$이면 $k=dm$이고 $a^k=(a^d)^m\equiv 1^m=1$.</p>
+  <p>($\Rightarrow$) $a^k\equiv 1$이라 하자. 나눗셈 정리로 $k=qd+r$ ($0\le r\lt d$)로
+  쓰면 $1\equiv a^k=(a^d)^q\,a^r\equiv a^r\pmod n$. 그런데 $d$는 $a^{(\cdot)}\equiv 1$을
+  만드는 <em>최소</em> 양의 지수인데 $0\le r\lt d$이므로 $r=0$일 수밖에 없다. 즉 $d\mid k$.</p>
+  <p>$\varphi(n)$의 약수임은 $a^{\varphi(n)}\equiv 1$에 방금 결과를 적용한 것이다.
+  마지막 동치는 $a$가 가역이므로 $a^i\equiv a^j \iff a^{i-j}\equiv 1 \iff d\mid i-j$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 거듭제곱의 위수 <span class="label-en">order of a power</span> (버튼 §8)</span>
+  <p><strong>이 정리가 하는 일:</strong> 한 원소의 위수만 알면 그 모든 거듭제곱의 위수를
+  나눗셈 한 번으로 준다 — 원시근 하나에서 “위수가 이런 원소들”을 통째로 복제할 때 쓴다.</p>
+  <p>$\gcd(a,n)=1$이고 $d=\operatorname{ord}_n(a)$이면</p>
+  $$\operatorname{ord}_n(a^k)=\frac{d}{\gcd(k,d)}.$$
+  <p>따라서 $a^k$도 여전히 위수 $d$를 가질 필요충분조건은 $\gcd(k,d)=1$이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $(a^k)^m\equiv 1 \iff d\mid km$을 만드는 최소 $m$을 구한다.</span></summary>
+  <p>$(a^k)^m=a^{km}\equiv 1 \iff d\mid km$ (위 정리). $g=\gcd(k,d)$로 놓으면
+  $d\mid km \iff \frac{d}{g}\,\big|\,\frac{k}{g}\,m$인데, $\gcd\!\big(\frac{k}{g},\frac{d}{g}\big)=1$
+  이므로 이는 $\frac{d}{g}\mid m$과 동치. 이를 만족하는 최소 양의 정수는
+  $m=\frac{d}{g}=\frac{d}{\gcd(k,d)}$이고, 이것이 곧 $\operatorname{ord}_n(a^k)$다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 법 $7$의 위수 전수 조사</span>
+  <p>$\varphi(7)=6$. 각 $a$의 거듭제곱을 $1$이 나올 때까지 돌린다:</p>
+  <p>$\operatorname{ord}_7(1)=1$; &nbsp; $2^1,2^2,2^3\equiv 2,4,1$이라
+  $\operatorname{ord}_7(2)=3$; &nbsp; $3^1,\dots,3^6\equiv 3,2,6,4,5,1$이라
+  $\operatorname{ord}_7(3)=6$; &nbsp; $4^1,4^2,4^3\equiv 4,2,1$이라
+  $\operatorname{ord}_7(4)=3$; &nbsp; $\operatorname{ord}_7(5)=6$; &nbsp;
+  $6^2\equiv 1$이라 $\operatorname{ord}_7(6)=2$.</p>
+  <p>모든 위수 $1,2,3,6$이 $\varphi(7)=6$의 약수임을 확인하라. 위수별 원소 수를 세면:
+  위수 $1$은 $\{1\}$($1$개), 위수 $2$는 $\{6\}$($1$개), 위수 $3$은 $\{2,4\}$($2$개),
+  위수 $6$은 $\{3,5\}$($2$개) — 각각 $\varphi(1),\varphi(2),\varphi(3),\varphi(6)$과
+  정확히 일치한다. 이 “우연이 아닌” 일치가 곧 원시근 존재의 씨앗이다(3절).</p>
+  <p>거듭제곱 공식도 확인: $\operatorname{ord}_7(3)=6$이므로
+  $\operatorname{ord}_7(3^2)=\dfrac{6}{\gcd(2,6)}=3$, 실제로 $3^2\equiv 2$이고
+  $\operatorname{ord}_7(2)=3$ ✓.</p>
+</div>
+
+<h2 id="sec-primitive-root">2. 원시근 — 곱셈군을 통째로 생성하는 원소</h2>
+
+<div class="box box-def" id="def-primitive-root">
+  <span class="box-label">정의 · 원시근 <span class="label-en">primitive root</span> (버튼 §8)</span>
+  <p>$\gcd(g,n)=1$이면서 $\operatorname{ord}_n(g)=\varphi(n)$인 정수 $g$를 <strong>법 $n$의
+  원시근</strong>이라 한다 — 위수가 “최대치” $\varphi(n)$에 도달한 원소.</p>
+  <p>동치인 그림: $g$가 원시근이면 $g^1, g^2, \dots, g^{\varphi(n)}$이 서로 다른
+  $\varphi(n)$개의 잉여류를 훑어 $(\mathbb{Z}/n\mathbb{Z})^\times$ 전체가 된다(축소잉여계).
+  즉 $g$가 이 군을 <a class="term" data-term="cyclic-group">순환군</a>으로
+  <strong>생성</strong>한다. 한 줄로: <strong>“원시근이 있다 $=$ 곱셈군이 순환군이다.”</strong></p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 원시근의 개수 <span class="label-en">count of primitive roots</span> (버튼 §8)</span>
+  <p><strong>이 정리가 하는 일:</strong> 원시근이 <em>하나라도</em> 있으면 몇 개인지까지
+  공짜로 알려준다 — 하나만 찾으면 나머지는 그 거듭제곱에서 전부 쏟아진다.</p>
+  <p>법 $n$이 원시근을 하나 가지면, 서로 합동이 아닌 원시근은 정확히
+  $\varphi(\varphi(n))$개다.</p>
+  <p>이유: 원시근 $g$를 하나 잡으면 모든 가역원은 $g^k$ 꼴로 유일하게 쓰인다. 거듭제곱의
+  위수 공식에서 $g^k$가 <em>다시</em> 원시근($\operatorname{ord}=\varphi(n)$)일 필요충분조건은
+  $\gcd\!\big(k,\varphi(n)\big)=1$. 그런 $k$가 $1$부터 $\varphi(n)$까지 정확히
+  $\varphi(\varphi(n))$개다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 법 $7$의 원시근</span>
+  <p>1절의 표에서 위수 $6=\varphi(7)$인 원소는 $3$과 $5$ — 원시근은 이 둘뿐이고, 개수는
+  $\varphi(\varphi(7))=\varphi(6)=2$와 정확히 맞는다. $3$이 원시근임을 알면 나머지
+  원시근은 $3^k$ 중 $\gcd(k,6)=1$인 것, 즉 $k=1,5$에서 $3^1=3$과 $3^5\equiv 5$로
+  즉시 나온다.</p>
+  <p>반면 $2$는 원시근이 아니다: $\operatorname{ord}_7(2)=3\neq 6$이라 $2$의 거듭제곱은
+  $\{1,2,4\}$ 세 잉여류만 맴돌고 $3,5,6$에는 결코 닿지 못한다. “아무 가역원이나 원시근은
+  아니다”를 눈으로 보는 예.</p>
+</div>
+
+<h2 id="sec-existence">3. 어떤 $n$이 원시근을 가지는가</h2>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 원시근 존재정리 <span class="label-en">primitive root theorem</span> (버튼 §8)</span>
+  <p><strong>이 정리가 하는 일:</strong> “곱셈군 $(\mathbb{Z}/n\mathbb{Z})^\times$가
+  순환군인가?”를 $n$의 소인수분해만 보고 판정한다.</p>
+  <p>법 $n$이 원시근을 가진다(동치로 $(\mathbb{Z}/n\mathbb{Z})^\times$가 순환군) 인 것은</p>
+  $$n=1,\ 2,\ 4,\ p^k,\ \text{또는}\ 2p^k \quad(p\ \text{는 홀수 소수},\ k\ge 1)$$
+  <p>일 때, 그리고 오직 그때뿐이다. 특히 <strong>모든 소수 $p$는 원시근을 가진다</strong> —
+  유한체 $\mathbb{F}_p$의 곱셈군은 언제나 순환군이라는, 정수론과 현대대수가 정확히
+  만나는 핵심 사실이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 심장 — 소수 $p$는 원시근을 가진다 <span class="proof-strategy">— 위수 $d$인 원소 수 $\psi(d)$가 $\varphi(d)$ 이하인데 양쪽 총합이 같아 등호가 강제된다.</span></summary>
+  <p>$\mathbb{Z}_p^\times$의 원소 중 위수가 <em>정확히</em> $d$인 것의 개수를 $\psi(d)$라
+  하자. 모든 원소의 위수는 $p-1$의 약수이므로, 원소들을 위수별로 분류하면</p>
+  $$\sum_{d\mid p-1}\psi(d)=p-1.$$
+  <p><strong>핵심 보조 주장: 각 $d\mid p-1$에 대해 $\psi(d)\le\varphi(d)$.</strong>
+  $\psi(d)=0$이면 자명. $\psi(d)\gt 0$이면 위수 $d$인 원소 $a$가 하나 있다. 그러면
+  $a,a^2,\dots,a^d$는 서로 다른 $d$개의 원소이고 모두 $x^d\equiv 1\pmod p$의 해다.
+  그런데 $\mathbb{Z}_p$는 <a class="term" data-term="field">체</a>이므로 다항식 $x^d-1$의
+  근은 많아야 $d$개 — 따라서 합동식 $x^d\equiv 1$의 해는 정확히 이 $d$개가 전부다.
+  이 중 위수가 <em>정확히</em> $d$인 것은 $\langle a\rangle$의 생성원, 즉 거듭제곱 위수
+  공식에 의해 $\gcd(k,d)=1$인 $a^k$뿐이므로 $\varphi(d)$개다. 그러므로 실은
+  $\psi(d)=\varphi(d)$.</p>
+  <p>이제 두 사실을 합친다. 항상 $\psi(d)\le\varphi(d)$인데</p>
+  $$\sum_{d\mid p-1}\psi(d)=p-1=\sum_{d\mid p-1}\varphi(d)$$
+  <p>이다(오른쪽은 가우스 항등식 $\sum_{d\mid m}\varphi(d)=m$). 작은 것들끼리의 합이
+  큰 것들끼리의 합과 같으니 <strong>모든</strong> $d$에서 $\psi(d)=\varphi(d)$일 수밖에
+  없다. 특히 $\psi(p-1)=\varphi(p-1)\ge 1$ — 위수가 $p-1$인 원소, 곧 원시근이 존재한다.
+  $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">반례 · 원시근이 없는 세계 — $n=8$</span>
+  <p>$\varphi(8)=4$이고 $(\mathbb{Z}/8\mathbb{Z})^\times=\{1,3,5,7\}$. 그런데</p>
+  $$3^2=9\equiv 1,\qquad 5^2=25\equiv 1,\qquad 7^2=49\equiv 1\pmod 8.$$
+  <p>모든 가역원이 위수 $\le 2$라 위수 $4$인 원소가 아예 없다 — 원시근 없음. 실제로 이
+  군은 클라인 4원군 $\mathbb{Z}_2\times\mathbb{Z}_2$와 동형이라
+  <a class="term" data-term="cyclic-group">순환군</a>이 아니다. $8=2^3$은 $1,2,4$도 아니고
+  $p^k,2p^k$ 꼴도 아니므로 존재정리와 정확히 맞아떨어진다.</p>
+  <p>같은 이유로 $n=12,15,16,24,\dots$도 원시근이 없다(예: $(\mathbb{Z}/12)^\times$의 네
+  원소 $1,5,7,11$은 모두 제곱하면 $1$). “원시근은 아무 $n$에나 있는 게 아니다”가 이 장
+  최대의 오해 지점이다.</p>
+</div>
+
+<h2 id="sec-index">4. 지수 — 나머지 세계의 로그</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 곱셈을 덧셈으로 바꾸는 사전</span>
+  <p>원시근 $g$가 있으면 모든 가역원은 $g$의 거듭제곱 딱 하나로 표현된다. 그렇다면
+  각 $a$에 “$g$를 몇 번 곱해야 나오는가”라는 지수를 붙일 수 있다. 이 지수는 로그가
+  실수에서 하던 일을 잉여류에서 그대로 한다: <strong>곱셈을 덧셈으로 번역</strong>한다.
+  단, 지수는 $\varphi(n)$을 주기로 하므로 “법 $\varphi(n)$의 로그표”가 된다. 덕분에
+  $x^k\equiv a$ 같은 곱셈 방정식이 <em>선형</em> 합동으로 납작해진다.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 지수 (이산로그) <span class="label-en">index, discrete logarithm</span> (버튼 §8)</span>
+  <p>법 $n$의 원시근 $g$를 하나 <strong>고정</strong>하자. $\gcd(a,n)=1$인 각 $a$에 대해
+  $g^k\equiv a\pmod n$을 만족하는 지수 $k$가 법 $\varphi(n)$에서 유일하게 존재한다. 이
+  $k$를 밑 $g$에 대한 $a$의 <strong>지수</strong>라 하고 $\operatorname{ind}_g a$로 쓴다 —
+  곱셈군에서의 “로그”.</p>
+  <p>로그가 그렇듯 곱을 합으로 바꾼다(모든 등식은 법 $\varphi(n)$):</p>
+  $$\operatorname{ind}_g(ab)\equiv\operatorname{ind}_g a+\operatorname{ind}_g b,\qquad
+  \operatorname{ind}_g(a^m)\equiv m\,\operatorname{ind}_g a.$$
+  <p>($g^{\operatorname{ind}(ab)}\equiv ab\equiv g^{\operatorname{ind}a}\,g^{\operatorname{ind}b}
+  =g^{\operatorname{ind}a+\operatorname{ind}b}$이고, 두 지수의 비교는
+  <a class="term" data-term="order-mod-n">위수</a> $\operatorname{ord}_n(g)=\varphi(n)$을
+  법으로 하기 때문이다.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 지수표로 $x^k\equiv a$ 풀기 (법 $7$, 밑 $g=3$)</span>
+  <p>원시근 $3$의 거듭제곱은 $3^1,3^2,3^3,3^4,3^5,3^6\equiv 3,2,6,4,5,1$. 이를 뒤집으면
+  지수표(법 $6$):</p>
+  $$\operatorname{ind}_3 1=0,\ \ \operatorname{ind}_3 2=2,\ \ \operatorname{ind}_3 3=1,\ \
+  \operatorname{ind}_3 4=4,\ \ \operatorname{ind}_3 5=5,\ \ \operatorname{ind}_3 6=3.$$
+  <p><strong>$x^4\equiv 2\pmod 7$ 풀기.</strong> 양변에 지수를 취하면
+  $4\,\operatorname{ind}x\equiv \operatorname{ind}2=2\pmod 6$. 선형
+  <a class="term" data-term="congruence">합동</a> $4t\equiv 2\pmod 6$은 $\gcd(4,6)=2\mid 2$라
+  해가 $2$개: $t\equiv 2,5\pmod 6$. 되돌리면 $x\equiv 3^2\equiv 2$ 또는
+  $x\equiv 3^5\equiv 5\pmod 7$. 검산: $2^4=16\equiv 2$, $5^4\equiv 2$ ✓.</p>
+  <p><strong>$x^3\equiv 3\pmod 7$ 풀기.</strong> $3\,\operatorname{ind}x\equiv
+  \operatorname{ind}3=1\pmod 6$. 그런데 $\gcd(3,6)=3\nmid 1$이라 <strong>해가 없다</strong>
+  — $3$은 법 $7$의 세제곱수가 아니다. 거듭제곱 방정식의 가해성이 지수의 선형 합동으로
+  완전히 번역되는 것을 본다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>위수는 $\varphi(n)$의 약수일 뿐, 항상 $\varphi(n)$인 것은 아니다.</strong>
+  성립하는 것은 $\operatorname{ord}_n(a)\mid\varphi(n)$ — 등호가 되는 특별한 $a$만
+  원시근이다. $\operatorname{ord}_7(2)=3\neq 6$이 대표 예.</p>
+  <p>② <strong>원시근은 모든 $n$에 있는 게 아니다.</strong> $n=1,2,4,p^k,2p^k$일 때만
+  존재한다. $n=8,12,15,16$ 등에는 없다 — “오일러가 $a^{\varphi(n)}\equiv 1$을 주니 위수
+  $\varphi(n)$짜리도 늘 있겠지”는 틀린 추론이다.</p>
+  <p>③ <strong>원시근의 개수는 $\varphi(n)$이 아니라 $\varphi(\varphi(n))$이다.</strong>
+  법 $7$에서 가역원은 $6$개지만 원시근은 $\varphi(6)=2$개뿐. 가역원 수와 원시근 수를
+  혼동하지 말 것.</p>
+  <p>④ <strong>지수는 원시근 선택에 의존한다.</strong> $\operatorname{ind}_g a$는 밑 $g$를
+  바꾸면 값이 달라진다(로그의 밑처럼). 단, “$x^k\equiv a$가 풀리는가” 같은 결론은
+  밑과 무관하다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">6장의 줄거리</span>
+  <p><a class="term" data-term="order-mod-n">위수</a> $\operatorname{ord}_n(a)$ = “$a$의
+  거듭제곱이 처음 $1$로 돌아오는 시각” — 핵심 성질 $a^k\equiv 1\iff\operatorname{ord}_n(a)\mid k$,
+  따라서 $\operatorname{ord}_n(a)\mid\varphi(n)$(<a class="term" data-term="lagrange-theorem">라그랑주</a>·<a class="term" data-term="euler-theorem">오일러</a>의 정수론 판)와
+  $\operatorname{ord}_n(a^k)=\operatorname{ord}_n(a)/\gcd(k,\operatorname{ord}_n(a))$
+  → 위수가 최대 $\varphi(n)$에 닿는 원소가 <a class="term" data-term="primitive-root">원시근</a>
+  ($=(\mathbb{Z}/n\mathbb{Z})^\times$를 <a class="term" data-term="cyclic-group">순환군</a>으로
+  생성; 있으면 $\varphi(\varphi(n))$개)
+  → <strong>존재정리</strong>: 순환 $\iff n=1,2,4,p^k,2p^k$ — 모든 소수는 원시근을 가짐
+  (유한체 $\mathbb{Z}_p$에서 $x^d-1$의 근 $\le d$와 $\sum_{d\mid p-1}\varphi(d)=p-1$이
+  등호를 강제; $8$은 반례)
+  → <strong>지수(이산로그)</strong> $\operatorname{ind}_g a$ = 곱을 합으로 바꾸는
+  로그표, $x^k\equiv a$를 선형 <a class="term" data-term="congruence">합동</a>으로 납작하게.</p>
+  <p><strong>왜 중요한가:</strong> 원시근은 현대대수의 “순환군”이라는 추상을 $\mathbb{Z}_n$이라는
+  손에 잡히는 예제로 되살린다. 페르마·오일러 정리는 “돌아온다”만 말했지만, 위수와 원시근은
+  “언제, 어떤 구조로 돌아오는가”를 말한다. 임용에서는 <strong>위수 계산 · 원시근 존재/개수
+  판정 · 지수를 이용한 거듭제곱 합동 풀이</strong>가 핵심 축이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>법 $11$에서 $\operatorname{ord}_{11}(3)$과 $\operatorname{ord}_{11}(2)$를 구하고,
+  각각이 원시근인지 판정하라. 원시근이 존재한다면 법 $11$의 원시근은 모두 몇 개인가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\varphi(11)=10$이므로 후보 위수는 $10$의 약수 $1,2,5,10$뿐. $3^2, 3^5$만 계산해
+    보면 어느 약수인지 좁혀진다(위수 나눗셈 성질). 개수는 $\varphi(\varphi(11))$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$3^2=9,\ 3^5\equiv 3^2\cdot 3^2\cdot 3\equiv 9\cdot 9\cdot 3=243\equiv 1\pmod{11}$.
+    $\operatorname{ord}_{11}(3)$는 $5$를 나누되 $1$은 아니므로 $\operatorname{ord}_{11}(3)=5$.
+    $5\neq 10=\varphi(11)$이라 <strong>$3$은 원시근이 아니다.</strong></p>
+    <p>$2$의 거듭제곱: $2,4,8,16\equiv 5,10,20\equiv 9,18\equiv 7,14\equiv 3,6,12\equiv 1$
+    — $2^{10}\equiv 1$이 처음이므로 $\operatorname{ord}_{11}(2)=10=\varphi(11)$.
+    <strong>$2$는 원시근이다.</strong></p>
+    <p>원시근이 존재하므로 개수는 $\varphi(\varphi(11))=\varphi(10)=4$개.
+    (구체적으로 $2^k$ 중 $\gcd(k,10)=1$인 $k=1,3,7,9$: $2,8,7,6$.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$2$가 법 $11$의 원시근임을 이용하여, 거듭제곱의 위수 공식으로 법 $11$에서 위수가
+  <strong>정확히 $5$</strong>인 원소를 모두 구하라. 그 개수가 $\varphi(5)$와 맞는지
+  확인하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\operatorname{ord}_{11}(2^k)=\dfrac{10}{\gcd(k,10)}$. 이것이 $5$가 되려면
+    $\gcd(k,10)=2$여야 한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\operatorname{ord}_{11}(2^k)=\dfrac{10}{\gcd(k,10)}=5 \iff \gcd(k,10)=2 \iff
+    k\in\{2,4,6,8\}$. 해당 원소는
+    $2^2=4,\ 2^4\equiv 5,\ 2^6\equiv 9,\ 2^8\equiv 3\pmod{11}$, 즉
+    $\{3,4,5,9\}$ — <strong>$4$개</strong>.</p>
+    <p>순환군(위수 $10$)에서 위수 $5$인 원소 수는 $\varphi(5)=4$와 일치한다 ✓.
+    검산: $3^5\equiv 1$(문제 1), $4^5=(2^2)^5=2^{10}\equiv 1$ 등, 모두 $5$번째에 처음 $1$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §8 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$2$가 법 $13$의 원시근임을 확인하고, 밑 $2$의 지수표를 만들어
+  $x^2\equiv 3\pmod{13}$의 해를 모두 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$2^k$를 $k=1,\dots,12$까지 나열해 $2^{12}$에서 처음 $1$이 됨을 보이면 원시근.
+    $x^2\equiv 3$은 지수를 취해 $2\,\operatorname{ind}x\equiv\operatorname{ind}3\pmod{12}$로.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$2^k\pmod{13}$: $2,4,8,3,6,12,11,9,5,10,7,1$ ($k=1,\dots,12$). $2^{12}$에서 처음
+    $1$이 되므로 $\operatorname{ord}_{13}(2)=12=\varphi(13)$ — <strong>$2$는 원시근.</strong>
+    표에서 $2^4\equiv 3$이라 $\operatorname{ind}_2 3=4$.</p>
+    <p>$x^2\equiv 3$에 지수를 취하면 $2\,\operatorname{ind}x\equiv 4\pmod{12}$. 선형 합동
+    $2t\equiv 4\pmod{12}$은 $\gcd(2,12)=2\mid 4$라 해 $2$개: $t\equiv 2,8\pmod{12}$.
+    되돌리면 $x\equiv 2^2=4$ 또는 $x\equiv 2^8\equiv 9\pmod{13}$.</p>
+    <p>검산: $4^2=16\equiv 3$, $9^2=81\equiv 3\pmod{13}$ ✓. (두 해가
+    $x$와 $-x$ 관계 $4\equiv -9$임도 확인 — 이차합동의 두 근은 부호 짝이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §8 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$p$가 홀수 소수이고 $g$가 법 $p$의 원시근이면
+  $$g^{(p-1)/2}\equiv -1\pmod p$$
+  임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$y=g^{(p-1)/2}$로 두면 $y^2\equiv 1$. 체 $\mathbb{Z}_p$에서 $x^2\equiv 1$의 해는
+    $\pm 1$뿐. $y=1$이면 위수가 $\varphi(p)=p-1$이라는 사실과 모순.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$y=g^{(p-1)/2}$라 하자. $p$가 홀수 소수라 $(p-1)/2$는 정수이고
+    $y^2=g^{p-1}\equiv 1\pmod p$(오일러/페르마). $\mathbb{Z}_p$는 체이므로 $x^2-1$의 근은
+    $x\equiv 1$과 $x\equiv -1$ 둘뿐 — 따라서 $y\equiv 1$ 또는 $y\equiv -1$.</p>
+    <p>만약 $y\equiv 1$이면 $g^{(p-1)/2}\equiv 1$이 되어 위수 나눗셈 성질에 의해
+    $\operatorname{ord}_p(g)\mid \frac{p-1}{2}$, 즉 위수가 $\frac{p-1}{2}\lt p-1$을 넘지
+    못한다. 이는 $g$가 원시근($\operatorname{ord}_p(g)=p-1$)이라는 가정에 모순.
+    그러므로 $y\equiv -1$, 곧 $g^{(p-1)/2}\equiv -1\pmod p$. $\blacksquare$</p>
+    <p>(여담: 이 식은 “원시근은 이차비잉여이다”, 나아가 오일러 판정법
+    $a^{(p-1)/2}\equiv\left(\tfrac{a}{p}\right)$로 이어지는 다음 장(이차잉여)의 발판이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>존재 판정 서술</span>
+  </div>
+  <p>다음 각 법에 대해 원시근의 존재 여부를 판정하고 근거를 서술하라. 존재하면 원시근을
+  하나 구하라.</p>
+  <p>(1) 법 $18$ &nbsp;&nbsp; (2) 법 $20$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>원시근 존재정리: $n=1,2,4,p^k,2p^k$ 꼴인지 소인수분해로 확인. $18=2\cdot 3^2$,
+    $20=2^2\cdot 5$. 존재하면 $\varphi$의 약수를 위수 후보로 두고 하나 검사.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1) 존재한다.</strong> $18=2\cdot 3^2=2p^k$ ($p=3,k=2$) — 정확히 $2p^k$
+    꼴이므로 존재정리에 의해 원시근이 있다. $\varphi(18)=6$이라 위수 후보는 $1,2,3,6$.
+    $5$를 시험: $5^2=25\equiv 7\not\equiv 1$, $5^3\equiv 5\cdot 7=35\equiv 17\equiv -1\not\equiv 1$.
+    위수가 $2$도 $3$도 아니므로 $\operatorname{ord}_{18}(5)=6=\varphi(18)$ — <strong>$5$가
+    원시근.</strong></p>
+    <p><strong>(2) 존재하지 않는다.</strong> $20=2^2\cdot 5$는 $1,2,4,p^k,2p^k$ 중 어느
+    꼴도 아니다($2^2$과 홀소수 $5$가 동시에 등장). 존재정리에 의해 원시근이 없다.
+    실제로 $\varphi(20)=8$이지만 $(\mathbb{Z}/20\mathbb{Z})^\times\cong\mathbb{Z}_2\times\mathbb{Z}_4$
+    라 최대 위수가 $\operatorname{lcm}(2,4)=4\lt 8$ — 위수 $8$짜리 원소가 없다.</p>
+    <p>(서술 뼈대: 소인수분해 → 존재정리의 다섯 꼴과 대조 → 존재 시 위수 후보를
+    약수로 좁혀 검사. 세 단계를 모두 적는 것이 만점 답안.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>구조 증명 서술</span>
+  </div>
+  <p>소수 $p$와 $d\mid p-1$에 대해, 법 $p$에서 위수가 <strong>정확히 $d$</strong>인 원소의
+  개수가 $\varphi(d)$임을 증명하라. 이로부터 모든 소수가 원시근을 가짐을 이끌어내라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>위수 $d$인 원소 수를 $\psi(d)$로 두고 (i) $\psi(d)\le\varphi(d)$를 “$x^d-1$의 근은
+    체에서 $\le d$개”로, (ii) $\sum_{d\mid p-1}\psi(d)=p-1=\sum_{d\mid p-1}\varphi(d)$를
+    이용해 등호를 강제한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\psi(d)=$ (법 $p$에서 위수가 정확히 $d$인 원소 수). 모든 가역원의 위수는 $p-1$의
+    약수이므로 $\sum_{d\mid p-1}\psi(d)=p-1$.</p>
+    <p><strong>$\psi(d)\le\varphi(d)$:</strong> $\psi(d)=0$이면 자명. $\psi(d)\gt 0$이면 위수
+    $d$인 원소 $a$가 있고, $a,a^2,\dots,a^d$는 서로 다른 $d$개의 $x^d\equiv 1$의 해다.
+    $\mathbb{Z}_p$가 체라 $x^d-1$의 근은 많아야 $d$개이므로 이들이 해의 전부. 그중 위수가
+    정확히 $d$인 것은 $\gcd(k,d)=1$인 $a^k$, 즉 $\varphi(d)$개다. 따라서 실제로
+    $\psi(d)=\varphi(d)$가 되어 $\psi(d)\le\varphi(d)$가 성립한다.</p>
+    <p><strong>등호 강제:</strong> 가우스 항등식 $\sum_{d\mid p-1}\varphi(d)=p-1$과 위 합을
+    비교하면 $\sum_{d\mid p-1}\big(\varphi(d)-\psi(d)\big)=0$인데 각 항이 $\ge 0$이므로
+    모든 $d$에서 $\psi(d)=\varphi(d)$.</p>
+    <p>특히 $d=p-1$에서 $\psi(p-1)=\varphi(p-1)\ge 1$ — 위수 $p-1$인 원소, 곧 원시근이
+    존재한다. $\blacksquare$</p>
+    <p>(핵심은 “체에서 $n$차 다항식의 근은 $n$개 이하”라는 현대대수의 사실 하나. 이
+    사실이 무너지는 합성수 법에서는 $x^2\equiv 1\pmod 8$이 네 근을 가져 논증이 깨지고,
+    실제로 $8$에는 원시근이 없다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

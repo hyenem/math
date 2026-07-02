@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7장 이차잉여와 상호법칙 — 정수론 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="number-theory" data-chapter="ch07.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">정수론 · Burton (§9)</p>
+  <h1><span class="ch-num">7</span> 이차잉여와 상호법칙</h1>
+  <p class="ch-source">“$x^2 \equiv a$에 해가 있는가?” — 이 한 줄짜리 질문이
+  숨긴 대칭이 소수 두 개를 마주 세운다. 가우스가 평생 여덟 번 증명한
+  <strong>황금정리</strong>로 정수론이 막을 내린다.</p>
+</div>
+
+<p>일차합동 $ax \equiv b \pmod p$는 3장에서 이미 정복했습니다 — 역원 하나 곱하면
+끝. 그렇다면 <strong>이차합동</strong> $x^2 \equiv a \pmod p$는? 근의 공식을 흉내
+내면 “$\sqrt a$”가 필요한데, 나머지의 세계에 제곱근이 있을 보장은 없습니다.
+$\bmod 7$에서 $3$은 제곱근이 없고($1,4,2,2,4,1$이 제곱값 전부), $2$는 있습니다
+($3^2 = 9 \equiv 2$). <strong>어떤 $a$가 제곱이 되는가</strong> — 이 질문의 답이
+소수 $p, q$ 사이의 놀라운 <a class="term" data-term="congruence">합동</a> 관계로
+정리되는 것이 이 장, 그리고 이 과목의 피날레입니다.</p>
+
+<h2 id="sec-quadratic-residue">1. 이차잉여 — 제곱이 되는 나머지</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 절반은 제곱, 절반은 아니다</span>
+  <p>$1^2, 2^2, \dots$을 $\bmod p$로 줄여 보면 신기한 대칭이 보입니다.
+  $\bmod 7$: $1, 4, 2, 2, 4, 1$ — $k$와 $p - k$의 제곱이 같으니($ (p-k)^2 \equiv k^2$)
+  <strong>거울처럼 접혀</strong> 서로 다른 값이 딱 절반, $\{1, 2, 4\}$만 나옵니다.
+  0이 아닌 나머지 $6$개 중 $3$개는 제곱이 되고($=$이차잉여) $3$개는 안 됩니다
+  ($3, 5, 6$$=$이차비잉여). “절반씩”은 우연이 아니라 정확한 정리입니다.</p>
+</div>
+
+<div class="box box-def" id="def-quadratic-residue">
+  <span class="box-label">정의 · 이차잉여 <span class="label-en">quadratic residue</span> (버튼 §9)</span>
+  <p>홀소수 $p$와 $\gcd(a, p) = 1$에 대해, 합동식
+  $$x^2 \equiv a \pmod p$$
+  이 해를 가지면 $a$를 $p$의 <strong>이차잉여</strong>(QR), 해가 없으면
+  <strong>이차비잉여</strong>(QNR)라 한다.</p>
+  <p><strong>정확히 절반씩:</strong> $\{1, 2, \dots, p-1\}$ 중 이차잉여가
+  $\dfrac{p-1}{2}$개, 이차비잉여가 $\dfrac{p-1}{2}$개다. — 근거는 두 가지 시선:
+  ① <strong>제곱 사상</strong> $x \mapsto x^2$는 <a class="term" data-term="order-mod-n">기약잉여계</a>
+  $(\mathbb{Z}/p)^\times$ 위의 준동형이고, 핵은 $x^2 \equiv 1$의 해 $\{1, -1\}$ (두 원소, $p$가 홀수라 $1 \neq -1$).
+  “$2$대$1$ 사상”이므로 상(이차잉여 전체)의 크기가 $\frac{p-1}{2}$.
+  ② <a class="term" data-term="primitive-root">원시근</a> $g$로 보면 $a = g^k$가
+  이차잉여 $\iff$ $k$가 짝수 — 짝수 지수가 정확히 절반이다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 오일러 판정법 <span class="label-en">Euler's criterion</span> (버튼 §9)</span>
+  <p><strong>이 정리가 하는 일:</strong> “제곱근이 있느냐”는 존재 문제를
+  <strong>거듭제곱 한 번</strong>의 계산 문제로 바꾼다 — 실제로 근을 찾지 않고도 판정.</p>
+  <p>$\gcd(a, p) = 1$이면
+  $$a^{\frac{p-1}{2}} \equiv \begin{cases} \ \ 1 \pmod p & a\text{가 이차잉여} \\ -1 \pmod p & a\text{가 이차비잉여} \end{cases}$$
+  즉 <a class="term" data-term="fermat-little">페르마 소정리</a> $a^{p-1} \equiv 1$을
+  “반으로 접은” 값의 부호가 이차잉여 여부를 그대로 알려 준다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 페르마를 제곱근 분해 + 다항식의 근은 차수 이하(체이므로)</span></summary>
+  <p><strong>값이 $\pm1$뿐:</strong> 페르마 소정리로 $a^{p-1} \equiv 1$, 곧
+  $\bigl(a^{(p-1)/2} - 1\bigr)\bigl(a^{(p-1)/2} + 1\bigr) \equiv 0 \pmod p$.
+  $\mathbb{Z}/p$는 <a class="term" data-term="prime-number">소수</a> 나머지의 체 — 영인자가 없으므로
+  두 인수 중 하나가 $0$, 즉 $a^{(p-1)/2} \equiv \pm 1$.</p>
+  <p><strong>이차잉여면 $+1$:</strong> $a \equiv x^2$이면
+  $a^{(p-1)/2} \equiv x^{p-1} \equiv 1$ (다시 페르마).</p>
+  <p><strong>역으로 $+1$이면 이차잉여:</strong> 이차잉여는 정확히 $\frac{p-1}{2}$개이고,
+  방금 본 대로 모두 다항식 $X^{(p-1)/2} - 1 \equiv 0$의 근이다. 체 위에서 이 다항식의
+  근은 많아야 $\frac{p-1}{2}$개(차수 이하) — 자리가 꽉 찼다. 따라서 “$+1$을 주는 원소”는
+  이차잉여로 남김없이 채워지고, 나머지 $\frac{p-1}{2}$개의 이차비잉여는 부득이
+  $-1$을 준다. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\bmod 13$의 이차잉여 전부</span>
+  <p>$k^2$을 $k = 1, \dots, 6$까지: $1, 4, 9, 16\equiv3, 25\equiv12, 36\equiv10$.
+  이차잉여 $= \{1, 3, 4, 9, 10, 12\}$ (여섯 개 $= \frac{13-1}{2}$ ✓), 이차비잉여
+  $= \{2, 5, 6, 7, 8, 11\}$.</p>
+  <p><strong>오일러 판정 시운전:</strong> $2$는? $2^{6} = 64 \equiv 12 \equiv -1$
+  — 이차비잉여 ✓. $3$은? $3^{6} = 729 = 56\cdot13 + 1 \equiv 1$ — 이차잉여 ✓
+  (실제 $4^2 = 16 \equiv 3$).</p>
+</div>
+
+<h2 id="sec-legendre-symbol">2. 르장드르 기호 — 이차잉여를 $\pm1$로 압축하다</h2>
+
+<div class="box box-def" id="def-legendre-symbol">
+  <span class="box-label">정의 + 정리 · 르장드르 기호 <span class="label-en">Legendre symbol</span> (버튼 §9)</span>
+  <p>홀소수 $p$와 정수 $a$에 대해
+  $$\left(\frac{a}{p}\right) = \begin{cases} \ \ 1 & a\text{가 이차잉여} \\ -1 & a\text{가 이차비잉여} \\ \ \ 0 & p \mid a \end{cases}$$
+  — 세 갈래의 답을 <strong>부호 하나</strong>로 포장한 것. 이차잉여 여부라는 “예/아니오”가
+  이제 $\times$로 계산되는 대수 대상이 된다.</p>
+  <p>세 성질이 전부 오일러 판정법에서 나온다:</p>
+  <p>① <strong>오일러 판정법(기호판)</strong>:
+  $\displaystyle \left(\frac{a}{p}\right) \equiv a^{\frac{p-1}{2}} \pmod p$.</p>
+  <p>② <strong>완전 곱셈성</strong>:
+  $\displaystyle \left(\frac{ab}{p}\right) = \left(\frac{a}{p}\right)\left(\frac{b}{p}\right)$
+  — “이차잉여 $\times$ 이차잉여 $=$ 이차잉여, 이차잉여 $\times$ 이차비잉여 $=$ 이차비잉여,
+  이차비잉여 $\times$ 이차비잉여 $=$ 이차잉여.” 곱을 인수마다 쪼개 계산할 수 있게 하는 심장.</p>
+  <p>③ $a \equiv b \pmod p$이면 $\left(\frac a p\right) = \left(\frac b p\right)$
+  (분자는 $\bmod p$로 마음껏 줄여도 된다), 그리고
+  $\left(\frac{1}{p}\right) = 1$, $\left(\frac{a^2}{p}\right) = 1$.</p>
+</div>
+
+<details class="proof">
+  <summary>곱셈성 증명 <span class="proof-strategy">— 오일러 판정법을 곱하기만 하면 된다</span></summary>
+  <p>오일러 판정법을 세 번 씁니다:
+  $$\left(\frac{ab}{p}\right) \equiv (ab)^{\frac{p-1}{2}} = a^{\frac{p-1}{2}}\, b^{\frac{p-1}{2}}
+  \equiv \left(\frac{a}{p}\right)\left(\frac{b}{p}\right) \pmod p.$$
+  양변은 모두 $\pm 1$이고, $p$는 홀소수라 $1 \not\equiv -1 \pmod p$ — 그러니
+  $\bmod p$로 같은 두 부호는 <strong>정수로서도 같다</strong>. 합동이 등호로 굳는다. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 곱셈성으로 쪼개기</span>
+  <p>$\left(\dfrac{6}{13}\right)$을 구하자. $6 = 2 \cdot 3$이므로
+  $\left(\dfrac{6}{13}\right) = \left(\dfrac{2}{13}\right)\left(\dfrac{3}{13}\right)$.
+  앞 예제에서 $\left(\frac{2}{13}\right) = -1$, $\left(\frac{3}{13}\right) = +1$이었으니
+  $\left(\dfrac{6}{13}\right) = (-1)(+1) = -1$ — $6$은 이차비잉여.
+  (직접 확인: 이차잉여 목록 $\{1,3,4,9,10,12\}$에 $6$ 없음 ✓.)</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 가우스 보조정리 <span class="label-en">Gauss's lemma</span> (버튼 §9)</span>
+  <p><strong>이 정리가 하는 일:</strong> 르장드르 기호를 <strong>“절반을 넘어간 개수”를
+  세는 문제</strong>로 번역한다 — 보충법칙과 상호법칙 증명의 공용 엔진.</p>
+  <p>$\gcd(a, p) = 1$일 때, 수들
+  $$a\cdot 1,\ a\cdot 2,\ \dots,\ a\cdot \tfrac{p-1}{2}$$
+  을 각각 $\bmod p$의 최소양의 나머지로 줄이고, 그중 $\dfrac p2$보다 <strong>큰</strong> 것의
+  개수를 $\mu$라 하자. 그러면
+  $$\left(\frac{a}{p}\right) = (-1)^{\mu}.$$</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— 절반을 넘은 것은 “반사”하면 앞 절반과 정확히 겹친다</span></summary>
+  <p>나머지들 중 $p/2$를 넘는 것들을 $p$에서 빼서 “반사”($r \mapsto p - r$)하면,
+  반사된 값과 원래 넘지 않던 값을 합쳐 정확히 $\{1, 2, \dots, \frac{p-1}{2}\}$가
+  <strong>한 번씩</strong> 나온다. (같은 값이 두 번 나오거나 서로 부호 반대로 나올 수
+  없음을 소거법칙으로 확인.) 모두 곱하면
+  $$\prod_{k=1}^{(p-1)/2}(a k) \equiv (-1)^{\mu}\prod_{k=1}^{(p-1)/2} k \pmod p.$$
+  좌변은 $a^{(p-1)/2}\bigl(\tfrac{p-1}{2}\bigr)!$, 우변은 $(-1)^\mu \bigl(\tfrac{p-1}{2}\bigr)!$.
+  공통인수 $\bigl(\tfrac{p-1}{2}\bigr)!$은 $p$와 서로소라 소거되어
+  $a^{(p-1)/2} \equiv (-1)^\mu$. 오일러 판정법으로 $\left(\frac a p\right) = (-1)^\mu$. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-quadratic-reciprocity">3. 이차상호법칙 — 정수론의 황금정리</h2>
+
+<div class="box box-thm" id="def-quadratic-reciprocity"><span class="box-label">정리 · 이차상호법칙 <span class="label-en">quadratic reciprocity</span> (버튼 §9)</span>
+  <p><strong>이 정리가 하는 일:</strong> “$p$가 $q$의 이차잉여인가?”와 그 <strong>질문을
+  뒤집은</strong> “$q$가 $p$의 이차잉여인가?”를 하나로 묶는다 — 두 소수의 역할을
+  맞바꿔도 되는(reciprocity) 놀라운 대칭. 덕분에 큰 분모의 기호를 작은 분모로
+  <strong>내려가며</strong> 계산할 수 있다.</p>
+  <p>서로 다른 홀소수 $p, q$에 대해
+  $$\left(\frac{p}{q}\right)\left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2}\cdot\frac{q-1}{2}}.$$</p>
+  <p><strong>부호 규칙(외우기):</strong> 지수 $\frac{p-1}{2}\cdot\frac{q-1}{2}$이 홀수가 되는 것은
+  $p, q$가 <strong>둘 다 $\equiv 3 \pmod 4$</strong>일 때뿐이다. 그러므로</p>
+  <p>· $p, q$ 중 적어도 하나가 $\equiv 1 \pmod 4$ $\ \Rightarrow\ $
+  $\left(\frac p q\right) = \left(\frac q p\right)$ (부호 <strong>같음</strong>),</p>
+  <p>· $p, q$ 둘 다 $\equiv 3 \pmod 4$ $\ \Rightarrow\ $
+  $\left(\frac p q\right) = -\left(\frac q p\right)$ (부호 <strong>반대</strong>).</p>
+  <p>가우스는 이 정리를 “<em>theorema aureum</em>(황금정리)”라 부르며 평생에 걸쳐
+  본질이 서로 다른 여러(전해지기로 여덟) 증명을 남겼다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 두 보충법칙 <span class="label-en">supplementary laws</span> (버튼 §9)</span>
+  <p>상호법칙은 <strong>홀소수 분자</strong>만 다룬다. $-1$과 $2$는 따로 처리하는데,
+  둘 다 가우스 보조정리에서 곧장 나온다:</p>
+  <p><strong>제1보충법칙</strong>:
+  $\displaystyle \left(\frac{-1}{p}\right) = (-1)^{\frac{p-1}{2}}$, 즉
+  $$-1\text{이 이차잉여} \iff p \equiv 1 \pmod 4.$$</p>
+  <p><strong>제2보충법칙</strong>:
+  $\displaystyle \left(\frac{2}{p}\right) = (-1)^{\frac{p^2-1}{8}}$, 즉
+  $$2\text{가 이차잉여} \iff p \equiv \pm 1 \pmod 8.$$
+  (곧 $p \equiv 1, 7 \pmod 8$이면 $2$는 이차잉여, $p \equiv 3, 5 \pmod 8$이면 이차비잉여.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— 제1보충은 오일러에서 즉시, 제2보충과 상호법칙은 가우스 보조정리의 개수 세기</span></summary>
+  <p><strong>제1보충법칙:</strong> 오일러 판정법에 $a = -1$을 그대로 대입 —
+  $\left(\frac{-1}{p}\right) \equiv (-1)^{(p-1)/2}$, 양변이 $\pm1$이라 등호.
+  $(p-1)/2$가 짝수 $\iff p \equiv 1 \pmod 4$. 끝.</p>
+  <p><strong>제2보충법칙:</strong> 가우스 보조정리에 $a = 2$. 세어야 할 것은
+  $2, 4, \dots, (p-1)$ 중 $p/2$를 넘는 개수 $\mu$, 즉 $p/4 < k \le p/2$인 정수 $k$의 수.
+  이 개수를 $p \bmod 8$의 네 경우로 나눠 계산하면 $\mu \equiv \frac{p^2-1}{8} \pmod 2$가
+  되어 결과가 나온다.</p>
+  <p><strong>상호법칙(아이젠슈타인의 격자점 증명):</strong> 가우스 보조정리로
+  $\left(\frac p q\right) = (-1)^{\,\sum_{k=1}^{(q-1)/2}\lfloor kp/q\rfloor}$ (넘어간 개수를
+  바닥함수 합으로 다시 셈). 마찬가지로 $\left(\frac q p\right)$는
+  $\sum \lfloor kq/p\rfloor$. 두 합
+  $$\sum_{k=1}^{(q-1)/2}\Big\lfloor \frac{kp}{q}\Big\rfloor + \sum_{j=1}^{(p-1)/2}\Big\lfloor \frac{jq}{p}\Big\rfloor$$
+  은 각각 대각선 $qy = px$ 아래·위의 <strong>격자점</strong> 수인데, 이 둘을 합치면
+  $\frac{p-1}{2}\times\frac{q-1}{2}$ 크기 직사각형 안의 격자점 전부 —
+  대각선 위에는 격자점이 없으니(서로소) 정확히 $\frac{p-1}{2}\cdot\frac{q-1}{2}$개다.
+  따라서 두 기호의 곱의 지수가 그 값이 된다. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 보충법칙 즉답</span>
+  <p><strong>(a)</strong> $x^2 \equiv -1 \pmod{61}$은 풀리는가? $61 \equiv 1 \pmod 4$이므로
+  제1보충법칙에 의해 $-1$은 이차잉여 — <strong>풀린다</strong>. (반면 $\bmod 83$은
+  $83 \equiv 3 \pmod 4$이라 $-1$이 이차비잉여, $x^2 \equiv -1$ 무해.)</p>
+  <p><strong>(b)</strong> $\left(\dfrac{2}{97}\right)$? $97 = 96 + 1 \equiv 1 \pmod 8$
+  이므로 $+1$ — $2$는 $\bmod 97$의 이차잉여. $\left(\dfrac{2}{101}\right)$?
+  $101 \equiv 5 \pmod 8$이라 $-1$.</p>
+</div>
+
+<h2 id="sec-applications">4. 계산과 응용 — 르장드르 기호 빠르게 접기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">표준 알고리즘 — 유클리드 호제법의 이차잉여 판</span>
+  <p>$\left(\frac a p\right)$를 손으로 계산하는 절차는 세 도구의 반복입니다.
+  ① 분자를 $\bmod p$로 줄이고 부호·$2$·홀소수로 <strong>인수분해</strong>(곱셈성),
+  ② $\pm1$과 $2$는 <strong>보충법칙</strong>으로 즉답,
+  ③ 홀소수끼리는 <strong>상호법칙으로 뒤집어</strong> 분모를 작게 만든 뒤 다시 ①.
+  분모가 계속 작아지니 <a class="term" data-term="euler-theorem">오일러 정리</a>의
+  거듭제곱보다 훨씬 빠릅니다 — 호제법이 최대공약수를 접어 내리듯, 상호법칙이
+  이차잉여 판정을 접어 내립니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\left(\dfrac{219}{383}\right)$ 완주</span>
+  <p>$383$은 소수, $383 \equiv 3 \pmod 4$, $383 \equiv 7 \equiv -1 \pmod 8$.
+  분자 $219 = 3 \cdot 73$이므로 곱셈성으로 쪼갠다:
+  $\left(\dfrac{219}{383}\right) = \left(\dfrac{3}{383}\right)\left(\dfrac{73}{383}\right)$.</p>
+  <p><strong>$\left(\dfrac{3}{383}\right)$:</strong> $3, 383$ 둘 다 $\equiv 3 \pmod 4$
+  — 부호 반대. $\left(\frac{3}{383}\right) = -\left(\frac{383}{3}\right)$.
+  $383 \equiv 2 \pmod 3$이니 $\left(\frac{383}{3}\right) = \left(\frac{2}{3}\right)$.
+  $3 \equiv 3 \pmod 8$이라 제2보충법칙으로 $\left(\frac{2}{3}\right) = -1$.
+  따라서 $\left(\frac{3}{383}\right) = -(-1) = 1$.</p>
+  <p><strong>$\left(\dfrac{73}{383}\right)$:</strong> $73 \equiv 1 \pmod 4$ — 부호 같음.
+  $\left(\frac{73}{383}\right) = \left(\frac{383}{73}\right)$. $383 \equiv 18 \pmod{73}$,
+  그리고 $18 = 2 \cdot 3^2$이라 $\left(\frac{18}{73}\right) = \left(\frac{2}{73}\right)\left(\frac{3}{73}\right)^2 = \left(\frac{2}{73}\right)$.
+  $73 \equiv 1 \pmod 8$이라 $\left(\frac{2}{73}\right) = 1$. 따라서 $\left(\frac{73}{383}\right) = 1$.</p>
+  <p><strong>결론:</strong> $\left(\dfrac{219}{383}\right) = 1 \cdot 1 = 1$ —
+  $x^2 \equiv 219 \pmod{383}$은 <strong>해를 가진다</strong> (근을 실제로 찾지 않고도 확정).</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 야코비 기호 <span class="label-en">Jacobi symbol</span> (버튼 §9)</span>
+  <p>홀수 $n = p_1 p_2 \cdots p_r$ (소인수 중복 허용)에 대해
+  $$\left(\frac{a}{n}\right) = \left(\frac{a}{p_1}\right)\left(\frac{a}{p_2}\right)\cdots\left(\frac{a}{p_r}\right)$$
+  로 르장드르 기호를 <strong>합성수 분모</strong>로 확장한 것. 곱셈성·상호법칙·보충법칙이
+  야코비 기호에서도 그대로 성립하여, <strong>분자를 소인수분해하지 않고도</strong>
+  기계적으로 접어 내릴 수 있다 (계산의 큰 이점).</p>
+  <p><strong>대가:</strong> $\left(\frac a n\right) = 1$이어도 $a$가 $\bmod n$의 이차잉여라는
+  보장은 <strong>없다</strong>. 예: $\left(\frac{2}{15}\right) = \left(\frac{2}{3}\right)\left(\frac{2}{5}\right) = (-1)(-1) = 1$
+  이지만 $2$는 $\bmod 15$의 이차잉여가 아니다 ($\bmod 15$ 이차잉여는 $\{1, 4\}$뿐).
+  “$-1$이면 확실히 비잉여, $+1$이면 미정” — 판정이 아니라 계산 보조 도구다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>르장드르 기호의 분모는 홀소수일 때만</strong> 이차잉여를 뜻한다.
+  합성수·짝수 분모로 쓴 것은 야코비 기호이며, 값이 $+1$이어도 이차잉여가 아닐 수 있다
+  (위 $\frac{2}{15}$).</p>
+  <p>② <strong>오일러 판정의 부호와 이차잉여의 대응</strong>: $a^{(p-1)/2} \equiv +1$이
+  이차잉여, $-1$이 이차비잉여다. 지수의 값($\frac{p-1}{2}$)이나 $a$ 자체와 혼동하지 말 것 —
+  중요한 건 “거듭제곱 결과의 부호”.</p>
+  <p>③ <strong>상호법칙의 부호 규칙</strong>: 부호가 반대가 되는 건 <strong>둘 다
+  $\equiv 3 \pmod 4$</strong>일 때<em>뿐</em>이다. 한쪽만 $3 \pmod 4$이거나 하나라도
+  $1 \pmod 4$이면 부호는 같다. “$3 \pmod 4$가 하나라도 있으면 뒤집힌다”는 흔한 오답.</p>
+  <p>④ <strong>제2보충법칙은 $\bmod 8$</strong>이다 ($\bmod 4$ 아님).
+  $\left(\frac{-1}{p}\right)$은 $\bmod 4$, $\left(\frac{2}{p}\right)$은 $\bmod 8$ —
+  법(modulus)을 섞으면 부호가 틀어진다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 정수론의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">7장의 줄거리</span>
+  <p><a class="term" data-term="quadratic-residue">이차잉여</a> = 제곱이 되는 나머지
+  (홀소수에서 정확히 절반; 제곱 사상의 핵 $\{\pm1\}$ 또는 원시근의 짝수 지수)
+  → <strong>오일러 판정법</strong> $a^{(p-1)/2} \equiv \pm1$: 존재를 거듭제곱으로 번역
+  → <a class="term" data-term="legendre-symbol">르장드르 기호</a> $\left(\frac a p\right)$:
+  세 갈래 답을 부호로 압축, <strong>완전 곱셈성</strong>으로 인수마다 분해
+  → <strong>가우스 보조정리</strong> $\left(\frac a p\right) = (-1)^\mu$: 부호를 개수 세기로
+  → <a class="term" data-term="quadratic-reciprocity">이차상호법칙</a>(황금정리)
+  $\left(\frac p q\right)\left(\frac q p\right) = (-1)^{\frac{p-1}2\frac{q-1}2}$ + 두 보충법칙:
+  소수를 <strong>뒤집어 내리며</strong> 어떤 $\left(\frac a p\right)$든 유한 단계에 계산.</p>
+  <p><strong>과목 전체 되돌아보기:</strong> 나눗셈 정리와 <a class="term" data-term="prime-number">소수</a>
+  (1–2장: 산술의 기본정리) → <a class="term" data-term="congruence">합동</a>과 중국인의
+  나머지 정리 (3장) → <a class="term" data-term="fermat-little">페르마</a>·오일러·윌슨과
+  수론적 함수 (4–5장) → <a class="term" data-term="primitive-root">원시근</a>과 지수
+  (6장: $(\mathbb{Z}/p)^\times$가 순환군) → <strong>이차상호법칙</strong> (7장: 제곱들이 그리는 대칭).
+  정수 하나만을 무대로 시작한 이야기가, 현대대수의 군·환·체를 <strong>살아있는 예제</strong>로
+  불러오며 끝난다 — $(\mathbb{Z}/p)^\times$의 순환성이 이차잉여를 절반으로 가르고, 그 절반의
+  대칭이 상호법칙이다.</p>
+  <p><strong>단 하나만 기억한다면:</strong> <em>“$x^2 \equiv a \pmod p$가 풀리는지는,
+  $p$와 $a$의 소인수들을 짝지어 뒤집는 것만으로 근을 찾지 않고 판정된다 —
+  이차상호법칙.”</em></p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$p = 11$에 대하여 (1) 이차잉여를 모두 구하고, (2) 오일러 판정법으로
+  $\left(\dfrac{7}{11}\right)$을 계산한 뒤, (3) $x^2 \equiv 5 \pmod{11}$의 가해성을
+  판정하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $k^2$을 $k = 1, \dots, 5$까지만. (2) $7^{5} \bmod 11$을 거듭제곱으로.
+    (3) 목록에 $5$가 있는지, 또는 $5^5 \bmod 11$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $1, 4, 9, 16\equiv5, 25\equiv3$ → 이차잉여 $= \{1, 3, 4, 5, 9\}$
+    (다섯 개 $= \frac{11-1}{2}$ ✓), 이차비잉여 $= \{2, 6, 7, 8, 10\}$.</p>
+    <p>(2) $7^2 = 49 \equiv 5$, $7^4 \equiv 5^2 = 25 \equiv 3$,
+    $7^5 = 7^4 \cdot 7 \equiv 3 \cdot 7 = 21 \equiv 10 \equiv -1$. 따라서
+    $\left(\frac{7}{11}\right) = -1$ — 이차비잉여 (목록 확인 ✓).</p>
+    <p>(3) $5$는 (1)의 이차잉여 목록에 있으므로 <strong>가해</strong>
+    ($4^2 = 16 \equiv 5$, 근 $x \equiv \pm 4$). 오일러로도 $5^5 = 5^4 \cdot 5
+    \equiv 3 \cdot 5 = 15 \equiv 4 \cdot \dots$ — $5^2 = 25 \equiv 3$, $5^4 \equiv 9$,
+    $5^5 \equiv 45 \equiv 1$, 부호 $+1$ ✓.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>보충법칙만 사용하여 다음을 판정하라. (1) $x^2 \equiv -1 \pmod{29}$의 가해성.
+  (2) $x^2 \equiv 2 \pmod{29}$의 가해성. (3) $\left(\dfrac{-2}{29}\right)$의 값.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$29 \bmod 4$와 $29 \bmod 8$을 먼저. (3)은 곱셈성으로 $(-1)$과 $2$를 분리.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$29 = 28 + 1 \equiv 1 \pmod 4$, $29 = 24 + 5 \equiv 5 \pmod 8$.</p>
+    <p>(1) $29 \equiv 1 \pmod 4$ → 제1보충법칙으로 $\left(\frac{-1}{29}\right) = 1$,
+    <strong>가해</strong> (실제 $12^2 = 144 \equiv 28 \equiv -1$).</p>
+    <p>(2) $29 \equiv 5 \pmod 8$ → 제2보충법칙으로 $\left(\frac{2}{29}\right) = -1$,
+    <strong>불가해</strong>.</p>
+    <p>(3) $\left(\frac{-2}{29}\right) = \left(\frac{-1}{29}\right)\left(\frac{2}{29}\right)
+    = (1)(-1) = -1$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §9 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$1009$가 소수임을 이용하여 $\left(\dfrac{713}{1009}\right)$을 계산하고,
+  $x^2 \equiv 713 \pmod{1009}$의 가해성을 판정하라. ($713 = 23 \cdot 31$)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$1009 \equiv 1 \pmod 4$ — 상호법칙에서 부호가 항상 같다. 곱셈성으로
+    $\left(\frac{23}{1009}\right)\left(\frac{31}{1009}\right)$로 쪼갠 뒤 각각 뒤집어 내려라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$1009 \equiv 1 \pmod 4$, $1009 \equiv 1 \pmod 8$. 곱셈성:
+    $\left(\frac{713}{1009}\right) = \left(\frac{23}{1009}\right)\left(\frac{31}{1009}\right)$.</p>
+    <p><strong>$\left(\frac{23}{1009}\right)$:</strong> $1009 \equiv 1 \pmod 4$ → 부호 같음,
+    $= \left(\frac{1009}{23}\right)$. $1009 \equiv 20 \pmod{23}$이고 $20 = 4 \cdot 5$이라
+    $= \left(\frac{5}{23}\right)$. $5 \equiv 1 \pmod 4$ → $= \left(\frac{23}{5}\right)
+    = \left(\frac{3}{5}\right)$. $\bmod 5$ 이차잉여는 $\{1, 4\}$이라 $3$은 비잉여:
+    $\left(\frac{3}{5}\right) = -1$. 따라서 $\left(\frac{23}{1009}\right) = -1$.</p>
+    <p><strong>$\left(\frac{31}{1009}\right)$:</strong> $= \left(\frac{1009}{31}\right)$.
+    $1009 \equiv 17 \pmod{31}$ → $\left(\frac{17}{31}\right)$. $17 \equiv 1 \pmod 4$ →
+    $= \left(\frac{31}{17}\right) = \left(\frac{14}{17}\right) = \left(\frac{2}{17}\right)\left(\frac{7}{17}\right)$.
+    $17 \equiv 1 \pmod 8$이라 $\left(\frac{2}{17}\right) = 1$.
+    $\left(\frac{7}{17}\right)$: $17 \equiv 1 \pmod 4$ → $= \left(\frac{17}{7}\right)
+    = \left(\frac{3}{7}\right)$. $3, 7$ 둘 다 $\equiv 3 \pmod 4$ → 부호 반대,
+    $\left(\frac{3}{7}\right) = -\left(\frac{7}{3}\right) = -\left(\frac{1}{3}\right) = -1$.
+    그러므로 $\left(\frac{14}{17}\right) = (1)(-1) = -1$, 곧 $\left(\frac{31}{1009}\right) = -1$.</p>
+    <p><strong>결론:</strong> $\left(\frac{713}{1009}\right) = (-1)(-1) = 1$ —
+    $x^2 \equiv 713 \pmod{1009}$은 <strong>가해</strong>. $\blacksquare$
+    (두 인수가 각각 비잉여지만 곱은 잉여 — 곱셈성의 전형.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>상호법칙 서술형</span>
+  </div>
+  <p>$3$이 아닌 홀소수 $p$에 대하여 다음을 증명하라:
+  $$3\text{이 }p\text{의 이차잉여} \iff p \equiv \pm 1 \pmod{12}.$$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\left(\frac{3}{p}\right)$에 상호법칙을 적용해 $\left(\frac{p}{3}\right)$로 뒤집고,
+    $p \bmod 4$와 $p \bmod 3$의 네 경우를 중국인의 나머지 정리로 $\bmod 12$에 합쳐라.
+    $\left(\frac{p}{3}\right)$는 $p \bmod 3$만으로 결정된다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>상호법칙: $\left(\frac{3}{p}\right)\left(\frac{p}{3}\right)
+    = (-1)^{\frac{3-1}{2}\cdot\frac{p-1}{2}} = (-1)^{\frac{p-1}{2}}$. 즉
+    $\left(\frac{3}{p}\right) = (-1)^{(p-1)/2}\left(\frac{p}{3}\right)$.</p>
+    <p>$\left(\frac{p}{3}\right)$: $\bmod 3$의 이차잉여는 $\{1\}$뿐이므로
+    $p \equiv 1 \pmod 3$이면 $+1$, $p \equiv 2 \pmod 3$이면 $-1$. 네 경우를
+    $\bmod 12$로 합친다:</p>
+    <p>· $p \equiv 1 (4),\ p \equiv 1 (3) \Rightarrow p \equiv 1(12)$:
+    $\left(\frac{3}{p}\right) = (+1)(+1) = +1$.<br>
+    · $p \equiv 1 (4),\ p \equiv 2 (3) \Rightarrow p \equiv 5(12)$:
+    $(+1)(-1) = -1$.<br>
+    · $p \equiv 3 (4),\ p \equiv 1 (3) \Rightarrow p \equiv 7(12)$:
+    $(-1)(+1) = -1$.<br>
+    · $p \equiv 3 (4),\ p \equiv 2 (3) \Rightarrow p \equiv 11(12)$:
+    $(-1)(-1) = +1$.</p>
+    <p>따라서 $\left(\frac{3}{p}\right) = +1 \iff p \equiv 1 \text{ 또는 } 11 \pmod{12}
+    \iff p \equiv \pm 1 \pmod{12}$. $\blacksquare$
+    (같은 방식으로 $\left(\frac{-3}{p}\right) = 1 \iff p \equiv 1 \pmod 3$이 나온다 —
+    아이젠슈타인 정수·원분체와 이어지는 결과.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>존재성 서술형 (피날레)</span>
+  </div>
+  <p>제1보충법칙을 이용하여, $p \equiv 1 \pmod 4$인 소수가 <strong>무한히 많음</strong>을
+  증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>유클리드식 반증. 그런 소수가 유한개 $p_1, \dots, p_k$라 가정하고
+    $N = (2 p_1 \cdots p_k)^2 + 1$을 보라. $N$의 소인수 $q$에서는
+    $(2p_1\cdots p_k)^2 \equiv -1 \pmod q$ — 즉 $-1$이 $q$의 이차잉여다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$p \equiv 1 \pmod 4$인 소수가 $p_1, \dots, p_k$로 유한하다고 가정하자.
+    $N = (2 p_1 p_2 \cdots p_k)^2 + 1$로 두면 $N$은 <strong>홀수</strong>이고
+    ($\text{짝수}^2 + 1$) $N > 1$.</p>
+    <p>$N$의 임의의 소인수 $q$를 잡으면 $q$는 홀수이고
+    $(2 p_1 \cdots p_k)^2 \equiv -1 \pmod q$ — 곧 $-1$이 $q$의 <strong>이차잉여</strong>.
+    제1보충법칙에 의해 $\left(\frac{-1}{q}\right) = 1 \iff q \equiv 1 \pmod 4$이므로
+    $q \equiv 1 \pmod 4$.</p>
+    <p>그러면 $q$는 가정한 목록의 어떤 $p_i$와 같아야 한다. 그런데 $p_i \mid N$이면서
+    $p_i \mid (2 p_1 \cdots p_k)^2$이므로 $p_i \mid \bigl(N - (2p_1\cdots p_k)^2\bigr) = 1$ —
+    모순. 따라서 $p \equiv 1 \pmod 4$인 소수는 무한히 많다. $\blacksquare$</p>
+    <p>(“이차잉여로 소수의 무한성을 낚는다” — 유클리드의 소수 무한 증명이
+    이차상호법칙의 보충법칙과 만나는, 정수론 전권을 닫는 논증. 같은 골격으로
+    산술수열 $\bmod m$의 소수 분포로 향하는 문(디리클레 정리)이 열린다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

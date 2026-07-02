@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5장 수론적 함수와 뫼비우스 반전 — 정수론 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="number-theory" data-chapter="ch05.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">정수론 · Burton (§6–7)</p>
+  <h1><span class="ch-num">5</span> 수론적 함수와 뫼비우스 반전</h1>
+  <p class="ch-source">“함수의 값을 알고 싶으면 소수에서만 물어보라” —
+  <a class="term" data-term="fundamental-theorem-arithmetic">산술의 기본정리</a>가 준
+  소인수분해라는 설계도를 그대로 읽어 값을 조립하는 함수들($\tau, \sigma, \varphi, \mu$),
+  그리고 그 합을 자유자재로 되돌리는 뫼비우스의 반전.</p>
+</div>
+
+<p>정수 하나하나에 수를 대응시키는 함수 — <strong>수론적 함수</strong> — 중에서
+가장 착한 종류가 있습니다. 서로소인 조각으로 나누면 값도 따라 쪼개지는 함수,
+즉 <strong>곱셈적 함수</strong>입니다. 이런 함수는 $n$의 소인수분해라는 설계도만
+있으면 소수 거듭제곱에서의 값을 곱해 통째로 복원됩니다. 이 장은 그 대표 선수
+넷 — 약수의 개수 $\tau$, 약수의 합 $\sigma$, <a class="term" data-term="euler-phi">오일러 $\varphi$</a>,
+뫼비우스 $\mu$ — 을 조립하고, 마지막에 “약수에 걸친 합”을 원래 함수로 되돌리는
+<strong>뫼비우스 반전공식</strong>으로 이들을 하나의 대수로 묶습니다.</p>
+
+<h2 id="sec-multiplicative">1. 곱셈적 함수 — 소수 거듭제곱에서 조립하기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — “설계도만 주면 조립된다”</span>
+  <p>$\gcd(m,n)=1$이면 $m$과 $n$은 소인수를 하나도 공유하지 않는, 완전히 독립된
+  두 부품이다. 곱셈적 함수는 “독립된 부품의 값은 따로 계산해 곱하면 된다”는 함수 —
+  전체 $mn$을 직접 보지 않고 조각으로 나눠 처리한다. 그래서 $n=p_1^{a_1}\cdots p_r^{a_r}$의
+  값은 소수 거듭제곱 조각 $p_i^{a_i}$에서의 값들의 곱으로 <strong>완전히 결정</strong>된다.
+  “소수에서만 알면 어디서나 안다” — 이것이 정수론이 소수에 집착하는 함수론적 이유다.</p>
+</div>
+
+<div class="box box-def" id="def-multiplicative-function">
+  <span class="box-label">정의 + 정리 · 수론적 함수와 곱셈성 <span class="label-en">arithmetic / multiplicative function</span> (버튼 §6)</span>
+  <p><strong>수론적 함수</strong>는 모든 양의 정수에서 정의된 함수 $f:\mathbb{Z}^+\to\mathbb{C}$이다.
+  이런 $f$가 항등적으로 $0$이 아니고</p>
+  $$\gcd(m,n)=1 \;\Longrightarrow\; f(mn)=f(m)f(n)$$
+  <p>을 만족하면 <strong>곱셈적(multiplicative)</strong>이라 한다. 서로소 조건 없이
+  <em>모든</em> $m,n$에 대해 $f(mn)=f(m)f(n)$이면 <strong>완전곱셈적(completely
+  multiplicative)</strong>이라 한다 — 이 둘은 다르다(3절·오해 참고).</p>
+  <p>곱셈적 함수는 자동으로 $f(1)=1$이고(서로소인 $m$에 $f(m)=f(m)f(1)$, $f\not\equiv0$),
+  <a class="term" data-term="fundamental-theorem-arithmetic">산술의 기본정리</a>와 결합하면</p>
+  $$n=p_1^{a_1}\cdots p_r^{a_r}\;\Longrightarrow\; f(n)=\prod_{i=1}^{r} f\!\left(p_i^{a_i}\right)$$
+  <p>즉 <strong>소수 거듭제곱에서의 값이 함수 전체를 결정한다</strong>. 완전곱셈적이면
+  한 단계 더 내려가 $f(p^a)=f(p)^a$ — 소수에서의 값만으로 결정된다.</p>
+  <p><strong>핵심 도구 (디리클레 합성곱):</strong> 두 수론적 함수의
+  <strong>디리클레 합성곱</strong>을</p>
+  $$(f*g)(n)=\sum_{d\mid n} f(d)\,g\!\left(\tfrac{n}{d}\right)=\sum_{de=n} f(d)\,g(e)$$
+  <p>로 정의하면, <strong>$f,g$가 곱셈적이면 $f*g$도 곱셈적</strong>이다. 이 한 줄이
+  이 장에서 $\tau,\sigma,\varphi$의 곱셈성을 “증명 없이 조립”하게 해 주는 만능 부품이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 — 디리클레 합성곱은 곱셈성을 보존한다 <span class="proof-strategy">— 서로소 $mn$의 약수는 “$m$쪽 약수 × $n$쪽 약수”로 유일하게 갈라지고, 그 조각들이 다시 서로소라 곱셈성이 두 겹으로 발동한다.</span></summary>
+  <p><strong>약수 분해 보조정리:</strong> $\gcd(m,n)=1$이면 $mn$의 각 약수 $d$는
+  $d=d_1 d_2$ ($d_1\mid m$, $d_2\mid n$)로 <em>유일하게</em> 쓰이고, 이때
+  $\gcd(d_1,d_2)=1$이며 $\gcd(m/d_1,\,n/d_2)=1$이다 (소인수가 $m$쪽·$n$쪽으로
+  겹치지 않으니 각 소인수의 행선지가 정해진다).</p>
+  <p><strong>계산:</strong> $h=f*g$라 하면</p>
+  $$h(mn)=\sum_{d\mid mn} f(d)\,g\!\left(\tfrac{mn}{d}\right)
+  =\sum_{d_1\mid m}\sum_{d_2\mid n} f(d_1 d_2)\,g\!\left(\tfrac{m}{d_1}\cdot\tfrac{n}{d_2}\right).$$
+  <p>$f,g$가 곱셈적이고 $\gcd(d_1,d_2)=1$, $\gcd(m/d_1,n/d_2)=1$이므로
+  $f(d_1 d_2)=f(d_1)f(d_2)$, $g(\tfrac{m}{d_1}\tfrac{n}{d_2})=g(\tfrac{m}{d_1})g(\tfrac{n}{d_2})$.
+  이중합이 곱으로 분리된다:</p>
+  $$h(mn)=\left(\sum_{d_1\mid m} f(d_1)g\!\left(\tfrac{m}{d_1}\right)\right)
+  \left(\sum_{d_2\mid n} f(d_2)g\!\left(\tfrac{n}{d_2}\right)\right)=h(m)\,h(n).$$
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 곱셈적 함수 명단과 합성곱 미리보기</span>
+  <p><strong>상수·항등 함수:</strong> $\mathbf{1}(n)=1$ (모든 $n$), $\operatorname{id}(n)=n$은
+  둘 다 <em>완전</em>곱셈적이다. 합성곱의 항등원은 $\varepsilon(n)=[\,n=1\,]$
+  (아이버슨 괄호: 참이면 $1$, 거짓이면 $0$) — 임의의 $f$에 대해 $f*\varepsilon=f$.</p>
+  <p><strong>합성곱으로 본 약수 함수(2절 예고):</strong> 상수함수끼리·항등과 상수의
+  합성곱이 바로 약수 함수다.</p>
+  $$\tau=\mathbf{1}*\mathbf{1},\qquad \sigma=\operatorname{id}*\mathbf{1}.$$
+  <p>$\mathbf{1},\operatorname{id}$이 곱셈적이므로 방금 정리에 의해 $\tau,\sigma$도
+  <strong>곱셈적</strong> — 증명이 조립 한 줄로 끝난다. $\varphi$와 $\mu$도 곧 이 대수에
+  합류한다.</p>
+  <p><strong>곱셈적이지만 완전곱셈적이 아닌 것:</strong> $\tau(4)=3$인데
+  $\tau(2)^2=2^2=4$ — 서로소가 아닌 $2\cdot2$에서 곱셈성이 깨진다. $\varphi,\mu,\sigma$도
+  같은 부류다.</p>
+</div>
+
+<h2 id="sec-divisor">2. 약수 함수와 완전수 — $\tau$, $\sigma$, 그리고 유클리드-오일러</h2>
+
+<div class="box box-def" id="def-divisor-functions">
+  <span class="box-label">정의 + 정리 · 약수 함수 $\tau,\sigma$와 완전수 <span class="label-en">divisor functions, perfect numbers</span> (버튼 §6, §11)</span>
+  <p>양의 정수 $n$에 대해</p>
+  $$\tau(n)=\sum_{d\mid n} 1\ \ (\text{약수의 개수}),\qquad
+  \sigma(n)=\sum_{d\mid n} d\ \ (\text{약수의 합}).$$
+  <p>둘 다 “<strong>곱셈적 함수의 약수합</strong>” 꼴 $\;F(n)=\sum_{d\mid n}f(d)=(f*\mathbf{1})(n)\;$이므로
+  ($\tau$는 $f=\mathbf{1}$, $\sigma$는 $f=\operatorname{id}$) 1절의 정리에 의해 <strong>곱셈적</strong>이다.
+  소수 거듭제곱에서의 값(약수는 $1,p,\dots,p^a$)을 곱하면 닫힌 공식을 얻는다:</p>
+  $$\tau(n)=\prod_{i=1}^{r}(a_i+1),\qquad
+  \sigma(n)=\prod_{i=1}^{r}\frac{p_i^{\,a_i+1}-1}{p_i-1}
+  \quad\bigl(n=p_1^{a_1}\cdots p_r^{a_r}\bigr).$$
+  <p><strong>완전수(perfect number):</strong> 자기 자신을 뺀 약수들의 합이 자기 자신과
+  같은 수, 즉 $\sigma(n)=2n$인 $n$. 가장 작은 예는 $6=1+2+3$, 그다음이 $28,\,496,\,8128$이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 — 곱셈성과 소수 거듭제곱 공식 <span class="proof-strategy">— 곱셈성은 “약수합은 곱셈성을 보존”에서 공짜, 공식은 등비급수 한 번.</span></summary>
+  <p><strong>소수 거듭제곱 값:</strong> $p^a$의 약수는 정확히 $1,p,p^2,\dots,p^a$
+  — $a+1$개다. 따라서 $\tau(p^a)=a+1$이고, 그 합은 등비급수</p>
+  $$\sigma(p^a)=1+p+\cdots+p^a=\frac{p^{\,a+1}-1}{p-1}.$$
+  <p><strong>곱셈성으로 조립:</strong> $\tau,\sigma$는 각각 $\mathbf{1}*\mathbf{1}$,
+  $\operatorname{id}*\mathbf{1}$이라 곱셈적. 그러므로
+  $\tau(n)=\prod\tau(p_i^{a_i})=\prod(a_i+1)$,
+  $\sigma(n)=\prod\sigma(p_i^{a_i})=\prod\frac{p_i^{a_i+1}-1}{p_i-1}$. 두 공식이 나온다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 계산 한 번에 익히기</span>
+  <p>$360=2^3\cdot3^2\cdot5$에 대해</p>
+  $$\tau(360)=(3{+}1)(2{+}1)(1{+}1)=4\cdot3\cdot2=24,$$
+  $$\sigma(360)=\frac{2^4-1}{2-1}\cdot\frac{3^3-1}{3-1}\cdot\frac{5^2-1}{5-1}
+  =15\cdot13\cdot6=1170.$$
+  <p>약수를 일일이 나열하지 않고 지수만으로 개수 $24$개, 합 $1170$을 얻는다 —
+  이것이 곱셈성의 실전 위력이다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 유클리드-오일러 정리 <span class="label-en">Euclid–Euler theorem</span> (버튼 §11)</span>
+  <p><strong>이 정리가 하는 일:</strong> “완전수는 어떻게 생겼는가”라는 2천 년 묵은 질문에
+  대해, 적어도 <strong>짝수</strong> 완전수는 <a class="term" data-term="prime-number">소수</a>
+  하나(메르센 소수)와 일대일로 대응함을 완벽히 판별한다.</p>
+  <p>$n$이 짝수일 때</p>
+  $$n\text{이 완전수}\iff n=2^{p-1}\bigl(2^{p}-1\bigr),\ \text{단 }2^{p}-1\text{이 소수(메르센 소수)}.$$
+  <p>($2^p-1$이 소수이려면 지수 $p$ 자체가 소수여야 한다.) $p=2,3,5,7$이 각각
+  $6,28,496,8128$을 준다. <strong>홀수 완전수가 존재하는지는 오늘날까지 미해결</strong>이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 — 유클리드(⇐)와 오일러(⇒) <span class="proof-strategy">— ⇐는 $\sigma$ 곱셈성 대입, ⇒는 짝수를 $2^{k-1}m$로 쪼개 $\sigma$ 방정식을 풀어 $m$이 소수임을 압박한다.</span></summary>
+  <p><strong>(⇐, 유클리드):</strong> $q=2^p-1$이 소수라 하고 $n=2^{p-1}q$라 하자.
+  $\gcd(2^{p-1},q)=1$이므로</p>
+  $$\sigma(n)=\sigma(2^{p-1})\,\sigma(q)=(2^{p}-1)(q+1)=q\cdot2^{p}=2\cdot 2^{p-1}q=2n.$$
+  <p>따라서 $n$은 완전수.</p>
+  <p><strong>(⇒, 오일러):</strong> $n$이 짝수 완전수이면 $n=2^{k-1}m$ ($k\ge2$, $m$ 홀수).
+  $\sigma$가 곱셈적이므로</p>
+  $$\sigma(n)=(2^{k}-1)\,\sigma(m),\qquad \sigma(n)=2n=2^{k}m.$$
+  <p>즉 $(2^k-1)\sigma(m)=2^k m$. $\gcd(2^k-1,2^k)=1$이라 $2^k\mid\sigma(m)$, $\sigma(m)=2^k t$로
+  쓰면 $m=(2^k-1)t$. 그러면</p>
+  $$\sigma(m)=2^k t=(2^k-1)t+t=m+t,$$
+  <p>여기서 $t\mid m$이다. 만약 $t>1$이면 $1,\,t,\,m$은 서로 다른 세 약수라
+  $\sigma(m)\ge 1+t+m>m+t$ — 모순. 그러므로 $t=1$이고 $\sigma(m)=m+1$, 즉 $m$의 약수가
+  $1,m$ 둘뿐 — <strong>$m$은 소수</strong>이며 $m=2^k-1$. 결국 $n=2^{k-1}(2^k-1)$,
+  $2^k-1$은 소수다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-euler">3. 오일러 파이 공식 — 곱셈성과 곱 공식</h2>
+
+<p>오일러 <a class="term" data-term="euler-phi">$\varphi$ 함수</a>는 4장에서
+$\varphi(n)=\#\{1\le k\le n:\gcd(k,n)=1\}$, 곧 $n$과 서로소인 잉여류의 개수
+$|(\mathbb{Z}/n\mathbb{Z})^\times|$로 정의했습니다. 여기서는 그 <strong>곱셈성</strong>을
+증명하고, 소인수만으로 값을 계산하는 곱 공식을 유도합니다.</p>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · $\varphi$의 곱셈성과 곱 공식 <span class="label-en">Euler's phi: multiplicativity, product formula</span> (버튼 §7)</span>
+  <p><strong>이 정리가 하는 일:</strong> $\varphi$를 “$n$까지 일일이 세는” 정의에서
+  해방시켜, 소인수분해만 보고 즉시 계산하게 한다.</p>
+  <p>$\varphi$는 곱셈적이고($\gcd(m,n)=1\Rightarrow\varphi(mn)=\varphi(m)\varphi(n)$),</p>
+  $$\varphi(n)=n\prod_{p\mid n}\left(1-\frac1p\right)
+  =\prod_{i=1}^{r}\bigl(p_i^{a_i}-p_i^{a_i-1}\bigr)\qquad(n=p_1^{a_1}\cdots p_r^{a_r}).$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 — 서로소 잉여류의 독립(CRT)과 소수 거듭제곱 값 <span class="proof-strategy">— 곱셈성은 “$mn$과 서로소 ⟺ $m$과도 $n$과도 서로소”를 중국인의 나머지 정리로 갈라 세는 것, 공식은 $p$의 배수를 빼는 것.</span></summary>
+  <p><strong>곱셈성:</strong> $\gcd(m,n)=1$일 때 <a class="term" data-term="congruence">합동</a>을
+  통해 $x\bmod mn$을 $(x\bmod m,\ x\bmod n)$으로 보내는 대응은 전단사다
+  (중국인의 나머지 정리). 그런데 $\gcd(x,mn)=1$은 “$\gcd(x,m)=1$이고 $\gcd(x,n)=1$”과
+  같으므로, $mn$과 서로소인 잉여류는 정확히 “($m$과 서로소인 잉여류) × ($n$과 서로소인
+  잉여류)”와 일대일 대응한다. 개수를 세면 $\varphi(mn)=\varphi(m)\varphi(n)$.</p>
+  <p><strong>소수 거듭제곱 값:</strong> $1$부터 $p^a$까지 중 $p$와 서로소가 <em>아닌</em>
+  것은 $p$의 배수 $p,2p,\dots,p^{a-1}\cdot p$ — 정확히 $p^{a-1}$개다. 따라서</p>
+  $$\varphi(p^a)=p^a-p^{a-1}=p^a\left(1-\tfrac1p\right).$$
+  <p><strong>조립:</strong> 곱셈성으로
+  $\varphi(n)=\prod\varphi(p_i^{a_i})=\prod p_i^{a_i}(1-\tfrac1{p_i})
+  =n\prod_{p\mid n}(1-\tfrac1p)$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\varphi$ 계산과 가우스 항등식</span>
+  <p>$\varphi(360)=360\left(1-\tfrac12\right)\left(1-\tfrac13\right)\left(1-\tfrac15\right)
+  =360\cdot\tfrac12\cdot\tfrac23\cdot\tfrac45=96.$ (검산: $\varphi(2^3)\varphi(3^2)\varphi(5)=4\cdot6\cdot4=96$.)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 가우스 항등식 <span class="label-en">Gauss's identity</span> (버튼 §7)</span>
+  <p><strong>이 정리가 하는 일:</strong> $\varphi$를 “약수에 걸쳐 합하면” 정확히 $n$이
+  된다는, $\varphi$와 항등함수를 잇는 다리. 4절 반전공식의 핵심 재료가 된다.</p>
+  $$\sum_{d\mid n}\varphi(d)=n,\qquad\text{즉}\quad \varphi*\mathbf{1}=\operatorname{id}.$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 — $\gcd$로 $\{1,\dots,n\}$을 분류 <span class="proof-strategy">— 각 원소를 “$n$과의 최대공약수”로 줄 세우면 각 줄의 길이가 $\varphi$가 된다.</span></summary>
+  <p>$1,2,\dots,n$을 “$\gcd(k,n)=d$”에 따라 분류한다. $d\mid n$일 때 $\gcd(k,n)=d$인
+  $k$는 $k=dj$ 꼴이고 $1\le j\le n/d$, $\gcd(j,n/d)=1$ — 그런 $j$가 정확히
+  $\varphi(n/d)$개다. 모든 $k$가 정확히 한 줄에 들어가므로</p>
+  $$n=\sum_{d\mid n}\varphi\!\left(\tfrac{n}{d}\right)=\sum_{d\mid n}\varphi(d)$$
+  <p>(마지막 등호는 $d\mapsto n/d$가 약수를 재배열). $\blacksquare$</p>
+</details>
+
+<h2 id="sec-mobius">4. 뫼비우스 함수와 반전공식 — 약수합을 되돌리다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — “약수에 걸친 합을 어떻게 되돌리나”</span>
+  <p>지금까지 본 등식들은 전부 “$F(n)=\sum_{d\mid n} f(d)$” 꼴이었다: $\tau=\sum1$,
+  $\sigma=\sum d$, 가우스의 $n=\sum\varphi(d)$. 자연스러운 질문 — <strong>$F$를 알 때
+  원래 $f$를 뽑아낼 수 있나?</strong> 유한합을 “미분해서 되돌리는” 이 역연산의 계수가
+  바로 뫼비우스 $\mu$이고, $\mu$가 그렇게 작동하는 이유는 단 하나의 항등식
+  $\sum_{d\mid n}\mu(d)=[\,n=1\,]$ 때문이다.</p>
+</div>
+
+<div class="box box-def" id="def-mobius-inversion">
+  <span class="box-label">정의 + 정리 · 뫼비우스 함수와 반전공식 <span class="label-en">Möbius function &amp; inversion</span> (버튼 §6)</span>
+  <p><strong>뫼비우스 함수</strong> $\mu$는</p>
+  $$\mu(n)=\begin{cases}
+  1 & n=1,\\[2pt]
+  (-1)^k & n=p_1p_2\cdots p_k\ (\text{서로 다른 소수 }k\text{개의 곱, 제곱인수 없음}),\\[2pt]
+  0 & \text{어떤 소수 }p\text{에 대해 }p^2\mid n\ (\text{제곱인수 존재}).
+  \end{cases}$$
+  <p>예: $\mu(1)=1$, $\mu(2)=\mu(3)=-1$, $\mu(6)=(-1)^2=1$, $\mu(30)=(-1)^3=-1$,
+  $\mu(4)=\mu(12)=0$. $\mu$는 <strong>곱셈적</strong>이다(소수 거듭제곱에서
+  $\mu(p)=-1$, $\mu(p^a)=0\ (a\ge2)$이고 제곱인수 조건이 서로소 곱에서 잘 갈라짐).</p>
+  <p><strong>초석 항등식:</strong></p>
+  $$\sum_{d\mid n}\mu(d)=[\,n=1\,]=\varepsilon(n),\qquad\text{즉}\quad \mu*\mathbf{1}=\varepsilon.$$
+  <p><strong>뫼비우스 반전공식:</strong> 임의의 수론적 함수 $f$에 대해</p>
+  $$F(n)=\sum_{d\mid n}f(d)\ \ (\text{모든 }n)\quad\Longleftrightarrow\quad
+  f(n)=\sum_{d\mid n}\mu(d)\,F\!\left(\tfrac{n}{d}\right).$$
+  <p>합성곱 언어로는 “$F=f*\mathbf{1}\iff f=\mu*F$” — $\mu$가 $\mathbf{1}$의 디리클레
+  역원이라는 사실 그 자체다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 — 초석 항등식과 반전 <span class="proof-strategy">— 초석은 이항정리 $(1-1)^r=0$, 반전은 $\mu*\mathbf{1}=\varepsilon$을 합성곱에 대입.</span></summary>
+  <p><strong>초석 항등식:</strong> $n=1$이면 명백. $n=p_1^{a_1}\cdots p_r^{a_r}>1$이면
+  $\mu(d)\ne0$인 약수 $d$는 제곱인수 없는 것, 즉 소수들의 부분집합 $S\subseteq\{p_1,\dots,p_r\}$의
+  곱뿐이다. 그런 $d$에 $\mu(d)=(-1)^{|S|}$이므로</p>
+  $$\sum_{d\mid n}\mu(d)=\sum_{S\subseteq\{p_1,\dots,p_r\}}(-1)^{|S|}
+  =\sum_{j=0}^{r}\binom{r}{j}(-1)^j=(1-1)^r=0.$$
+  <p><strong>반전:</strong> 디리클레 합성곱은 결합·교환법칙을 만족한다. $F=f*\mathbf{1}$이면</p>
+  $$\mu*F=\mu*(f*\mathbf{1})=f*(\mathbf{1}*\mu)=f*\varepsilon=f,$$
+  <p>즉 $f(n)=\sum_{d\mid n}\mu(d)F(n/d)$. 역방향도 $f=\mu*F\Rightarrow
+  \mathbf{1}*f=\mathbf{1}*(\mu*F)=(\mathbf{1}*\mu)*F=\varepsilon*F=F$로 대칭이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 반전공식의 응용 — 모든 것이 되돌아온다</span>
+  <p><strong>$\varphi$의 곱 공식 재유도:</strong> 가우스 항등식 $\operatorname{id}=\varphi*\mathbf{1}$에
+  반전을 걸면 $\varphi=\mu*\operatorname{id}$, 즉</p>
+  $$\varphi(n)=\sum_{d\mid n}\mu(d)\,\frac{n}{d}=n\sum_{d\mid n}\frac{\mu(d)}{d}
+  =n\prod_{p\mid n}\left(1-\frac1p\right).$$
+  <p>(마지막 등호: 제곱인수 없는 $d$만 살아남아 $\sum\frac{\mu(d)}{d}$가 소인수별
+  $(1-\tfrac1p)$의 곱으로 인수분해된다 — 3절의 공식이 반전 한 번으로 재탄생.)</p>
+  <p><strong>$\tau,\sigma$ 되돌리기:</strong> $\tau=\mathbf{1}*\mathbf{1}$, $\sigma=\operatorname{id}*\mathbf{1}$이므로
+  반전은</p>
+  $$\sum_{d\mid n}\mu(d)\,\tau\!\left(\tfrac{n}{d}\right)=1,\qquad
+  \sum_{d\mid n}\mu(d)\,\sigma\!\left(\tfrac{n}{d}\right)=n.$$
+  <p>($\mu*\tau=\mu*(\mathbf{1}*\mathbf{1})=(\mu*\mathbf{1})*\mathbf{1}=\varepsilon*\mathbf{1}=\mathbf{1}$,
+  $\mu*\sigma=\mu*(\operatorname{id}*\mathbf{1})=\operatorname{id}$.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>곱셈적 ≠ 완전곱셈적.</strong> $\varphi$는 곱셈적이지만
+  $\varphi(4)=2\ne\varphi(2)^2=1$ — $\varphi(mn)=\varphi(m)\varphi(n)$은 오직
+  $\gcd(m,n)=1$일 때만이다. $\tau,\sigma,\mu$도 마찬가지($\tau(4)=3\ne4$).
+  서로소가 아닌 곳에 곱셈성을 쓰면 오답.</p>
+  <p>② <strong>$\mu$의 제곱인수 조건.</strong> $\mu(12)=\mu(2^2\cdot3)=0$이다 —
+  “소인수가 $2$개니까 $(-1)^2=1$”이 아니다! 제곱인수($2^2$)가 하나라도 있으면
+  무조건 $0$. $(-1)^k$ 규칙은 <em>제곱인수가 없는</em> 수에만 적용된다.</p>
+  <p>③ <strong>완전수는 짝수만 알려져 있다.</strong> 유클리드-오일러 정리는 <em>짝수</em>
+  완전수만 분류한다. 홀수 완전수의 존재 여부는 미해결 — “완전수 = $2^{p-1}(2^p-1)$ 꼴”이라는
+  단정은 짝수라는 단서 없이는 틀린 서술이다.</p>
+  <p>④ <strong>메르센 소수: $p$가 소수여도 $2^p-1$이 소수라는 보장은 없다.</strong>
+  $p=11$은 소수지만 $2^{11}-1=2047=23\cdot89$ — 합성수다. “$p$ 소수”는 필요조건일 뿐
+  충분조건이 아니다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">5장의 줄거리</span>
+  <p><a class="term" data-term="multiplicative-function">곱셈적 함수</a>
+  = 서로소 조각으로 값이 쪼개지는 함수
+  (<a class="term" data-term="fundamental-theorem-arithmetic">산술의 기본정리</a> +
+  소수 거듭제곱 값 → 함수 전체 결정), 그리고 <strong>디리클레 합성곱은 곱셈성을 보존</strong>
+  ($f,g$ 곱셈적 $\Rightarrow f*g$ 곱셈적)이 만능 조립 도구
+  → <a class="term" data-term="divisor-functions">약수 함수</a>
+  $\tau=\mathbf{1}*\mathbf{1}=\prod(a_i+1)$, $\sigma=\operatorname{id}*\mathbf{1}=\prod\frac{p^{a+1}-1}{p-1}$은
+  자동으로 곱셈적; 완전수 $\sigma(n)=2n$은 짝수라면 <strong>유클리드-오일러</strong>로
+  $2^{p-1}(2^p-1)$($2^p-1$ 메르센 <a class="term" data-term="prime-number">소수</a>)와 일대일
+  → <a class="term" data-term="euler-phi">$\varphi$</a>도 곱셈적(<a class="term" data-term="congruence">합동</a>·CRT),
+  $\varphi(n)=n\prod_{p\mid n}(1-\tfrac1p)$, 가우스 $\sum_{d\mid n}\varphi(d)=n$
+  → <a class="term" data-term="mobius-inversion">뫼비우스 $\mu$와 반전공식</a>:
+  $\mu*\mathbf{1}=\varepsilon$이 초석, $F=f*\mathbf{1}\iff f=\mu*F$가 “약수합을 되돌리는”
+  대수 — 이 반전이 $\varphi$의 곱 공식을 한 줄로 재유도한다.</p>
+  <p><strong>임용 최중요 축:</strong> ① 소인수분해에서 $\tau,\sigma,\varphi$ 값을 즉석
+  계산, ② $\varphi$·완전수의 곱셈성 서술, ③ 디리클레 합성곱·뫼비우스 반전으로
+  항등식을 유도·간단화하는 것. “곱셈적 함수는 소수 거듭제곱에서 조립한다”가 한 줄 문법이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$n=7200$에 대해 $\tau(n),\ \sigma(n),\ \varphi(n),\ \mu(n)$을 구하라.
+  또 $\mu(30)$과 $\mu(12)$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$7200=2^5\cdot3^2\cdot5^2$. 곱셈 공식에 지수를 대입하라. $\mu$는 제곱인수가
+    있으면 즉시 $0$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$7200=2^5\cdot3^2\cdot5^2$.</p>
+    <p>$\tau(7200)=(5{+}1)(2{+}1)(2{+}1)=6\cdot3\cdot3=54.$</p>
+    <p>$\sigma(7200)=\dfrac{2^6-1}{1}\cdot\dfrac{3^3-1}{2}\cdot\dfrac{5^3-1}{4}
+    =63\cdot13\cdot31=25389.$</p>
+    <p>$\varphi(7200)=7200\left(1-\tfrac12\right)\left(1-\tfrac13\right)\left(1-\tfrac15\right)
+    =7200\cdot\tfrac12\cdot\tfrac23\cdot\tfrac45=1920.$
+    (검산: $\varphi(2^5)\varphi(3^2)\varphi(5^2)=16\cdot6\cdot20=1920$.)</p>
+    <p>$\mu(7200)=0$ ($2^5$이라 제곱인수 존재). $\mu(30)=\mu(2\cdot3\cdot5)=(-1)^3=-1$,
+    $\mu(12)=\mu(2^2\cdot3)=0$ (제곱인수 $2^2$).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) $\sigma$를 이용해 $496$이 완전수임을 확인하고, 유클리드-오일러의
+  $2^{p-1}(2^p-1)$ 꼴로 나타내라. (2) $2^{11}-1$이 소수가 아님을 보이고, 이것이
+  왜 “$2^{10}(2^{11}-1)$은 완전수”라는 결론을 막는지 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$496=2^4\cdot31$. 유클리드 방향 증명은 $2^p-1$이 <em>소수</em>임을 반드시 쓴다.
+    $2047=23\cdot89$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $496=2^4\cdot31$이고 $31=2^5-1$은 소수. $\sigma(496)=\sigma(2^4)\sigma(31)
+    =(2^5-1)(31+1)=31\cdot32=992=2\cdot496$ — 완전수. 꼴은 $p=5$인
+    $2^{5-1}(2^5-1)=16\cdot31=496$.</p>
+    <p>(2) $2^{11}-1=2047=23\cdot89$로 합성수. 유클리드 방향은 $q=2^p-1$이 소수여야
+    $\sigma(q)=q+1$이 성립해 계산이 완전수로 맞아떨어진다. $2047$이 합성수면
+    $\sigma(2047)=\sigma(23)\sigma(89)=24\cdot90=2160\ne2048$이라,
+    $\sigma(2^{10}\cdot2047)=2047\cdot2160\ne2\cdot(2^{10}\cdot2047)$ — 완전수가 아니다.
+    “$p$ 소수”만으로는 부족하고 $2^p-1$ 자체가 소수(메르센 소수)여야 한다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §6 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$n\ge1$에 대해 $n$의 모든 약수의 곱이 $\displaystyle\prod_{d\mid n}d=n^{\tau(n)/2}$임을
+  증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>약수 $d$와 $n/d$를 짝지어라. 곱 $P$를 두 방식으로 세어 $P^2=n^{\tau(n)}$을 얻는다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$P=\prod_{d\mid n}d$라 하자. $d$가 $n$의 약수를 훑을 때 $n/d$도 같은 약수 집합을
+    (순서만 바꿔) 훑으므로</p>
+    $$P=\prod_{d\mid n}\frac{n}{d}=\frac{n^{\tau(n)}}{\prod_{d\mid n}d}=\frac{n^{\tau(n)}}{P}.$$
+    <p>따라서 $P^2=n^{\tau(n)}$, 곧 $P=n^{\tau(n)/2}$. (지수 $\tau(n)/2$는 $n$이 완전제곱이
+    아니면 정수, 완전제곱이면 반정수지만 $\sqrt{n}$이 정수라 $P$는 여전히 정수다.)
+    $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §6 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>가우스 항등식 $\sum_{d\mid n}\varphi(d)=n$에서 출발해, 뫼비우스 반전공식만으로
+  $\varphi(n)=n\prod_{p\mid n}\left(1-\tfrac1p\right)$을 유도하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\operatorname{id}=\varphi*\mathbf{1}$에 반전을 걸면 $\varphi=\mu*\operatorname{id}$.
+    제곱인수 없는 약수만 살아남아 합이 소인수별 곱으로 인수분해된다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>가우스 항등식은 $\operatorname{id}=\varphi*\mathbf{1}$이다. 반전공식($F=f*\mathbf{1}
+    \iff f=\mu*F$)을 $F=\operatorname{id}$, $f=\varphi$에 적용하면
+    $\varphi=\mu*\operatorname{id}$, 즉</p>
+    $$\varphi(n)=\sum_{d\mid n}\mu(d)\,\frac{n}{d}=n\sum_{d\mid n}\frac{\mu(d)}{d}.$$
+    <p>$\mu(d)=0$ (제곱인수 있는 $d$)인 항이 죽으므로 남는 $d$는 서로 다른 소인수들의
+    곱뿐이다. $n=p_1^{a_1}\cdots p_r^{a_r}$이면</p>
+    $$\sum_{d\mid n}\frac{\mu(d)}{d}=\prod_{i=1}^{r}\left(1+\frac{\mu(p_i)}{p_i}\right)
+    =\prod_{i=1}^{r}\left(1-\frac{1}{p_i}\right)$$
+    <p>(각 소수를 “넣거나 빼거나” 두 선택으로 전개하면 정확히 제곱인수 없는 약수들의 합).
+    따라서 $\varphi(n)=n\prod_{p\mid n}\left(1-\tfrac1p\right)$. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>$\varphi$ 방정식</span>
+  </div>
+  <p>$\varphi(n)=8$인 양의 정수 $n$을 모두 구하고, 그것으로 전부임을 논증하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\varphi$는 곱셈적이라 각 소수 거듭제곱 $p^a$가 $\varphi(p^a)=p^{a-1}(p-1)$을
+    기여한다. 이 값이 $8=2^3$을 나눠야 하니 쓸 수 있는 소수는 $p-1\mid8$, 곧
+    $p\in\{2,3,5\}$ 정도로 좁혀진다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\varphi$가 곱셈적이므로 $n=\prod p_i^{a_i}$에서
+    $\varphi(n)=\prod p_i^{a_i-1}(p_i-1)=8$. 각 인수 $p^{a-1}(p-1)$은 $8$의 약수여야 하고,
+    $p-1\mid8$에서 $p\in\{2,3,5\}$ (다음 후보 $p=17$은 $\varphi(17)=16>8$). 쓸 수 있는
+    소수 거듭제곱 기여값:</p>
+    <p>$p=2$: $\varphi(2)=1,\ \varphi(4)=2,\ \varphi(8)=4,\ \varphi(16)=8$. &nbsp;
+    $p=3$: $\varphi(3)=2$. &nbsp; $p=5$: $\varphi(5)=4$.
+    ($\varphi(9)=6,\ \varphi(25)=20$은 $8$을 나누지 못해 탈락.)</p>
+    <p>서로 다른 소수의 기여값을 곱해 $8$을 만드는 조합:</p>
+    <ul>
+      <li>$8$: &nbsp;$\varphi(16)=8\Rightarrow n=16$.</li>
+      <li>$4\cdot2$: &nbsp;$\varphi(8)\varphi(3)\Rightarrow n=24$; &nbsp;
+      $\varphi(5)\varphi(3)\Rightarrow n=15$; &nbsp; $\varphi(5)\varphi(4)\Rightarrow n=20$.</li>
+      <li>$4\cdot2\cdot1$: &nbsp;$\varphi(5)\varphi(3)\varphi(2)\Rightarrow n=30$.</li>
+    </ul>
+    <p>따라서 $\boxed{n\in\{15,16,20,24,30\}}$. (같은 소수의 거듭제곱을 두 번 쓸 수
+    없어 다른 조합은 없다.) $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>합성곱·반전 간단화</span>
+  </div>
+  <p>디리클레 합성곱과 뫼비우스 반전을 이용하여 다음을 간단히 하라(모든 $n$에 대한
+  닫힌 꼴로).</p>
+  <p>(1) $\displaystyle\sum_{d\mid n}\mu(d)\,\tau\!\left(\tfrac{n}{d}\right)$ &nbsp;&nbsp;
+  (2) $\displaystyle\sum_{d\mid n}\mu(d)\,\sigma\!\left(\tfrac{n}{d}\right)$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\tau=\mathbf{1}*\mathbf{1}$, $\sigma=\operatorname{id}*\mathbf{1}$이고
+    $\mu*\mathbf{1}=\varepsilon$. 합성곱의 결합법칙으로 묶어라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 주어진 합은 $\mu*\tau$이다.
+    $\mu*\tau=\mu*(\mathbf{1}*\mathbf{1})=(\mu*\mathbf{1})*\mathbf{1}
+    =\varepsilon*\mathbf{1}=\mathbf{1}$. 따라서 그 값은 <strong>모든 $n$에서 $1$</strong>.</p>
+    <p>(2) 주어진 합은 $\mu*\sigma$이다.
+    $\mu*\sigma=\mu*(\operatorname{id}*\mathbf{1})=(\mu*\mathbf{1})*\operatorname{id}
+    =\varepsilon*\operatorname{id}=\operatorname{id}$. 따라서 그 값은 $\mathbf{n}$
+    (즉 $\sum_{d\mid n}\mu(d)\sigma(n/d)=n$).</p>
+    <p>(핵심은 “약수합 형태 $f*\mathbf{1}$에 $\mu$를 합성곱하면 $\mathbf{1}$이 벗겨져
+    $f$만 남는다”는 반전의 본질이다.) $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

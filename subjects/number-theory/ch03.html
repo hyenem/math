@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3장 합동과 중국인의 나머지 정리 — 정수론 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="number-theory" data-chapter="ch03.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">정수론 · Burton (§4)</p>
+  <h1><span class="ch-num">3</span> 합동과 중국인의 나머지 정리</h1>
+  <p class="ch-source">“몫은 버리고 나머지만 남긴다” — 무한한 $\mathbb{Z}$를
+  유한한 시계판으로 접는 이 한 번의 번역이, 정수론이 가장 자주 꺼내 드는 도구입니다.</p>
+</div>
+
+<p>시계는 $7$시에서 $8$시간이 지나면 $15$시가 아니라 $3$시입니다 — 우리는 이미
+$\bmod 12$로 계산하며 살아왔습니다. 가우스가 <em>Disquisitiones</em>에서 도입한
+<strong>합동(congruence)</strong>은 바로 이 “나머지의 산수”를 정식 언어로 만든 것입니다.
+$\mathbb{Z}$에서의 어려운 나눗셈 질문을 유한한 나머지 세계로 옮기면, 등식처럼
+더하고 곱할 수 있게 되고(합동 산술), 방정식을 풀 수 있게 되며(일차 합동방정식),
+여러 나머지 조건을 한꺼번에 만족시킬 수 있습니다(중국인의 나머지 정리). 그리고 이
+셋은 사실 현대대수의 <a class="term" data-term="factor-ring">잉여환</a> $\mathbb{Z}_n$과
+그 <a class="term" data-term="direct-product">직접곱</a> 이야기의 정수론판 재상영입니다.</p>
+
+<h2 id="sec-congruence">1. 합동 — 나머지가 같다는 등식</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관</span>
+  <p>“$a$와 $b$가 $n$으로 나눈 나머지가 같다”를 <strong>등호처럼 쓰고 싶다</strong> —
+  이것이 합동의 전부입니다. 나머지가 같다는 건 차이가 $n$의 배수라는 것이고
+  ($17$과 $5$는 $\bmod 12$에서 같다, 차이 $12$), 그래서 “$=$”가 아니라 “$\equiv$”라는
+  느슨한 등호를 씁니다. 이 등호가 진짜 등호처럼 <strong>양변에 같은 것을 더하고
+  곱해도 유지된다</strong>는 사실(합동 산술)이 이 장을 지탱합니다.</p>
+</div>
+
+<div class="box box-def" id="def-congruence">
+  <span class="box-label">정의 · 합동 <span class="label-en">congruence</span> (버튼 §4)</span>
+  <p>양의 정수 $n$(법, modulus)에 대해</p>
+  $$a \equiv b \pmod{n} \quad\overset{\text{정의}}{\iff}\quad n \mid (a - b).$$
+  <p>“$a$는 법 $n$에서 $b$와 <strong>합동</strong>”이라 읽는다. 동치인 표현:
+  $a$와 $b$를 $n$으로 나눈 <strong>나머지가 같다</strong>. 나눗셈 정리로 $a = qn + r$
+  ($0 \le r \lt n$)의 그 $r$이 $a$의 <strong>대표 나머지</strong>이며,
+  $a \equiv r \pmod n$.</p>
+  <p>합동은 $\mathbb{Z}$ 위의 <strong>동치관계</strong>다 — 반사($a\equiv a$),
+  대칭($a\equiv b \Rightarrow b\equiv a$), 추이($a\equiv b,\ b\equiv c \Rightarrow a\equiv c$)가
+  모두 “$n\mid$”의 성질에서 곧장 나온다. 그 동치류를 <strong>잉여류(residue class)</strong>
+  $[a]_n = \{\dots, a-n, a, a+n, \dots\}$라 하고, 이 $n$개의 잉여류 전체가 바로
+  현대대수의 <a class="term" data-term="factor-ring">잉여환</a> $\mathbb{Z}_n$이다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 합동 산술 <span class="label-en">congruence arithmetic</span> (버튼 §4)</span>
+  <p><strong>이 정리가 하는 일:</strong> 합동을 “진짜 등식처럼” 다룰 수 있게 허가한다 —
+  이 한 줄 덕분에 나머지 계산이 대수 계산이 된다.</p>
+  <p>$a \equiv b \pmod n$이고 $c \equiv d \pmod n$이면</p>
+  $$a + c \equiv b + d, \qquad a - c \equiv b - d, \qquad ac \equiv bd \pmod{n}.$$
+  <p>따라서 다항식 대입도 보존된다: 정수계수 $f$에 대해 $a\equiv b \Rightarrow f(a)\equiv f(b)$.
+  특히 $a \equiv b \Rightarrow a^k \equiv b^k$ — 거대한 거듭제곱을 작은 나머지로
+  갈아 끼우며 계산할 수 있는 근거다.</p>
+</div>
+
+<p>덧셈·뺄셈·곱셈은 이렇게 자유롭지만 <strong>나눗셈(소거)은 조심</strong>해야 합니다.
+$\mathbb{Z}_n$은 (일반적으로) 정역이 아니어서 $c \ne 0$이라도 $ca \equiv cb$에서 $c$를
+지울 수 없습니다. 정확한 규칙은 다음과 같습니다.</p>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 소거 규칙 <span class="label-en">cancellation law</span> (버튼 §4)</span>
+  <p>$d = \gcd(c, n)$이라 하면</p>
+  $$ca \equiv cb \pmod{n} \quad\iff\quad a \equiv b \pmod{n/d}.$$
+  <p>즉 $c$를 지우는 대가로 <strong>법이 $n$에서 $n/d$로 줄어든다</strong>.
+  특별한 경우 $\gcd(c,n)=1$이면 법이 그대로($n/1=n$) 유지되어 “$c$를 마음껏 지워도 된다”.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 합동 산술 두 번</span>
+  <p><strong>(a) 큰 거듭제곱:</strong> $2^{100}$을 $7$로 나눈 나머지. $2^3 = 8 \equiv 1 \pmod 7$이
+  열쇠다. $2^{100} = (2^3)^{33}\cdot 2 \equiv 1^{33}\cdot 2 = 2 \pmod 7$. — 지수를
+  $\bmod\,($위수$)$로 접는 이 요령이 다음 장 페르마·오일러 정리의 씨앗이다.</p>
+  <p><strong>(b) 나눗셈 판정법:</strong> $10 \equiv 1 \pmod 9$이므로 $10^k \equiv 1$,
+  따라서 어떤 수 $N = \sum d_k 10^k$은 <strong>각 자리 숫자의 합</strong>과 $\bmod 9$에서 합동이다
+  — “$9$의 배수 $\iff$ 자릿수 합이 $9$의 배수”. 한편 $10 \equiv -1 \pmod{11}$이라
+  $10^k \equiv (-1)^k$, 그래서 $N$은 <strong>교대 자릿수 합</strong>과 $\bmod 11$에서 합동이다
+  ($11$의 배수 판정). 예: $90728$은 $9-0+7-2+8 = 22 \equiv 0 \pmod{11}$이라 $11$의 배수.</p>
+  <p><strong>(c) 구거법(검산):</strong> $9$로 나눈 나머지가 곱셈에서 보존되므로
+  $a\times b = c$가 맞다면 (자릿수 합끼리도) $\bmod 9$에서 성립해야 한다 — 어긋나면
+  계산이 틀렸다는 빠른 검산이 된다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>소거는 공짜가 아니다.</strong> $6 \equiv 0 \pmod 6$에서 $2\cdot 3 \equiv 2\cdot 0$이지만
+  $3 \not\equiv 0 \pmod 6$ — $2$를 지우려면 법을 $6/\gcd(2,6)=3$으로 줄여야
+  ($3\equiv 0 \pmod 3$) 참이 된다. “$\gcd(c,n)=1$일 때만 법을 그대로 두고 지운다”가 정답.
+  ② <strong>지수는 $\bmod n$으로 접으면 안 된다.</strong> $a\equiv b\pmod n$이라 해서
+  $a^c \equiv a^d$가 되려면 $c\equiv d\pmod n$이 아니라 지수의 법(오일러 $\varphi(n)$ 등)이
+  따로 필요하다 — 밑과 지수의 법은 서로 다른 세계다.
+  ③ 법 $n$은 항상 명시하라 — “$3\equiv 8$”은 $\bmod 5$에서만 참인 문장이다.</p>
+</div>
+
+<h2 id="sec-linear-congruence">2. 일차 합동방정식 — 나머지 세계의 일차방정식</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관</span>
+  <p>실수에서 $ax = b$는 $a\ne 0$이면 해가 하나($x = b/a$)입니다. 나머지 세계에서
+  $ax \equiv b \pmod n$은 그렇게 단순하지 않습니다 — <strong>해가 없을 수도, 여러 개일
+  수도</strong> 있습니다. 갈림길을 결정하는 단 하나의 수는 $d = \gcd(a,n)$입니다.
+  “$a$가 $n$과 얼마나 얽혀 있는가”가 해의 운명을 정합니다.</p>
+</div>
+
+<div class="box box-def" id="def-linear-congruence">
+  <span class="box-label">정의 + 정리 · 일차 합동방정식과 해의 개수 <span class="label-en">linear congruence</span> (버튼 §4)</span>
+  <p>미지수 $x$에 대한 $ax \equiv b \pmod{n}$ 꼴을 <strong>일차 합동방정식</strong>이라 한다.
+  $d = \gcd(a, n)$이라 할 때:</p>
+  <p>① <strong>해의 존재:</strong> $d \mid b$이면 해가 있고, $d \nmid b$이면 <strong>무해</strong>.</p>
+  <p>② <strong>해의 개수:</strong> 해가 있을 때, 법 $n$을 기준으로 <strong>서로 다른 해가 정확히
+  $d$개</strong>다. 이들은 한 해 $x_0$에서 $x_0,\ x_0 + \tfrac{n}{d},\ x_0 + 2\tfrac{n}{d},\ \dots,\
+  x_0 + (d-1)\tfrac{n}{d}$로 $\tfrac{n}{d}$ 간격으로 놓인다.</p>
+  <p>③ <strong>역원:</strong> $a$의 곱셈 역원 $a^{-1}\pmod n$($aa^{-1}\equiv 1$)이 존재
+  $\iff \gcd(a,n)=1$. 이때 $ax\equiv b$의 유일한 해는 $x \equiv a^{-1}b$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 합동을 정수방정식 $ax - ny = b$로 번역하면 베주 항등식 그대로다.</span></summary>
+  <p><strong>존재:</strong> $ax\equiv b\pmod n$은 $ax - ny = b$인 정수 $x,y$가 있다는 말과 같다.
+  $\{ax - ny\}$가 만드는 정수 전체는 <strong>$d=\gcd(a,n)$의 배수 전체</strong>
+  (<a class="term" data-term="gcd-bezout">베주 항등식</a>)이므로,
+  이런 $x,y$가 있을 조건은 $d\mid b$다.</p>
+  <p><strong>개수:</strong> $d\mid b$이면 양변과 법을 $d$로 나눠 $\tfrac ad x \equiv \tfrac bd \pmod{n/d}$을
+  얻는데, 이제 $\gcd(\tfrac ad, \tfrac nd)=1$이라 $\tfrac ad$의 역원이 존재 —
+  법 $n/d$에서 해가 <strong>유일</strong>하다. 그 유일해를 법 $n$의 안경으로 되돌려 보면
+  $\tfrac nd$ 간격으로 $d$개의 잉여류로 갈라진다.</p>
+  <p><strong>역원:</strong> $b=1$인 특수경우 — $ax\equiv 1$이 풀릴 조건이 $\gcd(a,n)=1\ (\,d=1\mid 1)$이고,
+  그때 해가 하나이니 역원은 존재하며 유일하다. 구성은
+  <a class="term" data-term="euclidean-algorithm">유클리드 호제법</a>을
+  거꾸로 밟는 베주 항등식에서 곧장 읽는다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 세 가지 시나리오</span>
+  <p><strong>(a) 역원 구하기(유클리드 호제법):</strong> $7^{-1} \pmod{26}$.
+  호제법으로 $\gcd(7,26)$: $26 = 3\cdot 7 + 5,\ 7 = 1\cdot 5 + 2,\ 5 = 2\cdot 2 + 1$.
+  거꾸로 대입하면
+  $1 = 5 - 2\cdot 2 = 5 - 2(7-5) = 3\cdot 5 - 2\cdot 7 = 3(26 - 3\cdot 7) - 2\cdot 7
+  = 3\cdot 26 - 11\cdot 7.$
+  따라서 $-11\cdot 7 \equiv 1 \pmod{26}$, 즉 $7^{-1} \equiv -11 \equiv 15 \pmod{26}$
+  (검산 $7\cdot 15 = 105 = 4\cdot 26 + 1$ ✓). 이 역원으로 $7x \equiv 3 \pmod{26}$의 유일해는
+  $x \equiv 15\cdot 3 = 45 \equiv 19 \pmod{26}$.</p>
+  <p><strong>(b) 해가 여러 개:</strong> $18x \equiv 30 \pmod{42}$. $d=\gcd(18,42)=6$이고 $6\mid 30$ ✓ →
+  <strong>해 $6$개</strong>. 법과 양변을 $6$으로 나눠 $3x\equiv 5\pmod 7$; $3^{-1}\equiv 5\pmod 7$이라
+  $x\equiv 25 \equiv 4\pmod 7$. 법 $42$로 펼치면
+  $x \equiv 4,\ 11,\ 18,\ 25,\ 32,\ 39 \pmod{42}$ — $\tfrac{42}{6}=7$ 간격의 여섯 잉여류.</p>
+  <p><strong>(c) 무해:</strong> $6x \equiv 4 \pmod 9$. $d=\gcd(6,9)=3$인데 $3\nmid 4$ —
+  <strong>해가 없다</strong>. ($6x$는 언제나 $3$의 배수라 $\bmod 9$에서 $4$가 될 길이 없다.)</p>
+</div>
+
+<h2 id="sec-crt">3. 중국인의 나머지 정리 — 나머지 조건을 한꺼번에</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관</span>
+  <p>“$3$으로 나누면 $2$ 남고, $5$로 나누면 $3$ 남고, $7$로 나누면 $2$ 남는 수는?”
+  — 5세기 <em>손자산경</em>에 실린 이 물음이 정리의 이름값입니다. 법들이 <strong>서로소</strong>이기만
+  하면, 이렇게 <strong>따로따로 준 나머지 조건들을 언제나 동시에 만족</strong>시킬 수 있고,
+  그 답은 $N = \prod n_i$ 안에서 유일합니다. 각 법의 나머지를 “좌표”로 보면, 서로소 조건은
+  좌표들이 서로 간섭하지 않는다는 뜻 — 그래서 각 좌표를 독립적으로 지정할 수 있습니다.</p>
+</div>
+
+<div class="box box-thm" id="def-chinese-remainder">
+  <span class="box-label">정리 · 중국인의 나머지 정리 <span class="label-en">Chinese remainder theorem</span> (버튼 §4)</span>
+  <p><strong>이 정리가 하는 일:</strong> 여러 개의 나머지 조건을 하나의 큰 법 위의 <strong>단 하나의
+  잉여류</strong>로 합쳐 준다 — 나머지 세계의 “연립방정식 해법”.</p>
+  <p>$n_1, n_2, \dots, n_k$가 <strong>쌍마다 서로소</strong>($i\ne j$이면 $\gcd(n_i,n_j)=1$)라 하자.
+  임의의 정수 $a_1,\dots,a_k$에 대한 연립합동</p>
+  $$x \equiv a_1 \pmod{n_1},\quad x \equiv a_2 \pmod{n_2},\quad \dots,\quad x \equiv a_k \pmod{n_k}$$
+  <p>는 $N = n_1 n_2 \cdots n_k$를 법으로 <strong>유일한 해</strong>를 갖는다.</p>
+  <p>이것은 현대대수의 환 동형</p>
+  $$\mathbb{Z}_N \;\cong\; \mathbb{Z}_{n_1} \times \mathbb{Z}_{n_2} \times \cdots \times \mathbb{Z}_{n_k}$$
+  와 <strong>정확히 같은 사실</strong>이다: 왼쪽의 한 원소(나머지 하나)를 오른쪽의
+  <a class="term" data-term="direct-product">직접곱</a> 좌표(나머지들의 묶음)로 번역하는 사전이며,
+  “해의 존재”가 전사성, “해의 유일성”이 단사성에 대응한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 각 조건을 “저격하는” 원소를 만들어 더한다: 구성적 증명.</span></summary>
+  <p><strong>구성(존재):</strong> $N_i = N / n_i$라 두면 $N_i$는 자기 짝 $n_i$만 뺀 모든 법의 곱이라
+  $\gcd(N_i, n_i)=1$(쌍마다 서로소). 그래서 2절의 역원 정리로
+  $N_i M_i \equiv 1 \pmod{n_i}$인 $M_i$가 존재한다. 이제</p>
+  $$x_0 \;=\; a_1 N_1 M_1 + a_2 N_2 M_2 + \cdots + a_k N_k M_k$$
+  <p>를 보자. 법 $n_i$의 눈으로 보면 $j\ne i$인 항은 $N_j$가 인수 $n_i$를 품어 $\equiv 0$이고,
+  자기 항만 $a_i N_i M_i \equiv a_i\cdot 1 = a_i$ — <strong>각 항이 자기 조건만 저격</strong>한다.
+  따라서 $x_0 \equiv a_i \pmod{n_i}$가 모든 $i$에서 성립.</p>
+  <p><strong>유일성:</strong> $x_0, x_1$이 둘 다 해라면 모든 $i$에서 $n_i \mid (x_0 - x_1)$.
+  $n_i$가 쌍마다 서로소이므로 그 곱 $N \mid (x_0 - x_1)$, 즉 $x_0 \equiv x_1 \pmod N$ —
+  법 $N$에서 하나의 잉여류다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 손자의 물음</span>
+  <p>$x\equiv 2\pmod 3,\quad x\equiv 3\pmod 5,\quad x\equiv 2\pmod 7$. 법이 쌍마다 서로소이고
+  $N = 3\cdot 5\cdot 7 = 105$.</p>
+  <p>$N_1 = 35,\ N_2 = 21,\ N_3 = 15$. 각 역원:</p>
+  <p>· $35 \equiv 2 \pmod 3$, $2M_1\equiv 1\pmod 3 \Rightarrow M_1 = 2$.<br>
+     · $21 \equiv 1 \pmod 5$, $M_2 \equiv 1\pmod 5 \Rightarrow M_2 = 1$.<br>
+     · $15 \equiv 1 \pmod 7$, $M_3 \equiv 1\pmod 7 \Rightarrow M_3 = 1$.</p>
+  <p>$x_0 = 2\cdot 35\cdot 2 + 3\cdot 21\cdot 1 + 2\cdot 15\cdot 1 = 140 + 63 + 30 = 233 \equiv 23 \pmod{105}.$</p>
+  <p>검산: $23 = 7\cdot 3 + 2$ ✓, $23 = 4\cdot 5 + 3$ ✓, $23 = 3\cdot 7 + 2$ ✓. 답은 $x\equiv 23\pmod{105}$.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>서로소 조건은 장식이 아니다.</strong> 법이 서로소가 아니면 유일해는커녕
+  해 자체가 없을 수 있다: $x\equiv 1\pmod 2$와 $x\equiv 0\pmod 4$는 동시에 성립 불가
+  ($x$가 짝수이면서 홀수일 수 없다). 일반 법에서 연립합동 $x\equiv a\pmod m,\ x\equiv b\pmod n$은
+  <strong>$\gcd(m,n)\mid (a-b)$일 때만</strong> 풀리고, 풀리면 법 $\operatorname{lcm}(m,n)$에서 유일하다.
+  ② <strong>“유일”은 법 $N$ 안에서의 이야기다</strong> — 정수해는 $x_0 + N\mathbb{Z}$로 무한히 많다.
+  ③ 동형 $\mathbb{Z}_N \cong \prod \mathbb{Z}_{n_i}$은 <strong>서로소일 때만</strong> 성립 —
+  $\mathbb{Z}_4 \not\cong \mathbb{Z}_2\times\mathbb{Z}_2$($\mathbb{Z}_4$엔 위수 $4$ 원소가 있지만
+  오른쪽엔 없다)가 서로소가 깨진 대표 반례다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">3장의 줄거리</span>
+  <p><a class="term" data-term="congruence">합동</a> $a\equiv b\pmod n \iff n\mid a-b$ =
+  “나머지가 같다”는 느슨한 등호. 동치관계이자 <strong>합동 산술</strong>(덧셈·곱셈·거듭제곱 보존)의
+  무대이고, 잉여류가 <a class="term" data-term="factor-ring">잉여환</a> $\mathbb{Z}_n$을 이룬다
+  (소거만은 $\gcd(c,n)=1$일 때만 그대로; 아니면 법이 $n/\gcd$로 줄어든다).
+  → <a class="term" data-term="linear-congruence">일차 합동방정식</a> $ax\equiv b\pmod n$은
+  $d=\gcd(a,n)$이 운명 — $d\mid b$이면 해 <strong>$d$개</strong>, 아니면 무해; $\gcd(a,n)=1$이면
+  역원 $a^{-1}$(유클리드 호제법/베주)로 유일하게 풀린다.
+  → <a class="term" data-term="chinese-remainder">중국인의 나머지 정리</a>: 쌍마다 서로소인 법에
+  대한 연립합동은 mod $N=\prod n_i$에서 유일해($N_iM_i\equiv 1$로 구성), 이는
+  <a class="term" data-term="direct-product">직접곱</a> 동형 $\mathbb{Z}_N\cong\prod\mathbb{Z}_{n_i}$
+  바로 그것.</p>
+  <p><strong>다음 장으로:</strong> 합동 산술로 거듭제곱을 접는 요령 $2^3\equiv 1\pmod 7$은
+  페르마 소정리 $a^{p-1}\equiv 1\pmod p$와 오일러 정리로 자라나고, 역원과 서로소의
+  세계 $(\mathbb{Z}/n\mathbb{Z})^\times$는 원시근의 무대가 된다. 임용의 두 축은
+  <strong>합동으로 번역해 계산하기</strong>와 <strong>CRT로 법을 쪼개 조립하기</strong>다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>합동 산술을 이용해 다음을 구하라.</p>
+  <p>(1) $3^{100}$을 $5$로 나눈 나머지 &nbsp; (2) $7^{50}$을 $4$로 나눈 나머지 &nbsp;
+  (3) $41^{65} - 12^{20}$이 $5$의 배수인지 판정</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>밑을 먼저 작은 나머지로 줄이고, 지수의 “$\equiv 1$이 되는 주기”를 찾아라.
+    (1) $3^2=9\equiv 4\equiv -1$. (2) $7\equiv -1\pmod 4$. (3) $41\equiv 1$, $12\equiv 2\pmod 5$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $3^2 \equiv -1 \pmod 5$이므로 $3^{100} = (3^2)^{50} \equiv (-1)^{50} = 1 \pmod 5$.
+    나머지 $\mathbf{1}$.</p>
+    <p>(2) $7 \equiv -1 \pmod 4$이므로 $7^{50} \equiv (-1)^{50} = 1 \pmod 4$. 나머지 $\mathbf{1}$.</p>
+    <p>(3) $41\equiv 1\pmod 5$라 $41^{65}\equiv 1$. $12\equiv 2\pmod 5$이고 $2^4\equiv 16\equiv 1$이라
+    $12^{20} = 2^{20} = (2^4)^5 \equiv 1$. 따라서 $41^{65}-12^{20}\equiv 1-1 = 0\pmod 5$ —
+    <strong>$5$의 배수다.</strong></p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) 다음 소거가 왜 틀렸는지 지적하고 올바른 결론을 써라: “$4\cdot 5\equiv 4\cdot 2\pmod 6$이니
+  $5\equiv 2\pmod 6$.” &nbsp; (2) $15^{-1}\pmod{26}$을 유클리드 호제법으로 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 소거 규칙: $\gcd(4,6)=2$이라 법이 $6/2=3$으로 줄어든다.
+    (2) $\gcd(15,26)=1$을 호제법으로 풀고 거꾸로 대입.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\gcd(4,6)=2\ne 1$이라 법을 그대로 두고 $4$를 지울 수 없다. 소거 규칙대로라면
+    법이 $6/2 = 3$으로 줄어 <strong>$5\equiv 2\pmod 3$</strong>(둘 다 나머지 $2$)이 옳은 결론이다.
+    실제로 $5\equiv 2\pmod 6$은 거짓($5-2=3$은 $6$의 배수 아님).</p>
+    <p>(2) $26 = 1\cdot 15 + 11,\ 15 = 1\cdot 11 + 4,\ 11 = 2\cdot 4 + 3,\ 4 = 1\cdot 3 + 1$.
+    거꾸로: $1 = 4 - 3 = 4-(11-2\cdot 4) = 3\cdot 4 - 11 = 3(15-11) - 11 = 3\cdot 15 - 4\cdot 11
+    = 3\cdot 15 - 4(26-15) = 7\cdot 15 - 4\cdot 26$. 따라서 $7\cdot 15\equiv 1\pmod{26}$,
+    즉 $15^{-1} \equiv \mathbf{7}\pmod{26}$ (검산 $15\cdot 7 = 105 = 4\cdot 26 + 1$ ✓).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Burton §4 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>다음 일차 합동방정식의 해의 개수를 판정하고, 있으면 법을 기준으로 모든 해를 구하라.</p>
+  <p>(1) $9x \equiv 21 \pmod{30}$ &nbsp; (2) $8x \equiv 6 \pmod{14}$ &nbsp; (3) $5x \equiv 2 \pmod{12}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>먼저 $d=\gcd(a,n)$과 $d\mid b$를 확인, 그다음 법·양변을 $d$로 나눠 $\gcd=1$인
+    방정식으로 만들고 역원으로 풀어라. 해는 $\tfrac nd$ 간격으로 $d$개.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $d=\gcd(9,30)=3$, $3\mid 21$ → <strong>해 $3$개</strong>. $\div 3$:
+    $3x\equiv 7\pmod{10}$; $3^{-1}\equiv 7\pmod{10}$이라 $x\equiv 49\equiv 9\pmod{10}$.
+    법 $30$으로: $x\equiv 9,\ 19,\ 29\pmod{30}$.</p>
+    <p>(2) $d=\gcd(8,14)=2$, $2\mid 6$ → <strong>해 $2$개</strong>. $\div 2$:
+    $4x\equiv 3\pmod 7$; $4^{-1}\equiv 2\pmod 7$이라 $x\equiv 6\pmod 7$.
+    법 $14$로: $x\equiv 6,\ 13\pmod{14}$.</p>
+    <p>(3) $d=\gcd(5,12)=1$ → <strong>해 $1$개</strong>. $5^{-1}\equiv 5\pmod{12}$($5\cdot 5=25\equiv 1$)이라
+    $x\equiv 5\cdot 2 = 10\pmod{12}$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>CRT 계산</span>
+  </div>
+  <p>$7$로 나누면 $6$, $8$로 나누면 $7$, $9$로 나누면 $8$ 남는 가장 작은 양의 정수를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>각 나머지가 “법보다 $1$ 작다”는 데 주목 — $x\equiv -1$로 통일된다. 아니면
+    $N_i M_i\equiv 1$ 표준 공식으로 정공법. $7,8,9$는 쌍마다 서로소, $N=504$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>영리한 관찰:</strong> $6\equiv -1\pmod 7$, $7\equiv -1\pmod 8$, $8\equiv -1\pmod 9$이라
+    세 조건이 모두 $x\equiv -1$. 서로소이므로 CRT로 $x\equiv -1\pmod{504}$, 즉
+    $x \equiv 503\pmod{504}$. 가장 작은 양의 정수는 $\mathbf{503}$.</p>
+    <p><strong>정공법 확인:</strong> $N=504$, $N_1=72,\ N_2=63,\ N_3=56$.
+    $72\equiv 2\pmod 7,\ M_1=4$; $63\equiv 7\pmod 8,\ M_2=7$; $56\equiv 2\pmod 9,\ M_3=5$.
+    $x_0 = 6\cdot 72\cdot 4 + 7\cdot 63\cdot 7 + 8\cdot 56\cdot 5 = 1728 + 3087 + 2240 = 7055 \equiv 503\pmod{504}$ ✓.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>서술형 · 구조 증명</span>
+  </div>
+  <p>$\gcd(m,n)=1$일 때, 사상 $\psi:\mathbb{Z}_{mn}\to \mathbb{Z}_m\times\mathbb{Z}_n$,
+  $\psi([x]_{mn}) = ([x]_m, [x]_n)$이 잘 정의된 <strong>환 동형사상</strong>임을 보이고,
+  이것이 중국인의 나머지 정리와 어떻게 같은 진술인지 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>잘 정의됨: $mn\mid x-x' \Rightarrow m\mid x-x'$ 그리고 $n\mid x-x'$.
+    준동형: 합동 산술. 단사: 핵이 자명($m\mid x$ 그리고 $n\mid x$이고 서로소면 $mn\mid x$).
+    전사: 유한집합 크기 비교 또는 CRT의 해 존재.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>잘 정의됨:</strong> $[x]_{mn}=[x']_{mn}$이면 $mn\mid x-x'$이니 $m\mid x-x'$, $n\mid x-x'$ —
+    좌표가 대표원 선택에 무관하다.</p>
+    <p><strong>준동형:</strong> 합동 산술로 $\psi([x]+[y]) = ([x+y]_m,[x+y]_n) = ([x]_m,[y]_n$ 성분합$)
+    = \psi([x])+\psi([y])$, 곱셈도 동일. $\psi([1]_{mn}) = ([1]_m,[1]_n)$로 단위원 보존.</p>
+    <p><strong>단사:</strong> $\ker\psi$는 $m\mid x$이고 $n\mid x$인 $[x]$ — $\gcd(m,n)=1$이라
+    $mn\mid x$, 즉 $[x]_{mn} = [0]$. 핵이 자명하므로 단사.</p>
+    <p><strong>전사:</strong> 양변 모두 원소가 $mn$개인 유한집합이고 단사이므로 자동으로 전사
+    (비둘기집). $\therefore \psi$는 <strong>환 동형사상</strong>. $\blacksquare$</p>
+    <p><strong>CRT와의 동일성:</strong> $\psi$의 <strong>전사성</strong>이 바로 “임의의 목표 나머지쌍
+    $([a]_m,[b]_n)$에 대응하는 $x$가 존재한다” — 즉 연립합동 $x\equiv a\pmod m,\ x\equiv b\pmod n$의
+    <strong>해의 존재</strong>이고, <strong>단사성</strong>이 그 해의 <strong>법 $mn$에서의 유일성</strong>이다.
+    CRT는 이 동형의 “원소 언어” 판본인 셈이다.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

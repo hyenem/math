@@ -97,8 +97,16 @@ window.MATH_TOC = [
     en: "Number Theory",
     book: "Burton, Elementary Number Theory (7th ed.)",
     desc: "정수의 성질 — 합동, 소수, 그리고 수의 아름다움.",
-    status: "planned",
-    chapters: []
+    status: "active",
+    chapters: [
+      { file: "ch01.html", num: 1, title: "나눗셈 정리와 최대공약수", ready: true },
+      { file: "ch02.html", num: 2, title: "소수와 산술의 기본정리", ready: true },
+      { file: "ch03.html", num: 3, title: "합동과 중국인의 나머지 정리", ready: true },
+      { file: "ch04.html", num: 4, title: "페르마·오일러·윌슨 정리", ready: true },
+      { file: "ch05.html", num: 5, title: "수론적 함수와 뫼비우스 반전", ready: true },
+      { file: "ch06.html", num: 6, title: "원시근과 지수", ready: true },
+      { file: "ch07.html", num: 7, title: "이차잉여와 상호법칙", ready: true }
+    ]
   },
   {
     slug: "topology",
