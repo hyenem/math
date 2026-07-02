@@ -430,6 +430,33 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/linear-algebra/ch04.html#def-determinant"
   },
 
+  /* ---------- 선형대수 5장: 대각화 ---------- */
+
+  "eigenvalue": {
+    "ko": "고윳값 / 고유벡터",
+    "en": "eigenvalue, eigenvector",
+    "short": "$T(v) = \\lambda v$인 $0$ 아닌 $v$가 고유벡터, $\\lambda$가 고윳값 — 변환이 방향을 안 바꾸는 벡터. 고유공간 $E_\\lambda = N(T - \\lambda I)$는 부분공간이고, $\\dim E_\\lambda = n - \\operatorname{rank}(A - \\lambda I)$.",
+    "href": "subjects/linear-algebra/ch05.html#def-eigenvalue"
+  },
+  "characteristic-polynomial": {
+    "ko": "특성다항식",
+    "en": "characteristic polynomial",
+    "short": "$f(t) = \\det(A - tI)$ — 그 근이 정확히 고윳값이다. 닮은 행렬은 특성다항식이 같다 (기저 불변량).",
+    "href": "subjects/linear-algebra/ch05.html#def-characteristic-polynomial"
+  },
+  "diagonalizable": {
+    "ko": "대각화 가능",
+    "en": "diagonalizable",
+    "short": "고유벡터들로 기저를 만들 수 있는 것 ($Q^{-1}AQ = D$). 판정: 특성다항식이 완전 분해 + 모든 고윳값에서 기하 중복도 = 대수 중복도. 서로 다른 고윳값이 $n$개면 자동.",
+    "href": "subjects/linear-algebra/ch05.html#def-diagonalizable"
+  },
+  "cayley-hamilton": {
+    "ko": "케일리-해밀턴 정리",
+    "en": "Cayley–Hamilton theorem",
+    "short": "$f$가 특성다항식이면 $f(A) = O$ — 행렬은 자기 특성방정식을 만족한다. $A^n$을 낮은 거듭제곱으로 환원하고 $A^{-1}$을 다항식으로 표현하는 도구.",
+    "href": "subjects/linear-algebra/ch05.html#def-cayley-hamilton"
+  },
+
   /* ---------- 선형대수 1장: 벡터공간 ---------- */
 
   "vector-space": {
