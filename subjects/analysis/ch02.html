@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2장 기초 위상 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch02.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin, Principles of Mathematical Analysis</p>
+  <h1><span class="ch-num">2</span> 기초 위상</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다. 이 장은 해석학의 첫 고비입니다 —
+  천천히, 예시와 함께 가세요.</p>
+</div>
+
+<p>1장에서 실수를 지었습니다. 3장부터는 “수렴”을 다룰 텐데, 그 전에 질문 하나:
+수렴을 말하는 데 <em>정말로</em> 필요한 건 뭘까요? 답은 의외로 단순합니다 —
+<strong>거리</strong> 하나면 됩니다. “$x_n$이 $x$로 수렴한다”는 결국
+“$x_n$과 $x$ 사이의 거리가 $0$으로 간다”는 말이니까요.
+이 장은 거리만 가지고 얼마나 풍부한 세계를 지을 수 있는지 보여줍니다:
+열린집합, 닫힌집합, 그리고 이 장의 보스 — <strong>컴팩트</strong>.</p>
+
+<div class="box box-intuition">
+  <span class="box-label">이 장의 지도</span>
+  <p>① 먼저 <strong>무한의 크기</strong>를 세는 법(가산/비가산)을 배웁니다 — 별개의 주제 같지만
+  뒤에서 계속 쓰입니다. ② <strong>거리공간</strong>이라는 무대를 세우고,
+  ③ 그 위에서 <strong>열린/닫힌 집합</strong>의 문법을 익히고,
+  ④ “유한처럼 행동하는 무한집합”인 <strong>컴팩트 집합</strong>을 만나고,
+  ⑤ 완전집합·연결집합으로 마무리합니다. 임용 출제 밀도가 가장 높은 장 중 하나입니다.</p>
+</div>
+
+<h2 id="sec-countable">1. 무한에도 크기가 있다 — 가산과 비가산</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>원소가 무한히 많은 두 집합, 어느 쪽이 “더 많을까요”?
+  세는 대신 <strong>짝을 지어봅니다.</strong> 양쪽을 하나씩 남김없이 짝지을 수 있으면
+  (일대일 대응) 두 집합은 같은 크기입니다. 그리고 “자연수와 짝지을 수 있는 무한”에
+  이름을 붙입니다 — 셀 수 있다는 뜻에서 <em>가산</em>(可算).
+  이 절의 반전: 유리수는 가산인데, 실수는 아닙니다.
+  무한에도 <strong>급이 있습니다.</strong></p>
+</div>
+
+<div class="box box-def" id="def-countable">
+  <span class="box-label">정의 2.4 · 가산집합 <span class="label-en">countable set</span></span>
+  <p>집합 $E$가 자연수 전체 $J = \{1, 2, 3, \dots\}$와 일대일 대응(전단사)을 가지면
+  $E$를 <strong>가산</strong>(countable)이라 한다. 유한이거나 가산이면
+  <strong>많아야 가산</strong>(at most countable)이라 한다.
+  무한인데 가산이 아니면 <strong>비가산</strong>(uncountable)이라 한다.</p>
+  <p>가산이라는 것은 곧 원소를 $x_1, x_2, x_3, \dots$처럼 <strong>수열로 빠짐없이
+  나열할 수 있다</strong>는 뜻이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 정수와 유리수는 가산이다</span>
+  <p><strong>$\mathbb{Z}$:</strong> $0, 1, -1, 2, -2, 3, -3, \dots$ 순서로 나열하면 된다.
+  “$\mathbb{Z}$가 $\mathbb{N}$의 두 배쯤 커 보이는데 같은 크기”라는 것부터 이미 무한의
+  기묘함이다.</p>
+  <p><strong>$\mathbb{Q}$ (루딘 따름정리 2.13):</strong> 분수 $m/n$을 좌표 $(m, n)$으로 보고
+  격자점을 대각선 순서로 훑으면 (중복은 건너뛰며) 모든 유리수가 한 줄로 나열된다.
+  수직선에 빽빽이 깔린 유리수가 자연수와 같은 크기라는 것 — 1장의
+  <a class="term" data-term="density-of-q">조밀성</a>과 나란히 놓고 보면 더 놀랍다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.12</span>
+  <p><strong>이 정리가 하는 일:</strong> 가산집합을 가산 개 모아도 여전히 가산임을 보증한다.
+  (그래서 “가산을 벗어나려면” 훨씬 과격한 일이 필요하다 — 다음 정리.)</p>
+  <p>$E_1, E_2, E_3, \dots$이 각각 많아야 가산이면, $\bigcup_{n} E_n$도 많아야 가산이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— 전략: 원소들을 직사각형 배열로 놓고 대각선으로 훑는다 (유리수 나열과 같은 기술).</span></summary>
+  <p>$E_n$의 원소를 $n$번째 행에 나열해 무한 배열을 만들고,
+  대각선 방향($x_{11};\ x_{21}, x_{12};\ x_{31}, x_{22}, x_{13};\ \dots$)으로 훑으면
+  모든 원소가 언젠가 등장하는 하나의 수열이 된다. 중복을 제거하면 나열 완성.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.14 · 칸토어의 대각선 논법 <span class="label-en">Cantor's diagonal argument</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 비가산 무한이 실제로 존재함을 보인다 —
+  수학 전체에서 가장 유명한 증명 중 하나.</p>
+  <p>$0$과 $1$로만 이루어진 수열 전체의 집합 $A$는 비가산이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: “전부 나열했다”는 목록을 받아서, 대각선을 따라가며 목록에 없는 수열을 하나 만들어낸다.</span></summary>
+  <p>$A$의 원소들을 $s_1, s_2, s_3, \dots$으로 나열할 수 있다고 가정하자.
+  새 수열 $s$를 다음처럼 정의한다: $s$의 $n$번째 자리 = ($s_n$의 $n$번째 자리를 뒤집은 것)
+  ($0$이면 $1$, $1$이면 $0$).</p>
+  <p>그러면 $s \in A$이지만, 모든 $n$에 대해 $s$는 $s_n$과 $n$번째 자리에서 다르므로
+  $s$는 목록의 어디에도 없다. “빠짐없는 나열”이라는 가정에 모순.
+  그러므로 어떤 나열도 $A$를 다 담지 못한다 — $A$는 비가산이다.</p>
+  <p class="qed"></p>
+</details>
+
+<p>실수를 이진 전개로 보면 $\mathbb{R}$이 비가산이라는 사실이 이 정리에서 따라 나옵니다
+(전개의 중복 표현 문제를 조심해야 해서, 루딘은 엄밀한 증명을 5절의 완전집합 정리(2.43)로
+미룹니다 — 우리도 거기서 다시 만납니다).</p>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>“무한은 다 같은 무한이다” — 아닙니다. $\mathbb{N}, \mathbb{Z}, \mathbb{Q}$는 모두
+  같은 크기(가산)지만 $\mathbb{R}$은 진짜로 더 큽니다.
+  또 하나: “$\mathbb{Q}$가 $\mathbb{R}$에서 조밀하니까 거의 전부 아닌가?” —
+  크기로 보면 유리수는 실수의 티끌입니다. 조밀함은 <em>배치</em>에 대한 말이지
+  <em>양</em>에 대한 말이 아니에요.</p>
+</div>
+
+<h2 id="sec-metric">2. 거리공간 — 수렴을 말할 최소한의 무대</h2>
+
+<div class="box box-def" id="def-metric-space">
+  <span class="box-label">정의 2.15 · 거리공간 <span class="label-en">metric space</span></span>
+  <p>집합 $X$의 두 점마다 실수 $d(p, q)$가 대응되고 다음을 만족하면,
+  $d$를 <strong>거리</strong>(metric), $(X, d)$를 <strong>거리공간</strong>이라 한다.</p>
+  <p>(i) $p \neq q$이면 $d(p, q) \gt 0$이고, $d(p, p) = 0$<br>
+  (ii) $d(p, q) = d(q, p)$ (대칭성)<br>
+  (iii) $d(p, q) \le d(p, r) + d(r, q)$ (<a class="term" data-term="triangle-inequality">삼각부등식</a>)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 거리공간들</span>
+  <p><strong>(a)</strong> <a class="term" data-term="euclidean-space">유클리드 공간</a>
+  $\mathbb{R}^k$에 $d(\mathbf{x}, \mathbf{y}) = |\mathbf{x} - \mathbf{y}|$ —
+  1장 정리 1.37이 정확히 (i)–(iii)을 보증한다. 이 장의 기본 무대다.</p>
+  <p><strong>(b)</strong> 아무 집합에나 $d(p,q) = 1$ ($p \neq q$), $d(p,p) = 0$을 주면
+  거리공간이 된다 (이산거리). “거리공간”이 얼마나 헐렁한 개념인지 보여주는 예 —
+  그래서 반례 제조기로 자주 쓰인다.</p>
+  <p><strong>(c)</strong> 거리공간의 부분집합은 같은 거리로 다시 거리공간이다.
+  예: $\mathbb{Q}$, $[0,1]$ 모두 그 자체로 거리공간.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>거리공간에서 앞으로 모든 개념은 딱 한 가지 재료로 만들어집니다 —
+  <strong>“$p$에서 반지름 $r$ 안”</strong>이라는 공. 아래 정의 2.18의 긴 목록이
+  겁나 보이지만, 전부 “공을 어떻게 굴리느냐”의 변주입니다.</p>
+</div>
+
+<h2 id="sec-open-closed">3. 열린집합과 닫힌집합의 문법</h2>
+
+<p>루딘 정의 2.18은 이 책 전체에서 가장 밀도 높은 반 페이지입니다.
+하나씩 풀어서 갑니다. 이하 $X$는 거리공간, $E \subset X$입니다.</p>
+
+<div class="box box-def" id="def-neighborhood">
+  <span class="box-label">정의 2.18(a) · 근방 <span class="label-en">neighborhood</span></span>
+  <p>점 $p$의 <strong>근방</strong> $N_r(p)$는 $d(p, q) \lt r$인 점 $q$ 전체의 집합이다
+  ($r \gt 0$). 즉 “$p$ 중심, 반지름 $r$인 열린 공”.
+  $\mathbb{R}$에서는 열린구간 $(p - r,\ p + r)$이다.</p>
+</div>
+
+<div class="box box-def" id="def-limit-point">
+  <span class="box-label">정의 2.18(b,c) · 집적점 <span class="label-en">limit point</span></span>
+  <p>점 $p$의 <strong>모든</strong> 근방이 $p$ 자신이 아닌 $E$의 점을 포함하면,
+  $p$를 $E$의 <strong>집적점</strong>(limit point)이라 한다.
+  $p \in E$인데 집적점이 아니면 $p$는 $E$의 <strong>고립점</strong>(isolated point)이다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>집적점은 “$E$의 점들이 <strong>한없이 몰려드는 지점</strong>”입니다.
+  아무리 작게 확대해도(반지름 $r$을 아무리 줄여도) 그 안에 $E$의 다른 점이 보인다는 것.
+  중요한 두 가지: ① 집적점은 $E$에 <strong>속할 필요가 없습니다</strong>
+  ($E = (0,1)$의 집적점 $0$처럼). ② $E$에 속한 점이라고 집적점인 것도 아닙니다
+  ($E = \{1/n\}$에서 각 $1/n$은 외톨이 — 고립점).</p>
+</div>
+
+<div class="box box-def" id="def-closed-set">
+  <span class="box-label">정의 2.18(d) · 닫힌집합 <span class="label-en">closed set</span></span>
+  <p>$E$의 모든 집적점이 $E$에 속하면 $E$는 <strong>닫혀 있다</strong>(closed)고 한다.
+  — “몰려드는 지점을 하나도 흘리지 않는 집합”.</p>
+</div>
+
+<div class="box box-def" id="def-open-set">
+  <span class="box-label">정의 2.18(e,f) · 내점과 열린집합 <span class="label-en">interior point, open set</span></span>
+  <p>어떤 근방 $N_r(p)$가 통째로 $E$에 들어가면 $p$는 $E$의 <strong>내점</strong>(interior point)이다.
+  $E$의 모든 점이 내점이면 $E$는 <strong>열려 있다</strong>(open)고 한다.
+  — “모든 점이 여유 공간을 갖는 집합”: 어느 점에 서 있어도 조금은 움직일 틈이 있다.</p>
+</div>
+
+<div class="box box-def" id="def-bounded-dense">
+  <span class="box-label">정의 2.18(i,j) · 유계, 조밀 <span class="label-en">bounded, dense</span></span>
+  <p>$E$가 어떤 공 하나에 통째로 들어가면 <strong>유계</strong>(bounded).
+  $X$의 모든 점이 $E$의 점이거나 $E$의 집적점이면 $E$는 $X$에서 <strong>조밀</strong>(dense)하다.
+  (1장에서 본 <a class="term" data-term="density-of-q">유리수의 조밀성</a>은 이 정의의 특수한 경우다.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 2.21 · 판정 연습 ($\mathbb{R}$ 또는 $\mathbb{R}^2$에서)</span>
+  <p style="margin-bottom:0.4rem;">아래 표는 이 절 전체의 요약이기도 하다. 각 칸을 스스로 판정해 본 뒤 확인하라.</p>
+  <table style="width:100%; border-collapse:collapse; font-size:0.92em;">
+    <thead>
+      <tr style="border-bottom:1px solid var(--rule); text-align:left; font-family:var(--gothic); font-size:0.85em;">
+        <th style="padding:0.3rem;">집합</th><th>열림?</th><th>닫힘?</th><th>집적점들</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$(a, b) \subset \mathbb{R}$</td><td>예</td><td>아니오</td><td>$[a, b]$</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$[a, b]$</td><td>아니오</td><td>예</td><td>$[a, b]$</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$[a, b)$</td><td>아니오</td><td>아니오</td><td>$[a, b]$</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$\{1/n : n \in \mathbb{N}\}$</td><td>아니오</td><td>아니오</td><td>$\{0\}$ (딱 하나!)</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$\mathbb{Z}$</td><td>아니오</td><td>예 (집적점이 없으므로 자명하게)</td><td>$\varnothing$</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$\mathbb{Q}$</td><td>아니오</td><td>아니오</td><td>$\mathbb{R}$ 전체</td></tr>
+      <tr><td style="padding:0.3rem;">$\mathbb{R}$ (전체), $\varnothing$</td><td>예</td><td>예</td><td>—</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p><strong>“열림의 반대는 닫힘”이 아닙니다.</strong> 위 표의 $[a, b)$처럼 둘 다 아닐 수도,
+  $\mathbb{R}$과 $\varnothing$처럼 둘 다일 수도 있습니다. 문과 달리 집합은
+  “반쯤 열려” 있을 수 있어요. 정확한 관계는 정리 2.23입니다:
+  <em>$E$가 열림 $\iff$ 여집합 $E^c$가 닫힘.</em> 반대가 아니라 <strong>여집합</strong>입니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.19</span>
+  <p><strong>이 정리가 하는 일:</strong> “열린 공”이 이름값을 함을 확인한다.</p>
+  <p>모든 근방 $N_r(p)$는 열린집합이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 공 안의 점 $q$에는 “가장자리까지 남은 거리”만큼의 작은 공이 들어간다. 삼각부등식으로 확인.</span></summary>
+  <p>$q \in N_r(p)$라 하면 $d(p, q) = r - h$ 꼴로 쓸 수 있다 ($h \gt 0$).
+  이제 $N_h(q) \subset N_r(p)$를 보이자: $s \in N_h(q)$이면</p>
+  $$d(p, s) \le d(p, q) + d(q, s) \lt (r - h) + h = r$$
+  <p>즉 $s \in N_r(p)$. 그러므로 $q$는 내점이고, $q$가 임의였으므로 $N_r(p)$는 열려 있다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.20</span>
+  <p><strong>이 정리가 하는 일:</strong> 집적점 근처에는 $E$의 점이 “하나 있는” 정도가 아니라
+  <strong>무한히 많음</strong>을 보인다. 따름정리: 유한집합에는 집적점이 없다.</p>
+  <p>$p$가 $E$의 집적점이면, $p$의 모든 근방은 $E$의 점을 무한히 많이 포함한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 유한 개뿐이라면, 그중 가장 가까운 점보다 더 작은 반지름을 잡아 모순.</span></summary>
+  <p>어떤 근방 $N_r(p)$가 $E \setminus \{p\}$의 점을 유한 개 $q_1, \dots, q_m$만 담는다고 하자.
+  $h = \min\{d(p, q_1), \dots, d(p, q_m)\}$는 유한 개 양수의 최솟값이므로 $h \gt 0$이다.
+  그러면 근방 $N_h(p)$는 $p$ 아닌 $E$의 점을 하나도 담지 않는다 —
+  $p$가 집적점이라는 데 모순.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.23</span>
+  <p><strong>이 정리가 하는 일:</strong> 열림과 닫힘을 잇는 다리. 이 다리 덕분에
+  한쪽에서 증명한 성질을 여집합을 통해 반대쪽으로 공짜로 옮길 수 있다.</p>
+  <p>$E$가 열린집합 $\iff$ $E^c$가 닫힌집합.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 양쪽 다 “정의를 뒤집으면 서로가 나온다”. 대우로 두 방향을 오간다.</span></summary>
+  <p>($\Leftarrow$) $E^c$가 닫혀 있다고 하자. $x \in E$를 잡자. $x \notin E^c$이고 $E^c$는
+  자기 집적점을 다 갖고 있으므로, $x$는 $E^c$의 집적점이 아니다. 즉 $x$의 어떤 근방 $N$이
+  $E^c$의 점을 ($x$ 아닌 것으로는) 갖지 않는다. $x \notin E^c$이므로 $N$은 $E^c$와 아예
+  만나지 않고, 따라서 $N \subset E$. 즉 $x$는 내점 — $E$는 열려 있다.</p>
+  <p>($\Rightarrow$) $E$가 열려 있다고 하자. $x$를 $E^c$의 집적점이라 하면 $x$의 모든 근방이
+  $E^c$의 점을 포함하므로, 어떤 근방도 $E$에 통째로 들어갈 수 없다. $E$가 열려 있으므로
+  $x$는 $E$의 점일 수 없다 — 즉 $x \in E^c$. 그러므로 $E^c$는 집적점을 모두 담는다: 닫혀 있다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.24 · 합집합과 교집합</span>
+  <p><strong>이 정리가 하는 일:</strong> 열림/닫힘이 집합 연산에서 언제 보존되는지 —
+  그리고 언제 깨지는지 — 를 정리한다. <strong>비대칭에 주의:</strong></p>
+  <p>(a) 열린집합의 <strong>임의</strong> 합집합은 열려 있다.<br>
+  (b) 닫힌집합의 <strong>임의</strong> 교집합은 닫혀 있다.<br>
+  (c) 열린집합의 <strong>유한</strong> 교집합은 열려 있다.<br>
+  (d) 닫힌집합의 <strong>유한</strong> 합집합은 닫혀 있다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · “유한”을 뗄 수 없는 이유</span>
+  <p>열린구간들의 무한 교집합:</p>
+  $$\bigcap_{n=1}^{\infty} \left( -\tfrac{1}{n},\ \tfrac{1}{n} \right) = \{0\}$$
+  <p>각각은 열려 있지만 교집합 $\{0\}$은 열려 있지 않다 (어떤 근방도 한 점 안에 못 들어간다).
+  여집합을 취하면 “닫힌집합의 무한 합집합이 닫히지 않는 예”도 얻는다.
+  이런 반례는 임용 단골 소재다.</p>
+</div>
+
+<div class="box box-def" id="def-closure">
+  <span class="box-label">정의 2.26 · 폐포 <span class="label-en">closure</span></span>
+  <p>$E$의 집적점 전체의 집합을 $E'$이라 할 때, $E$의 <strong>폐포</strong>는
+  $\bar{E} = E \cup E'$이다.
+  — “$E$에 몰려드는 지점까지 전부 쓸어 담은 것”. 정리 2.27: $\bar{E}$는 닫힌집합이고,
+  $E$를 포함하는 <strong>가장 작은</strong> 닫힌집합이다.
+  예: $\overline{(0,1)} = [0,1]$, $\overline{\mathbb{Q}} = \mathbb{R}$
+  (<a class="term" data-term="density-of-q">조밀성</a>의 폐포 버전: $E$가 $X$에서 조밀 $\iff \bar{E} = X$).</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.28</span>
+  <p><strong>이 정리가 하는 일:</strong> 1장의 상한과 이 장의 폐포를 연결한다 —
+  상한은 “거의 원소”다.</p>
+  <p>$E \subset \mathbb{R}$이 공집합이 아니고 위로 유계이면, $\sup E \in \bar{E}$이다.
+  특히 $E$가 닫혀 있으면 $\sup E \in E$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 상한의 “바로 아래엔 원소가 치고 올라온다”는 성질이 곧 집적점의 정의다.</span></summary>
+  <p>$y = \sup E$라 하자. $y \in E$이면 끝. $y \notin E$라 하자. 임의의 $h \gt 0$에 대해
+  $y - h$는 <a class="term" data-term="supremum">상한</a>보다 작으므로 상계가 아니고,
+  따라서 $y - h \lt x \le y$인 $x \in E$가 존재한다 ($x \neq y$인 것은 $y \notin E$이므로).
+  즉 $y$의 모든 근방 $(y-h, y+h)$가 $y$ 아닌 $E$의 점을 포함한다 — $y$는 $E$의 집적점이고
+  $y \in \bar{E}$.</p>
+  <p class="qed"></p>
+</details>
+
+<p>한 가지 미묘한 개념만 더: <strong>상대적 열림</strong> (정리 2.30).
+“열려 있다”는 <em>어느 공간 안에서 보느냐</em>에 따라 달라집니다.
+예컨대 $[0, 1)$은 $\mathbb{R}$에서는 열려 있지 않지만, 공간을 $X = [0, 2]$로 좁히면
+$[0, 1) = [0,2] \cap (-1, 1)$이 $X$ 안에서 열려 있습니다 ($0$ 근처의 “왼쪽 바깥”이
+아예 존재하지 않으니까). 일반적으로: <em>$E$가 $Y \subset X$에서 열려 있다
+$\iff$ $E = Y \cap G$인 $X$의 열린집합 $G$가 존재한다.</em>
+다음 절에서 “컴팩트는 이런 상대성을 타지 않는다”는 대비로 다시 등장합니다.</p>
+
+<h2 id="sec-compact">4. 컴팩트 — 유한처럼 행동하는 무한</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>유한집합은 다루기 쉽습니다: 최댓값이 있고, 최솟값이 있고, 뭘 해도 탈이 안 나요.
+  해석학의 꿈은 <strong>무한집합인데 유한처럼 구는 집합</strong>을 찾는 것입니다.
+  그 답이 컴팩트예요. 정의는 처음 보면 기괴합니다 — “모든 열린 덮개가 유한 부분덮개를
+  갖는다”. 이렇게 읽어보세요: <em>“무한 개의 자원(열린집합들)으로 덮어야 했던 일이,
+  사실은 항상 유한 개로 충분하다.”</em> 무한을 유한으로 줄여주는 압축 장치입니다.
+  이 정의가 왜 강력한지는 정리들이 보여줍니다 — 그리고 3장·4장에서
+  “컴팩트 위에서는 좋은 일만 일어난다”를 계속 확인하게 됩니다.</p>
+</div>
+
+<div class="box box-def" id="def-open-cover">
+  <span class="box-label">정의 2.31 · 열린 덮개 <span class="label-en">open cover</span></span>
+  <p>거리공간 $X$의 부분집합 $E$에 대해, 열린집합들의 모임 $\{G_\alpha\}$가
+  $E \subset \bigcup_\alpha G_\alpha$를 만족하면 이 모임을 $E$의
+  <strong>열린 덮개</strong>라 한다.</p>
+</div>
+
+<div class="box box-def" id="def-compact">
+  <span class="box-label">정의 2.32 · 컴팩트 집합 <span class="label-en">compact set</span></span>
+  <p>$K$의 <strong>모든</strong> 열린 덮개가 <strong>유한 부분덮개</strong>를 가지면 —
+  즉 $\{G_\alpha\}$가 $K$의 열린 덮개일 때마다 그중 유한 개
+  $G_{\alpha_1}, \dots, G_{\alpha_n}$만으로 $K \subset G_{\alpha_1} \cup \cdots \cup G_{\alpha_n}$이
+  되게 할 수 있으면 — $K$를 <strong>컴팩트</strong>(compact)라 한다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>“유한 개로 덮을 수 있는 덮개가 <em>하나 존재한다</em>”가 아닙니다 —
+  그건 아무 집합이나 만족해요 ($X$ 전체 하나로 덮으면 되니까).
+  포인트는 <strong>어떤 덮개를 가져와도</strong>(모든 덮개에 대해) 유한 부분덮개를
+  뽑을 수 있다는 <em>전칭</em>입니다. 그래서 “컴팩트가 아님”을 보이려면
+  유한 부분덮개가 없는 <strong>나쁜 덮개 하나</strong>를 제시하면 됩니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $(0, 1)$은 컴팩트가 아니다</span>
+  <p>덮개 $G_n = \left( \frac{1}{n},\ 1 \right)$ ($n = 2, 3, 4, \dots$)을 보자.
+  임의의 $x \in (0,1)$에 대해 <a class="term" data-term="archimedean-property">아르키메데스 성질</a>로
+  $1/n \lt x$인 $n$이 있으므로 $\{G_n\}$은 $(0,1)$의 열린 덮개다.
+  그런데 유한 개 $G_{n_1}, \dots, G_{n_k}$만 고르면 그 합집합은
+  $\left( \frac{1}{N},\ 1 \right)$ ($N = \max n_i$)이 되어 $\frac{1}{N}$ 이하의 점들을 놓친다.
+  유한 부분덮개가 없는 덮개를 찾았으므로 $(0,1)$은 컴팩트가 아니다.
+  — 직관적으로: $(0,1)$은 끝점 $0$ 근처에서 “새는” 집합이고, 그 틈으로 무한이 빠져나간다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.33 · 컴팩트는 절대적이다</span>
+  <p><strong>이 정리가 하는 일:</strong> 앞 절의 “상대적 열림”과 정반대 —
+  컴팩트함은 어느 공간 안에서 보든 변하지 않는 <em>집합 자체의 성질</em>임을 보인다.</p>
+  <p>$K \subset Y \subset X$일 때, $K$가 $X$에서 컴팩트 $\iff$ $K$가 $Y$에서 컴팩트.</p>
+  <p>그래서 “컴팩트 <strong>공간</strong>”이라고 말해도 모호하지 않다.
+  (증명은 상대적 열림의 정의로 덮개를 번역하는 연습 — 루딘 본문 참고.)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.34</span>
+  <p><strong>이 정리가 하는 일:</strong> 컴팩트의 첫 대가(對價) — 컴팩트면 공짜로 닫혀 있다.</p>
+  <p>거리공간의 컴팩트 부분집합은 닫혀 있다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 바깥 점 $p$를 잡고, $K$의 각 점을 “$p$와 겹치지 않는 작은 공”으로 덮는다. 유한 부분덮개가 $p$ 주위의 여유 공간을 만들어 준다.</span></summary>
+  <p>$K^c$가 열려 있음을 보인다. $p \in K^c$를 잡자. 각 $q \in K$에 대해 반지름
+  $r_q = \frac{1}{2} d(p, q)$인 근방 $V_q = N_{r_q}(q)$를 만들자.
+  $\{V_q\}_{q \in K}$는 $K$의 열린 덮개이므로, 컴팩트성에 의해 유한 개
+  $V_{q_1}, \dots, V_{q_n}$이 $K$를 덮는다.</p>
+  <p>이제 $r = \min_i r_{q_i} \gt 0$으로 잡으면, $N_r(p)$는 모든 $V_{q_i}$와 만나지 않는다
+  (만난다면 어떤 점 $s$가 $d(p,s) \lt r \le r_{q_i}$이고 $d(q_i, s) \lt r_{q_i}$이므로
+  $d(p, q_i) \lt 2 r_{q_i} = d(p, q_i)$ — 모순).
+  따라서 $N_r(p) \subset K^c$: $p$는 $K^c$의 내점이다. $K^c$가 열려 있으므로 $K$는 닫혀 있다.</p>
+  <p><em>어디서 컴팩트성이 쓰였나?</em> $r = \min r_{q_i}$가 양수라는 대목 —
+  무한 개의 반지름이었다면 최솟값(정확히는 하한)이 $0$이 될 수 있다. “무한을 유한으로”가
+  정확히 여기서 작동한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.35</span>
+  <p><strong>이 정리가 하는 일:</strong> 컴팩트의 유전 — 닫힌 부분집합에게 물려진다.</p>
+  <p>컴팩트 집합 $K$의 닫힌 부분집합 $F$는 컴팩트다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: $F$의 덮개에 “여집합 $F^c$” 한 장을 보태 $K$의 덮개로 만들고, $K$의 유한 부분덮개에서 $F^c$를 도로 뺀다.</span></summary>
+  <p>$\{G_\alpha\}$를 $F$의 열린 덮개라 하자. $F$가 닫혀 있으므로 $F^c$는 열려 있고,
+  $\{G_\alpha\} \cup \{F^c\}$는 $K$ 전체의 열린 덮개가 된다.
+  $K$의 컴팩트성으로 유한 부분덮개 $\Phi$를 뽑자. $\Phi$에서 $F^c$를 제거해도
+  ($F$의 점은 $F^c$에 없으므로) 여전히 $F$를 덮는다 — $F$의 유한 부분덮개 완성.</p>
+  <p>따름정리: $F$가 닫혀 있고 $K$가 컴팩트이면 $F \cap K$는 컴팩트다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.37</span>
+  <p><strong>이 정리가 하는 일:</strong> 컴팩트 안에서는 무한집합이 반드시 “뭉치는 곳”을
+  갖는다 — 3장에서 “컴팩트에서는 부분수열이 수렴한다”로 재등장할 핵심 성질.</p>
+  <p>$E$가 컴팩트 집합 $K$의 무한 부분집합이면, $E$는 $K$ 안에 집적점을 갖는다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 아무도 집적점이 아니라면, 각 점마다 “$E$를 한 점 이하로만 만나는 근방”이 있다. 그런 근방 유한 개로는 무한집합 $E$를 못 덮는다.</span></summary>
+  <p>$K$의 어떤 점도 $E$의 집적점이 아니라고 하자. 그러면 각 $q \in K$는 근방 $V_q$를
+  가져서 $V_q \cap E$가 많아야 $\{q\}$ 하나뿐이다 (집적점이 아니므로).
+  $\{V_q\}_{q \in K}$는 $K$의 (따라서 $E$의) 열린 덮개인데, 각 $V_q$가 $E$의 점을
+  많아야 하나 담으므로 <strong>유한 개의 $V_q$로는 무한집합 $E$를 덮을 수 없다.</strong>
+  이는 $K$의 컴팩트성에 모순.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.38 · 구간축소법 <span class="label-en">nested intervals</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 줄어드는 닫힌구간들의 공통점이 반드시 남는다 —
+  완비성의 또 다른 얼굴이자, 컴팩트성 증명(2.40)의 엔진.</p>
+  <p>$I_n = [a_n, b_n]$이 $I_1 \supset I_2 \supset I_3 \supset \cdots$이면
+  $\bigcap_{n=1}^{\infty} I_n \neq \varnothing$이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 왼쪽 끝점들의 상한 $x = \sup\{a_n\}$이 모든 구간에 들어 있음을 보인다. (1장 완비성이 여기서 일한다.)</span></summary>
+  <p>$E = \{a_1, a_2, \dots\}$는 공집합이 아니고 $b_1$이 상계이므로
+  (<a class="term" data-term="lub-property">완비성</a>에 의해) $x = \sup E$가 존재한다.</p>
+  <p>임의의 $n$에 대해: 모든 $m$에 대해 $a_m \le b_n$이다 — $m \le n$이면
+  $a_m \le a_n \le b_n$, $m \ge n$이면 $a_m \le b_m \le b_n$ (구간이 중첩되므로).
+  즉 $b_n$은 $E$의 상계이고, 따라서 $x \le b_n$. 또 $a_n \le x$는 상한의 정의에서 즉시.
+  그러므로 $x \in [a_n, b_n]$이 모든 $n$에 대해 성립한다.</p>
+  <p><em>닫힌 구간이어야 하는 이유:</em> $(0, 1/n)$들은 중첩되지만 공통점이 없다 —
+  열린 끝으로 공통점이 새 버린다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.40</span>
+  <p><strong>이 정리가 하는 일:</strong> 드디어 구체적인 컴팩트 집합을 확보한다.</p>
+  <p>모든 $k$-세포(닫힌 상자 $[a_1,b_1] \times \cdots \times [a_k,b_k]$, $k=1$이면 닫힌구간)는 컴팩트다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— 전략(이분법): 유한 부분덮개가 없다고 가정 → 상자를 반씩 쪼개면 한 조각은 여전히 “덮기 어려움” → 무한히 쪼개 한 점으로 수렴(2.38) → 그 점을 덮는 열린집합 하나가 충분히 작아진 조각을 통째로 덮어 모순.</span></summary>
+  <p>$I$를 $k$-세포, $\{G_\alpha\}$를 유한 부분덮개가 없는 열린 덮개라 가정하자.
+  각 변을 절반으로 나누면 $I$는 $2^k$개의 작은 세포로 쪼개지고, 그중 적어도 하나는
+  여전히 유한 개로 덮이지 않는다 (전부 유한 덮개를 가지면 합쳐서 $I$의 유한 덮개가 되므로).
+  이를 반복하면 중첩된 세포열 $I \supset I_1 \supset I_2 \supset \cdots$을 얻고,
+  $I_n$의 지름은 $\delta / 2^n \to 0$이다 ($\delta$는 $I$의 지름).</p>
+  <p>구간축소법(2.38의 $k$차원 버전, 2.39)에 의해 공통점 $x^* \in \bigcap I_n$이 존재한다.
+  $x^*$는 어떤 $G_\alpha$에 속하고, $G_\alpha$는 열려 있으므로 어떤 근방
+  $N_r(x^*) \subset G_\alpha$가 있다. $n$을 충분히 크게 잡아 지름이 $r$보다 작아지면
+  $I_n \subset N_r(x^*) \subset G_\alpha$ — 조각 $I_n$이 열린집합 <em>단 한 장</em>으로
+  덮인다. “유한 개로 못 덮는다”던 조각이 한 장으로 덮이는 모순.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.41 · <span id="def-heine-borel">하이네-보렐 정리</span> <span class="label-en">Heine–Borel theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> $\mathbb{R}^k$에서 컴팩트를 <em>판정 가능한</em>
+  조건으로 바꿔 준다 — 이 장에서 가장 자주 인용될 정리.</p>
+  <p>$E \subset \mathbb{R}^k$에 대해 다음 셋은 동치다.</p>
+  <p>(a) $E$는 닫혀 있고 유계이다.<br>
+  (b) $E$는 컴팩트다.<br>
+  (c) $E$의 모든 무한 부분집합은 $E$ 안에 집적점을 갖는다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 구조 <span class="proof-strategy">— 이미 증명한 조각들을 조립한다.</span></summary>
+  <p><strong>(a)$\Rightarrow$(b):</strong> 유계이면 $E$는 어떤 $k$-세포 $I$ 안에 들어간다.
+  $I$는 컴팩트(2.40)이고 $E$는 컴팩트 안의 닫힌 부분집합이므로 컴팩트(2.35).</p>
+  <p><strong>(b)$\Rightarrow$(c):</strong> 정리 2.37 그 자체.</p>
+  <p><strong>(c)$\Rightarrow$(a):</strong> 대우로. $E$가 유계가 아니면 $|\mathbf{x}_n| \gt n$인
+  점들을 뽑아 만든 무한집합은 집적점을 가질 수 없다 (아무리 큰 공도 유한 개만 담으므로).
+  $E$가 닫혀 있지 않으면 $E$ 밖의 집적점 $x_0$이 있고, $d(x_n, x_0) \lt 1/n$인
+  $x_n \in E$들을 뽑으면 이 무한집합의 집적점은 $x_0$ <em>뿐</em>이어서 — $E$ 안에
+  집적점이 없다. 어느 쪽이든 (c)가 깨진다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 임용 최다 출제 포인트</span>
+  <p>“닫혀 있고 유계이면 컴팩트”는 <strong>$\mathbb{R}^k$에서만</strong> 보증됩니다.
+  일반 거리공간에서는 거짓이에요. 표준 반례 둘:</p>
+  <p>① <strong>이산거리공간</strong>의 무한집합: $d(p,q)=1$이므로 반지름 $\frac{1}{2}$ 공들
+  $\{N_{1/2}(p)\}$가 열린 덮개인데, 각 공은 자기 중심 하나만 담아서 유한 부분덮개가 없다.
+  하지만 이 집합은 닫혀 있고 유계다(반지름 $2$짜리 공 하나에 다 들어가므로).</p>
+  <p>② $\mathbb{Q}$ 안의 $E = \{x \in \mathbb{Q} : 2 \lt x^2 \lt 3\}$: $\mathbb{Q}$ 안에서
+  닫혀 있고 유계지만 컴팩트가 아니다 — 집적점 $\sqrt{2}$가 공간 밖으로 “새는” 것이
+  1장의 구멍과 정확히 같은 현상이다.</p>
+  <p>(b)$\Rightarrow$(a)와 (b)$\Leftrightarrow$(c)는 모든 거리공간에서 참이고,
+  (a)$\Rightarrow$(b)만 $\mathbb{R}^k$ 전용입니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.42 · 바이어슈트라스 <span class="label-en">Weierstrass</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 하이네-보렐의 즉석 열매 — 3장 볼차노-바이어슈트라스
+  정리의 집합 버전.</p>
+  <p>$\mathbb{R}^k$의 유계인 무한 부분집합 $E$는 $\mathbb{R}^k$ 안에 집적점을 갖는다.</p>
+  <p>(증명: $E$는 어떤 $k$-세포 $I$ 안에 들어가고, $I$는 컴팩트이므로 정리 2.37을 적용.)</p>
+</div>
+
+<h2 id="sec-perfect">5. 완전집합과 칸토어 집합</h2>
+
+<div class="box box-def" id="def-perfect-set">
+  <span class="box-label">정의 2.18(h) · 완전집합 <span class="label-en">perfect set</span></span>
+  <p>$E$가 닫혀 있고, $E$의 <strong>모든</strong> 점이 $E$의 집적점이면
+  (즉 고립점이 하나도 없으면) $E$를 <strong>완전집합</strong>이라 한다.
+  예: $[a, b]$, $\mathbb{R}$. 반례: $\{1/n\} \cup \{0\}$은 닫혀 있지만 고립점투성이라
+  완전이 아니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.43</span>
+  <p><strong>이 정리가 하는 일:</strong> “모든 점이 붐비는 닫힌집합”은 필연적으로
+  거대함(비가산)을 보인다 — 그리고 $\mathbb{R}$의 비가산성이 따름정리로 떨어진다.</p>
+  <p>$\mathbb{R}^k$의 공집합이 아닌 완전집합은 비가산이다.
+  <strong>따름정리:</strong> $[a, b]$ ($a \lt b$)는 비가산이고, 따라서 $\mathbb{R}$도 비가산이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— 전략: 가산 나열 $x_1, x_2, \dots$을 받아, “$x_n$을 피하는 근방”을 연쇄적으로 파고들어 아무 $x_n$도 아닌 점을 만든다 (대각선 논법의 기하 버전).</span></summary>
+  <p>$P$가 완전집합인데 가산이라 하자: $P = \{x_1, x_2, \dots\}$.
+  $P$의 점은 전부 집적점이므로, 아무 점에서 시작해도 근방 안에 $P$의 다른 점이 무한히 있다.
+  이를 이용해 근방열 $V_1 \supset \bar{V}_2 \supset \bar{V}_3 \supset \cdots$을 만들되,
+  각 $V_n$이 $P$와 만나면서 $\bar{V}_{n+1}$은 $x_n$을 피하도록 잡을 수 있다
+  (집적점이 무한히 붐비므로 $x_n$을 비켜 갈 공간이 항상 있다).</p>
+  <p>$K_n = \bar{V}_n \cap P$는 컴팩트(닫힘+유계)이고 공집합이 아니며 중첩 감소하므로,
+  컴팩트성(정리 2.36 — 유한교차성)에 의해 $\bigcap K_n \neq \varnothing$.
+  그 공통점은 $P$의 점인데 모든 $x_n$을 피해 갔다 — 나열에 없는 점. 모순.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 2.44 · <span id="def-cantor-set">칸토어 집합</span> <span class="label-en">Cantor set</span></span>
+  <p>$[0, 1]$에서 시작해 가운데 $\frac{1}{3}$ 열린구간을 제거하고, 남은 두 구간에서
+  또 가운데 $\frac{1}{3}$씩 제거하고… 를 무한히 반복한다. 남는 집합 $C$가
+  <strong>칸토어 집합</strong>이다.</p>
+</div>
+
+<svg viewBox="0 0 560 130" role="img" aria-label="칸토어 집합 구성: 구간에서 가운데 3분의 1을 반복 제거하는 4단계 그림" style="max-width:100%; height:auto; display:block; margin:1.2rem auto;">
+  <g fill="#2F5DA8">
+    <rect x="40" y="10" width="480" height="10" rx="2"/>
+    <rect x="40" y="40" width="160" height="10" rx="2"/><rect x="360" y="40" width="160" height="10" rx="2"/>
+    <rect x="40" y="70" width="53.3" height="10" rx="2"/><rect x="146.7" y="70" width="53.3" height="10" rx="2"/>
+    <rect x="360" y="70" width="53.3" height="10" rx="2"/><rect x="466.7" y="70" width="53.3" height="10" rx="2"/>
+    <rect x="40" y="100" width="17.8" height="10" rx="2"/><rect x="75.6" y="100" width="17.8" height="10" rx="2"/>
+    <rect x="146.7" y="100" width="17.8" height="10" rx="2"/><rect x="182.2" y="100" width="17.8" height="10" rx="2"/>
+    <rect x="360" y="100" width="17.8" height="10" rx="2"/><rect x="395.6" y="100" width="17.8" height="10" rx="2"/>
+    <rect x="466.7" y="100" width="17.8" height="10" rx="2"/><rect x="502.2" y="100" width="17.8" height="10" rx="2"/>
+  </g>
+  <text x="30" y="19" text-anchor="end" font-size="12" fill="#666D7C">C₀</text>
+  <text x="30" y="49" text-anchor="end" font-size="12" fill="#666D7C">C₁</text>
+  <text x="30" y="79" text-anchor="end" font-size="12" fill="#666D7C">C₂</text>
+  <text x="30" y="109" text-anchor="end" font-size="12" fill="#666D7C">C₃</text>
+</svg>
+
+<div class="box box-intuition">
+  <span class="box-label">칸토어 집합이 유명한 이유</span>
+  <p>거의 모든 직관을 한 번에 배신하는 반례 공장입니다:</p>
+  <p>① 제거한 길이를 다 더하면 $\frac{1}{3} + \frac{2}{9} + \frac{4}{27} + \cdots = 1$ —
+  “길이 $0$”인데, ② 완전집합이라 (정리 2.43) <strong>비가산</strong>입니다.
+  점의 개수로는 $[0,1]$만큼 많은데 길이는 없어요.
+  ③ 닫힌집합들의 교집합이므로 닫혀 있고 유계 — 하이네-보렐에 의해 <strong>컴팩트</strong>.
+  ④ 어떤 열린구간도 통째로 담지 않습니다 (내부가 공집합).
+  “집적점만으로 이루어졌는데 어디에도 뭉쳐 있지 않은” 집합 — 3장 이후에도
+  반례가 필요할 때마다 소환됩니다.</p>
+</div>
+
+<h2 id="sec-connected">6. 연결집합 — 한 덩어리인가</h2>
+
+<div class="box box-def" id="def-connected-set">
+  <span class="box-label">정의 2.45 · 분리와 연결 <span class="label-en">separated, connected</span></span>
+  <p>$A, B \subset X$가 $\bar{A} \cap B = \varnothing$이고 $A \cap \bar{B} = \varnothing$이면
+  (서로의 폐포조차 건드리지 않으면) $A$와 $B$는 <strong>분리되어 있다</strong>(separated)고 한다.</p>
+  <p>$E \subset X$가 공집합 아닌 분리된 두 집합의 합으로 쪼개질 수 <strong>없으면</strong>
+  $E$는 <strong>연결</strong>(connected)이라 한다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>연결 = <strong>한 덩어리</strong>. “분리”가 단순히 “서로소”보다 강한 조건임에 주의하세요:
+  $(0, 1)$과 $[1, 2)$는 서로소지만 분리되어 있지는 않습니다 —
+  $1$이 앞 집합의 폐포에 들어가 두 집합이 “맞닿아” 있으니까요. 그래서
+  $(0,1) \cup [1,2) = (0,2)$가 멀쩡한 한 덩어리인 것과 아귀가 맞습니다.
+  반면 $(0,1)$과 $(1,2)$는 분리 — $1$이라는 이음새가 빠져 있죠.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 2.47</span>
+  <p><strong>이 정리가 하는 일:</strong> $\mathbb{R}$의 연결집합을 완전히 분류한다 —
+  연결 $=$ 구간. (4장에서 중간값 정리가 이 정리에서 나온다.)</p>
+  <p>$E \subset \mathbb{R}$이 연결 $\iff$ $E$가 구간이다. 즉:
+  $x, y \in E$이고 $x \lt z \lt y$이면 $z \in E$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: (⇒) 중간점이 빠졌다면 그 점으로 자르면 분리된다. (⇐) 쪼개졌다면 한쪽의 상한을 보라 — 그 점이 이음새가 되어 모순.</span></summary>
+  <p>($\Rightarrow$, 대우) $x, y \in E$, $x \lt z \lt y$인데 $z \notin E$라 하자.
+  $A = E \cap (-\infty, z)$, $B = E \cap (z, +\infty)$로 자르면 $E = A \cup B$이고
+  둘 다 공집합이 아니다 ($x \in A$, $y \in B$). $\bar{A} \subset (-\infty, z]$이고
+  $B \subset (z, \infty)$이므로 $\bar{A} \cap B = \varnothing$; 마찬가지로
+  $A \cap \bar{B} = \varnothing$. 분리된 분해 — $E$는 연결이 아니다.</p>
+  <p>($\Leftarrow$, 대우) $E = A \cup B$가 분리된 분해라 하자. $x \in A$, $y \in B$를 잡고
+  ($x \lt y$라 하자) $z = \sup (A \cap [x, y])$로 놓는다.
+  정리 2.28에 의해 $z \in \bar{A}$이므로 (분리 조건에서) $z \notin B$.</p>
+  <p>만약 $z \notin A$라면: $z \notin A \cup B = E$이면서 $x \le z \le y$ — 그런데
+  $z \neq x$ ($x \in A$), $z \neq y$ ($y \in B$)이므로 $x \lt z \lt y$인 빠진 중간점 발견.</p>
+  <p>만약 $z \in A$라면: $z \notin \bar{B}$이므로 $z$의 어떤 근방이 $B$와 안 만나고,
+  따라서 $z \lt z_1 \lt y$이면서 $z_1 \notin B$인 $z_1$이 존재한다.
+  $z_1 \gt z = \sup(A \cap [x,y])$이므로 $z_1 \notin A$. 즉 $z_1 \notin E$ —
+  또 빠진 중간점 발견. 어느 경우든 “중간점 조건”이 깨진다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">2장의 줄거리</span>
+  <p>무한에는 급이 있다: <a class="term" data-term="countable">가산</a> vs 비가산 (대각선 논법)
+  → 수렴의 무대: <a class="term" data-term="metric-space">거리공간</a>
+  → 공으로 만드는 문법: <a class="term" data-term="neighborhood">근방</a>,
+  <a class="term" data-term="limit-point">집적점</a>,
+  <a class="term" data-term="open-set">열린집합</a> / <a class="term" data-term="closed-set">닫힌집합</a>
+  (열림 $\iff$ 여집합이 닫힘; 임의 합·유한 교),
+  <a class="term" data-term="closure">폐포</a>
+  → 주인공: <a class="term" data-term="compact">컴팩트</a> = 모든
+  <a class="term" data-term="open-cover">열린 덮개</a>가 유한 부분덮개를 가짐
+  → $\mathbb{R}^k$에서의 판정법: <a class="term" data-term="heine-borel">하이네-보렐</a>
+  (닫힘+유계 $\iff$ 컴팩트 — <strong>$\mathbb{R}^k$ 한정!</strong>)
+  → 괴물 예제: <a class="term" data-term="perfect-set">완전집합</a>은 비가산,
+  <a class="term" data-term="cantor-set">칸토어 집합</a>
+  → <a class="term" data-term="connected-set">연결집합</a> = $\mathbb{R}$에서는 구간.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 컴팩트는 “무한을 유한으로 압축하는 성질”이고,
+  $\mathbb{R}^k$에서는 닫힘+유계와 같다 — 단, 그 동치는 $\mathbb{R}^k$ 밖에서 깨진다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$\mathbb{R}$에서 다음 집합 각각에 대해 (i) 집적점 전체, (ii) 열림 여부,
+  (iii) 닫힘 여부, (iv) 컴팩트 여부를 판정하라.</p>
+  <p>(1) $E_1 = \{1/n : n \in \mathbb{N}\}$ &nbsp;
+  (2) $E_2 = E_1 \cup \{0\}$ &nbsp;
+  (3) $E_3 = \mathbb{Q} \cap [0, 1]$ &nbsp;
+  (4) $E_4 = [0, \infty)$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>컴팩트 판정은 하이네-보렐(닫힘+유계)로 하는 것이 가장 빠르다.
+    (3)의 집적점을 구할 때는 유리수의 조밀성을 떠올려라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 집적점은 $\{0\}$ 하나. $0 \notin E_1$이므로 닫혀 있지 않고, 각 점이 고립점이라
+    내점이 없어 열려 있지도 않다. 닫혀 있지 않으므로 컴팩트 아님 (정리 2.34의 대우).</p>
+    <p>(2) 집적점은 여전히 $\{0\}$이고 이제 $0 \in E_2$ — 닫혀 있다. 유계이므로
+    하이네-보렐에 의해 <strong>컴팩트</strong>. (열려 있지는 않다.)
+    “점 하나 추가”가 컴팩트 여부를 바꾼다는 것에 주목.</p>
+    <p>(3) 조밀성에 의해 $[0,1]$의 모든 점이 집적점 (무리수 포함!). 집적점 중 무리수들이
+    $E_3$ 밖에 있으므로 닫혀 있지 않고, 어떤 근방도 유리수만 담을 수 없으므로 열려 있지도
+    않다. 컴팩트 아님.</p>
+    <p>(4) 닫혀 있다 (집적점 전체가 $[0,\infty)$ 자신). 열려 있지 않다 ($0$이 내점이 아님).
+    하지만 <strong>유계가 아니므로</strong> 컴팩트 아님 — “닫힘만으로는 부족하다”의 표준 예.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거(정리 번호면 충분), 거짓이면 반례를 들어라.</p>
+  <p>(1) 열린집합들의 무한 교집합은 열려 있다.<br>
+  (2) 컴팩트 집합들의 임의의 교집합은 컴팩트다.<br>
+  (3) 임의의 거리공간에서, 닫혀 있고 유계인 집합은 컴팩트다.<br>
+  (4) 유한집합은 항상 컴팩트다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 본문의 $(-1/n, 1/n)$ 예. (2) 컴팩트 → 닫힘(2.34)과 “컴팩트의 닫힌 부분집합”(2.35)을
+    조합하라. (3) 이산거리공간. (4) 아무 덮개에서나 각 점을 덮는 열린집합을 하나씩만 뽑아 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $\bigcap_n (-1/n, 1/n) = \{0\}$은 열려 있지 않다.</p>
+    <p>(2) <strong>참.</strong> 각 컴팩트 집합은 닫혀 있으므로(2.34) 교집합도 닫혀 있고,
+    교집합은 그중 한 컴팩트 집합의 닫힌 부분집합이므로 컴팩트다(2.35).</p>
+    <p>(3) <strong>거짓.</strong> 무한집합에 이산거리를 주면 닫혀 있고 유계지만,
+    반지름 $1/2$ 공들의 덮개가 유한 부분덮개를 갖지 않는다. ($\mathbb{Q}$의
+    $\{x : 2 \lt x^2 \lt 3\}$도 좋은 반례 — 본문 참고.)</p>
+    <p>(4) <strong>참.</strong> $E = \{p_1, \dots, p_n\}$의 임의의 열린 덮개에서 각 $p_i$를
+    담는 $G_{\alpha_i}$를 하나씩 뽑으면 그 $n$개가 유한 부분덮개다. “컴팩트 = 유한처럼
+    행동”의 출발점.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 2장 연습 5 기반</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>집적점을 정확히 세 개 갖는 $\mathbb{R}$의 유계집합을 하나 구성하고, 근거를 밝혀라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\{1/n\}$의 집적점은 $0$ 하나다. 이런 “한 점으로 몰려드는 무리”를 세 벌 만들어
+    합쳐라 — 서로 겹치지 않게 평행이동해서.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>예: $E = \{1/n\} \cup \{1 + 1/n\} \cup \{2 + 1/n\}$ ($n \in \mathbb{N}$).</p>
+    <p>각 무리는 각각 $0, 1, 2$로 몰려들므로 $0, 1, 2$는 집적점이다.
+    다른 점 $p$가 집적점이 아님을 보이려면: $p \notin \{0,1,2\}$이면 $p$와
+    $\{0,1,2\}$ 및 $E$의 점들 사이 거리 중 양수인 최소 간격이 존재해
+    (각 무리에서 $p$ 근처에는 유한 개의 점만 있으므로 — 정리 2.20의 논법)
+    충분히 작은 근방은 $E$를 ($p$ 자신 외에는) 만나지 않는다.
+    $E$는 $[0, 3]$ 안에 있으므로 유계. 집적점이 정확히 $\{0, 1, 2\}$인 유계집합 완성.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 2장 연습 12 기반</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$K = \{1/n : n \in \mathbb{N}\} \cup \{0\}$이 컴팩트임을,
+  하이네-보렐을 <strong>쓰지 말고</strong> 정의(모든 열린 덮개에서 유한 부분덮개)로부터
+  직접 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>덮개 중 $0$을 담는 열린집합 $G$ 하나에 주목하라. $G$가 열려 있으므로 $0$의 어떤
+    근방을 통째로 담는데, 그 근방 바깥에 남는 $1/n$은 몇 개인가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\{G_\alpha\}$를 $K$의 임의의 열린 덮개라 하자. $0 \in K$이므로 $0 \in G_{\alpha_0}$인
+    $G_{\alpha_0}$가 있다. $G_{\alpha_0}$는 열려 있으므로 $N_r(0) = (-r, r) \subset G_{\alpha_0}$인
+    $r \gt 0$이 존재한다.</p>
+    <p>아르키메데스 성질에 의해 $1/N \lt r$인 $N$이 있고, $n \ge N$인 모든 $1/n$은
+    $(-r, r) \subset G_{\alpha_0}$ 안에 들어간다. <strong>즉 $G_{\alpha_0}$ 한 장이 꼬리 전체를
+    삼킨다.</strong> 남는 점은 $1, \frac{1}{2}, \dots, \frac{1}{N-1}$의 유한 개뿐이고,
+    각각을 담는 $G_{\alpha_1}, \dots, G_{\alpha_{N-1}}$을 하나씩 뽑으면
+    $\{G_{\alpha_0}, G_{\alpha_1}, \dots, G_{\alpha_{N-1}}\}$이 유한 부분덮개다.</p>
+    <p>(비교: $\{0\}$을 빼면 이 논증이 무너진다 — $0$을 담는 “꼬리를 삼키는 한 장”이
+    없어지기 때문. $(0,1)$이 컴팩트가 아닌 것과 같은 이유다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>컴팩트 판정 서술</span>
+  </div>
+  <p>다음 각 집합이 컴팩트인지 판정하고 근거를 서술하라 (거리는 통상적 거리).</p>
+  <p>(1) $A = \{(x, y) \in \mathbb{R}^2 : x^2 + y^2 \le 1\}$<br>
+  (2) $B = \{(x, y) \in \mathbb{R}^2 : x^2 + y^2 \lt 1\}$<br>
+  (3) $C = \{x \in \mathbb{Q} : 0 \le x \le 1\}$, 거리공간 $\mathbb{Q}$의 부분집합으로서</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1), (2)는 하이네-보렐. (3)이 함정 — 정리 2.33(컴팩트의 절대성)에 의해
+    “$\mathbb{Q}$ 안에서 컴팩트”와 “$\mathbb{R}$ 안에서 컴팩트”는 같은 질문이다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>컴팩트.</strong> 닫힌 원판은 닫혀 있고 (경계를 포함하며, 여집합이 열려 있음을
+    쉽게 확인) 유계이므로 하이네-보렐에 의해 컴팩트.</p>
+    <p>(2) <strong>컴팩트 아님.</strong> 유계지만 닫혀 있지 않다 — 경계점 $(1, 0)$이 $B$의
+    집적점인데 $B$에 없다. 정리 2.34(컴팩트 → 닫힘)의 대우.</p>
+    <p>(3) <strong>컴팩트 아님.</strong> 컴팩트성은 절대적 성질이므로(정리 2.33) $C$가
+    $\mathbb{R}$의 부분집합으로 컴팩트인지 보면 된다. $C$는 $\mathbb{R}$에서 닫혀 있지 않다 —
+    예컨대 무리수 $\sqrt{2}/2 \in [0,1]$은 (조밀성에 의해) $C$의 집적점이지만
+    $\sqrt{2}/2 \notin C$이다. 그러므로 컴팩트가 아니다.
+    “$\mathbb{Q}$ 안에서는 닫혀 있는데요?”라는 반문이 나올 수 있지만, 절대성 덕분에
+    공간을 $\mathbb{R}$로 넓혀 판정해도 되고, 그러면 결론이 명확하다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>집적점·폐포 논증 서술형</span>
+  </div>
+  <p>$E \subset \mathbb{R}$이 공집합이 아니고 위로 유계인 집합일 때, 다음을 증명하라.</p>
+  <p>(1) $\sup E \notin E$이면 $\sup E$는 $E$의 집적점이다.<br>
+  (2) $E$가 닫혀 있으면 $E$는 최댓값을 갖는다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 상한의 정의 조건 (ii)를 “임의의 $\varepsilon \gt 0$”의 언어로 번역하라:
+    $\sup E - \varepsilon$은 상계가 아니다. (2)는 (1)과 닫힘의 정의를 조합하면 두 줄이다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1)</strong> $\alpha = \sup E$라 하고 $\alpha \notin E$라 하자.
+    임의의 $\varepsilon \gt 0$에 대해 $\alpha - \varepsilon \lt \alpha$이므로
+    $\alpha - \varepsilon$은 $E$의 상계가 아니고, 따라서
+    $\alpha - \varepsilon \lt x \le \alpha$인 $x \in E$가 존재한다.
+    $\alpha \notin E$이므로 $x \neq \alpha$, 즉 $x \in (\alpha - \varepsilon, \alpha + \varepsilon)
+    \setminus \{\alpha\}$. $\varepsilon$이 임의이므로 $\alpha$의 모든 근방이 $\alpha$ 아닌
+    $E$의 점을 포함한다 — $\alpha$는 $E$의 집적점이다.</p>
+    <p><strong>(2)</strong> 완비성에 의해 $\alpha = \sup E$가 존재한다.
+    만약 $\alpha \notin E$라면 (1)에 의해 $\alpha$는 $E$의 집적점인데, $E$가 닫혀 있으므로
+    $\alpha \in E$ — 모순. 그러므로 $\alpha \in E$이고, 상계이면서 원소이므로
+    $\alpha = \max E$.</p>
+    <p>(이 결과는 4장에서 “컴팩트 집합 위의 연속함수는 최댓값을 갖는다”로 확장된다 —
+    같은 뼈대의 논증이다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

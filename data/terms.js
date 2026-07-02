@@ -111,5 +111,92 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "triangle inequality",
     "short": "$|\\mathbf{x}+\\mathbf{y}| \\le |\\mathbf{x}|+|\\mathbf{y}|$, 또는 거리 형태로 $|\\mathbf{x}-\\mathbf{z}| \\le |\\mathbf{x}-\\mathbf{y}|+|\\mathbf{y}-\\mathbf{z}|$. \"돌아가는 길은 직행보다 짧지 않다\" — 2장 거리공간의 출발점.",
     "href": "subjects/analysis/ch01.html#def-triangle-inequality"
+  },
+
+  /* ---------- 해석학 2장: 기초 위상 ---------- */
+
+  "countable": {
+    "ko": "가산집합",
+    "en": "countable set",
+    "short": "자연수 전체와 일대일 대응이 있는 집합 — 원소를 $x_1, x_2, \\dots$로 빠짐없이 나열할 수 있다. $\\mathbb{Z}, \\mathbb{Q}$는 가산, $\\mathbb{R}$은 비가산.",
+    "href": "subjects/analysis/ch02.html#def-countable"
+  },
+  "metric-space": {
+    "ko": "거리공간",
+    "en": "metric space",
+    "short": "두 점마다 거리 $d(p,q)$가 정의된 집합. 조건: 양수성($p \\neq q \\Rightarrow d \\gt 0$), 대칭성, 삼각부등식. 수렴을 말할 최소한의 무대다.",
+    "href": "subjects/analysis/ch02.html#def-metric-space"
+  },
+  "neighborhood": {
+    "ko": "근방",
+    "en": "neighborhood",
+    "short": "$N_r(p) = \\{q : d(p,q) \\lt r\\}$ — $p$ 중심, 반지름 $r$인 열린 공. $\\mathbb{R}$에서는 열린구간 $(p-r, p+r)$.",
+    "href": "subjects/analysis/ch02.html#def-neighborhood"
+  },
+  "limit-point": {
+    "ko": "집적점",
+    "en": "limit point",
+    "short": "모든 근방이 자기 아닌 $E$의 점을 포함하는 점 — \"$E$가 한없이 몰려드는 지점\". $E$에 속하지 않을 수 있고, 근방마다 $E$의 점이 무한히 많다 (Rudin 2.20).",
+    "href": "subjects/analysis/ch02.html#def-limit-point"
+  },
+  "open-set": {
+    "ko": "열린집합",
+    "en": "open set",
+    "short": "모든 점이 내점인 집합 — 어느 점이든 어떤 근방이 통째로 집합 안에 들어간다. 열림 $\\iff$ 여집합이 닫힘 (Rudin 2.23).",
+    "href": "subjects/analysis/ch02.html#def-open-set"
+  },
+  "closed-set": {
+    "ko": "닫힌집합",
+    "en": "closed set",
+    "short": "자신의 집적점을 모두 포함하는 집합. 임의의 교집합·유한 합집합에서 닫힘이 보존된다 (Rudin 2.24).",
+    "href": "subjects/analysis/ch02.html#def-closed-set"
+  },
+  "bounded-dense": {
+    "ko": "유계 / 조밀 (거리공간)",
+    "en": "bounded / dense",
+    "short": "유계: 공 하나에 통째로 들어감. 조밀: 공간의 모든 점이 $E$의 점이거나 집적점 ($\\bar{E} = X$). 예: $\\mathbb{Q}$는 $\\mathbb{R}$에서 조밀.",
+    "href": "subjects/analysis/ch02.html#def-bounded-dense"
+  },
+  "closure": {
+    "ko": "폐포",
+    "en": "closure",
+    "short": "$\\bar{E} = E \\cup E'$ ($E'$은 집적점 전체) — $E$를 포함하는 가장 작은 닫힌집합. 예: $\\overline{(0,1)} = [0,1]$, $\\overline{\\mathbb{Q}} = \\mathbb{R}$.",
+    "href": "subjects/analysis/ch02.html#def-closure"
+  },
+  "open-cover": {
+    "ko": "열린 덮개",
+    "en": "open cover",
+    "short": "합집합이 $E$를 포함하는 열린집합들의 모임 $\\{G_\\alpha\\}$. 컴팩트성 정의의 재료.",
+    "href": "subjects/analysis/ch02.html#def-open-cover"
+  },
+  "compact": {
+    "ko": "컴팩트 집합",
+    "en": "compact set",
+    "short": "모든 열린 덮개가 유한 부분덮개를 갖는 집합 — \"유한처럼 행동하는 무한\". 컴팩트이면 닫히고 유계이며, $\\mathbb{R}^k$에서는 역도 성립 (하이네-보렐).",
+    "href": "subjects/analysis/ch02.html#def-compact"
+  },
+  "heine-borel": {
+    "ko": "하이네-보렐 정리",
+    "en": "Heine–Borel theorem",
+    "short": "$\\mathbb{R}^k$에서: 닫힘+유계 $\\iff$ 컴팩트 $\\iff$ 모든 무한 부분집합이 안에 집적점을 가짐. 일반 거리공간에서는 \"닫힘+유계 $\\Rightarrow$ 컴팩트\"가 거짓!",
+    "href": "subjects/analysis/ch02.html#def-heine-borel"
+  },
+  "perfect-set": {
+    "ko": "완전집합",
+    "en": "perfect set",
+    "short": "닫혀 있고 고립점이 없는(모든 점이 집적점인) 집합. $\\mathbb{R}^k$의 공집합 아닌 완전집합은 비가산이다 (Rudin 2.43).",
+    "href": "subjects/analysis/ch02.html#def-perfect-set"
+  },
+  "cantor-set": {
+    "ko": "칸토어 집합",
+    "en": "Cantor set",
+    "short": "$[0,1]$에서 가운데 $1/3$을 무한히 반복 제거한 집합. 컴팩트·완전·비가산이지만 길이 $0$, 내부 공집합 — 해석학 최고의 반례 공장.",
+    "href": "subjects/analysis/ch02.html#def-cantor-set"
+  },
+  "connected-set": {
+    "ko": "연결집합",
+    "en": "connected set",
+    "short": "공집합 아닌 분리된 두 집합($\\bar{A} \\cap B = A \\cap \\bar{B} = \\varnothing$)의 합으로 쪼갤 수 없는 집합 — \"한 덩어리\". $\\mathbb{R}$에서는 연결 $\\iff$ 구간 (Rudin 2.47).",
+    "href": "subjects/analysis/ch02.html#def-connected-set"
   }
 });
