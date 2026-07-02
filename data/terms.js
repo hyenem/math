@@ -617,6 +617,31 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/abstract-algebra/ch05.html#def-characteristic"
   },
 
+  "ideal": {
+    "ko": "아이디얼",
+    "en": "ideal",
+    "short": "덧셈 부분군 + 흡수 성질($r \\in R, a \\in N \\Rightarrow ra \\in N$) — 몫환 곱셈이 잘 정의되는 조건. 환 준동형의 핵은 항상 아이디얼. $\\mathbb{Z}$와 $F[x]$에서는 전부 주 아이디얼.",
+    "href": "subjects/abstract-algebra/ch06.html#def-ideal"
+  },
+  "factor-ring": {
+    "ko": "잉여환",
+    "en": "factor ring",
+    "short": "$R/N$ — 아이디얼로 나눈 몫. 환 제1동형정리 $R/\\ker\\phi \\cong \\phi(R)$. \"대입 = 몫\": $F[x]/\\langle x \\rangle \\cong F$, $\\mathbb{R}[x]/\\langle x^2+1 \\rangle \\cong \\mathbb{C}$.",
+    "href": "subjects/abstract-algebra/ch06.html#def-factor-ring"
+  },
+  "prime-maximal": {
+    "ko": "소 / 극대 아이디얼",
+    "en": "prime, maximal ideal",
+    "short": "소: $ab \\in N \\Rightarrow a \\in N$ 또는 $b \\in N$. 극대: 더 키울 수 없음. 몫이 정역 $\\iff$ 소, 몫이 체 $\\iff$ 극대 — 극대 ⇒ 소이고 역은 거짓 ($\\mathbb{Z}[x]$의 $\\langle x \\rangle$).",
+    "href": "subjects/abstract-algebra/ch06.html#def-prime-maximal"
+  },
+  "field-hierarchy": {
+    "ko": "체 (환의 위계에서)",
+    "en": "field in the ring hierarchy",
+    "short": "체 ⇒ 정역 ⇒ 가환환 (역은 각각 거짓). 유한 정역은 체 — $\\mathbb{Z}_p$가 체인 이유. 체의 아이디얼은 자명한 둘뿐.",
+    "href": "subjects/abstract-algebra/ch05.html#def-field-hierarchy"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {
