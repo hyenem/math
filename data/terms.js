@@ -312,5 +312,32 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "fundamental theorem of calculus",
     "short": "① $F(x) = \\int_a^x f$는 $f$의 연속점에서 $F' = f$ (Rudin 6.20). ② $F' = f \\in \\mathscr{R}$이면 $\\int_a^b f = F(b) - F(a)$ (Rudin 6.21, 증명 = 소구간마다 MVT + 망원합).",
     "href": "subjects/analysis/ch06.html#def-fundamental-theorem-calculus"
+  },
+
+  /* ---------- 해석학 7장: 함수열과 함수급수 ---------- */
+
+  "pointwise-convergence": {
+    "ko": "점별 수렴",
+    "en": "pointwise convergence",
+    "short": "각 점 $x$마다 수열 $f_n(x)$가 수렴하는 것 — $N$이 $\\varepsilon$과 $x$ 둘 다에 의존해도 된다. 연속·적분·미분이 극한에 유전되지 않을 수 있다 ($x^n$이 대표 반례).",
+    "href": "subjects/analysis/ch07.html#def-pointwise-convergence"
+  },
+  "uniform-convergence": {
+    "ko": "균등수렴",
+    "en": "uniform convergence",
+    "short": "하나의 $N$이 모든 $x$를 동시에 감당: $n \\ge N \\Rightarrow \\sup_x |f_n(x) - f(x)| \\le \\varepsilon$. 판정은 $M_n = \\sup|f_n - f| \\to 0$. 연속성 유전, $\\lim$–$\\int$ 교환을 보증한다.",
+    "href": "subjects/analysis/ch07.html#def-uniform-convergence"
+  },
+  "m-test": {
+    "ko": "바이어슈트라스 M-판정법",
+    "en": "Weierstrass M-test",
+    "short": "$|f_n(x)| \\le M_n$ (모든 $x$)이고 $\\sum M_n$이 수렴하면 $\\sum f_n$은 균등·절대수렴 (Rudin 7.10). 함수급수 균등수렴의 실전 도구 1호.",
+    "href": "subjects/analysis/ch07.html#def-m-test"
+  },
+  "equicontinuity": {
+    "ko": "동등연속",
+    "en": "equicontinuity",
+    "short": "하나의 $\\delta$가 모든 지점과 족의 모든 함수를 동시에 감당하는 것. 점별 유계 + 동등연속이면 컴팩트 위에서 균등수렴 부분수열이 존재한다 (아르젤라-아스콜리, Rudin 7.25).",
+    "href": "subjects/analysis/ch07.html#def-equicontinuity"
   }
 });
