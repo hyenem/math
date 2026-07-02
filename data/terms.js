@@ -198,5 +198,50 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "connected set",
     "short": "공집합 아닌 분리된 두 집합($\\bar{A} \\cap B = A \\cap \\bar{B} = \\varnothing$)의 합으로 쪼갤 수 없는 집합 — \"한 덩어리\". $\\mathbb{R}$에서는 연결 $\\iff$ 구간 (Rudin 2.47).",
     "href": "subjects/analysis/ch02.html#def-connected-set"
+  },
+
+  /* ---------- 해석학 3장: 수열과 급수 ---------- */
+
+  "convergent-sequence": {
+    "ko": "수열의 수렴",
+    "en": "convergence of a sequence",
+    "short": "임의의 $\\varepsilon \\gt 0$에 대해 $N$이 존재하여 $n \\ge N$이면 $d(p_n, p) \\lt \\varepsilon$ — \"$\\varepsilon$이 먼저, $N$은 그에 맞춰서\". 극한은 유일하고 수렴수열은 유계다.",
+    "href": "subjects/analysis/ch03.html#def-convergent-sequence"
+  },
+  "subsequence": {
+    "ko": "부분수열",
+    "en": "subsequence",
+    "short": "첨자를 증가하게 골라낸 $\\{p_{n_k}\\}$. 전체가 수렴 $\\iff$ 모든 부분수열이 같은 값으로 수렴. $\\mathbb{R}^k$의 유계수열은 수렴 부분수열을 가진다 (볼차노-바이어슈트라스).",
+    "href": "subjects/analysis/ch03.html#def-subsequence"
+  },
+  "cauchy-sequence": {
+    "ko": "코시 수열",
+    "en": "Cauchy sequence",
+    "short": "$m, n \\ge N$이면 $d(p_n, p_m) \\lt \\varepsilon$ — 극한값 없이 \"자기들끼리 뭉침\"으로 수렴을 예고하는 조건. 수렴 $\\Rightarrow$ 코시는 항상 참, 역은 완비공간에서만.",
+    "href": "subjects/analysis/ch03.html#def-cauchy-sequence"
+  },
+  "complete-space": {
+    "ko": "완비 거리공간",
+    "en": "complete metric space",
+    "short": "모든 코시 수열이 수렴하는 거리공간. $\\mathbb{R}^k$와 컴팩트 공간은 완비, $\\mathbb{Q}$는 아니다 ($\\sqrt{2}$ 근사 수열이 반례).",
+    "href": "subjects/analysis/ch03.html#def-complete-space"
+  },
+  "limsup-liminf": {
+    "ko": "상극한 / 하극한",
+    "en": "limsup / liminf",
+    "short": "부분수열 극한 전체의 집합 $E$에 대해 $\\limsup s_n = \\sup E$, $\\liminf s_n = \\inf E$. 극한과 달리 (확장실수에서) 항상 존재한다. 수렴 $\\iff$ 상극한 $=$ 하극한.",
+    "href": "subjects/analysis/ch03.html#def-limsup-liminf"
+  },
+  "series": {
+    "ko": "급수",
+    "en": "series",
+    "short": "부분합 $s_n = a_1 + \\cdots + a_n$의 수열이 수렴할 때 $\\sum a_n$이 수렴한다고 한다 — 무한합은 부분합 수열의 극한일 뿐. 수렴하면 $a_n \\to 0$ (역은 거짓: 조화급수).",
+    "href": "subjects/analysis/ch03.html#def-series"
+  },
+  "absolute-convergence": {
+    "ko": "절대수렴",
+    "en": "absolute convergence",
+    "short": "$\\sum |a_n|$이 수렴하는 것. 절대수렴 $\\Rightarrow$ 수렴이고, 재배열해도 합이 불변. 수렴하지만 절대수렴이 아니면 조건수렴 — 재배열로 아무 값이나 만들 수 있다 (리만).",
+    "href": "subjects/analysis/ch03.html#def-absolute-convergence"
   }
 });

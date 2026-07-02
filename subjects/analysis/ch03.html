@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3장 수열과 급수 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch03.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin, Principles of Mathematical Analysis</p>
+  <h1><span class="ch-num">3</span> 수열과 급수</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다. 임용에서 계산·판정 문제가
+  가장 많이 나오는 장입니다.</p>
+</div>
+
+<p>드디어 극한입니다. 1장에서 실수를 짓고 2장에서 거리의 언어를 만든 것이 전부
+이 순간을 위해서였어요. 이 장의 목표는 두 가지입니다:
+“수열이 수렴한다”를 반박 불가능하게 정의하는 것, 그리고
+수렴 여부를 <em>극한값을 몰라도</em> 판정하는 도구들을 갖추는 것.</p>
+
+<h2 id="sec-convergence">1. 수렴 — $\varepsilon$–$N$ 게임</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>“$p_n$이 $p$로 수렴한다”를 게임으로 읽으세요. <strong>상대가 먼저</strong> 오차 허용치
+  $\varepsilon \gt 0$을 아무리 짜게 제시해도, <strong>나는 언제나</strong> 시점 $N$을 골라
+  “$N$번째부터는 전부 $p$에서 $\varepsilon$ 안쪽”이라고 응수할 수 있다 — 이 게임에서
+  내가 항상 이기면 수렴입니다. 순서가 생명이에요:
+  $\varepsilon$이 먼저, $N$은 그에 <em>맞춰서</em> 나중. ($N$은 $\varepsilon$에 따라
+  얼마든지 커져도 됩니다.)</p>
+</div>
+
+<div class="box box-def" id="def-convergent-sequence">
+  <span class="box-label">정의 3.1 · 수열의 수렴 <span class="label-en">convergence</span></span>
+  <p><a class="term" data-term="metric-space">거리공간</a> $X$의 수열 $\{p_n\}$이 다음을 만족하는
+  $p \in X$를 가지면 <strong>수렴한다</strong>(converge)고 한다:</p>
+  <p style="text-align:center;">임의의 $\varepsilon \gt 0$에 대해, 자연수 $N$이 존재하여
+  $n \ge N$이면 $d(p_n, p) \lt \varepsilon$.</p>
+  <p>이때 $p_n \to p$ 또는 $\lim_{n\to\infty} p_n = p$로 쓴다. 수렴하지 않으면
+  <strong>발산한다</strong>(diverge)고 한다. $\mathbb{R}$에서는 $d(p_n, p) = |p_n - p|$이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① “한없이 가까워지지만 도달하지는 않는다” — 도달해도 됩니다. 상수수열
+  $p, p, p, \dots$도 당당히 $p$로 수렴해요. 핵심은 접근의 드라마가 아니라
+  “<em>결국 아무리 좁은 근방에도 갇힌다</em>”는 사실입니다.
+  ② 수렴 여부와 극한값은 <strong>공간에 따라 달라집니다</strong>: $\{1/n\}$은
+  $\mathbb{R}$에서는 $0$으로 수렴하지만, 공간을 $(0, 1]$로 좁히면 극한이 공간에 없어
+  발산하는 수열이 됩니다. 2장의 교훈(성질은 어디서 보느냐에 달렸다)이 그대로 이어져요.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.2 · 기본 성질</span>
+  <p><strong>이 정리가 하는 일:</strong> 수렴의 기초 문법 — 극한은 하나뿐이고,
+  수렴하면 유계이며, 집적점은 수열로 붙잡을 수 있다.</p>
+  <p>(a) $p_n \to p$ $\iff$ $p$의 모든 근방이 $p_n$을 유한 개만 빼고 전부 담는다.<br>
+  (b) 극한은 유일하다.<br>
+  (c) 수렴하는 수열은 <a class="term" data-term="bounded-dense">유계</a>다.<br>
+  (d) $p$가 $E$의 <a class="term" data-term="limit-point">집적점</a>이면, $p_n \to p$인
+  $E$의 수열 $\{p_n\}$이 존재한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (b), (c) <span class="proof-strategy">— (b) 두 극한 사이 거리를 삼각부등식으로 임의로 작게. (c) 어느 시점 이후는 반지름 1 공 안, 나머지는 유한 개.</span></summary>
+  <p><strong>(b)</strong> $p_n \to p$이고 $p_n \to p'$이라 하자. 임의의 $\varepsilon \gt 0$에
+  대해 충분히 큰 $n$을 잡으면 $d(p, p_n) \lt \varepsilon$과 $d(p_n, p') \lt \varepsilon$이
+  동시에 성립하므로, <a class="term" data-term="triangle-inequality">삼각부등식</a>에 의해
+  $d(p, p') \lt 2\varepsilon$. 모든 $\varepsilon$에 대해 성립하는 음이 아닌 수는 $0$뿐이므로
+  $d(p, p') = 0$, 즉 $p = p'$.</p>
+  <p><strong>(c)</strong> $\varepsilon = 1$에 대한 $N$을 잡으면 $n \ge N$인 $p_n$은 전부
+  $N_1(p)$ 안에 있다. 남은 것은 $p_1, \dots, p_{N-1}$의 유한 개이므로
+  $r = \max\{1, d(p_1, p), \dots, d(p_{N-1}, p)\}$로 잡으면 모든 항이 $N_{2r}(p)$ 안 — 유계.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.3 · 극한의 연산</span>
+  <p><strong>이 정리가 하는 일:</strong> 극한 계산을 “부품 조립”으로 만들어 준다.</p>
+  <p>$s_n \to s$, $t_n \to t$ (실수 또는 복소수 수열)이면:</p>
+  <p>(a) $s_n + t_n \to s + t$ &nbsp; (b) $c\, s_n \to c\, s$ &nbsp;
+  (c) $s_n t_n \to s t$ &nbsp; (d) $t \neq 0$이면 $s_n / t_n \to s / t$
+  (단, 어느 시점 이후 $t_n \neq 0$).</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (c) <span class="proof-strategy">— 전략: $s_nt_n - st$를 “한 번에 하나씩 바꾸는” 꼴로 쪼갠다. 더하고 빼기 트릭의 원형.</span></summary>
+  <p>항등식 하나가 전부다:</p>
+  $$s_n t_n - s t = (s_n - s)(t_n - t) + s(t_n - t) + t(s_n - s)$$
+  <p>$\varepsilon \gt 0$이 주어지면, $n$이 충분히 클 때 $|s_n - s| \lt \sqrt{\varepsilon}$,
+  $|t_n - t| \lt \sqrt{\varepsilon}$이 되게 할 수 있으므로 첫 항은 $\varepsilon$보다 작아지고,
+  나머지 두 항도 ($s$, $t$는 고정 상수이므로) 각각 임의로 작게 만들 수 있다.
+  세 항의 합이 임의로 작아지므로 $s_n t_n \to st$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-def" id="def-subsequence">
+  <span class="box-label">정의 3.5 · 부분수열 <span class="label-en">subsequence</span></span>
+  <p>자연수의 증가수열 $n_1 \lt n_2 \lt n_3 \lt \cdots$에 대해 $\{p_{n_k}\}$를
+  $\{p_n\}$의 <strong>부분수열</strong>이라 한다. 부분수열의 극한을
+  <strong>부분수열 극한</strong>(subsequential limit)이라 한다.</p>
+  <p>기본 사실: $p_n \to p$ $\iff$ 모든 부분수열이 $p$로 수렴한다.
+  (그래서 서로 다른 값으로 수렴하는 두 부분수열을 찾으면 발산 증명 끝 —
+  $(-1)^n$처럼.)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.6 · 볼차노-바이어슈트라스 <span class="label-en">Bolzano–Weierstrass</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 2장의 컴팩트가 수열의 언어로 열매를 맺는다 —
+  유계이기만 하면 수렴하는 조각을 건질 수 있다.</p>
+  <p>(a) <a class="term" data-term="compact">컴팩트</a> 거리공간의 수열은 수렴하는 부분수열을
+  갖는다.<br>
+  (b) 특히 $\mathbb{R}^k$의 유계수열은 수렴하는 부분수열을 갖는다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 항이 유한 종류면 한 값이 무한 번 반복. 무한 종류면 2.37로 집적점을 얻고, 그 점으로 다가가는 항들을 골라낸다.</span></summary>
+  <p>(a) 치역 $E = \{p_n : n \in \mathbb{N}\}$이 유한이면 어떤 값이 무한히 자주 나타나므로
+  그 항들만 골라 상수 부분수열(수렴)을 만든다. $E$가 무한이면 정리 2.37에 의해 $E$는
+  컴팩트 공간 안에 집적점 $p$를 갖는다. $n_1$을 $d(p_{n_1}, p) \lt 1$이 되게, 이후 귀납적으로
+  $n_k \gt n_{k-1}$이면서 $d(p_{n_k}, p) \lt 1/k$인 항을 고르면 (집적점의 모든 근방에 $E$의
+  점이 무한히 많으므로 항상 가능 — 정리 2.20) $p_{n_k} \to p$.</p>
+  <p>(b) 유계수열은 어떤 $k$-세포 안에 살고, $k$-세포는 컴팩트(2.40)이므로 (a) 적용.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-cauchy">2. 코시 수열 — 목적지 없이 수렴을 말하기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>수렴의 정의에는 치명적 불편이 있습니다 — <strong>극한값 $p$를 알아야</strong> 확인할 수
+  있다는 것. 극한값을 모르는 채로 “이 수열, 수렴하는 중”이라고 말할 수는 없을까요?
+  코시의 아이디어: 목적지 대신 <strong>수열이 자기들끼리 뭉치는지</strong>를 보자.
+  뒤로 갈수록 항들 사이의 거리가 다 같이 작아지면, 어딘가로 모이고 있는 겁니다.
+  “그 어딘가”가 공간 안에 실제로 존재하느냐 — 그건 공간의 성질(완비성)이고,
+  1장의 구멍 이야기가 여기서 세 번째로 등장합니다.</p>
+</div>
+
+<div class="box box-def" id="def-cauchy-sequence">
+  <span class="box-label">정의 3.8 · 코시 수열 <span class="label-en">Cauchy sequence</span></span>
+  <p>거리공간 $X$의 수열 $\{p_n\}$이 다음을 만족하면 <strong>코시 수열</strong>이라 한다:</p>
+  <p style="text-align:center;">임의의 $\varepsilon \gt 0$에 대해 $N$이 존재하여,
+  $m, n \ge N$이면 $d(p_n, p_m) \lt \varepsilon$.</p>
+  <p>극한값이 등장하지 않는 것에 주목 — 수열 <em>내부의</em> 조건이다.</p>
+</div>
+
+<div class="box box-def" id="def-complete-space">
+  <span class="box-label">정의 3.12 · 완비 거리공간 <span class="label-en">complete metric space</span></span>
+  <p>모든 코시 수열이 수렴하는 거리공간을 <strong>완비</strong>(complete)라 한다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.11</span>
+  <p><strong>이 정리가 하는 일:</strong> “수렴 ⇒ 코시”는 공짜이고, 역은 공간을 탄다 —
+  컴팩트 공간과 $\mathbb{R}^k$에서는 성립한다.</p>
+  <p>(a) 수렴하는 수열은 코시 수열이다.<br>
+  (b) 컴팩트 거리공간의 코시 수열은 수렴한다 (컴팩트 공간은 완비).<br>
+  (c) $\mathbb{R}^k$의 코시 수열은 수렴한다 ($\mathbb{R}^k$는 완비).</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— (a) 둘 다 극한 근처면 서로도 가깝다. (b) 부분수열 극한을 하나 얻으면, 코시 조건이 수열 전체를 그리로 끌고 간다. (c) 유계 → 볼차노-바이어슈트라스 → (b)와 같은 마무리.</span></summary>
+  <p><strong>(a)</strong> $p_n \to p$이면 $m, n \ge N$일 때
+  $d(p_n, p_m) \le d(p_n, p) + d(p, p_m) \lt 2\varepsilon$.</p>
+  <p><strong>(b)</strong> $\{p_n\}$이 코시라 하자. 볼차노-바이어슈트라스(3.6a)로 수렴하는
+  부분수열 $p_{n_k} \to p$를 얻는다. 이제 $\varepsilon \gt 0$에 대해 코시 조건의 $N$을 잡고,
+  $n_k \ge N$이면서 $d(p_{n_k}, p) \lt \varepsilon$인 $n_k$를 하나 고르면, $n \ge N$일 때</p>
+  $$d(p_n, p) \le d(p_n, p_{n_k}) + d(p_{n_k}, p) \lt \varepsilon + \varepsilon$$
+  <p>즉 수열 전체가 $p$로 수렴한다. <em>부분수열 하나가 전체를 견인하는 것</em> —
+  코시 조건이 있어야만 가능한 마법이다.</p>
+  <p><strong>(c)</strong> 코시 수열은 유계다 ((a)의 증명과 같은 요령). $\mathbb{R}^k$의
+  유계수열은 수렴 부분수열을 갖고(3.6b), (b)의 논증으로 전체가 수렴한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\mathbb{Q}$는 완비가 아니다</span>
+  <p>$\sqrt{2}$의 십진 근사 $1,\ 1.4,\ 1.41,\ 1.414,\ \dots$는 유리수 수열이고
+  코시 수열이지만 ($m, n \ge N$이면 차이가 $10^{-N}$ 이하), $\mathbb{Q}$ 안에서는
+  극한이 없다 — 극한이어야 할 자리가 1장의 그 “구멍”이다.
+  실은 <strong>완비성 = 최소상계성질의 거리공간 버전</strong>이라 봐도 좋다
+  ($\mathbb{R}$에서 두 성질은 서로를 유도한다).</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.14 · 단조수렴 정리 <span class="label-en">monotone convergence theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 단조수열에게 수렴 판정을 공짜로 준다 —
+  “유계인가?”만 물으면 된다.</p>
+  <p>단조수열(증가 또는 감소) $\{s_n\} \subset \mathbb{R}$이 수렴 $\iff$ 유계.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 증가수열이면 극한은 당연히 $\sup$이어야 한다. 상한의 정의가 곧 $\varepsilon$–$N$ 조건을 준다.</span></summary>
+  <p>수렴 $\Rightarrow$ 유계는 정리 3.2(c). 역으로 $\{s_n\}$이 증가하고 유계라 하자.
+  <a class="term" data-term="lub-property">완비성</a>에 의해 $s = \sup\{s_n\}$이 존재한다.
+  $\varepsilon \gt 0$에 대해 $s - \varepsilon$은 상계가 아니므로
+  $s - \varepsilon \lt s_N \le s$인 $N$이 있다. 수열이 증가하므로 $n \ge N$이면
+  $s - \varepsilon \lt s_N \le s_n \le s$ — 즉 $|s_n - s| \lt \varepsilon$. 그러므로 $s_n \to s$.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-limsup">3. 상극한과 하극한 — 진동하는 수열 다루기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$(-1)^n$처럼 진동하는 수열엔 극한이 없습니다. 하지만 “위쪽으로는 $1$ 언저리,
+  아래쪽으로는 $-1$ 언저리를 맴돈다”는 정보는 분명 있죠. 이걸 붙잡는 도구가
+  상극한($\limsup$)과 하극한($\liminf$)입니다.
+  읽는 법: <strong>부분수열들이 도달할 수 있는 값들 중 최고 기록이 상극한, 최저 기록이
+  하극한.</strong> 극한은 없을 수 있어도 상극한·하극한은 (확장실수에서) <em>항상</em> 있습니다 —
+  그래서 극한을 모르는 상황에서도 쓸 수 있는 만능 도구예요.</p>
+</div>
+
+<div class="box box-def" id="def-limsup-liminf">
+  <span class="box-label">정의 3.16–3.17 · 상극한과 하극한 <span class="label-en">limsup, liminf</span></span>
+  <p>실수열 $\{s_n\}$에 대해, $E$를 $\{s_n\}$의 부분수열 극한 전체의 집합이라 하자
+  (확장실수 $\pm\infty$ 허용). <strong>상극한</strong>과 <strong>하극한</strong>은</p>
+  $$\limsup_{n\to\infty} s_n = \sup E, \qquad \liminf_{n\to\infty} s_n = \inf E$$
+  <p>동치인 실용적 특징 (정리 3.17): $s^* = \limsup s_n$은 다음 둘을 만족하는
+  <strong>유일한</strong> 값이다.</p>
+  <p>(i) $s^*$ 자신이 어떤 부분수열의 극한이다 ($s^* \in E$ — 최고 기록은 실제로 달성된다)<br>
+  (ii) $x \gt s^*$이면, $s_n \ge x$인 $n$은 유한 개뿐이다 ($s^*$ 위쪽은 결국 텅 빈다)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 계산 연습</span>
+  <p><strong>(a)</strong> $s_n = (-1)^n \left(1 + \frac{1}{n}\right)$:
+  짝수 항은 $1 + \frac{1}{n} \to 1$, 홀수 항은 $-\left(1 + \frac{1}{n}\right) \to -1$이므로
+  $E = \{1, -1\}$, $\limsup s_n = 1$, $\liminf s_n = -1$.</p>
+  <p><strong>(b)</strong> 유리수를 한 줄로 나열한 수열 $\{r_n\}$ (2장의 가산성!):
+  모든 실수가 부분수열 극한이 되므로 ($\mathbb{Q}$의 조밀성)
+  $\limsup r_n = +\infty$, $\liminf r_n = -\infty$, $E = \overline{\mathbb{R}}$ 전체.</p>
+  <p><strong>(c)</strong> $\lim s_n = s$ 존재 $\iff$ $\limsup s_n = \liminf s_n = s$ —
+  진동 폭이 $0$으로 죄어들 때가 정확히 수렴이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>$\limsup s_n$은 $\sup s_n$이 <strong>아닙니다.</strong>
+  $s_n = 1/n$이면 $\sup s_n = 1$ (첫 항)이지만 $\limsup s_n = 0$입니다.
+  $\sup$은 수열의 “역대 최고 기록”, $\limsup$은 “<em>끝까지 반복해서</em> 도달하는 최고
+  수준” — 초반의 반짝 기록은 상극한에 반영되지 않아요.
+  (동치 정의 $\limsup s_n = \lim_{N\to\infty} \sup_{n \ge N} s_n$이 이 직관을 그대로
+  수식화한 것입니다: 앞부분을 점점 잘라내며 sup을 다시 재는 것.)</p>
+</div>
+
+<h2 id="sec-series">4. 급수 — 무한히 더하기</h2>
+
+<div class="box box-def" id="def-series">
+  <span class="box-label">정의 3.21 · 급수 <span class="label-en">series</span></span>
+  <p>수열 $\{a_n\}$에 대해 <strong>부분합</strong> $s_n = a_1 + a_2 + \cdots + a_n$의 수열을
+  생각하고, $s_n \to s$이면 <strong>급수</strong> $\sum_{n=1}^{\infty} a_n$이 $s$로
+  <strong>수렴한다</strong>고 하며 $\sum a_n = s$로 쓴다.</p>
+  <p>— 무한합은 새로운 개념이 아니라 <em>부분합 수열의 극한</em>일 뿐이다. 급수 이론 전체가
+  수열 이론의 번역이다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.22–3.23 · 코시 판정과 필요조건</span>
+  <p><strong>이 정리가 하는 일:</strong> 코시 조건을 급수의 언어로 번역하고,
+  가장 값싼 필요조건을 얻는다.</p>
+  <p>$\sum a_n$ 수렴 $\iff$ 임의의 $\varepsilon \gt 0$에 대해 $N$이 있어
+  $m \ge n \ge N$이면 $\left| \sum_{k=n}^{m} a_k \right| \lt \varepsilon$.</p>
+  <p>특히 ($m = n$으로 두면) <strong>$\sum a_n$이 수렴하면 $a_n \to 0$.</strong></p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 해석학 사상 최다 오답</span>
+  <p><strong>“$a_n \to 0$이면 $\sum a_n$ 수렴”은 거짓입니다.</strong> 반례가 조화급수:</p>
+  $$\sum_{n=1}^{\infty} \frac{1}{n} = 1 + \frac{1}{2} + \frac{1}{3} + \cdots = +\infty$$
+  <p>항은 $0$으로 가지만 너무 <em>느리게</em> 가서 합이 터집니다
+  (묶어 보기: $\frac{1}{3}+\frac{1}{4} \gt \frac{1}{2}$,
+  $\frac{1}{5}+\cdots+\frac{1}{8} \gt \frac{1}{2}$, … — $\frac{1}{2}$이 무한 번).
+  “$a_n \to 0$”은 입장권일 뿐, 수렴을 보증하지 않습니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.25 · 비교판정법 <span class="label-en">comparison test</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 모든 판정법의 어머니 — 모르는 급수를 아는 급수에
+  포갠다.</p>
+  <p>(a) 어느 시점 이후 $|a_n| \le c_n$이고 $\sum c_n$이 수렴하면, $\sum a_n$도 수렴한다.<br>
+  (b) 어느 시점 이후 $a_n \ge d_n \ge 0$이고 $\sum d_n$이 발산하면, $\sum a_n$도 발산한다.</p>
+  <p>(증명은 코시 판정 3.22에 삼각부등식 한 줄.) 비교의 기준이 될 “아는 급수”가 필요하다 —
+  그 재고를 다음 두 정리가 채워 준다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.26 · 기하급수 <span class="label-en">geometric series</span></span>
+  <p>$0 \le x \lt 1$이면 $\displaystyle\sum_{n=0}^{\infty} x^n = \frac{1}{1 - x}$.
+  $x \ge 1$이면 발산.
+  (부분합 $s_n = \frac{1 - x^{n+1}}{1 - x}$의 극한 — 유일하게 합을 “손으로” 아는 급수라서
+  모든 비교의 원점이 된다.)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.27–3.28 · 응집판정법과 $p$-급수 <span class="label-en">condensation test</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 감소하는 양항 급수의 수렴을 “듬성듬성 뽑은
+  지수 부분합”으로 판정한다 — 그리고 $p$-급수를 단칼에 정리한다.</p>
+  <p>(3.27) $a_1 \ge a_2 \ge \cdots \ge 0$이면:
+  $\sum a_n$ 수렴 $\iff$ $\sum_{k=0}^{\infty} 2^k a_{2^k}$ 수렴.</p>
+  <p>(3.28) $\displaystyle\sum \frac{1}{n^p}$는 $p \gt 1$이면 수렴, $p \le 1$이면 발산.</p>
+</div>
+
+<details class="proof">
+  <summary>3.28의 증명 <span class="proof-strategy">— 응집판정법에 넣으면 기하급수가 튀어나온다.</span></summary>
+  <p>$a_n = 1/n^p$ ($p \gt 0$이면 감소, $p \le 0$이면 $a_n \not\to 0$이라 즉시 발산)에
+  응집판정법을 적용하면:</p>
+  $$\sum_k 2^k \cdot \frac{1}{(2^k)^p} = \sum_k 2^{k(1-p)} = \sum_k \left( 2^{1-p} \right)^k$$
+  <p>이는 공비 $2^{1-p}$의 기하급수이므로 $2^{1-p} \lt 1 \iff p \gt 1$일 때 수렴.
+  조화급수($p = 1$)의 발산도 이 안에 들어 있다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.33 · 근판정법 <span class="label-en">root test</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 급수를 기하급수와 “점근적으로” 비교한다.
+  상극한이 실전 투입되는 첫 무대.</p>
+  <p>$\alpha = \limsup_{n\to\infty} \sqrt[n]{|a_n|}$이라 하자.</p>
+  <p>$\alpha \lt 1$이면 $\sum a_n$ 수렴 · $\alpha \gt 1$이면 발산 · $\alpha = 1$이면
+  <strong>판정 불가</strong> (예: $\sum 1/n$은 발산, $\sum 1/n^2$은 수렴 — 둘 다 $\alpha = 1$).</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $\alpha \lt \beta \lt 1$인 $\beta$를 끼우면, 상극한의 성질 (ii)에 의해 결국 $|a_n| \lt \beta^n$ — 기하급수와 비교 끝.</span></summary>
+  <p>$\alpha \lt 1$이면 $\alpha \lt \beta \lt 1$인 $\beta$를 잡는다. 정리 3.17(ii)에 의해
+  $\sqrt[n]{|a_n|} \ge \beta$인 $n$은 유한 개뿐 — 즉 어느 시점 이후
+  $|a_n| \lt \beta^n$. 수렴하는 기하급수 $\sum \beta^n$과의 비교판정으로 수렴.</p>
+  <p>$\alpha \gt 1$이면 성질 (i)에 의해 $\sqrt[n_k]{|a_{n_k}|} \to \alpha \gt 1$인 부분수열이
+  있어 $|a_n| \gt 1$인 $n$이 무한히 많다 — $a_n \not\to 0$이므로 발산.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.34 · 비판정법 <span class="label-en">ratio test</span></span>
+  <p>$\displaystyle\limsup_{n\to\infty} \left| \frac{a_{n+1}}{a_n} \right| \lt 1$이면 수렴,
+  어느 시점 이후 $\left| \frac{a_{n+1}}{a_n} \right| \ge 1$이면 발산.</p>
+  <p><strong>근판정법과의 관계 (정리 3.37):</strong> 비판정법이 판정하면 근판정법도 반드시
+  판정한다 — 근판정법이 더 강하다. 하지만 비율 계산이 보통 더 쉬워서
+  (특히 팩토리얼·거듭제곱이 섞인 급수) 실전에서는 비판정법을 먼저 시도한다.
+  예: $\sum \frac{2^{(-1)^n}}{2^n}$은 비율이 진동해 비판정법은 침묵하지만,
+  근은 $\sqrt[n]{|a_n|} \to \frac{1}{2}$라 근판정법으로 수렴.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.43 · 교대급수 판정법 <span class="label-en">alternating series test, Leibniz</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 부호가 번갈아 나오는 급수의 전용 판정법.</p>
+  <p>$c_1 \ge c_2 \ge c_3 \ge \cdots \ge 0$이고 $c_n \to 0$이면,
+  $\displaystyle\sum_{n=1}^{\infty} (-1)^{n+1} c_n$은 수렴한다.</p>
+  <p>대표 예: $1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots$ (교대조화급수)는 수렴한다
+  (합은 $\ln 2$ — 8장에서). 조화급수는 발산하는데 부호만 섞으면 수렴한다는 것 —
+  다음 절의 복선이다.</p>
+</div>
+
+<div class="box box-def" id="def-absolute-convergence">
+  <span class="box-label">정의 3.45 · 절대수렴 <span class="label-en">absolute convergence</span></span>
+  <p>$\sum |a_n|$이 수렴하면 $\sum a_n$은 <strong>절대수렴</strong>한다고 한다.
+  절대수렴하면 수렴한다 (비교판정법). 수렴하지만 절대수렴하지 않으면
+  <strong>조건수렴</strong>(conditionally convergent)이라 한다 — 교대조화급수가 대표.</p>
+</div>
+
+<h2 id="sec-rearrange">5. 재배열 — 무한합에서는 덧셈 순서가 문제다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>유한합은 아무 순서로 더해도 같습니다. 무한합은 <strong>아닙니다.</strong>
+  조건수렴 급수는 양의 항들만의 합이 $+\infty$, 음의 항들만의 합이 $-\infty$라서
+  (둘 중 하나라도 유한하면 절대수렴이 되어 버리므로), 항을 재배치해
+  “양의 항을 목표까지 쌓고 → 음의 항으로 살짝 내리고 → 다시 쌓고…”를 반복하면
+  <strong>원하는 어떤 값으로든 수렴하게 만들 수 있습니다.</strong> 이것이 리만의 정리입니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.54 · 리만 재배열 정리 <span class="label-en">Riemann rearrangement theorem</span></span>
+  <p>$\sum a_n$이 조건수렴하는 실수 급수라 하자. 임의의
+  $-\infty \le \alpha \le \beta \le +\infty$에 대해, 재배열 $\sum a_{n}'$이 존재하여
+  부분합의 하극한이 $\alpha$, 상극한이 $\beta$가 되게 할 수 있다.
+  (특히 $\alpha = \beta$로 잡으면: <strong>아무 값으로나 수렴시킬 수 있다.</strong>)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 3.55</span>
+  <p><strong>이 정리가 하는 일:</strong> 절대수렴이 “순서 걱정 없이 더해도 되는 면허”임을
+  보증한다.</p>
+  <p>$\sum a_n$이 절대수렴하면, 모든 재배열이 같은 값으로 수렴한다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>“수렴하는 급수는 결합·교환법칙이 성립한다” — 조건수렴이면 <strong>교환(재배열)이
+  깨집니다.</strong> 교대조화급수를 재배열해 합을 두 배로 만드는 고전 예가 있죠.
+  급수를 다룰 때 “절대수렴인가?”를 먼저 묻는 습관이 여기서 나옵니다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">3장의 줄거리</span>
+  <p><a class="term" data-term="convergent-sequence">수렴</a>의 $\varepsilon$–$N$ 정의
+  → 극한 연산(3.3), <a class="term" data-term="subsequence">부분수열</a>과
+  볼차노-바이어슈트라스(유계 $\Rightarrow$ 수렴 부분수열)
+  → <a class="term" data-term="cauchy-sequence">코시 수열</a>: 목적지 없이 수렴을 말하기,
+  $\mathbb{R}^k$는 <a class="term" data-term="complete-space">완비</a>
+  → 단조+유계 $\Rightarrow$ 수렴 (완비성의 열매)
+  → <a class="term" data-term="limsup-liminf">상극한·하극한</a>: 항상 존재하는 극한의 대용품
+  → <a class="term" data-term="series">급수</a> = 부분합의 극한, 판정법 무기고
+  (비교 → 기하·$p$-급수를 기준으로 → 근·비판정법은 $\limsup$으로 작동, 교대급수는 라이프니츠)
+  → <a class="term" data-term="absolute-convergence">절대수렴</a>만이 재배열을 견딘다 (리만).</p>
+  <p><strong>판정법 사용 순서 요령:</strong> ① $a_n \to 0$인가 (아니면 즉시 발산)
+  ② 양항이면 비교/$p$-급수/응집 ③ 팩토리얼·지수 꼴이면 비판정 ④ $n$제곱 꼴이면 근판정
+  ⑤ 부호 교대면 라이프니츠 ⑥ 마지막에 절대수렴 여부로 안정성 확인.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>정의(ε–N)에 따라 $\displaystyle\lim_{n\to\infty} \frac{n}{n+1} = 1$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\left| \frac{n}{n+1} - 1 \right|$을 계산해 간단히 한 뒤, 그것이 $\varepsilon$보다
+    작아지는 $N$을 아르키메데스 성질로 잡아라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\left| \frac{n}{n+1} - 1 \right| = \frac{1}{n+1}$이다.
+    $\varepsilon \gt 0$이 주어지면 <a class="term" data-term="archimedean-property">아르키메데스
+    성질</a>에 의해 $N \gt \frac{1}{\varepsilon}$인 자연수 $N$이 존재한다.
+    $n \ge N$이면 $\frac{1}{n+1} \lt \frac{1}{N} \lt \varepsilon$.
+    그러므로 정의에 의해 수렴한다. (답안에서 “$\varepsilon$이 먼저, $N$이 나중” 구조가
+    드러나야 한다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 코시 수열은 항상 유계다.<br>
+  (2) 유계수열은 항상 수렴하는 부분수열을 갖는다 (실수열).<br>
+  (3) $\limsup (s_n + t_n) = \limsup s_n + \limsup t_n$.<br>
+  (4) $\sum a_n$이 수렴하고 $\sum b_n$이 발산하면 $\sum (a_n + b_n)$은 발산한다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(3) $s_n = (-1)^n$, $t_n = (-1)^{n+1}$. (4) 만약 수렴한다면 $b_n = (a_n+b_n) - a_n$은?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> $\varepsilon = 1$의 $N$을 잡으면 $n \ge N$인 항은 전부
+    $p_N$에서 거리 $1$ 안이고, 나머지는 유한 개다 (정리 3.2c와 같은 논법).</p>
+    <p>(2) <strong>참.</strong> 볼차노-바이어슈트라스(정리 3.6b).</p>
+    <p>(3) <strong>거짓.</strong> $s_n = (-1)^n$, $t_n = (-1)^{n+1}$이면 좌변은
+    $\limsup 0 = 0$, 우변은 $1 + 1 = 2$. 일반적으로는 부등식
+    $\limsup(s_n + t_n) \le \limsup s_n + \limsup t_n$만 성립한다 (양변이 정의될 때).</p>
+    <p>(4) <strong>참.</strong> $\sum(a_n + b_n)$이 수렴한다면 정리 3.3에 의해
+    $\sum b_n = \sum\big((a_n + b_n) - a_n\big)$도 수렴 — 모순.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 3장 연습 1 기반</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\{s_n\}$이 수렴하면 $\{|s_n|\}$도 수렴함을 증명하라. 역은 성립하는가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>역삼각부등식 $\big| |a| - |b| \big| \le |a - b|$를 쓰면 한 줄이다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$s_n \to s$라 하자. 역삼각부등식에 의해
+    $\big| |s_n| - |s| \big| \le |s_n - s| \lt \varepsilon$ ($n \ge N$).
+    그러므로 $|s_n| \to |s|$.</p>
+    <p>역은 <strong>거짓:</strong> $s_n = (-1)^n$이면 $|s_n| = 1 \to 1$이지만
+    $\{s_n\}$은 발산한다 (부분수열 극한이 $1, -1$ 둘).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 3장 연습 20 기반</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>코시 수열 $\{p_n\}$의 어떤 부분수열이 $p$로 수렴하면, 수열 전체가 $p$로 수렴함을
+  증명하라. (정리 3.11(b) 증명의 핵심 보조정리다 — 스스로 재구성해 보라.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$d(p_n, p) \le d(p_n, p_{n_k}) + d(p_{n_k}, p)$에서 첫 항은 코시 조건으로,
+    둘째 항은 부분수열의 수렴으로 잡는다. 두 조건이 “동시에” 성립하는 첨자를 골라야 한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\varepsilon \gt 0$이 주어졌다 하자. 코시 조건에서 $N$을 잡아 $m, n \ge N$이면
+    $d(p_n, p_m) \lt \frac{\varepsilon}{2}$가 되게 한다. $p_{n_k} \to p$이므로
+    $n_K \ge N$이면서 $d(p_{n_K}, p) \lt \frac{\varepsilon}{2}$인 $K$를 고른다
+    ($n_k$는 증가하므로 언젠가 $N$을 넘고, 그 이후에서 수렴 조건을 쓰면 된다).</p>
+    <p>이제 $n \ge N$이면
+    $d(p_n, p) \le d(p_n, p_{n_K}) + d(p_{n_K}, p) \lt \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon$.
+    그러므로 $p_n \to p$. $\blacksquare$</p>
+    <p>(의미: 코시 수열에게 부분수열의 수렴은 전체의 수렴과 같다 — “뭉쳐 있는 무리는
+    한 명만 도착해도 다 도착한 것”.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>상극한·하극한 계산</span>
+  </div>
+  <p>수열 $s_n = \dfrac{n}{n+1} \cos \dfrac{n\pi}{2}$에 대해 $\limsup s_n$과 $\liminf s_n$을
+  구하고 근거를 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\cos\frac{n\pi}{2}$는 $n \bmod 4$에 따라 $0, -1, 0, 1$의 주기를 돈다.
+    부분수열 극한 집합 $E$를 먼저 구하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$n = 4k$이면 $\cos\frac{n\pi}{2} = 1$이므로 $s_{4k} = \frac{4k}{4k+1} \to 1$.
+    $n = 4k+2$이면 $\cos = -1$이므로 $s_{4k+2} \to -1$.
+    $n$이 홀수이면 $\cos = 0$이므로 $s_n = 0 \to 0$.</p>
+    <p>모든 항이 이 세 부류에 속하므로 부분수열 극한 집합은 $E = \{-1, 0, 1\}$이다
+    (다른 극한값이 없음은: 임의의 수렴 부분수열은 세 부류 중 한 부류의 항을 무한히
+    포함하므로 그 부류의 극한과 같아야 한다).
+    그러므로 $\limsup s_n = \sup E = 1$, $\liminf s_n = \inf E = -1$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>수렴판정 서술형</span>
+  </div>
+  <p>다음 급수의 수렴/발산을 판정하고, 사용한 판정법을 명시하여 근거를 서술하라.</p>
+  <p>(1) $\displaystyle\sum_{n=1}^{\infty} \frac{n!}{n^n}$ &nbsp;&nbsp;
+  (2) $\displaystyle\sum_{n=2}^{\infty} \frac{1}{n \ln n}$ &nbsp;&nbsp;
+  (3) $\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{\sqrt{n}}$ — 수렴한다면 절대수렴인가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 비판정법 — $\frac{a_{n+1}}{a_n}$을 계산하면 $\left(\frac{n}{n+1}\right)^n$ 꼴이
+    나온다. (2) 응집판정법 — $2^k a_{2^k}$가 조화급수 꼴이 된다. (3) 라이프니츠 +
+    $p$-급수.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1) 수렴 (비판정법).</strong>
+    $\dfrac{a_{n+1}}{a_n} = \dfrac{(n+1)!}{(n+1)^{n+1}} \cdot \dfrac{n^n}{n!}
+    = \left( \dfrac{n}{n+1} \right)^n = \left( 1 + \frac{1}{n} \right)^{-n} \to \frac{1}{e} \lt 1$.
+    상극한이 $\frac{1}{e} \lt 1$이므로 정리 3.34에 의해 수렴.</p>
+    <p><strong>(2) 발산 (응집판정법).</strong> $a_n = \frac{1}{n \ln n}$은 감소 양항수열이고</p>
+    $$\sum_k 2^k a_{2^k} = \sum_k \frac{2^k}{2^k \ln 2^k} = \sum_k \frac{1}{k \ln 2} = \frac{1}{\ln 2} \sum_k \frac{1}{k}$$
+    <p>이 조화급수라 발산하므로 원급수도 발산 (정리 3.27).
+    ($a_n \to 0$인데도 발산하는 또 하나의 예 — $\frac{1}{n}$보다 아주 조금 빠를 뿐으로는
+    부족하다.)</p>
+    <p><strong>(3) 조건수렴.</strong> $c_n = \frac{1}{\sqrt{n}}$은 감소하며 $0$으로 가므로
+    라이프니츠 판정법(정리 3.43)에 의해 수렴.
+    그러나 절댓값 급수 $\sum \frac{1}{\sqrt{n}} = \sum \frac{1}{n^{1/2}}$은
+    $p = \frac{1}{2} \le 1$인 $p$-급수라 발산 (정리 3.28).
+    그러므로 수렴하지만 절대수렴은 아니다 — 조건수렴이며, 리만 정리(3.54)에 의해
+    재배열로 합을 바꿀 수 있는 급수다.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

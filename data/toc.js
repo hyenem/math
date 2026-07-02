@@ -25,7 +25,7 @@ window.MATH_TOC = [
     chapters: [
       { file: "ch01.html", num: 1, title: "실수와 복소수 체계", ready: true },
       { file: "ch02.html", num: 2, title: "기초 위상", ready: true },
-      { file: "ch03.html", num: 3, title: "수열과 급수", ready: false },
+      { file: "ch03.html", num: 3, title: "수열과 급수", ready: true },
       { file: "ch04.html", num: 4, title: "연속", ready: false },
       { file: "ch05.html", num: 5, title: "미분", ready: false },
       { file: "ch06.html", num: 6, title: "리만-스틸체스 적분", ready: false },
