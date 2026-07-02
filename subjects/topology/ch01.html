@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1장 위상공간 — 위상수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="topology" data-chapter="ch01.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§12–13, §16–17)</p>
+  <h1><span class="ch-num">1</span> 위상공간</h1>
+  <p class="ch-source">거리를 버리고 “열린집합 목록”만 남기는 장 —
+  그리고 반례 공장 세 곳(여유한 위상, $\mathbb{R}_\ell$, 밀착 위상)의 개업식.</p>
+</div>
+
+<p>해석학 2장의 정리들을 돌아보면 이상한 점이 있습니다.
+“열린집합의 임의 합은 열려 있다”(루딘 2.24), “연속 $\iff$ 열린집합의 원상이 열림”(루딘 4.8),
+컴팩트의 정의 — 전부 <strong>거리 $d$를 직접 쓰지 않고 열린집합만</strong> 언급해요.
+그렇다면 거리를 아예 버리고, “어떤 집합들을 열려 있다고 부를지”의 목록만 공리로
+남기면 어떨까? 그것이 위상입니다.</p>
+
+<h2 id="sec-topology">1. 위상 — 열린집합의 공리화</h2>
+
+<div class="box box-def" id="def-topology">
+  <span class="box-label">정의 · 위상과 위상공간 <span class="label-en">topology, topological space</span></span>
+  <p>집합 $X$의 <strong>위상</strong>은 부분집합들의 모임 $\mathcal{T}$로서 다음을 만족하는
+  것이다:</p>
+  <p>(i) $\varnothing, X \in \mathcal{T}$<br>
+  (ii) $\mathcal{T}$의 원소들의 <strong>임의의</strong> 합집합은 $\mathcal{T}$에 속한다<br>
+  (iii) $\mathcal{T}$의 원소들의 <strong>유한</strong> 교집합은 $\mathcal{T}$에 속한다</p>
+  <p>$(X, \mathcal{T})$를 <strong>위상공간</strong>, $\mathcal{T}$의 원소를
+  <strong>열린집합</strong>이라 부른다. — 해석학 2장에서 <em>정리</em>였던 성질
+  (루딘 2.24)이 여기서는 <em>정의</em>가 된다. 무엇이 열려 있는지는 이제 증명하는 것이
+  아니라 <strong>선언하는</strong> 것이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 위상 동물원 — 앞으로 계속 쓸 반례들</span>
+  <p><strong>(a) 거리위상:</strong> 거리공간의 열린집합 전체 — 해석학 2장이 통째로 여기
+  들어온다. $\mathbb{R}$의 <strong>표준위상</strong> = 열린구간들의 합집합 전체.</p>
+  <p><strong>(b) 이산위상:</strong> $\mathcal{T} = \mathcal{P}(X)$ (모든 부분집합이 열림) —
+  가장 “잘게 부순” 위상.</p>
+  <p><strong>(c) 밀착위상(trivial):</strong> $\mathcal{T} = \{\varnothing, X\}$ —
+  가장 “뭉툭한” 위상. 점들을 위상적으로 전혀 구별할 수 없다.</p>
+  <p><strong>(d) 여유한위상(cofinite):</strong> $\varnothing$과 “여집합이 유한인 집합”들 —
+  무한집합 위에서 기묘한 성질들의 원산지 (아래에서 계속).</p>
+  <p>같은 집합에 다른 위상 — $\mathcal{T}_1 \subset \mathcal{T}_2$이면
+  “$\mathcal{T}_2$가 더 <strong>섬세하다</strong>(finer)”고 한다.
+  이산(최대) ⊃ 표준 ⊃ 밀착(최소).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>공리 (iii)이 왜 “유한”인지 — 해석학 2장의 반례
+  $\bigcap_n \left( -\frac{1}{n}, \frac{1}{n} \right) = \{0\}$이 그대로 답입니다.
+  무한 교집합까지 허용하면 표준위상에서 한 점이 열려 버리고, 극한 개념이 무너져요.
+  “임의 합 / 유한 교”의 비대칭은 위상이라는 개념의 지문입니다.</p>
+</div>
+
+<h2 id="sec-basis">2. 기저 — 위상을 지정하는 경제적인 방법</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>표준위상의 열린집합 전체를 나열하는 건 불가능하지만, “열린구간들의 합집합”이라고
+  말하면 한 줄입니다. 이렇게 <strong>벽돌 목록</strong>만 주고 “이것들의 합집합 전부”로
+  위상을 생성하는 것이 기저예요. 선형대수의 기저(재료로 전부 생성)와 정확히 같은
+  발상 — 다만 여기선 일차결합 대신 합집합으로 짓습니다.</p>
+</div>
+
+<div class="box box-def" id="def-basis-topology">
+  <span class="box-label">정의 · 기저 <span class="label-en">basis for a topology</span></span>
+  <p>$X$의 부분집합 모임 $\mathcal{B}$가 다음을 만족하면 <strong>기저</strong>라 한다:</p>
+  <p>(i) 모든 $x \in X$가 어떤 기저원소에 속한다 (덮음)<br>
+  (ii) $x \in B_1 \cap B_2$이면, $x \in B_3 \subset B_1 \cap B_2$인 기저원소 $B_3$이 있다
+  (교집합 속에서도 벽돌을 찾을 수 있음)</p>
+  <p>$\mathcal{B}$가 <strong>생성하는 위상</strong>: “$U$가 열림 $\iff$ 각 $x \in U$마다
+  $x \in B \subset U$인 $B \in \mathcal{B}$ 존재” ($=$ 기저원소들의 합집합 전체).
+  거리위상의 기저 = 열린 공 전체 — 해석학의 “내점” 정의가 정확히 이 형식이었다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\mathbb{R}_\ell$ — 하한위상, 반례계의 슈퍼스타</span>
+  <p>반열린구간 $[a, b)$ 전체를 기저로 $\mathbb{R}$에 위상을 주면 —
+  <strong>하한위상</strong> $\mathbb{R}_\ell$ (lower limit topology).
+  기저 조건 확인: $[a_1, b_1) \cap [a_2, b_2)$는 다시 $[\max a_i, \min b_i)$ 꼴 ✓.</p>
+  <p>표준위상보다 <strong>순전히 더 섬세하다</strong>: 열린구간
+  $(a, b) = \bigcup_{n} [a + \frac{1}{n}, b)$은 $\mathbb{R}_\ell$에서 열려 있지만,
+  $[a, b)$는 표준위상에서 열려 있지 않다 ($a$가 내점이 아님 — 왼쪽이 막혀 있으므로).
+  이 공간은 “정규지만 곱하면 정규가 아님”(5장), “린델뢰프지만 곱은 아님” 등
+  일반위상 반례의 단골 무대가 된다 — 이름을 기억해 둘 것.</p>
+</div>
+
+<h2 id="sec-closed">3. 닫힌집합, 폐포, 집적점 — 거리 없이 다시 짓기</h2>
+
+<div class="box box-def" id="def-topology-closure">
+  <span class="box-label">정의 · 닫힌집합·폐포·내부 <span class="label-en">closed set, closure, interior</span></span>
+  <p><strong>닫힌집합</strong> = 여집합이 열린 집합 (해석학에서 <em>정리</em>(루딘 2.23)였던
+  것이 여기서는 <em>정의</em> — 집적점 개념 없이 먼저 정의된다는 것에 주의).
+  임의 교집합·유한 합집합에서 닫힘 (드모르간으로 공리에서 즉시).</p>
+  <p>$A \subset X$의 <strong>폐포</strong> $\bar{A}$ = $A$를 포함하는 모든 닫힌집합의
+  교집합 (가장 작은 닫힌 포장), <strong>내부</strong> $\operatorname{Int} A$ = $A$에 담긴
+  모든 열린집합의 합집합 (가장 큰 열린 속).</p>
+  <p>실용 판정 (문크레스 정리 17.5): $x \in \bar{A}$ $\iff$ $x$를 담는 <strong>모든</strong>
+  열린집합이 $A$와 만난다 (기저원소만 검사해도 충분).</p>
+</div>
+
+<div class="box box-def" id="def-limit-point-top">
+  <span class="box-label">정의 · 집적점 <span class="label-en">limit point</span></span>
+  <p>$x$를 담는 모든 열린집합이 $A \setminus \{x\}$와 만나면 $x$를 $A$의
+  <strong>집적점</strong>이라 한다. 해석학 2장의 정의에서 “근방”이 “열린집합”으로
+  바뀌었을 뿐이고, 익숙한 등식이 성립한다 (문크레스 17.6):</p>
+  $$\bar{A} = A \cup A' \qquad (A' = \text{집적점 전체})$$
+  <p>따라서: 닫힘 $\iff$ 자기 집적점을 모두 포함 — 해석학의 정의가 정리로 복원된다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 같은 집합, 다른 위상, 다른 폐포</span>
+  <p>$A = (0, 1)$의 폐포를 $\mathbb{R}$의 세 위상에서 재 보자:</p>
+  <p>· 표준위상: $\bar{A} = [0, 1]$ (익숙한 답)<br>
+  · 이산위상: $\bar{A} = (0, 1)$ — 모든 집합이 닫혀 있으므로 자기 자신<br>
+  · 밀착위상: $\bar{A} = \mathbb{R}$ — 닫힌집합이 $\varnothing, \mathbb{R}$뿐이라
+  “가장 작은 닫힌 포장”이 전체</p>
+  <p><strong>폐포는 집합의 성질이 아니라 (집합, 위상) 쌍의 성질이다</strong> —
+  “어느 위상에서?”가 항상 첫 질문.</p>
+</div>
+
+<h2 id="sec-hausdorff">4. 하우스도르프 — 점들을 갈라놓을 수 있는가</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>위상이 너무 뭉툭하면(밀착위상처럼) 이상한 일이 생깁니다 — 수열 하나가
+  <em>모든 점으로 동시에</em> 수렴한다든가. 극한의 유일성 같은 “상식”을 지키려면
+  두 점을 <strong>서로 겹치지 않는 열린집합으로 갈라놓을 수 있어야</strong> 해요.
+  그 조건이 하우스도르프입니다. 거리공간은 공짜로 만족하죠 — 두 점 사이 거리의
+  절반짜리 공 두 개면 되니까. 일반 위상공간에서는 <strong>공리로 요구해야 하는
+  사치품</strong>입니다.</p>
+</div>
+
+<div class="box box-def" id="def-hausdorff">
+  <span class="box-label">정의 · 하우스도르프 공간 <span class="label-en">Hausdorff space, $T_2$</span></span>
+  <p>서로 다른 두 점 $x \neq y$마다, 서로소인 열린집합 $U \ni x$, $V \ni y$가 존재하면
+  $X$를 <strong>하우스도르프</strong>($T_2$) 공간이라 한다.</p>
+  <p>기본 열매 (문크레스 §17):
+  ① 유한집합(특히 한 점)은 닫혀 있다.
+  ② 수열의 극한은 유일하다.
+  ③ 거리공간은 전부 하우스도르프.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (①, ②) <span class="proof-strategy">— ① 다른 점마다 “x를 피하는 열린집합”을 얻는다. ② 두 극한을 가르는 열린집합 쌍에서 모순.</span></summary>
+  <p><strong>①</strong> 한 점 $\{x\}$가 닫힘을 보이면 유한 합집합으로 끝.
+  임의의 $y \neq x$에 대해 하우스도르프 조건으로 $y \in V$, $x \notin V$인 열린 $V$가
+  있다 — 즉 $y$는 $\{x\}$의 집적점이 아니다. 집적점이 없으므로
+  $\overline{\{x\}} = \{x\}$: 닫혀 있다.</p>
+  <p><strong>②</strong> $x_n \to x$이고 $x_n \to y$, $x \neq y$라 하자. 서로소인
+  $U \ni x$, $V \ni y$를 잡으면, 수렴의 정의(어느 시점 이후 항이 전부 그 열린집합 안)로
+  꼬리가 $U$에도 $V$에도 통째로 들어가야 한다 — 서로소에 모순.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 하우스도르프가 아닌 세계 — 여유한위상</span>
+  <p>무한집합 $X$에 여유한위상을 주자. 공집합 아닌 두 열린집합은 (여집합이 유한이라)
+  <strong>반드시 만난다</strong> — 서로소 쌍 자체가 없어서 하우스도르프가 아니다.</p>
+  <p>그런데 한 점 집합은 닫혀 있다 (여집합이 “여유한”). 즉 이 공간은
+  <strong>$T_1$(점이 닫힘)이지만 $T_2$가 아니다</strong> — 두 분리 공리가 진짜로 다른
+  조건임을 보이는 표준 반례. 덤: 이 공간에서 수열 $x_1, x_2, \dots$ (서로 다른 점들)은
+  <em>모든 점으로</em> 수렴한다 — 어떤 점의 어떤 열린집합도 수열의 꼬리를 유한 개만
+  빼고 다 담으므로. 극한 유일성의 붕괴 현장이다.</p>
+</div>
+
+<h2 id="sec-subspace">5. 부분공간 위상</h2>
+
+<div class="box box-def" id="def-subspace-topology">
+  <span class="box-label">정의 · 부분공간 위상 <span class="label-en">subspace topology</span></span>
+  <p>$Y \subset X$에 대해 $\mathcal{T}_Y = \{ Y \cap U : U \in \mathcal{T} \}$ —
+  “큰 공간의 열린집합을 $Y$로 자른 것들”이 $Y$의 위상이 된다.</p>
+  <p>해석학 2장의 “상대적 열림”(루딘 2.30 — $[0,1)$이 $[0,2]$ 안에서는 열림)이
+  정확히 이 정의였다. 주의 습관도 그대로:
+  “$Y$에서 열림”과 “$X$에서 열림”은 다른 말이고, <strong>어느 공간에서 보는지</strong>를
+  항상 명시해야 한다. ($Y$ 자체가 $X$에서 열려 있으면 두 개념이 일치.)</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">1장의 줄거리</span>
+  <p>해석학의 <em>정리</em>(임의 합·유한 교)를 <em>공리</em>로 승격 =
+  <a class="term" data-term="topology">위상</a>
+  (동물원: 이산·밀착·여유한·거리위상, finer/coarser)
+  → 위상을 벽돌로 지정: <a class="term" data-term="basis-topology">기저</a>
+  ($\mathbb{R}_\ell$ 하한위상 — 반례계의 스타 탄생)
+  → 닫힘 = 여집합 열림(이제 정의), <a class="term" data-term="topology-closure">폐포·내부</a>
+  = 최소 닫힌 포장·최대 열린 속, $\bar{A} = A \cup A'$ 복원
+  (폐포는 위상에 따라 다르다!)
+  → <a class="term" data-term="hausdorff">하우스도르프</a>: 점 가르기 공리 —
+  극한 유일성의 값, 여유한위상이 $T_1 \neq T_2$의 증인
+  → <a class="term" data-term="subspace-topology">부분공간 위상</a> = 잘라서 물려주기.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 위상수학의 모든 질문에는 “어느 위상에서?”가
+  선행한다 — 같은 집합도 위상이 다르면 폐포, 수렴, 연속이 전부 달라진다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$X = \{a, b, c\}$에서 다음 모임이 위상인지 각각 판정하라.</p>
+  <p>(1) $\mathcal{T}_1 = \{\varnothing, \{a\}, \{a, b\}, X\}$<br>
+  (2) $\mathcal{T}_2 = \{\varnothing, \{a\}, \{b\}, X\}$<br>
+  (3) $\mathcal{T}_3 = \{\varnothing, \{a, b\}, \{b, c\}, X\}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>합집합과 교집합이 목록 밖으로 튀어나가는지만 보면 된다 — 유한이라 전수 검사 가능.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>위상.</strong> 사슬 $\varnothing \subset \{a\} \subset \{a,b\} \subset X$
+    꼴이라 합·교가 전부 목록 안.</p>
+    <p>(2) <strong>아니다.</strong> $\{a\} \cup \{b\} = \{a, b\} \notin \mathcal{T}_2$ —
+    공리 (ii) 위반.</p>
+    <p>(3) <strong>아니다.</strong> $\{a,b\} \cap \{b,c\} = \{b\} \notin \mathcal{T}_3$ —
+    공리 (iii) 위반.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 임의의 집합 위의 이산위상은 어떤 거리에서 나오는 거리위상이다.<br>
+  (2) $\bar{A} \cup \bar{B} = \overline{A \cup B}$.<br>
+  (3) $\bar{A} \cap \bar{B} = \overline{A \cap B}$.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 해석학 2장의 이산거리. (3) $\mathbb{R}$에서 서로 “맞닿은” 두 집합 —
+    $(0,1)$과 $(1,2)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 이산거리($d(x,y) = 1$, $x \neq y$)에서 $N_{1/2}(x) = \{x\}$
+    — 한 점이 전부 열리므로 모든 부분집합이 열린다. (“거리화 가능” 개념의 첫 만남 —
+    밀착위상은 반대로 어떤 거리로도 못 만든다: 하우스도르프가 아니므로.)</p>
+    <p>(2) <strong>참</strong> (문크레스 §17 연습의 표준). $\subset$: $A \subset A \cup B$에서
+    폐포의 단조성. $\supset$: $\bar{A} \cup \bar{B}$는 닫힌집합 두 개의 합 — 닫혀 있고
+    $A \cup B$를 포함하므로 “가장 작은 닫힌 포장”보다 크거나 같다.</p>
+    <p>(3) <strong>거짓.</strong> $A = (0, 1)$, $B = (1, 2)$ (표준위상):
+    $\bar{A} \cap \bar{B} = [0,1] \cap [1,2] = \{1\}$이지만
+    $A \cap B = \varnothing$이라 $\overline{A \cap B} = \varnothing$.
+    (포함 $\overline{A \cap B} \subset \bar{A} \cap \bar{B}$만 항상 성립.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §13 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\mathbb{R}_\ell$ (하한위상)에서 다음을 판정하라: $[0, 1)$은 열려 있는가, 닫혀
+  있는가? $(0, 1]$은 어떤가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>열림은 기저로, 닫힘은 여집합의 열림으로. 여집합
+    $(-\infty, 0) \cup [1, \infty)$를 기저원소들의 합으로 쓸 수 있는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>$[0, 1)$: 열려 있고 닫혀 있다 (clopen!).</strong>
+    열림: 자신이 기저원소. 닫힘: 여집합 $(-\infty, 0) \cup [1, \infty)
+    = \bigcup_n [-n, 0) \cup \bigcup_n [1, n)$ — 기저원소들의 합집합이라 열림.</p>
+    <p><strong>$(0, 1]$: 둘 다 아니다.</strong>
+    열려 있지 않음: $1 \in (0,1]$인데 $1 \in [a, b) \subset (0, 1]$이려면 $b \gt 1$이
+    필요해 불가능 (오른쪽 끝이 막혀 있으면 하한위상에서 불리하다).
+    닫혀 있지 않음: 여집합 $(-\infty, 0] \cup (1, \infty)$에서 점 $0$이 같은 이유로
+    내점이 아니다.</p>
+    <p>(“clopen 집합이 $\varnothing, X$ 말고도 존재한다” — 3장에서 이것이
+    $\mathbb{R}_\ell$의 <strong>비연결성</strong>과 정확히 같은 말임을 보게 된다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>여유한위상 논증</span>
+  </div>
+  <p>무한집합 $X$에 여유한위상을 줄 때, 무한 부분집합 $A \subset X$의 폐포가
+  $X$ 전체임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>임의의 점 $x$와 $x$를 담는 임의의 열린집합 $U$에 대해 $U \cap A \neq \varnothing$을
+    보이면 된다 (폐포의 실용 판정). $U$의 여집합은 유한이다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$x \in X$와 $x$를 담는 공집합 아닌 열린집합 $U$를 잡자. 여유한위상에서
+    $X \setminus U$는 유한집합이다. $A$는 무한집합이므로 유한집합 안에 다 들어갈 수
+    없다 — 즉 $A \not\subset X \setminus U$, 다시 말해 $U \cap A \neq \varnothing$.</p>
+    <p>모든 점의 모든 열린 근방이 $A$와 만나므로, 폐포 판정에 의해 모든 $x \in \bar{A}$:
+    $\bar{A} = X$. $\blacksquare$</p>
+    <p>(해석: 여유한위상에서 무한집합은 어디에나 조밀하다 — 열린집합이 “거의 전부”를
+    담을 만큼 뭉툭하기 때문. 유한 $A$라면 반대로 $\bar{A} = A$ — 유한집합은 닫혀 있다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>하우스도르프 논증 서술형</span>
+  </div>
+  <p>$X$가 하우스도르프 공간이고 $A \subset X$가 유한집합이면 $A' = \varnothing$
+  (집적점 없음)임을 보이고, 이로부터 하우스도르프 공간의 유한집합은 닫혀 있음을
+  다시 유도하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$x$가 유한집합 $A$의 집적점이라 가정 — $A \setminus \{x\}$의 각 점을 하우스도르프로
+    갈라내고, 그 열린집합들의 <strong>유한</strong> 교집합을 취하라 (해석학 2장 루딘 2.20
+    증명과 같은 뼈대).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$x \in X$가 $A$의 집적점이라 가정하자. $A \setminus \{x\} = \{a_1, \dots, a_m\}$
+    (유한). 각 $i$에 대해 하우스도르프 조건으로 서로소인 열린집합
+    $U_i \ni x$, $V_i \ni a_i$를 잡는다. 이제</p>
+    $$U = U_1 \cap U_2 \cap \cdots \cap U_m$$
+    <p>은 열린집합들의 <strong>유한</strong> 교집합이므로 열려 있고 (공리 (iii) —
+    유한성이 일하는 지점!), $x$를 담으며, 각 $a_i$를 담지 않는다
+    ($a_i \in V_i$는 $U_i$와 서로소이므로 $a_i \notin U_i \supset U$).
+    즉 $U \cap (A \setminus \{x\}) = \varnothing$ — $x$가 집적점이라는 데 모순.</p>
+    <p>그러므로 $A' = \varnothing$이고, $\bar{A} = A \cup A' = A$ — $A$는 닫혀 있다.
+    $\blacksquare$</p>
+    <p>(비교: 여유한위상($T_1$)에서도 유한집합은 닫혀 있었지만, 그건 위상의 정의가
+    직접 준 것이었다. 하우스도르프는 더 강한 도구 — “집적점 자체가 없다”까지 준다.
+    $T_1$과 $T_2$의 체감 차이.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

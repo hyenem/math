@@ -373,6 +373,46 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "short": "$\\Gamma(x) = \\int_0^\\infty t^{x-1}e^{-t}dt$. $\\Gamma(n+1) = n!$ — 팩토리얼의 연속 확장이며, 로그볼록성 조건이 이 확장을 유일하게 결정한다 (보어-몰레루프).",
     "href": "subjects/analysis/ch08.html#def-gamma-function"
   },
+  /* ---------- 위상수학 1장: 위상공간 ---------- */
+
+  "topology": {
+    "ko": "위상 / 위상공간",
+    "en": "topology, topological space",
+    "short": "\"열린집합 목록\"의 공리화: $\\varnothing, X$ 포함 + 임의 합 + 유한 교에 닫힘. 거리 없이 연속·수렴·컴팩트를 말하게 해 준다. 예: 이산·밀착·여유한·거리위상.",
+    "href": "subjects/topology/ch01.html#def-topology"
+  },
+  "basis-topology": {
+    "ko": "기저 (위상)",
+    "en": "basis for a topology",
+    "short": "합집합으로 위상 전체를 생성하는 \"벽돌 목록\". 조건: 덮음 + 두 벽돌의 교집합 속 벽돌 존재. 예: 열린구간들 → $\\mathbb{R}$ 표준위상, $[a,b)$들 → 하한위상 $\\mathbb{R}_\\ell$.",
+    "href": "subjects/topology/ch01.html#def-basis-topology"
+  },
+  "topology-closure": {
+    "ko": "폐포·내부 (위상)",
+    "en": "closure, interior",
+    "short": "폐포 = 포함하는 닫힌집합들의 교집합(최소 닫힌 포장), 내부 = 담긴 열린집합들의 합(최대 열린 속). $x \\in \\bar{A} \\iff$ 모든 열린 근방이 $A$와 만남. 위상에 따라 달라진다!",
+    "href": "subjects/topology/ch01.html#def-topology-closure"
+  },
+  "hausdorff": {
+    "ko": "하우스도르프 공간",
+    "en": "Hausdorff space, T₂",
+    "short": "서로 다른 두 점을 서로소 열린집합으로 가를 수 있는 공간 — 극한의 유일성을 보증. 거리공간은 자동 만족, 여유한위상(무한집합)은 $T_1$이지만 $T_2$가 아니다.",
+    "href": "subjects/topology/ch01.html#def-hausdorff"
+  },
+  "subspace-topology": {
+    "ko": "부분공간 위상",
+    "en": "subspace topology",
+    "short": "$\\mathcal{T}_Y = \\{Y \\cap U : U \\in \\mathcal{T}\\}$ — 큰 공간의 열린집합을 잘라 물려주기. \"$Y$에서 열림\"과 \"$X$에서 열림\"은 다르다 (해석학의 상대적 열림).",
+    "href": "subjects/topology/ch01.html#def-subspace-topology"
+  },
+
+  "limit-point-top": {
+    "ko": "집적점 (위상)",
+    "en": "limit point",
+    "short": "$x$의 모든 열린 근방이 $A \\setminus \\{x\\}$와 만나는 점 — 거리공간 정의에서 \"근방\"을 \"열린집합\"으로 바꾼 것. $\\bar{A} = A \\cup A'$이 그대로 성립한다.",
+    "href": "subjects/topology/ch01.html#def-limit-point-top"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {
@@ -419,6 +459,13 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "homogeneous system",
     "short": "$Ax = 0$ — 해집합은 부분공간 $N(L_A)$이고 차원은 $n - \\operatorname{rank}A$ (자유 변수 개수). 비동차 $Ax = b$의 해집합은 특수해 $+ N(L_A)$의 평행이동.",
     "href": "subjects/linear-algebra/ch03.html#def-homogeneous-system"
+  },
+
+  "elementary-operation": {
+    "ko": "기본행연산",
+    "en": "elementary row operations",
+    "short": "행 교환·$0$ 아닌 스칼라 곱·다른 행의 배수 더하기 — 각각 가역인 기본행렬을 곱하는 것과 같아서 해집합과 rank를 보존한다. 소거법의 정체.",
+    "href": "subjects/linear-algebra/ch03.html#def-elementary-operation"
   },
 
   /* ---------- 선형대수 4장: 행렬식 ---------- */

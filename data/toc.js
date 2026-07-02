@@ -92,8 +92,15 @@ window.MATH_TOC = [
     en: "Topology",
     book: "Munkres, Topology (2nd ed.)",
     desc: "연속을 가장 일반적으로 — 공간의 본질적 성질을 다루는 과목.",
-    status: "planned",
-    chapters: []
+    status: "active",
+    chapters: [
+      { file: "ch01.html", num: 1, title: "위상공간", ready: true },
+      { file: "ch02.html", num: 2, title: "연속함수와 곱공간", ready: false },
+      { file: "ch03.html", num: 3, title: "연결성", ready: false },
+      { file: "ch04.html", num: 4, title: "컴팩트성", ready: false },
+      { file: "ch05.html", num: 5, title: "가산공리와 분리공리", ready: false },
+      { file: "ch06.html", num: 6, title: "거리화와 완비성", ready: false }
+    ]
   },
   {
     slug: "complex-analysis",
