@@ -73,7 +73,7 @@ window.MATH_TOC = [
       { file: "ch04.html", num: 4, title: "준동형사상과 잉여군", ready: true },
       { file: "ch05.html", num: 5, title: "환과 체", ready: true },
       { file: "ch06.html", num: 6, title: "아이디얼과 잉여환", ready: true },
-      { file: "ch07.html", num: 7, title: "다항식환과 체의 확대", ready: false }
+      { file: "ch07.html", num: 7, title: "다항식환과 체의 확대", ready: true }
     ]
   },
   {

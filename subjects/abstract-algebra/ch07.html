@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7장 다항식환과 체의 확대 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch07.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§22–23, §29, §33)</p>
+  <h1><span class="ch-num">7</span> 다항식환과 체의 확대</h1>
+  <p class="ch-source">“근이 없다고요? 근이 사는 체를 만들면 됩니다” —
+  6장의 몫환 기술이 새로운 수 체계를 제조하는 공장이 되는, 이 과목의 피날레.</p>
+</div>
+
+<p>$x^2 - 2$는 $\mathbb{Q}$에 근이 없습니다. 옛날식 해법: “$\sqrt2$라는 수가 있다고
+치자.” 현대대수의 해법: <strong>몫환 $\mathbb{Q}[x]/\langle x^2 - 2 \rangle$을 만들면
+그 안에 $x^2 = 2$를 만족하는 원소가 저절로 산다</strong> — 있다고 치는 게 아니라
+건설하는 것. 이 공장의 부품(나눗셈 정리, 기약성)과 생산품(확대체, 유한체)이
+이 장의 내용입니다.</p>
+
+<h2 id="sec-polyring">1. 다항식환 — $F[x]$는 제2의 $\mathbb{Z}$다</h2>
+
+<div class="box box-def" id="def-polynomial-ring">
+  <span class="box-label">정의 + 정리 · 다항식환과 나눗셈 정리 <span class="label-en">polynomial ring, division algorithm</span> (프랄리 §22–23)</span>
+  <p>체 $F$ 위의 다항식 전체 $F[x]$는 정역이다 (최고차항끼리 곱하면 안 죽는다 —
+  $\deg(fg) = \deg f + \deg g$).
+  <strong>나눗셈 정리</strong>: $g \neq 0$이면 $f = q g + r$, $\deg r \lt \deg g$인
+  $q, r$이 유일하게 존재.</p>
+  <p>따름정리 사슬 — 전부 $\mathbb{Z}$에서 본 이야기의 재상영:
+  ① <strong>인수정리</strong>: $f(a) = 0 \iff (x - a) \mid f$
+  ② $n$차 다항식의 근은 (체에서) 많아야 $n$개
+  ③ 모든 아이디얼이 주 아이디얼 ($\langle$최저차 원소$\rangle$ — 나눗셈 + 최소성 보법)
+  ④ $\gcd$·유클리드 호제법·유일 인수분해 성립.</p>
+  <p>“<strong>$F[x]$에서 기약다항식 = $\mathbb{Z}$에서 소수</strong>” — 이 사전 한 줄이
+  이 장 전체의 문법이다.</p>
+</div>
+
+<div class="box box-def" id="def-irreducible-polynomial">
+  <span class="box-label">정의 · 기약다항식 <span class="label-en">irreducible polynomial</span> (프랄리 §23)</span>
+  <p>$p(x) \in F[x]$ (차수 $\ge 1$)가 더 낮은 차수 두 다항식의 곱으로 쪼개지지 않으면
+  <strong>$F$ 위에서 기약</strong>이라 한다. — <strong>어느 체 위에서인지가 전부다</strong>:
+  $x^2 - 2$는 $\mathbb{Q}$에서 기약, $\mathbb{R}$에서 가약;
+  $x^2 + 1$은 $\mathbb{R}$에서 기약, $\mathbb{C}$에서 가약.</p>
+  <p>실전 판정 도구:
+  ① 2·3차는 “근 있음 $\iff$ 가약” (근 없으면 기약 — 4차부터는 거짓!
+  $(x^2+1)^2$은 실근 없지만 가약)
+  ② 유리근 정리 (정수계수: 근 후보는 $\pm\frac{\text{상수항 약수}}{\text{최고차 약수}}$)
+  ③ <strong>아이젠슈타인 판정법</strong>: 소수 $p$가 최고차항 빼고 전부 나누고
+  $p^2 \nmid$ 상수항이면 $\mathbb{Q}$에서 기약 (예: $x^5 - 6x + 3$, $p = 3$)
+  ④ $\bmod p$ 환원.</p>
+</div>
+
+<h2 id="sec-extension">2. 체의 확대 — 근을 제조하는 공장</h2>
+
+<div class="box box-thm" id="def-kronecker"><span class="box-label">정리 · 크로네커의 정리 <span class="label-en">Kronecker's theorem</span> (프랄리 §29)</span>
+  <p><strong>이 정리가 하는 일:</strong> 이 과목에서 가장 건설적인 순간 —
+  근은 발견하는 것이 아니라 제조하는 것.</p>
+  <p>$p(x)$가 $F$ 위에서 기약이면</p>
+  $$K = F[x]/\langle p(x) \rangle$$
+  <p>은 <strong>체</strong>이고, $F$를 (동형으로) 담으며, $\alpha = x + \langle p \rangle$가
+  $p(\alpha) = 0$을 만족한다 — $K$는 $p$의 근을 갖는 $F$의 <strong>확대체</strong>다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 6장 부품 조립: 기약 ⇒ ⟨p⟩ 극대 ⇒ 몫이 체. 근이 되는 것은 “계산이 정의를 베끼기” 때문.</span></summary>
+  <p><strong>$\langle p \rangle$가 극대:</strong> $\langle p \rangle \subsetneq N$인
+  아이디얼 $N$을 잡자. $F[x]$는 주 아이디얼 환이므로 $N = \langle g \rangle$이고
+  $g \mid p$. $p$가 기약이므로 $g$는 상수(단위원 배) 아니면 $p$의 동반원 —
+  전자면 $N = F[x]$, 후자면 $N = \langle p \rangle$. 중간이 없다: 극대.</p>
+  <p><strong>몫이 체:</strong> 6장 품질 정리 — 극대 아이디얼의 몫은 체. 끝.</p>
+  <p><strong>$\alpha$가 근:</strong> $p(\alpha) = p(x + \langle p \rangle)
+  = p(x) + \langle p \rangle = \langle p \rangle = 0_K$ — “$p(x)$를 $0$으로 선언한
+  세계”에서 $x$의 잔상이 근이 되는 것은 정의 그 자체다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 공장 가동 두 번</span>
+  <p><strong>(a)</strong> $\mathbb{Q}[x]/\langle x^2 - 2 \rangle \cong \mathbb{Q}(\sqrt2)
+  = \{a + b\sqrt2\}$ — 5장 문제에서 “유리화로 체”임을 본 그 대상이 몫환으로
+  재건설된다. 원소는 $a + b\alpha$ ($\alpha^2 = 2$) — 나눗셈 정리 덕분에 모든
+  잉여류가 1차 이하 대표를 유일하게 갖기 때문.</p>
+  <p><strong>(b)</strong> $\mathbb{R}[x]/\langle x^2 + 1 \rangle \cong \mathbb{C}$ —
+  6장 문제의 재해석: 복소수는 “$x^2 = -1$을 강제로 참으로 만든 세계”.</p>
+  <p><strong>(c) 유한체 제조:</strong> $\mathbb{Z}_2[x]/\langle x^2 + x + 1 \rangle$ —
+  $x^2 + x + 1$은 $\mathbb{Z}_2$에서 근이 없어(0, 1 대입) 기약. 몫은 원소
+  $\{0, 1, \alpha, \alpha + 1\}$의 <strong>4원소 체 $\mathbb{F}_4$</strong>
+  ($\alpha^2 = \alpha + 1$로 계산) — 5장에서 예고한 “위수 4, 표수 2인 체”의 실물이다.</p>
+</div>
+
+<div class="box box-def" id="def-extension-field">
+  <span class="box-label">정의 + 정리 · 대수적 원소와 차수 <span class="label-en">algebraic element, degree</span> (프랄리 §29, §31)</span>
+  <p>확대체 $E \supset F$의 원소 $\alpha$가 $F$-계수 다항식의 근이면
+  <strong>대수적</strong>, 아니면 <strong>초월적</strong>이라 한다
+  ($\sqrt2$, $i$는 $\mathbb{Q}$ 위에서 대수적; $\pi, e$는 초월적 — 증명은 해석학의
+  깊은 정리).
+  대수적 $\alpha$의 <strong>최소다항식</strong> $\operatorname{irr}(\alpha, F)$ =
+  $\alpha$를 근으로 갖는 최저차 monic 다항식 — 자동으로 기약이고,
+  선형대수 7장의 행렬 최소다항식과 같은 정신이다.</p>
+  <p><strong>차수 공식:</strong> $E$는 $F$ 위의 <a class="term" data-term="vector-space">벡터공간</a>이고
+  (선형대수 합류!) $[E : F] = \dim_F E$를 확대의 <strong>차수</strong>라 한다.
+  $[F(\alpha) : F] = \deg \operatorname{irr}(\alpha, F)$이고 (기저:
+  $1, \alpha, \dots, \alpha^{n-1}$ — 나눗셈 정리), 탑 법칙:</p>
+  $$[K : F] = [K : E]\,[E : F]$$
+  <p>(“차수는 곱해진다” — 라그랑주의 체 버전. 자와 컴퍼스 작도 불가능성 증명의
+  엔진: 작도 가능한 수의 차수는 $2^k$뿐 → $\sqrt[3]{2}$ (차수 3)는 작도 불가 —
+  고대 3대 난제가 이 공식 한 줄에 쓰러진다.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① 크로네커 정리에서 <strong>기약성이 필수</strong>다 — $p$가 가약이면
+  $\langle p \rangle$가 극대가 아니라서 몫에 영인자가 생긴다:
+  $\mathbb{Q}[x]/\langle x^2 - 1 \rangle$에서 $(x-1)(x+1)$의 잔상들이 영인자.
+  ② “기약”은 항상 “어느 체 위에서”와 함께 — 임용 단답에서 체 명시 누락은 오답
+  처리될 수 있다.
+  ③ 유한체의 위수는 반드시 $p^n$ (소수 거듭제곱) — 위수 6인 체는 없다
+  (표수 $p$가 소수이고 $\mathbb{Z}_p$-벡터공간이므로 $|F| = p^{\dim}$ —
+  3장에서 쓴 그 벡터공간 논증). 그리고 각 $p^n$마다 유한체가 (동형까지) 정확히
+  하나 존재하며, 그 곱셈군 $\mathbb{F}_q^*$는 <strong>순환군</strong>이다 (프랄리 §33).</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 현대대수의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">7장의 줄거리</span>
+  <p><a class="term" data-term="polynomial-ring">$F[x]$</a> = 제2의 $\mathbb{Z}$
+  (나눗셈 정리 → 인수정리 → 근 ≤ 차수 → 주 아이디얼 → 유일 인수분해)
+  → <a class="term" data-term="irreducible-polynomial">기약다항식</a> = 소수의 대응물
+  (2·3차는 근 검사, 아이젠슈타인; “어느 체에서”가 생명)
+  → <a class="term" data-term="kronecker">크로네커</a>: 기약 ⇒ $\langle p \rangle$ 극대
+  ⇒ $F[x]/\langle p \rangle$는 근을 담은 <strong>체</strong> —
+  $\mathbb{C}$도 $\mathbb{F}_4$도 이 공장의 생산품
+  → <a class="term" data-term="extension-field">확대의 차수</a> $[E:F]$ = 벡터공간
+  차원 (선형대수 합류), 탑 법칙 = 차수의 라그랑주 — 작도 불가능성까지.</p>
+  <p><strong>과목 전체 되돌아보기:</strong> 군(1–4장: 연산 하나, 라그랑주와 동형정리)
+  → 환·체(5–6장: 연산 둘, 아이디얼과 몫의 품질) → 다항식과 확대(7장: 몫환으로
+  새 수 체계 건설). 임용 최중요 축은 <strong>라그랑주 위수 논증 · 제1동형정리 ·
+  $\mathbb{Z}_n$/기약성 판정</strong>이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 다항식의 $\mathbb{Q}$ 위에서의 기약성을 판정하라.</p>
+  <p>(1) $x^3 - 3x + 1$ &nbsp; (2) $x^4 + 2x^2 + 2$ &nbsp; (3) $x^4 + 4$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 3차 — 유리근 후보 $\pm 1$만 확인. (2) 아이젠슈타인 $p = 2$.
+    (3) 함정 — 근은 없지만… $x^4 + 4 = (x^2 + 2x + 2)(x^2 - 2x + 2)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>기약.</strong> 3차이므로 가약 $\iff$ 유리근 존재. 후보
+    $\pm 1$: $f(1) = -1$, $f(-1) = 3$ — 근 없음.</p>
+    <p>(2) <strong>기약.</strong> 아이젠슈타인 $p = 2$: $2 \mid 2, 2$ (중간·상수항),
+    $2 \nmid 1$ (최고차), $4 \nmid 2$ (상수항) ✓.</p>
+    <p>(3) <strong>가약!</strong> $x^4 + 4 = (x^2 + 2x + 2)(x^2 - 2x + 2)$
+    (소피 제르맹 항등식). 유리근이 없는데도 가약 — “근 없음 = 기약”은 3차까지만
+    유효하다는 표준 함정.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\mathbb{F}_4 = \mathbb{Z}_2[x]/\langle x^2 + x + 1 \rangle$에서 ($\alpha = x$의
+  잔상) (1) $\alpha^2$과 $\alpha^3$을 계산하라. (2) $\mathbb{F}_4^* $가 순환군임을
+  직접 확인하라. (3) $\alpha$의 곱셈 역원을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>계산 규칙은 $\alpha^2 = \alpha + 1$ (표수 2라 $-1 = 1$).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\alpha^2 = -\alpha - 1 = \alpha + 1$ (표수 2).
+    $\alpha^3 = \alpha \cdot \alpha^2 = \alpha(\alpha + 1) = \alpha^2 + \alpha
+    = (\alpha + 1) + \alpha = 1$.</p>
+    <p>(2) $\mathbb{F}_4^* = \{1, \alpha, \alpha^2\}$이고 $\alpha^3 = 1$, $|\alpha| = 3$
+    — $\langle \alpha \rangle = \mathbb{F}_4^*$: 위수 3 순환군 ✓ (§33 일반 정리의
+    최소 사례).</p>
+    <p>(3) $\alpha \cdot \alpha^2 = \alpha^3 = 1$이므로 $\alpha^{-1} = \alpha^2 = \alpha + 1$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §29 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$[\mathbb{Q}(\sqrt2, \sqrt3) : \mathbb{Q}] = 4$임을 탑 법칙으로 증명하라.
+  (핵심 보조 주장: $\sqrt3 \notin \mathbb{Q}(\sqrt2)$.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\sqrt3 = a + b\sqrt2$ ($a, b \in \mathbb{Q}$)로 놓고 제곱 —
+    $2ab\sqrt2$ 항이 유리수가 되려면 $a = 0$ 또는 $b = 0$, 각각 모순.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$[\mathbb{Q}(\sqrt2) : \mathbb{Q}] = 2$ ($x^2 - 2$가 기약 — 유리근 없음).</p>
+    <p><strong>보조 주장:</strong> $\sqrt3 \in \mathbb{Q}(\sqrt2)$라면
+    $\sqrt3 = a + b\sqrt2$. 제곱하면 $3 = a^2 + 2b^2 + 2ab\sqrt2$.
+    $\sqrt2$가 무리수이므로 $2ab = 0$.
+    $b = 0$이면 $\sqrt3 = a \in \mathbb{Q}$ — $\sqrt3$ 무리성에 모순.
+    $a = 0$이면 $3 = 2b^2$, $b = \sqrt{3/2} \notin \mathbb{Q}$ — 모순.
+    그러므로 $\sqrt3 \notin \mathbb{Q}(\sqrt2)$.</p>
+    <p>따라서 $x^2 - 3$은 $\mathbb{Q}(\sqrt2)$ 위에서도 근이 없어 (2차라) 기약 —
+    $[\mathbb{Q}(\sqrt2, \sqrt3) : \mathbb{Q}(\sqrt2)] = 2$. 탑 법칙:</p>
+    $$[\mathbb{Q}(\sqrt2, \sqrt3) : \mathbb{Q}] = 2 \times 2 = 4 \qquad \blacksquare$$
+    <p>(기저는 $\{1, \sqrt2, \sqrt3, \sqrt6\}$ — 두 층의 기저의 곱. 덤:
+    $\sqrt2 + \sqrt3$의 최소다항식은 $x^4 - 10x^2 + 1$ — 차수 4가 탑 법칙과
+    맞아떨어진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>몫환 구조 판정</span>
+  </div>
+  <p>다음 몫환이 체인지 판정하고 근거를 서술하라.</p>
+  <p>(1) $\mathbb{Q}[x]/\langle x^2 - 5x + 6 \rangle$ &nbsp;&nbsp;
+  (2) $\mathbb{Z}_3[x]/\langle x^2 + 1 \rangle$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>기약성 = 극대성 = 몫이 체. (1) 인수분해된다. (2) $\mathbb{Z}_3$에서 $x^2 = -1 = 2$의
+    해를 전수 검사.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>체가 아니다.</strong> $x^2 - 5x + 6 = (x-2)(x-3)$ — 가약이므로
+    $\langle \cdot \rangle$이 극대가 아니고, 몫에는 영인자
+    $(x - 2 + N)(x - 3 + N) = 0$이 생긴다.</p>
+    <p>(2) <strong>체다.</strong> $\mathbb{Z}_3$에서 $x^2 + 1$의 근:
+    $0^2+1 = 1$, $1^2+1 = 2$, $2^2+1 = 2$ — 근 없음, 2차이므로 기약.
+    크로네커에 의해 몫은 체 — 원소 $9$개짜리 $\mathbb{F}_9$ (표수 3). $\blacksquare$</p>
+    <p>(서술 뼈대: 기약성 판정 → “기약 $\iff$ 극대 $\iff$ 몫이 체” 인용 → 결론.
+    세 단계를 모두 적는 것이 만점 답안.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>차수 논증 서술형</span>
+  </div>
+  <p>$[E : F] = p$ (소수)이면, $F \subsetneq K \subseteq E$인 중간체는 $K = E$뿐임을
+  보이고, 임의의 $\alpha \in E \setminus F$에 대해 $E = F(\alpha)$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>탑 법칙 — 라그랑주 정리와 완전히 같은 논법이다. $F(\alpha)$는 $F$와 $E$ 사이의
+    중간체.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>중간체 $F \subseteq K \subseteq E$에 탑 법칙:
+    $p = [E : F] = [E : K][K : F]$ — $p$가 소수이므로 $[K : F]$는 $1$ 또는 $p$,
+    즉 $K = F$ 또는 $K = E$. 중간체가 없다.</p>
+    <p>$\alpha \in E \setminus F$를 잡으면 $F(\alpha)$는 $F$를 진포함하는 중간체 —
+    방금 결과로 $F(\alpha) = E$. $\blacksquare$</p>
+    <p>(“소수 차수 확대는 원시원소 하나로 끝난다” — 3장 “소수 위수 군은 순환군”의
+    체 버전이다. 라그랑주(군) ↔ 탑 법칙(체)의 평행을 답안에서 언급하면 구조적 이해를
+    보여줄 수 있다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

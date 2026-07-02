@@ -642,6 +642,31 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/abstract-algebra/ch05.html#def-field-hierarchy"
   },
 
+  "polynomial-ring": {
+    "ko": "다항식환",
+    "en": "polynomial ring",
+    "short": "체 위의 $F[x]$ — 제2의 $\\mathbb{Z}$: 나눗셈 정리, 인수정리, 근 ≤ 차수, 주 아이디얼, 유일 인수분해가 전부 성립. 기약다항식이 소수의 역할.",
+    "href": "subjects/abstract-algebra/ch07.html#def-polynomial-ring"
+  },
+  "irreducible-polynomial": {
+    "ko": "기약다항식",
+    "en": "irreducible polynomial",
+    "short": "더 낮은 차수의 곱으로 안 쪼개지는 다항식 — 반드시 \"어느 체 위에서\"와 함께. 판정: 2·3차는 근 검사, 아이젠슈타인, mod p. 기약 $\\iff \\langle p \\rangle$ 극대 $\\iff$ 몫이 체.",
+    "href": "subjects/abstract-algebra/ch07.html#def-irreducible-polynomial"
+  },
+  "kronecker": {
+    "ko": "크로네커의 정리",
+    "en": "Kronecker's theorem",
+    "short": "$p$ 기약이면 $F[x]/\\langle p \\rangle$는 $p$의 근 $\\alpha = x + \\langle p \\rangle$를 담은 확대체 — 근은 발견이 아니라 제조. $\\mathbb{C}$와 유한체 $\\mathbb{F}_{p^n}$이 이 공장의 생산품.",
+    "href": "subjects/abstract-algebra/ch07.html#def-kronecker"
+  },
+  "extension-field": {
+    "ko": "체의 확대와 차수",
+    "en": "field extension, degree",
+    "short": "$E \\supset F$는 $F$-벡터공간이고 $[E:F] = \\dim_F E$. $[F(\\alpha):F] = \\deg \\operatorname{irr}(\\alpha, F)$, 탑 법칙 $[K:F] = [K:E][E:F]$ — 차수의 라그랑주. 작도 불가능성 증명의 엔진.",
+    "href": "subjects/abstract-algebra/ch07.html#def-extension-field"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {
