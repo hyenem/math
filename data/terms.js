@@ -573,6 +573,31 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/abstract-algebra/ch03.html#def-lagrange-theorem"
   },
 
+  "group-homomorphism": {
+    "ko": "준동형사상 (군)",
+    "en": "group homomorphism",
+    "short": "$\\phi(ab) = \\phi(a)\\phi(b)$ — 연산 보존 함수. $\\det$, 치환의 부호, $\\exp$가 대표 예. 핵 $\\ker\\phi$는 항상 정규부분군이고, 단사 $\\iff$ 핵이 자명. 위수를 나눈다: $|\\phi(a)| \\mid |a|$.",
+    "href": "subjects/abstract-algebra/ch04.html#def-group-homomorphism"
+  },
+  "normal-subgroup": {
+    "ko": "정규부분군",
+    "en": "normal subgroup",
+    "short": "$gH = Hg$ (모든 $g$) — 잉여류 곱셈 $(aH)(bH) = abH$가 잘 정의되는 정확한 조건. 아벨군의 모든 부분군, 지수 2 부분군, 모든 준동형의 핵은 자동 정규.",
+    "href": "subjects/abstract-algebra/ch04.html#def-normal-subgroup"
+  },
+  "factor-group": {
+    "ko": "잉여군 (몫군)",
+    "en": "factor group",
+    "short": "$G/H$ = 잉여류들의 군 — \"$H$의 차이를 무시한 세계\". $\\mathbb{Z}/n\\mathbb{Z} \\cong \\mathbb{Z}_n$, $\\mathbb{R}/\\mathbb{Z} \\cong S^1$. 원소는 잉여류(집합)이지 $G$의 원소가 아니다.",
+    "href": "subjects/abstract-algebra/ch04.html#def-factor-group"
+  },
+  "first-isomorphism": {
+    "ko": "제1동형정리",
+    "en": "first isomorphism theorem",
+    "short": "$G/\\ker\\phi \\cong \\phi(G)$ — 몫군 계산의 만능 도구: 핵이 $H$인 준동형을 설계하면 $G/H$가 그 상이다. $GL_n/SL_n \\cong \\mathbb{R}^*$, $S_n/A_n \\cong \\mathbb{Z}_2$. 선형대수 차원정리의 군론 쌍둥이.",
+    "href": "subjects/abstract-algebra/ch04.html#def-first-isomorphism"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {

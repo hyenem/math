@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4장 준동형사상과 잉여군 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch04.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§13–15)</p>
+  <h1><span class="ch-num">4</span> 준동형사상과 잉여군</h1>
+  <p class="ch-source">군론의 중앙역 — 구조 보존 사상, 잉여류로 만드는 새 군,
+  그리고 둘을 잇는 제1동형정리. 선형대수 2장과 완벽히 평행한 이야기입니다.</p>
+</div>
+
+<p>선형대수 2장의 줄거리를 기억하세요 — 구조 보존 함수(선형변환), 그 핵과 상,
+차원정리. 이 장은 같은 이야기의 군론 버전입니다: 구조 보존 함수(준동형사상),
+그 핵과 상, 그리고 “핵으로 나눈 몫이 상과 같다”(제1동형정리).
+한 번 배운 이야기 구조를 두 번째 무대에서 재관람하는 것 — 추상대수를 배우는
+가장 좋은 방법입니다.</p>
+
+<h2 id="sec-hom">1. 준동형사상 — 연산을 보존하는 함수</h2>
+
+<div class="box box-def" id="def-group-homomorphism">
+  <span class="box-label">정의 · 준동형사상 <span class="label-en">homomorphism</span> (프랄리 §13)</span>
+  <p>군 $G, G'$ 사이의 함수 $\phi : G \to G'$가</p>
+  <p style="text-align:center;">$\phi(ab) = \phi(a)\,\phi(b)$</p>
+  <p>를 만족하면 <strong>준동형사상</strong>이라 한다 (좌변은 $G$의 연산, 우변은 $G'$의
+  연산). 즉시 따라오는 것: $\phi(e) = e'$, $\phi(a^{-1}) = \phi(a)^{-1}$,
+  $\phi(a^n) = \phi(a)^n$.
+  전단사 준동형이 <strong>동형사상</strong>($G \cong G'$) — “이름만 다른 같은 군”.</p>
+  <p><strong>핵</strong>(kernel):
+  $\ker \phi = \{ g \in G : \phi(g) = e' \}$ — “$e'$으로 뭉개지는 원소들”.
+  선형변환의 영공간과 완전히 같은 역할: $\phi$ 단사 $\iff \ker\phi = \{e\}$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 준동형 동물원</span>
+  <p><strong>(a)</strong> $\phi : \mathbb{Z} \to \mathbb{Z}_n$, $\phi(k) = k \bmod n$ —
+  “나머지 취하기”. $\ker\phi = n\mathbb{Z}$.</p>
+  <p><strong>(b)</strong> $\det : GL_n(\mathbb{R}) \to \mathbb{R}^*$ —
+  $\det(AB) = \det A \det B$ (선형대수 4장)가 정확히 준동형성.
+  $\ker(\det) = SL_n$.</p>
+  <p><strong>(c)</strong> $\operatorname{sgn} : S_n \to \{1, -1\}$ — 치환의 부호.
+  $\ker(\operatorname{sgn}) = A_n$.</p>
+  <p><strong>(d)</strong> $\exp : \langle \mathbb{R}, + \rangle \to \langle \mathbb{R}^+, \cdot \rangle$
+  — $e^{a+b} = e^a e^b$ (해석학 8장의 지수법칙!). 전단사이므로 <strong>동형</strong>:
+  덧셈의 세계와 곱셈의 세계는 군으로서 같다 (로그가 역방향 동형).</p>
+</div>
+
+<h2 id="sec-normal">2. 정규부분군 — 잉여류를 군으로 만드는 조건</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>3장의 잉여류들 $\{aH\}$에 곱셈을 주고 싶습니다 — 자연스러운 후보는
+  $(aH)(bH) = abH$. 문제는 이 정의가 <strong>대표원 선택에 의존하면 안 된다</strong>는
+  것 (같은 방을 다른 이름으로 불러도 결과가 같아야). 그 잘 정의됨의 조건이 정확히
+  $gH = Hg$ (좌우 잉여류 일치) — 정규부분군입니다.
+  “$H$가 정규 = $H$로 나눈 몫에 산술이 생긴다”.</p>
+</div>
+
+<div class="box box-def" id="def-normal-subgroup">
+  <span class="box-label">정의 · 정규부분군 <span class="label-en">normal subgroup</span> (프랄리 §14)</span>
+  <p>$H \le G$가 모든 $g \in G$에 대해 $gH = Hg$ (동치: $gHg^{-1} = H$, 동치:
+  $ghg^{-1} \in H$ for all $h$)를 만족하면 <strong>정규부분군</strong>이라 하고
+  $H \trianglelefteq G$로 쓴다.</p>
+  <p>자동으로 정규인 경우: 아벨군의 모든 부분군, 지수 2인 부분군 (3장 문제),
+  <strong>모든 준동형의 핵</strong> ($\phi(ghg^{-1}) = \phi(g)e'\phi(g)^{-1} = e'$).
+  정규가 아닌 예: $S_3$에서 $H = \{e, (1\,2)\}$ —
+  $(1\,3)H = \{(1\,3), (1\,2\,3)\}$인데 $H(1\,3) = \{(1\,3), (1\,3\,2)\}$ — 다르다.</p>
+</div>
+
+<div class="box box-def" id="def-factor-group">
+  <span class="box-label">정의 · 잉여군 <span class="label-en">factor group, quotient group</span> (프랄리 §14)</span>
+  <p>$H \trianglelefteq G$이면 잉여류 전체 $G/H = \{ aH \}$가 연산
+  $(aH)(bH) = abH$로 군을 이룬다 — <strong>잉여군</strong>(몫군).
+  $|G/H| = (G : H) = |G|/|H|$ (유한일 때).</p>
+  <p>예: $\mathbb{Z}/n\mathbb{Z} \cong \mathbb{Z}_n$ — 시계 산술의 정체가 드디어
+  공식화된다. $\mathbb{R}/\mathbb{Z}$ — “소수부만 남기기” — 는 원 $S^1$와 동형
+  (위상수학 2장의 몫공간과 같은 그림!).</p>
+  <p><em>직관:</em> $G/H$는 “$H$의 차이를 무시하기로 한 세계” — $H$를 통째로 새
+  항등원으로 삼고, $H$만큼의 차이는 같은 것으로 본다. 뭉개서 단순화하는 것.</p>
+</div>
+
+<h2 id="sec-iso">3. 제1동형정리 — 이 장의 정점</h2>
+
+<div class="box box-thm" id="def-first-isomorphism"><span class="box-label">정리 · 제1동형정리 <span class="label-en">first isomorphism theorem</span> (프랄리 §14)</span>
+  <p><strong>이 정리가 하는 일:</strong> 잉여군을 “계산”하는 만능 도구 —
+  $G/\ker$는 언제나 상(image)이다.</p>
+  <p>$\phi : G \to G'$이 준동형사상이면</p>
+  $$G / \ker\phi \;\cong\; \phi(G)$$
+  <p>(동형사상은 $g \ker\phi \mapsto \phi(g)$ — 잘 정의됨·단사·전사·준동형 확인이
+  증명의 전부다.)</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — 사용법이 곧 이해</span>
+  <p>“$G/H$가 뭔지 모르겠다”의 표준 해법: <strong>핵이 $H$인 준동형을 하나 설계</strong>
+  하면, 몫군은 그 준동형의 상이다. 예:</p>
+  <p>· $\mathbb{Z}/n\mathbb{Z} \cong \mathbb{Z}_n$: (a)의 나머지 사상, 핵 $n\mathbb{Z}$,
+  상 전체.<br>
+  · $GL_n/SL_n \cong \mathbb{R}^*$: $\det$의 핵이 $SL_n$, 상이 $\mathbb{R}^*$ —
+  “행렬을 행렬식만 남기고 뭉갠 세계는 $0$ 아닌 실수”.<br>
+  · $S_n/A_n \cong \{\pm 1\} \cong \mathbb{Z}_2$: 부호 사상 — “치환을 홀짝만 남기고
+  뭉갠 세계”.<br>
+  · $\mathbb{R}/\mathbb{Z} \cong S^1$: $t \mapsto e^{2\pi i t}$, 핵 $\mathbb{Z}$
+  (해석학 8장의 주기성!).</p>
+  <p>선형대수의 차원정리와의 평행: $\dim V = \dim N(T) + \dim R(T)$가
+  유한군에서는 $|G| = |\ker\phi| \cdot |\phi(G)|$로 나타난다 — 같은 보존 법칙의
+  두 얼굴.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① $(aH)(bH) = abH$는 <strong>정규가 아니면 잘 정의되지 않는다</strong> —
+  “$H \le G$면 항상 $G/H$가 군”이 아니다. 잘 정의됨 확인을 답안에서 생략하면 감점
+  포인트.
+  ② $G/H$의 원소는 $G$의 원소가 아니라 <strong>잉여류(집합)</strong>다 —
+  $\mathbb{Z}/3\mathbb{Z}$의 원소는 “숫자 1”이 아니라 “집합 $1 + 3\mathbb{Z}$”.
+  ③ $G/H \cong K$라고 $G \cong H \times K$인 것은 아니다 —
+  $\mathbb{Z}_4 / \langle 2 \rangle \cong \mathbb{Z}_2$이지만
+  $\mathbb{Z}_4 \not\cong \mathbb{Z}_2 \times \mathbb{Z}_2$ (2장 문제).
+  몫이 같아도 “조립 방식”(확대)은 다를 수 있다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">4장의 줄거리</span>
+  <p><a class="term" data-term="group-homomorphism">준동형사상</a> = 연산 보존
+  ($\det$, $\operatorname{sgn}$, $\exp$, 나머지 사상), 핵 = 뭉개지는 것들,
+  단사 $\iff$ 핵 자명
+  → <a class="term" data-term="normal-subgroup">정규부분군</a>($gH = Hg$) =
+  잉여류 곱셈이 잘 정의되는 조건; 핵은 항상 정규, 지수 2도 항상 정규
+  → <a class="term" data-term="factor-group">잉여군</a> $G/H$ = “$H$의 차이를 무시한
+  세계” ($\mathbb{Z}/n\mathbb{Z} = \mathbb{Z}_n$, $\mathbb{R}/\mathbb{Z} = S^1$)
+  → <a class="term" data-term="first-isomorphism">제1동형정리</a>:
+  $G/\ker\phi \cong \phi(G)$ — 몫군 계산 = 좋은 준동형 설계.</p>
+  <p><strong>단 하나만 기억한다면:</strong> “$G/H$를 구하라”는 문제의 정석 풀이는
+  핵이 $H$인 준동형사상을 하나 만드는 것이다 — 잉여류를 직접 곱해보는 것은
+  최후의 수단.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\phi : \mathbb{Z}_{12} \to \mathbb{Z}_{12}$, $\phi(x) = 3x$가 준동형사상임을
+  확인하고 $\ker\phi$와 $\phi(\mathbb{Z}_{12})$를 구한 뒤, 제1동형정리를 검증하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$3x \equiv 0 \pmod{12}$인 $x$들. 상은 $3$의 배수들.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>준동형: $\phi(x + y) = 3(x+y) = 3x + 3y$ ✓ (아벨이라 자동).
+    $\ker\phi = \{x : 12 \mid 3x\} = \{x : 4 \mid x\} = \{0, 4, 8\} = \langle 4 \rangle$.
+    상: $\{0, 3, 6, 9\} = \langle 3 \rangle$.</p>
+    <p>제1동형정리 검증: $\mathbb{Z}_{12}/\langle 4 \rangle$의 위수는 $12/3 = 4$이고
+    $|\langle 3 \rangle| = 4$ ✓ — 실제로 둘 다 $\mathbb{Z}_4$와 동형 (잉여류
+    $k + \langle 4 \rangle \mapsto 3k$).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 아벨군의 잉여군은 아벨군이다.<br>
+  (2) $G/H$가 아벨이면 $G$도 아벨이다.<br>
+  (3) 준동형사상은 원소의 위수를 보존한다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) $S_3 / A_3$. (3) 보존이 아니라 “나눈다” — $\phi(a)^{|a|} = e'$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> $(aH)(bH) = abH = baH = (bH)(aH)$.</p>
+    <p>(2) <strong>거짓.</strong> $S_3/A_3 \cong \mathbb{Z}_2$는 아벨이지만 $S_3$은
+    비아벨. (몫은 정보를 잃는다 — 뭉갠 세계가 얌전하다고 원본이 얌전한 것은 아니다.)</p>
+    <p>(3) <strong>거짓 (정확히는: 나눈다).</strong> $\phi(a)^{|a|} = \phi(a^{|a|}) = e'$
+    이므로 $|\phi(a)| \mid |a|$ — 등호는 단사일 때. 반례: 자명 사상은 모든 위수를
+    1로 뭉갠다. (“위수를 나눈다”는 준동형 존재 여부 판정의 핵심 도구:
+    $\mathbb{Z}_4 \to \mathbb{Z}_6$의 준동형은 상의 위수가 $\gcd(4,6) = 2$의 약수인
+    것뿐.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §14 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\mathbb{Z}_4 \times \mathbb{Z}_6$의 부분군 $H = \langle (2, 3) \rangle$에 대해
+  $H$의 원소를 나열하고, 잉여군 $(\mathbb{Z}_4 \times \mathbb{Z}_6)/H$의 위수를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$(2,3)$의 위수 = $\operatorname{lcm}(|2|_{\mathbb{Z}_4}, |3|_{\mathbb{Z}_6})$.
+    아벨이라 정규는 자동.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$|2| = 2$ (in $\mathbb{Z}_4$), $|3| = 2$ (in $\mathbb{Z}_6$) —
+    $|(2,3)| = \operatorname{lcm}(2,2) = 2$.
+    $H = \{(0,0), (2,3)\}$, $|H| = 2$.</p>
+    <p>아벨군이므로 $H \trianglelefteq$, 잉여군의 위수는
+    $\frac{|\mathbb{Z}_4 \times \mathbb{Z}_6|}{|H|} = \frac{24}{2} = 12$.
+    (구조까지 궁금하면: $(1, 0) + H$의 위수 4, $(0, 1) + H$의 위수를 조사해
+    $\mathbb{Z}_{12}$ 또는 $\mathbb{Z}_2 \times \mathbb{Z}_6$ 중 어느 쪽인지 가리는
+    것이 심화 — $(1,1) + H$의 위수가 12임을 확인하면 $\mathbb{Z}_{12}$와 동형.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>제1동형정리 활용</span>
+  </div>
+  <p>$\phi : \mathbb{C}^* \to \mathbb{R}^+$, $\phi(z) = |z|$ (절댓값)에 대해
+  $\phi$가 전사 준동형임을 보이고, $\mathbb{C}^*/\ker\phi$가 어떤 군과 동형인지
+  판정하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$|zw| = |z||w|$ (해석학 1장). 핵은 $|z| = 1$ — 단위원.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>준동형: $|zw| = |z|\,|w|$ (해석학 1장 절댓값 성질). 전사: 임의의 $r \gt 0$에
+    대해 $\phi(r) = r$.
+    핵: $\ker\phi = \{z : |z| = 1\} = S^1$ (단위원군).</p>
+    <p>제1동형정리로 $\mathbb{C}^*/S^1 \cong \mathbb{R}^+$ —
+    “$0$ 아닌 복소수를 방향(각도)을 뭉개고 크기만 남긴 세계는 양의 실수”.
+    $\blacksquare$ (쌍둥이 문제: $z \mapsto z/|z|$로 뭉개면
+    $\mathbb{C}^*/\mathbb{R}^+ \cong S^1$ — 극형식 $z = re^{i\theta}$의 두 성분이
+    각각 몫군으로 읽힌다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>정규성 논증 서술형</span>
+  </div>
+  <p>$N \trianglelefteq G$이고 $(G : N) = m$이면, 모든 $g \in G$에 대해 $g^m \in N$임을
+  증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>잉여군 $G/N$의 위수가 $m$ — 라그랑주 따름정리를 잉여군에 적용하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$N$이 정규이므로 잉여군 $G/N$이 존재하고 $|G/N| = (G : N) = m$.
+    라그랑주 따름정리(“$a^{|G|} = e$”)를 $G/N$에 적용하면, 임의의 잉여류 $gN$에 대해</p>
+    $$(gN)^m = g^m N = N \quad (= G/N\text{의 항등원})$$
+    <p>$g^m N = N \iff g^m \in N$ (같은 방 판정법). $\blacksquare$</p>
+    <p>(잉여군의 위력이 압축된 문제 — “몫에서의 산술이 원본의 원소에 대한 결론을
+    준다”. 정규성이 없으면 $G/N$이 군이 아니라서 이 논증 전체가 무너진다는 점을
+    답안 첫 줄에 명시하는 것이 좋다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
