@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6장 리만-스틸체스 적분 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch06.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin, Principles of Mathematical Analysis</p>
+  <h1><span class="ch-num">6</span> 리만-스틸체스 적분</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다. 본문은 리만 적분($\alpha(x) = x$)을
+  중심으로 읽고, 스틸체스 일반화는 필요한 곳에서만 언급합니다.</p>
+</div>
+
+<p>“곡선 아래 넓이”를 계산하는 법은 이미 압니다. 이 장의 질문은 더 근본적입니다:
+<strong>어떤 함수가 적분 가능한가?</strong> 그리고 “넓이”라는 말을 쓰지 않고
+적분을 어떻게 정의하는가? 답의 아이디어는 하나예요 —
+<em>위에서 누르고 아래에서 받치기.</em> 두 근사가 만나면 적분이고, 안 만나면
+적분 불가능입니다.</p>
+
+<h2 id="sec-def">1. 상합과 하합 — 위에서 누르고 아래에서 받치기</h2>
+
+<div class="box box-def" id="def-partition">
+  <span class="box-label">정의 6.1 · 분할 <span class="label-en">partition</span></span>
+  <p>$[a, b]$의 <strong>분할</strong> $P$는 유한 점집합
+  $a = x_0 \le x_1 \le \cdots \le x_n = b$이다. $\Delta x_i = x_i - x_{i-1}$로 쓴다.
+  유계함수 $f : [a,b] \to \mathbb{R}$와 분할 $P$에 대해 각 소구간에서</p>
+  $$M_i = \sup_{[x_{i-1}, x_i]} f, \qquad m_i = \inf_{[x_{i-1}, x_i]} f$$
+  <p>로 놓고 <strong>상합</strong>과 <strong>하합</strong>을 정의한다:</p>
+  $$U(P, f) = \sum_{i=1}^{n} M_i \, \Delta x_i, \qquad L(P, f) = \sum_{i=1}^{n} m_i \, \Delta x_i$$
+  <p>($\sup, \inf$가 존재하는 것은 $f$가 유계이기 때문 —
+  <a class="term" data-term="lub-property">완비성</a>이 첫 줄부터 일한다.)</p>
+</div>
+
+<div class="box box-def" id="def-riemann-integral">
+  <span class="box-label">정의 6.2 · 리만 적분 <span class="label-en">Riemann integral</span></span>
+  <p><strong>상적분</strong>과 <strong>하적분</strong>을 모든 분할에 대한 최선값으로 정의한다:</p>
+  $$\overline{\int_a^b} f\, dx = \inf_P U(P, f), \qquad \underline{\int_a^b} f\, dx = \sup_P L(P, f)$$
+  <p>두 값이 일치할 때 $f$를 <strong>리만 적분가능</strong>하다고 하고
+  ($f \in \mathscr{R}$), 공통값을 $\int_a^b f\, dx$로 쓴다.</p>
+  <p>(리만-<strong>스틸체스</strong> 적분 $\int f\, d\alpha$는 $\Delta x_i$ 대신
+  $\Delta \alpha_i = \alpha(x_i) - \alpha(x_{i-1})$을 쓰는 일반화다 — 증가함수 $\alpha$가
+  “구간의 무게”를 정한다. $\alpha(x) = x$이면 리만 적분.)</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>그래프를 계단으로 <strong>덮은</strong> 넓이(상합)와 계단으로 <strong>받친</strong>
+  넓이(하합)를 생각하세요. 분할을 잘게 할수록 덮개는 내려오고 받침은 올라갑니다
+  (정리 6.4 — 세분은 상합을 줄이고 하합을 키운다).
+  “덮개들의 최저 기록”과 “받침들의 최고 기록”이 같은 값에서 만나면,
+  그 값 말고는 “넓이”라 부를 후보가 없죠. 안 만나면 — 넓이 개념 자체가 그 함수에겐
+  성립하지 않는 겁니다. 항상 $\underline{\int} \le \overline{\int}$이므로 (정리 6.5)
+  문제는 늘 “틈을 없앨 수 있는가”입니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 적분 불가능한 함수 — 디리클레</span>
+  <p>$f(x) = 1$ ($x \in \mathbb{Q}$), $f(x) = 0$ ($x \notin \mathbb{Q}$)을 $[0, 1]$에서 보자.
+  <a class="term" data-term="density-of-q">조밀성</a>에 의해 어떤 소구간에도 유리수와 무리수가
+  다 있으므로 모든 분할에서 $M_i = 1$, $m_i = 0$:</p>
+  $$U(P, f) = 1, \quad L(P, f) = 0 \quad \text{(모든 } P \text{에서)}$$
+  <p>상적분 $1 \neq$ 하적분 $0$ — 적분 불가능. 덮개와 받침의 틈이 분할을 아무리 잘게 해도
+  전혀 좁혀지지 않는 함수다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 6.6 · 리만 판정법 <span class="label-en">Riemann criterion</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 적분가능성을 “한 분할에서 틈이 $\varepsilon$보다 작다”는
+  확인 가능한 조건으로 바꾼다 — 이 장의 모든 존재 정리가 이 판정법을 통과한다.</p>
+  <p>$f \in \mathscr{R}$ $\iff$ 임의의 $\varepsilon \gt 0$에 대해 분할 $P$가 존재하여</p>
+  $$U(P, f) - L(P, f) \lt \varepsilon$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— (⇐) 틈이 임의로 작아지면 사이에 낀 상·하적분도 붙는다. (⇒) 상적분·하적분 각각을 $\varepsilon/2$ 안에서 달성하는 분할 둘을 공통 세분으로 합친다.</span></summary>
+  <p>($\Leftarrow$) 항상 $L(P, f) \le \underline{\int} \le \overline{\int} \le U(P, f)$이므로,
+  가정에서 $\overline{\int} - \underline{\int} \lt \varepsilon$이 모든 $\varepsilon$에 대해
+  성립 — 두 값은 같다.</p>
+  <p>($\Rightarrow$) $\int = \overline{\int} = \underline{\int}$라 하자. $\inf$, $\sup$의
+  정의에서 $U(P_1, f) \lt \int + \frac{\varepsilon}{2}$인 $P_1$과
+  $L(P_2, f) \gt \int - \frac{\varepsilon}{2}$인 $P_2$가 있다.
+  $P = P_1 \cup P_2$ (공통 세분)로 잡으면 세분의 성질(6.4)에 의해</p>
+  $$U(P, f) - L(P, f) \le U(P_1, f) - L(P_2, f) \lt \varepsilon$$
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-exist">2. 누가 적분가능한가</h2>
+
+<div class="box box-thm">
+  <span class="box-label">정리 6.8 · 연속이면 적분가능</span>
+  <p><strong>이 정리가 하는 일:</strong> 4장의 균등연속이 값을 하는 순간.</p>
+  <p>$f$가 $[a, b]$에서 연속이면 $f \in \mathscr{R}$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $[a,b]$ 컴팩트 → 균등연속(4.19) → 소구간 폭을 δ보다 작게 하면 각 소구간의 진폭 $M_i - m_i$가 균일하게 작다.</span></summary>
+  <p>$\varepsilon \gt 0$이 주어졌다 하자. $[a,b]$는 컴팩트이므로 $f$는
+  <a class="term" data-term="uniform-continuity">균등연속</a>(정리 4.19):
+  $|s - t| \lt \delta \Rightarrow |f(s) - f(t)| \lt \frac{\varepsilon}{b - a}$인
+  $\delta \gt 0$이 있다.</p>
+  <p>소구간 폭이 전부 $\delta$ 미만인 분할 $P$를 잡으면, 각 소구간에서 최대최소 정리(4.16)로
+  $M_i - m_i = f(s_i) - f(t_i) \lt \frac{\varepsilon}{b-a}$ (어떤 $s_i, t_i$가 달성). 따라서</p>
+  $$U(P, f) - L(P, f) = \sum_i (M_i - m_i) \Delta x_i \lt \frac{\varepsilon}{b - a} \sum_i \Delta x_i = \varepsilon$$
+  <p>리만 판정법(6.6)으로 끝. <em>지점마다 다른 $\delta$였다면 “모든 소구간에서 동시에”가
+  불가능했다 — 균등연속이 필요했던 이유.</em></p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 6.9–6.10 · 단조함수, 유한 불연속</span>
+  <p>① $f$가 $[a, b]$에서 단조이면 $f \in \mathscr{R}$.
+  ② $f$가 유계이고 불연속점이 <strong>유한 개</strong>뿐이면 $f \in \mathscr{R}$.</p>
+  <p>①의 증명 아이디어: 균등분할($\Delta x_i = \frac{b-a}{n}$)에서 증가함수는
+  $M_i = f(x_i)$, $m_i = f(x_{i-1})$이므로</p>
+  $$U - L = \frac{b-a}{n} \sum_i \big[ f(x_i) - f(x_{i-1}) \big] = \frac{b-a}{n} \big[ f(b) - f(a) \big] \xrightarrow{n \to \infty} 0$$
+  <p>— 망원(telescoping) 합 한 줄. ②는 불연속점들을 아주 좁은 소구간으로 “격리”하고
+  나머지에서 균등연속을 쓰는 표준 논법이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>“적분가능 = 연속”이 아닙니다. 연속은 <strong>충분조건</strong>일 뿐 —
+  단조함수는 불연속점이 (가산 개나) 있어도 적분가능하고, 심지어 불연속점이 무한해도
+  적분가능한 함수가 많습니다. 정확한 경계는 르베그의 판정법
+  — <em>유계함수가 리만 적분가능 $\iff$ 불연속점 집합의 “측도가 $0$”</em> —
+  인데, 이는 11장(르베그 이론)의 예고편입니다. 디리클레 함수가 탈락한 이유:
+  불연속점이 $[0,1]$ <em>전체</em>라서.</p>
+</div>
+
+<p>적분의 대수적 성질(정리 6.12)은 예상대로입니다 — 선형성
+($\int (f + g) = \int f + \int g$, $\int cf = c \int f$), 구간 분할 가법성
+($\int_a^b = \int_a^c + \int_c^b$), 단조성 ($f \le g \Rightarrow \int f \le \int g$),
+그리고 자주 쓰는 부등식:</p>
+
+$$\left| \int_a^b f \, dx \right| \le \int_a^b |f| \, dx$$
+
+<p>(증명: $-|f| \le f \le |f|$에 단조성. $|f|$의 적분가능성은 정리 6.11 —
+연속함수와의 합성이 적분가능성을 보존한다는 정리 — 에서 나온다.)
+곱 $fg$도 적분가능하다 ($fg = \frac{1}{4}[(f+g)^2 - (f-g)^2]$ 트릭).</p>
+
+<h2 id="sec-ftc">3. 미적분학의 기본정리 — 미분과 적분은 서로의 역</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>미분(순간 변화율)과 적분(누적)은 정의만 보면 완전히 다른 연산입니다.
+  이 둘이 서로의 역이라는 것 — $F(x) = \int_a^x f$를 미분하면 $f$가 되돌아오고,
+  $f'$을 적분하면 $f$의 변화량이 나온다는 것 — 은 <em>정리</em>이지 당연한 사실이
+  아니에요. 그래서 이름이 “기본정리”입니다. 증명의 재료는 이 장의 리만 판정법과
+  5장의 MVT — 전반부 전체의 합류 지점입니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 6.20 · 부정적분의 미분</span>
+  <p><strong>이 정리가 하는 일:</strong> “적분한 것을 미분하면 원래대로” —
+  적분이 함수를 매끄럽게 만든다는 것까지 덤으로.</p>
+  <p>$f \in \mathscr{R}$이고 $F(x) = \int_a^x f(t)\, dt$라 하자. 그러면
+  ① $F$는 $[a, b]$에서 (균등)연속이고,
+  ② $f$가 $x_0$에서 연속이면 $F$는 $x_0$에서 미분가능하며 $F'(x_0) = f(x_0)$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— ① 적분의 크기 부등식으로 립시츠. ② 몫에서 $f(x_0)$을 빼면 “$f$와 $f(x_0)$의 차이의 평균” — 연속성이 그것을 죽인다.</span></summary>
+  <p>① $|f| \le M$이라 하면 $|F(y) - F(x)| = \left| \int_x^y f \right| \le M|y - x|$ —
+  립시츠, 따라서 균등연속.</p>
+  <p>② $t \neq x_0$에 대해</p>
+  $$\frac{F(t) - F(x_0)}{t - x_0} - f(x_0) = \frac{1}{t - x_0} \int_{x_0}^{t} \big[ f(u) - f(x_0) \big] du$$
+  <p>($f(x_0)$은 상수라 $\frac{1}{t-x_0}\int_{x_0}^t f(x_0)\,du = f(x_0)$이므로).
+  $f$가 $x_0$에서 연속이므로, $|u - x_0| \lt \delta$이면 $|f(u) - f(x_0)| \lt \varepsilon$.
+  $|t - x_0| \lt \delta$이면 우변의 크기는 $\frac{1}{|t - x_0|} \cdot \varepsilon |t - x_0| = \varepsilon$
+  이하. 그러므로 몫은 $f(x_0)$으로 수렴한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 6.21 · <span id="def-fundamental-theorem-calculus">미적분학의 기본정리</span> <span class="label-en">fundamental theorem of calculus</span></span>
+  <p><strong>이 정리가 하는 일:</strong> “도함수를 적분하면 변화량” — 적분 계산을
+  역도함수 찾기로 바꿔 주는, 계산 미적분학 전체의 근거.</p>
+  <p>$f \in \mathscr{R}$이고, $F' = f$인 미분가능한 $F$가 $[a,b]$에 존재하면</p>
+  $$\int_a^b f(x)\, dx = F(b) - F(a)$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 분할의 각 소구간에 MVT를 적용하면 리만 합이 정확히 $F(b) - F(a)$로 망원된다.</span></summary>
+  <p>$\varepsilon \gt 0$에 대해 리만 판정법(6.6)으로 $U(P, f) - L(P, f) \lt \varepsilon$인
+  분할 $P$를 잡자. 각 소구간 $[x_{i-1}, x_i]$에 <a class="term" data-term="mean-value-theorem">MVT</a>를
+  적용하면 $F(x_i) - F(x_{i-1}) = f(t_i)\, \Delta x_i$인 $t_i$가 존재한다. 더하면 (망원):</p>
+  $$F(b) - F(a) = \sum_{i=1}^{n} f(t_i)\, \Delta x_i$$
+  <p>우변은 $L(P, f)$와 $U(P, f)$ 사이에 끼어 있고, $\int_a^b f$도 그 사이에 있다.
+  둘 다 폭 $\varepsilon$ 미만인 같은 구간 안에 있으므로</p>
+  $$\left| F(b) - F(a) - \int_a^b f\, dx \right| \lt \varepsilon$$
+  <p>$\varepsilon$이 임의이므로 등호 성립.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>두 정리의 가정을 구분하세요. 6.20②는 “$f$가 연속인 <em>지점에서</em>” $F' = f$ —
+  $f$가 불연속인 점에서는 $F$가 미분 불가능하거나 $F' \neq f$일 수 있습니다.
+  6.21은 반대로 “$F' = f$인 $F$가 <em>주어졌을 때</em>”의 이야기이고,
+  $f \in \mathscr{R}$ 가정이 꼭 필요합니다 — 도함수인데 적분 불가능한 함수가 존재하거든요
+  (유계인 경우조차, Volterra의 예). “미분과 적분이 서로 역”은 조건 달린 진실입니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 6.22 · 부분적분 <span class="label-en">integration by parts</span></span>
+  <p>$F, G$가 미분가능하고 $F' = f \in \mathscr{R}$, $G' = g \in \mathscr{R}$이면</p>
+  $$\int_a^b F(x) g(x)\, dx = F(b)G(b) - F(a)G(a) - \int_a^b f(x) G(x)\, dx$$
+  <p>(증명: 곱 $FG$에 기본정리 6.21을 적용 — $(FG)' = Fg + fG \in \mathscr{R}$이므로.
+  치환적분(6.19)도 같은 방식으로 기본정리에서 나온다.)</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">6장의 줄거리</span>
+  <p><a class="term" data-term="partition">분할</a>로 만든 상합·하합, 그 최선값이 만나면
+  <a class="term" data-term="riemann-integral">리만 적분</a>
+  → 실전 판정은 리만 판정법(6.6): “$U - L \lt \varepsilon$인 분할 하나”
+  → 연속이면 적분가능 (균등연속이 핵심 재료), 단조여도 적분가능 (망원 합),
+  디리클레 함수는 탈락 (조밀성 때문에 틈이 안 좁혀짐)
+  → <a class="term" data-term="fundamental-theorem-calculus">미적분학의 기본정리</a>:
+  $\int_a^x f$의 미분은 ($f$의 연속점에서) $f$이고, $F'$의 적분은 $F(b) - F(a)$
+  (증명 = 소구간마다 MVT + 망원)
+  → 부분적분·치환적분은 기본정리의 따름정리.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 이 장의 기술적 심장은 “틈 좁히기”(리만 판정법)이고,
+  개념적 심장은 기본정리 — 그리고 그 증명이 <em>4장(균등연속) + 5장(MVT)의 합류</em>라는 것.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$f(x) = x$를 $[0, 1]$에서, 균등분할 $P_n = \{0, \frac{1}{n}, \frac{2}{n}, \dots, 1\}$에
+  대해 $U(P_n, f)$와 $L(P_n, f)$를 직접 계산하고, 정의에 따라
+  $\int_0^1 x\, dx = \frac{1}{2}$임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>증가함수이므로 $M_i = \frac{i}{n}$, $m_i = \frac{i-1}{n}$.
+    $\sum_{i=1}^n i = \frac{n(n+1)}{2}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$U(P_n, f) = \sum_{i=1}^n \frac{i}{n} \cdot \frac{1}{n} = \frac{n(n+1)}{2n^2} = \frac{1}{2} + \frac{1}{2n}$,
+    같은 계산으로 $L(P_n, f) = \frac{1}{2} - \frac{1}{2n}$.</p>
+    <p>따라서 $\underline{\int} \ge \sup_n L(P_n) = \frac{1}{2}$이고
+    $\overline{\int} \le \inf_n U(P_n) = \frac{1}{2}$. 항상 $\underline{\int} \le \overline{\int}$이므로
+    둘 다 $\frac{1}{2}$ — 적분가능하고 값은 $\frac{1}{2}$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) $f$가 적분가능하면 $|f|$도 적분가능하다.<br>
+  (2) $|f|$가 적분가능하면 $f$도 적분가능하다.<br>
+  (3) $f$가 $[a,b]$에서 유계이고 한 점에서만 불연속이면 적분가능하다.<br>
+  (4) $\int_a^b f = 0$이고 $f \ge 0$이면 $f \equiv 0$이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) 디리클레 함수를 $\pm 1$ 버전으로 바꿔 보라. (4) 한 점에서만 양수인 함수.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> $|f| = \varphi \circ f$ ($\varphi(t) = |t|$ 연속)에 정리 6.11,
+    또는 $\big||f(s)| - |f(t)|\big| \le |f(s) - f(t)|$에서 소구간 진폭이 줄어듦을 관찰.</p>
+    <p>(2) <strong>거짓.</strong> $f(x) = 1$ (유리수), $f(x) = -1$ (무리수)이면
+    $|f| \equiv 1$은 적분가능하지만 $f$는 디리클레형이라 불가능 ($M_i = 1, m_i = -1$).</p>
+    <p>(3) <strong>참.</strong> 정리 6.10 — 불연속점을 폭 $\varepsilon$짜리 소구간으로 격리하면
+    그 구간의 기여는 $2M\varepsilon$ 이하, 나머지에서는 균등연속 논법.</p>
+    <p>(4) <strong>거짓.</strong> $f(x) = 1$ ($x = a$), $f(x) = 0$ (그 외)은 $f \ge 0$,
+    $\int = 0$이지만 $f \not\equiv 0$. (단, $f$가 <strong>연속</strong>이면 참이다 —
+    $f(x_0) \gt 0$인 점이 있으면 연속성으로 그 근방에서 $f \gt \frac{f(x_0)}{2}$가 되어
+    적분이 양수가 된다. 연속 가정의 유무로 결론이 갈리는 임용 단골 포인트.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 6장 연습 2 기반</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$f \ge 0$이 $[a, b]$에서 <strong>연속</strong>이고 $\int_a^b f(x)\, dx = 0$이면
+  $f \equiv 0$임을 증명하라. (앞 문제 (4)의 연속 버전.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>귀류법: $f(x_0) = c \gt 0$이면 연속성으로 어떤 구간 $[x_0 - \delta, x_0 + \delta]$에서
+    $f \gt \frac{c}{2}$. 적분의 단조성과 구간 가법성으로 하한을 만들어라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f(x_0) = c \gt 0$인 $x_0$이 있다고 하자. 연속성에서 ($\varepsilon = \frac{c}{2}$)
+    $|x - x_0| \lt \delta$이면 $f(x) \gt \frac{c}{2}$인 $\delta \gt 0$이 있다
+    (끝점이면 한쪽 근방으로). 구간 $I = [x_0 - \delta, x_0 + \delta] \cap [a, b]$의 길이를
+    $\ell \gt 0$이라 하면, $f \ge 0$과 적분의 단조성·가법성으로</p>
+    $$\int_a^b f \ \ge\ \int_I f \ \ge\ \frac{c}{2} \cdot \ell \ \gt\ 0$$
+    <p>— $\int_a^b f = 0$에 모순. 그러므로 $f \equiv 0$. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 6장 연습 4 기반</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f(x) = 0$ (모든 무리수 $x$), $f(x) = \frac{1}{q}$ ($x = \frac{p}{q}$ 기약분수,
+  $q \gt 0$) — 토메 함수(팝콘 함수) — 가 $[0, 1]$에서 리만 적분가능하고
+  $\int_0^1 f = 0$임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>핵심 관찰: $f(x) \ge \varepsilon$인 점은 분모 $q \le \frac{1}{\varepsilon}$인 유리수뿐 —
+    <strong>유한 개</strong>다. 그 점들을 좁은 소구간으로 격리하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>모든 분할에서 각 소구간은 무리수를 포함하므로 $m_i = 0$, 즉 $L(P, f) = 0$ —
+    하적분은 $0$이다. 남은 것은 상적분도 $0$임을 보이는 것.</p>
+    <p>$\varepsilon \gt 0$을 잡자. $f(x) \ge \frac{\varepsilon}{2}$인 점은 분모
+    $q \le \frac{2}{\varepsilon}$인 $[0,1]$의 유리수들뿐이고, 이는 유한 개다 —
+    $N$개라 하자. 이 $N$개의 점 각각을 폭 $\frac{\varepsilon}{2N}$ 이하의 소구간으로 덮는
+    분할 $P$를 만들면:</p>
+    <p>· 격리 구간들의 기여: $M_i \le 1$이므로 합쳐서 $\le N \cdot \frac{\varepsilon}{2N} = \frac{\varepsilon}{2}$<br>
+    · 나머지 구간들: $M_i \lt \frac{\varepsilon}{2}$이므로 기여는 $\lt \frac{\varepsilon}{2} \cdot 1$</p>
+    <p>따라서 $U(P, f) \lt \varepsilon$. 상적분 $= \inf_P U \le \varepsilon$이 모든
+    $\varepsilon$에서 성립하므로 상적분 $= 0 =$ 하적분 — 적분가능하고 $\int_0^1 f = 0$. $\blacksquare$</p>
+    <p>(이 함수는 <em>모든 유리수에서 불연속, 모든 무리수에서 연속</em>인 기괴한 예다 —
+    불연속점이 조밀하게 무한한데도 적분가능하다. “적분가능 ⊋ 연속”의 폭을 보여주는
+    대표 사례.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>기본정리 응용</span>
+  </div>
+  <p>$F(x) = \displaystyle\int_0^{x^2} \frac{1}{1 + t^3}\, dt$에 대해 $F'(x)$를 구하고,
+  근거가 되는 정리를 명시하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$G(u) = \int_0^u \frac{dt}{1+t^3}$로 놓으면 $F = G \circ (x \mapsto x^2)$ —
+    6.20과 연쇄법칙의 합작.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$g(t) = \frac{1}{1+t^3}$은 $t \ge 0$에서 연속이므로, 정리 6.20에 의해
+    $G(u) = \int_0^u g$는 미분가능하고 $G'(u) = g(u)$.
+    $F(x) = G(x^2)$이므로 연쇄법칙(5.5)에 의해</p>
+    $$F'(x) = G'(x^2) \cdot 2x = \frac{2x}{1 + x^6}$$
+    <p>(근거: 피적분함수의 <strong>연속성</strong> — 이것이 빠지면 6.20②를 쓸 수 없다 —
+    와 연쇄법칙.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>적분가능성 논증 서술형</span>
+  </div>
+  <p>$f : [0, 1] \to \mathbb{R}$가 유계이고, 모든 $\delta \in (0, 1)$에 대해 $[\delta, 1]$에서
+  적분가능하다고 하자. $f$가 $[0, 1]$ 전체에서 적분가능함을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>문제의 구도는 “$0$ 근처의 말썽을 폭 $\delta$짜리 구간에 가둔다”이다.
+    리만 판정법으로: $[0, \delta]$의 기여는 $2M\delta$로 누르고, $[\delta, 1]$에서는
+    가정으로 좋은 분할을 받아 이어 붙여라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$|f| \le M$이라 하자 ($M \gt 0$). $\varepsilon \gt 0$이 주어지면
+    $\delta = \frac{\varepsilon}{4M}$로 잡는다.</p>
+    <p>가정에 의해 $f$는 $[\delta, 1]$에서 적분가능하므로, 리만 판정법(6.6)으로
+    $[\delta, 1]$의 분할 $P_1$이 존재하여 $U(P_1, f) - L(P_1, f) \lt \frac{\varepsilon}{2}$.</p>
+    <p>$P = \{0\} \cup P_1$은 $[0, 1]$의 분할이고, 추가된 소구간 $[0, \delta]$에서
+    $M_1 - m_1 \le 2M$이므로 그 기여는 $2M\delta = \frac{\varepsilon}{2}$ 이하. 따라서</p>
+    $$U(P, f) - L(P, f) \le 2M\delta + \big[ U(P_1, f) - L(P_1, f) \big] \lt \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon$$
+    <p>리만 판정법에 의해 $f \in \mathscr{R}$ on $[0, 1]$. $\blacksquare$</p>
+    <p>(응용: $f(x) = \sin\frac{1}{x}$ ($x \neq 0$), $f(0) = 0$은 각 $[\delta, 1]$에서
+    연속이라 적분가능하므로, 이 문제에 의해 $[0,1]$에서 적분가능 — $0$에서의 격렬한
+    진동도 “폭이 좁으면” 적분을 방해하지 못한다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

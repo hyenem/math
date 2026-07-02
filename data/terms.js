@@ -291,5 +291,26 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "Taylor's theorem",
     "short": "$f(\\beta) = \\sum_{k \\lt n} \\frac{f^{(k)}(\\alpha)}{k!}(\\beta-\\alpha)^k + \\frac{f^{(n)}(x)}{n!}(\\beta-\\alpha)^n$ — 오차(라그랑주 나머지)가 명시된 다항 근사. $n=1$이면 평균값 정리. 증명은 롤 정리 $n$번 연쇄.",
     "href": "subjects/analysis/ch05.html#def-taylor-theorem"
+  },
+
+  /* ---------- 해석학 6장: 리만-스틸체스 적분 ---------- */
+
+  "partition": {
+    "ko": "분할",
+    "en": "partition",
+    "short": "$[a,b]$의 유한 점집합 $a = x_0 \\le \\cdots \\le x_n = b$. 각 소구간의 $\\sup, \\inf$로 상합 $U(P,f)$와 하합 $L(P,f)$를 만든다. 세분할수록 상합은 줄고 하합은 는다.",
+    "href": "subjects/analysis/ch06.html#def-partition"
+  },
+  "riemann-integral": {
+    "ko": "리만 적분",
+    "en": "Riemann integral",
+    "short": "상적분 $\\inf_P U(P,f)$와 하적분 $\\sup_P L(P,f)$가 일치할 때의 공통값. 실전 판정은 리만 판정법: $U(P,f) - L(P,f) \\lt \\varepsilon$인 분할의 존재. 연속·단조함수는 적분가능, 디리클레 함수는 불가능.",
+    "href": "subjects/analysis/ch06.html#def-riemann-integral"
+  },
+  "fundamental-theorem-calculus": {
+    "ko": "미적분학의 기본정리",
+    "en": "fundamental theorem of calculus",
+    "short": "① $F(x) = \\int_a^x f$는 $f$의 연속점에서 $F' = f$ (Rudin 6.20). ② $F' = f \\in \\mathscr{R}$이면 $\\int_a^b f = F(b) - F(a)$ (Rudin 6.21, 증명 = 소구간마다 MVT + 망원합).",
+    "href": "subjects/analysis/ch06.html#def-fundamental-theorem-calculus"
   }
 });
