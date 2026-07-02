@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4장 연속 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch04.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin, Principles of Mathematical Analysis</p>
+  <h1><span class="ch-num">4</span> 연속</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다.
+  2장의 위상 언어가 여기서 전부 회수됩니다.</p>
+</div>
+
+<p>“연속”의 직관은 초등학생도 압니다 — <em>붓을 떼지 않고 그릴 수 있는 그래프.</em>
+이 장이 하는 일은 그 직관을 $\varepsilon$–$\delta$로 번역하고, 그 번역이
+2장의 개념들(열린집합, 컴팩트, 연결)과 어떻게 맞물리는지 보이는 것입니다.
+맞물림의 결과가 미적분에서 “당연하게” 쓰던 세 정리예요:
+<strong>최대최소 정리, 균등연속 정리, 중간값 정리.</strong>
+셋 다 “당연”이 아니라 컴팩트성과 연결성의 대가임이 드러납니다.</p>
+
+<h2 id="sec-limit">1. 함수의 극한</h2>
+
+<div class="box box-def" id="def-function-limit">
+  <span class="box-label">정의 4.1 · 함수의 극한 <span class="label-en">limit of a function</span></span>
+  <p>거리공간 $X, Y$와 $E \subset X$, 함수 $f : E \to Y$, 그리고 $E$의
+  <a class="term" data-term="limit-point">집적점</a> $p$가 있다 하자.
+  다음이 성립하면 $\lim_{x \to p} f(x) = q$라 쓴다:</p>
+  <p style="text-align:center;">임의의 $\varepsilon \gt 0$에 대해 $\delta \gt 0$이 존재하여,
+  $x \in E$이고 $0 \lt d_X(x, p) \lt \delta$이면 $d_Y(f(x), q) \lt \varepsilon$.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>3장의 $\varepsilon$–$N$ 게임과 같은 게임, 선수만 교체입니다.
+  상대가 목표 오차 $\varepsilon$을 제시하면, 나는 입력 허용 반경 $\delta$로 응수합니다 —
+  “$p$에서 $\delta$ 안쪽으로만 넣으면 출력은 $q$에서 $\varepsilon$ 안쪽”.
+  두 가지 디테일: ① $0 \lt d(x, p)$ — <strong>$x = p$는 제외.</strong>
+  극한은 “$p$ <em>근처에서</em> 어떻게 행동하는가”이지 “$p$에서의 값”이 아니에요
+  ($f(p)$는 정의 안 돼 있어도 되고, 달라도 됩니다).
+  ② $p$는 집적점이어야 합니다 — 접근할 점들이 없으면 게임 자체가 성립하지 않으니까.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.2 · 수열 판정법</span>
+  <p><strong>이 정리가 하는 일:</strong> 함수의 극한을 3장(수열)으로 환원한다 —
+  극한이 <em>없음</em>을 보일 때 특히 강력하다.</p>
+  <p>$\lim_{x \to p} f(x) = q$ $\iff$ $p$로 수렴하는 ($p_n \neq p$인) $E$의 <strong>모든</strong>
+  수열 $\{p_n\}$에 대해 $f(p_n) \to q$.</p>
+  <p>따름정리: $f(p_n)$의 극한이 다른 두 수열을 찾으면 극한 부재 증명 끝.
+  예: $f(x) = \sin(1/x)$은 $x \to 0$에서 극한이 없다 —
+  $p_n = \frac{1}{2n\pi} \to 0$은 $f(p_n) = 0$, $q_n = \frac{1}{2n\pi + \pi/2} \to 0$은
+  $f(q_n) = 1$.</p>
+</div>
+
+<h2 id="sec-continuity">2. 연속 — 세 가지 얼굴</h2>
+
+<div class="box box-def" id="def-continuous-function">
+  <span class="box-label">정의 4.5 · 연속 <span class="label-en">continuity</span></span>
+  <p>$f : E \to Y$가 $p \in E$에서 <strong>연속</strong>이라는 것은:</p>
+  <p style="text-align:center;">임의의 $\varepsilon \gt 0$에 대해 $\delta \gt 0$이 존재하여,
+  $x \in E$, $d_X(x, p) \lt \delta$이면 $d_Y(f(x), f(p)) \lt \varepsilon$.</p>
+  <p>$E$의 모든 점에서 연속이면 “$f$는 $E$에서 연속”이라 한다.
+  $p$가 집적점이면: <strong>연속 $\iff$ $\lim_{x\to p} f(x) = f(p)$</strong>
+  (극한이 존재하고, 함숫값과 일치). $p$가 고립점이면 자동으로 연속이다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.8 · 위상적 특징 <span class="label-en">topological characterization</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 연속을 $\varepsilon$–$\delta$ 없이, 열린집합만으로
+  다시 정의한다 — 이 장 전체의 엔진이자, 위상수학으로 가는 문.</p>
+  <p>$f : X \to Y$가 연속 $\iff$ $Y$의 모든 <a class="term" data-term="open-set">열린집합</a>
+  $V$에 대해 원상 $f^{-1}(V)$가 $X$에서 열려 있다.</p>
+  <p>(따름정리: 닫힌집합의 원상이 닫힘으로 바꿔 말해도 동치 — 여집합을 취하면 된다.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 두 방향 모두 “$\varepsilon$-공의 원상이 $\delta$-공을 담는다”는 번역 연습이다.</span></summary>
+  <p>($\Rightarrow$) $V \subset Y$가 열려 있고 $p \in f^{-1}(V)$라 하자. $f(p) \in V$이고
+  $V$가 열려 있으므로 $N_\varepsilon(f(p)) \subset V$인 $\varepsilon$이 있다.
+  연속성에서 이 $\varepsilon$에 대한 $\delta$를 받으면:
+  $d(x, p) \lt \delta \Rightarrow d(f(x), f(p)) \lt \varepsilon \Rightarrow f(x) \in V$.
+  즉 $N_\delta(p) \subset f^{-1}(V)$ — $p$는 내점이다. $p$가 임의이므로 $f^{-1}(V)$는 열려 있다.</p>
+  <p>($\Leftarrow$) $p \in X$와 $\varepsilon \gt 0$을 잡자. $V = N_\varepsilon(f(p))$는
+  열린집합이므로 (정리 2.19) 가정에 의해 $f^{-1}(V)$가 열려 있고, $p \in f^{-1}(V)$이므로
+  $N_\delta(p) \subset f^{-1}(V)$인 $\delta$가 있다. 이 $\delta$가 정확히 연속의 정의를
+  만족시킨다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>방향을 조심하세요 — <strong>원상(preimage)</strong>이지 상(image)이 아닙니다.
+  연속함수가 열린집합을 열린집합으로 보내는 것(열린 사상)은 일반적으로 거짓:
+  상수함수 $f(x) = 0$은 열린구간 $(0,1)$을 한 점 $\{0\}$으로 보냅니다.
+  “연속 = 좋은 성질을 <em>당겨오는</em> 함수”로 기억하세요.</p>
+</div>
+
+<p>연속함수의 합·곱·몫·합성이 연속(정리 4.7, 4.9)이라는 사실은 3장 극한 연산의
+번역이므로 빠르게 지나갑니다 — 덕분에 다항식과 유리함수는 (정의역에서) 전부 연속.
+이제 본론입니다: <strong>연속 + 컴팩트 = 좋은 일들.</strong></p>
+
+<h2 id="sec-compactness">3. 연속과 컴팩트 — 최대최소와 균등연속</h2>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.14</span>
+  <p><strong>이 정리가 하는 일:</strong> 컴팩트성은 연속함수를 통과해도 살아남는다.</p>
+  <p>$f : X \to Y$가 연속이고 $X$가 <a class="term" data-term="compact">컴팩트</a>이면,
+  상 $f(X)$는 컴팩트다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $f(X)$의 덮개를 원상으로 당겨 $X$의 덮개로 만들고(4.8), 유한 부분덮개를 도로 밀어낸다.</span></summary>
+  <p>$\{V_\alpha\}$를 $f(X)$의 열린 덮개라 하자. 정리 4.8에 의해 각 $f^{-1}(V_\alpha)$는
+  열려 있고, 이들이 $X$를 덮는다. $X$의 컴팩트성으로 유한 개
+  $f^{-1}(V_{\alpha_1}), \dots, f^{-1}(V_{\alpha_n})$이 $X$를 덮고, 그러면
+  $V_{\alpha_1}, \dots, V_{\alpha_n}$이 $f(X)$를 덮는다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.16 · 최대최소 정리 <span class="label-en">extreme value theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 미적분에서 “닫힌구간에서 연속이면 최댓값을 갖는다”로
+  외웠던 그 정리 — 진짜 이유는 컴팩트성이다.</p>
+  <p>$f : X \to \mathbb{R}$가 연속이고 $X$가 컴팩트이면, $f$는 최댓값과 최솟값을
+  <strong>달성</strong>한다: $f(p) = \sup_{x} f(x)$, $f(q) = \inf_{x} f(x)$인
+  $p, q \in X$가 존재한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 상이 컴팩트(4.14) → 닫히고 유계(하이네-보렐) → sup이 상에 속한다(2장 임용문제와 같은 논증).</span></summary>
+  <p>정리 4.14에 의해 $f(X) \subset \mathbb{R}$는 컴팩트이고, 따라서
+  (<a class="term" data-term="heine-borel">하이네-보렐</a>) 닫혀 있고 유계다.
+  유계이므로 $M = \sup f(X)$가 존재하고(<a class="term" data-term="lub-property">완비성</a>),
+  정리 2.28에 의해 $M \in \overline{f(X)} = f(X)$ (닫혀 있으므로).
+  즉 $f(p) = M$인 $p$가 존재한다. 최솟값도 마찬가지.</p>
+  <p><em>반례로 이해하기:</em> 컴팩트가 아니면 둘 다 깨질 수 있다 —
+  $(0, 1)$에서 $f(x) = 1/x$은 연속이지만 유계조차 아니고,
+  $f(x) = x$는 유계지만 최댓값을 달성하지 못한다. “닫힌 <em>유계</em> 구간”의 두 조건이
+  각각 어느 반례를 막는지 확인해 보라.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — 균등연속이 왜 필요한가</span>
+  <p>연속의 $\delta$는 <strong>지점마다 다르게</strong> 골라도 됩니다.
+  $f(x) = 1/x$을 $(0, 1)$에서 보세요: $x = 0.5$ 근처에서는 여유롭지만
+  $x = 0.001$ 근처에서는 함수가 미친 듯이 가팔라져서, 같은 $\varepsilon$이라도
+  훨씬 작은 $\delta$가 필요해요. $0$에 다가갈수록 필요한 $\delta \to 0$ —
+  <strong>모든 지점을 한 번에 감당하는 $\delta$ 하나가 없습니다.</strong>
+  “$\delta$를 $\varepsilon$만으로(지점과 무관하게) 고를 수 있다”가 균등연속입니다.
+  7장(함수열)에서 극한과 적분·미분을 교환할 때 이 “균등함”이 결정적 재료가 됩니다.</p>
+</div>
+
+<div class="box box-def" id="def-uniform-continuity">
+  <span class="box-label">정의 4.18 · 균등연속 <span class="label-en">uniform continuity</span></span>
+  <p>$f : X \to Y$가 <strong>균등연속</strong>이라는 것은: 임의의 $\varepsilon \gt 0$에 대해
+  $\delta \gt 0$이 존재하여, <strong>모든</strong> $p, q \in X$에 대해</p>
+  <p style="text-align:center;">$d_X(p, q) \lt \delta \implies d_Y(f(p), f(q)) \lt \varepsilon$.</p>
+  <p>연속과의 차이는 한정사의 순서뿐이다:
+  연속은 “$\forall p\ \forall\varepsilon\ \exists\delta$” ($\delta$가 $p$에 의존 가능),
+  균등연속은 “$\forall\varepsilon\ \exists\delta\ \forall p$” ($\delta$ 하나가 전 지점 담당).
+  균등연속 $\Rightarrow$ 연속은 자명하고, 역은 거짓 ($1/x$).</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.19 · 하이네 정리 <span class="label-en">Heine / uniform continuity theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 컴팩트 위에서는 연속과 균등연속의 구분이 사라진다 —
+  임용 서술형 단골 중의 단골.</p>
+  <p>$f : X \to Y$가 연속이고 $X$가 컴팩트이면, $f$는 균등연속이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 각 점의 “개인 $\delta$-공”의 절반들로 $X$를 덮고, 유한 부분덮개의 최소 반지름을 공용 $\delta$로 삼는다. (2.34 증명과 같은 “최솟값이 양수” 마법.)</span></summary>
+  <p>$\varepsilon \gt 0$이 주어졌다 하자. 각 $p \in X$마다 연속성에서 $\delta_p \gt 0$를 받아
+  $d(x, p) \lt \delta_p \Rightarrow d(f(x), f(p)) \lt \frac{\varepsilon}{2}$가 되게 한다.
+  공들 $\left\{ N_{\delta_p / 2}(p) \right\}_{p \in X}$는 $X$의 열린 덮개이므로 컴팩트성으로
+  유한 개 $N_{\delta_{p_1}/2}(p_1), \dots, N_{\delta_{p_n}/2}(p_n)$이 $X$를 덮는다.
+  $\delta = \frac{1}{2} \min\{\delta_{p_1}, \dots, \delta_{p_n}\} \gt 0$로 잡자
+  (<strong>유한 개라서 양수</strong> — 컴팩트성이 일하는 지점).</p>
+  <p>이제 $d(p, q) \lt \delta$인 임의의 $p, q$를 보자. $p$는 어떤 $N_{\delta_{p_i}/2}(p_i)$에
+  속하고, 그러면</p>
+  $$d(q, p_i) \le d(q, p) + d(p, p_i) \lt \delta + \tfrac{\delta_{p_i}}{2} \le \delta_{p_i}$$
+  <p>즉 $p, q$ 둘 다 $p_i$의 개인 $\delta_{p_i}$-공 안에 있다. 따라서</p>
+  $$d(f(p), f(q)) \le d(f(p), f(p_i)) + d(f(p_i), f(q)) \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \varepsilon$$
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>“균등연속은 그래프가 완만한 것” — 아닙니다. 기울기가 유계일 필요는 없어요.
+  $f(x) = \sqrt{x}$는 $[0, 1]$에서 균등연속이지만 ($0$ 근처에서 기울기 $\to \infty$인데도!
+  컴팩트 + 연속이므로 4.19가 보증), $f(x) = x^2$은 완만해 보여도 $\mathbb{R}$ 전체에서는
+  균등연속이 아닙니다 (멀리 갈수록 가팔라져서: $|f(n + \frac{1}{n}) - f(n)| = 2 + \frac{1}{n^2} \gt 2$인데
+  두 입력의 거리는 $\frac{1}{n} \to 0$).
+  균등연속을 깨는 것은 “가파름” 자체가 아니라 “<em>한없이 심해지는</em> 가파름”입니다.</p>
+</div>
+
+<h2 id="sec-ivt">4. 연속과 연결 — 중간값 정리</h2>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.22</span>
+  <p><strong>이 정리가 하는 일:</strong> 연결성도 연속함수를 통과해 살아남는다.</p>
+  <p>$f : X \to Y$가 연속이고 $E \subset X$가 <a class="term" data-term="connected-set">연결</a>이면,
+  $f(E)$도 연결이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 상이 쪼개지면 원상도 쪼개진다 — 대우로, 분리된 분해를 당겨온다.</span></summary>
+  <p>$f(E) = A \cup B$가 분리된 분해라 가정하자 ($A, B$ 공집합 아님,
+  $\bar{A} \cap B = A \cap \bar{B} = \varnothing$).
+  $G = E \cap f^{-1}(A)$, $H = E \cap f^{-1}(B)$로 놓으면 $E = G \cup H$이고 둘 다 공집합이
+  아니다. $G \subset f^{-1}(\bar{A})$이고 연속성에 의해 $f^{-1}(\bar{A})$는 ($E$에 대해
+  상대적으로) 닫혀 있으므로 $\bar{G} \cap E \subset f^{-1}(\bar{A})$, 따라서
+  $f(\bar{G} \cap E) \subset \bar{A}$. $\bar{A} \cap B = \varnothing$이므로
+  $\bar{G} \cap H = \varnothing$. 대칭적으로 $G \cap \bar{H} = \varnothing$ —
+  $E$가 분리된 분해를 가져 연결성에 모순.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.23 · 중간값 정리 <span class="label-en">intermediate value theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> “붓을 떼지 않으면 중간 높이를 다 지난다” —
+  연결성(2.47)의 직접 열매.</p>
+  <p>$f : [a, b] \to \mathbb{R}$가 연속이고 $f(a) \lt c \lt f(b)$ (또는 반대 부등호)이면,
+  $f(x) = c$인 $x \in (a, b)$가 존재한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 구간은 연결(2.47) → 상도 연결(4.22) → 상은 구간 → 중간값 포함. 세 줄이면 끝난다.</span></summary>
+  <p>$[a, b]$는 구간이므로 연결이다(정리 2.47). 정리 4.22에 의해 $f([a, b])$도 연결이고,
+  다시 2.47에 의해 구간이다. $f(a)$와 $f(b)$가 상에 속하므로, 그 사이의 값 $c$도
+  상에 속한다 — 즉 $f(x) = c$인 $x$가 존재한다. ($x \neq a, b$는 $f(a) \lt c \lt f(b)$에서.)</p>
+  <p><em>역은 거짓:</em> 중간값 성질을 갖지만 불연속인 함수가 있다 —
+  $g(x) = \sin(1/x)$ ($x \neq 0$), $g(0) = 0$은 $[-1, 1]$에서 중간값 성질을 갖지만
+  $0$에서 불연속. (5장에서: 도함수는 불연속이어도 항상 중간값 성질을 갖는다 — 다르부 정리.)</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-discont">5. 불연속의 분류와 단조함수</h2>
+
+<div class="box box-def" id="def-discontinuity-kinds">
+  <span class="box-label">정의 4.26 · 제1종·제2종 불연속 <span class="label-en">discontinuities of the first/second kind</span></span>
+  <p>$f : (a, b) \to \mathbb{R}$가 $x$에서 불연속일 때, 한쪽 극한
+  $f(x+) = \lim_{t \to x^+} f(t)$와 $f(x-) = \lim_{t \to x^-} f(t)$가
+  <strong>둘 다 존재</strong>하면 <strong>제1종</strong>(단순) 불연속,
+  하나라도 존재하지 않으면 <strong>제2종</strong> 불연속이라 한다.</p>
+  <p>예: 계단함수의 도약은 제1종 ($f(x+) \neq f(x-)$).
+  $\sin(1/x)$의 $x=0$은 제2종 (진동 — 한쪽 극한 자체가 없음).
+  디리클레 함수(유리수에서 $1$, 무리수에서 $0$)는 <em>모든 점</em>에서 제2종 불연속 —
+  <a class="term" data-term="density-of-q">조밀성</a> 때문에 어느 점에서도 한쪽 극한이 없다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 4.29–4.30 · 단조함수의 불연속</span>
+  <p><strong>이 정리가 하는 일:</strong> 단조함수는 불연속조차 얌전하다 —
+  종류도 제1종뿐, 개수도 많아야 가산.</p>
+  <p>$f$가 $(a, b)$에서 단조이면: ① 모든 점에서 $f(x+), f(x-)$가 존재한다
+  (즉 불연속은 전부 제1종 — 도약뿐). ② 불연속점의 집합은 많아야
+  <a class="term" data-term="countable">가산</a>이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— ① 증가함수의 좌극한은 $\sup$, 우극한은 $\inf$로 존재가 보장된다(완비성). ② 각 도약 틈에 유리수를 하나씩 배정하면 단사 — 유리수가 가산이므로 끝.</span></summary>
+  <p>① $f$ 증가라 하자. $f(x-) = \sup\{f(t) : t \lt x\}$는 위로 유계인($f(x)$가 상계)
+  집합의 상한으로 존재하고, 좌극한과 일치함은 상한의 정의로 확인된다
+  (정리 3.14 단조수렴과 같은 논법). 우극한은 $\inf$로 대칭.</p>
+  <p>② 불연속점 $x$마다 도약 구간 $\big( f(x-),\ f(x+) \big)$은 공집합이 아닌 열린구간이고,
+  $x_1 \lt x_2$이면 두 도약 구간은 겹치지 않는다 ($f(x_1+) \le f(x_2-)$).
+  각 구간에서 유리수 $r(x)$를 하나씩 고르면(조밀성) $x \mapsto r(x)$는 단사 —
+  불연속점 집합이 $\mathbb{Q}$의 부분집합과 일대일 대응되므로 많아야 가산이다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">4장의 줄거리</span>
+  <p><a class="term" data-term="function-limit">함수의 극한</a>($\varepsilon$–$\delta$, $x = p$ 제외)
+  → 수열 판정법(4.2)으로 3장과 연결
+  → <a class="term" data-term="continuous-function">연속</a>의 세 얼굴:
+  $\varepsilon$–$\delta$ $=$ 수열 보존 $=$ <strong>열린집합의 원상이 열림</strong>(4.8)
+  → 컴팩트와 만나면: 상이 컴팩트(4.14) $\Rightarrow$ <strong>최대최소 정리</strong>(4.16),
+  <strong><a class="term" data-term="uniform-continuity">균등연속</a></strong>(4.19)
+  → 연결과 만나면: <strong>중간값 정리</strong>(4.23)
+  → 불연속의 분류(제1종/제2종), 단조함수의 불연속점은 많아야 가산(4.30).</p>
+  <p><strong>단 하나만 기억한다면:</strong> 미적분의 3대 “당연한” 정리는 전부
+  <em>컴팩트(닫힌 유계 구간) 또는 연결(구간)의 성질이 연속함수를 통과해 보존</em>되는
+  현상이다. “$[a,b]$에서 연속”이라는 상투구의 $[\ ,\ ]$가 바로 컴팩트성이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>정의($\varepsilon$–$\delta$)에 따라 $f(x) = x^2$이 $x = 3$에서 연속임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$|x^2 - 9| = |x-3||x+3|$. $\delta \le 1$로 미리 제한하면 $|x + 3|$을 상수로 누를 수 있다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\varepsilon \gt 0$이 주어졌다 하자. $\delta = \min\left\{1, \frac{\varepsilon}{7}\right\}$로
+    잡는다. $|x - 3| \lt \delta$이면 우선 $|x - 3| \lt 1$이므로 $2 \lt x \lt 4$, 따라서
+    $|x + 3| \lt 7$. 그러면</p>
+    $$|x^2 - 9| = |x - 3| \cdot |x + 3| \lt \frac{\varepsilon}{7} \cdot 7 = \varepsilon$$
+    <p>“$\delta$를 두 조건의 $\min$으로 잡는” 이 기술은 곱이 있는 모든 $\varepsilon$–$\delta$
+    증명의 표준 수법이다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 연속함수는 열린집합을 열린집합으로 보낸다.<br>
+  (2) $f : (0, 1) \to \mathbb{R}$가 연속이면 유계다.<br>
+  (3) $f : [0, 1] \to \mathbb{R}$가 연속이면 균등연속이다.<br>
+  (4) $f, g$가 $x_0$에서 불연속이면 $f + g$도 $x_0$에서 불연속이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 상수함수. (2) 정의역이 컴팩트가 아니다. (4) 서로 상쇄되는 도약을 설계하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $f(x) = 0$ (상수)은 $(0,1)$을 $\{0\}$으로 보낸다.
+    열린 것을 보존하는 방향은 원상이다 (정리 4.8).</p>
+    <p>(2) <strong>거짓.</strong> $f(x) = 1/x$. $(0,1)$은 유계지만 닫혀 있지 않아
+    컴팩트가 아니므로 4.14를 쓸 수 없고, 실제로 깨진다.</p>
+    <p>(3) <strong>참.</strong> $[0, 1]$은 닫힌 유계 구간 — 하이네-보렐로 컴팩트 — 이므로
+    정리 4.19 (하이네 정리).</p>
+    <p>(4) <strong>거짓.</strong> $f(x) = \begin{cases} 1 &amp; x \ge 0 \\ 0 &amp; x \lt 0 \end{cases}$,
+    $g = -f$로 잡으면 둘 다 $0$에서 불연속이지만 $f + g \equiv 0$은 연속.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 4장 연습 1 기반</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>모든 $x$에 대해 $\lim_{h \to 0} \big[ f(x + h) - f(x - h) \big] = 0$을 만족하는
+  $f : \mathbb{R} \to \mathbb{R}$는 반드시 연속인가? 증명하거나 반례를 들어라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>이 조건은 “$x$ 좌우의 값이 서로 가까워진다”이지 “$f(x)$와 가까워진다”가 아니다.
+    한 점에서만 값을 튀겨 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>반례가 존재한다.</strong> $f(x) = 0$ ($x \neq 0$), $f(0) = 1$로 잡자.
+    $x \neq 0$에서는 자명하게 조건이 성립하고, $x = 0$에서도
+    $f(h) - f(-h) = 0 - 0 = 0$ ($h \neq 0$)이므로 극한이 $0$이다.
+    그러나 $f$는 $0$에서 불연속이다.</p>
+    <p>교훈: 대칭 차 $f(x+h) - f(x-h)$는 “가운데 점” $f(x)$를 아예 보지 못한다 —
+    극한 조건이 함숫값을 통제하지 못하면 연속성은 나오지 않는다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 4장 연습 4 기반</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f, g : X \to Y$가 연속이고, $E \subset X$가 $X$에서
+  <a class="term" data-term="bounded-dense">조밀</a>하다고 하자. 다음을 증명하라.</p>
+  <p>(1) $f(E)$는 $f(X)$에서 조밀하다.<br>
+  (2) $E$의 모든 점에서 $f = g$이면, $X$ 전체에서 $f = g$이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $f(X)$의 점 $f(x)$에 대해, $x$로 수렴하는 $E$의 수열을 잡고 연속성으로 밀어라.
+    (2) 임의의 $x \in X$를 $E$의 수열로 근사하고, $f, g$의 연속성과 극한의 유일성(3.2b)을 써라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1)</strong> $f(x) \in f(X)$를 잡자. $E$가 조밀하므로 $x$는 $E$의 점이거나
+    집적점이고, 어느 경우든 $p_n \to x$인 $E$의 수열이 있다 (정리 3.2d).
+    연속성(수열 보존)에 의해 $f(p_n) \to f(x)$. $f(p_n) \in f(E)$이므로 $f(x)$는
+    $f(E)$의 점이거나 집적점 — 즉 $f(E)$는 $f(X)$에서 조밀하다.</p>
+    <p><strong>(2)</strong> $x \in X$를 잡고 $p_n \to x$인 $E$의 수열을 잡자.
+    가정에 의해 $f(p_n) = g(p_n)$ (모든 $n$). 연속성으로
+    $f(x) = \lim f(p_n) = \lim g(p_n) = g(x)$ — 극한의 유일성(3.2b)이 등호를 보증한다.</p>
+    <p>(의미: 연속함수는 조밀집합 위의 값만으로 완전히 결정된다. “유리수에서의 값만 알면
+    실수 전체에서 안다” — 8장에서 지수함수를 정의할 때 실제로 쓰는 원리다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>중간값 정리 응용</span>
+  </div>
+  <p>$f : [0, 1] \to [0, 1]$이 연속이면 $f(c) = c$인 $c \in [0, 1]$ (고정점)이 존재함을
+  증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$g(x) = f(x) - x$에 중간값 정리. 양 끝점에서 $g$의 부호는?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$g(x) = f(x) - x$로 놓으면 $g$는 연속이다 (연속함수의 차).
+    $f(0) \in [0,1]$이므로 $g(0) = f(0) \ge 0$이고, $f(1) \in [0,1]$이므로
+    $g(1) = f(1) - 1 \le 0$.</p>
+    <p>$g(0) = 0$이면 $c = 0$, $g(1) = 0$이면 $c = 1$로 끝.
+    둘 다 아니면 $g(1) \lt 0 \lt g(0)$이므로 중간값 정리(4.23)에 의해
+    $g(c) = 0$, 즉 $f(c) = c$인 $c \in (0, 1)$이 존재한다. $\blacksquare$</p>
+    <p>(1차원 브라우어 고정점 정리 — “정사각형 지도를 구겨서 원래 위에 올려놓으면
+    제자리인 점이 있다”의 구간 버전.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>균등연속 판정 서술형</span>
+  </div>
+  <p>다음 함수가 주어진 구간에서 균등연속인지 판정하고 근거를 서술하라.</p>
+  <p>(1) $f(x) = \sqrt{x}$, $[0, \infty)$에서<br>
+  (2) $g(x) = \sin \dfrac{1}{x}$, $(0, 1)$에서</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $[0, 2]$ (컴팩트)와 $[1, \infty)$ (기울기 유계)로 쪼개라.
+    (2) 균등연속이 아님을 보이려면: 거리는 $0$으로 가는데 함숫값 차이는 그대로인
+    두 점열을 잡아라 — $\sin$이 $1$과 $-1$을 오가는 지점들.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1) 균등연속이다.</strong> $[0, 2]$에서는: 닫힌 유계 구간(컴팩트)에서 연속이므로
+    하이네 정리(4.19)에 의해 균등연속. $[1, \infty)$에서는: 임의의 $x, y \ge 1$에 대해</p>
+    $$|\sqrt{x} - \sqrt{y}| = \frac{|x - y|}{\sqrt{x} + \sqrt{y}} \le \frac{|x - y|}{2}$$
+    <p>이므로 $\delta = 2\varepsilon$이 전 구간을 감당한다.
+    두 구간이 $[1, 2]$에서 겹치게 쪼갰으므로, $\delta$를 두 쪽의 $\min$ (그리고 $\le 1$)로
+    잡으면 경계를 걸치는 두 점도 처리된다 — $[0, \infty)$ 전체에서 균등연속.</p>
+    <p><strong>(2) 균등연속이 아니다.</strong>
+    $p_n = \dfrac{1}{2n\pi + \pi/2}$, $q_n = \dfrac{1}{2n\pi - \pi/2}$로 잡으면
+    둘 다 $(0,1)$의 점이고 $|p_n - q_n| \to 0$인데,</p>
+    $$|g(p_n) - g(q_n)| = |1 - (-1)| = 2$$
+    <p>가 모든 $n$에서 유지된다. $\varepsilon = 1$에 대해 어떤 $\delta$도 작동하지 않으므로
+    균등연속이 아니다. (연속인데 균등연속이 아닌 표준 예 — 정의역이 컴팩트가 아니고,
+    $0$ 근처에서 진동이 한없이 빨라지는 것이 원인.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

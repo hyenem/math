@@ -243,5 +243,32 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "absolute convergence",
     "short": "$\\sum |a_n|$이 수렴하는 것. 절대수렴 $\\Rightarrow$ 수렴이고, 재배열해도 합이 불변. 수렴하지만 절대수렴이 아니면 조건수렴 — 재배열로 아무 값이나 만들 수 있다 (리만).",
     "href": "subjects/analysis/ch03.html#def-absolute-convergence"
+  },
+
+  /* ---------- 해석학 4장: 연속 ---------- */
+
+  "function-limit": {
+    "ko": "함수의 극한",
+    "en": "limit of a function",
+    "short": "$0 \\lt d(x, p) \\lt \\delta$이면 $d(f(x), q) \\lt \\varepsilon$ — $x = p$ 자체는 제외한다. $p$는 정의역의 집적점이어야 하며, 모든 수열 $p_n \\to p$에 대해 $f(p_n) \\to q$와 동치 (Rudin 4.2).",
+    "href": "subjects/analysis/ch04.html#def-function-limit"
+  },
+  "continuous-function": {
+    "ko": "연속",
+    "en": "continuity",
+    "short": "$d(x,p) \\lt \\delta \\Rightarrow d(f(x), f(p)) \\lt \\varepsilon$. 세 얼굴이 동치: $\\varepsilon$–$\\delta$ = 수렴하는 수열 보존 = 열린집합의 원상이 열림 (Rudin 4.8).",
+    "href": "subjects/analysis/ch04.html#def-continuous-function"
+  },
+  "uniform-continuity": {
+    "ko": "균등연속",
+    "en": "uniform continuity",
+    "short": "하나의 $\\delta$가 모든 지점을 감당: $\\forall\\varepsilon\\ \\exists\\delta\\ \\forall p,q$. 연속보다 강하다 ($1/x$이 반례). 컴팩트 위의 연속함수는 자동으로 균등연속 (Rudin 4.19).",
+    "href": "subjects/analysis/ch04.html#def-uniform-continuity"
+  },
+  "discontinuity-kinds": {
+    "ko": "제1종 / 제2종 불연속",
+    "en": "discontinuity of the first/second kind",
+    "short": "한쪽 극한 $f(x+), f(x-)$가 둘 다 존재하면 제1종(도약), 하나라도 없으면 제2종(진동 등). 단조함수의 불연속은 전부 제1종이고 많아야 가산 개다 (Rudin 4.29–4.30).",
+    "href": "subjects/analysis/ch04.html#def-discontinuity-kinds"
   }
 });
