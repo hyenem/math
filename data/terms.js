@@ -535,6 +535,31 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/abstract-algebra/ch01.html#def-element-order"
   },
 
+  "cyclic-group": {
+    "ko": "순환군",
+    "en": "cyclic group",
+    "short": "원소 하나가 전부 생성: $G = \\langle a \\rangle$. 전부 아벨이고 부분군도 순환이며, 분류 완결 — $\\mathbb{Z}$ 또는 $\\mathbb{Z}_n$뿐. $\\mathbb{Z}_n$에서 $|\\langle k \\rangle| = n/\\gcd(k,n)$.",
+    "href": "subjects/abstract-algebra/ch02.html#def-cyclic-group"
+  },
+  "permutation-group": {
+    "ko": "치환과 대칭군",
+    "en": "permutation, symmetric group",
+    "short": "집합의 전단사들이 합성으로 이루는 군 $S_n$ ($n!$개, $n \\ge 3$ 비아벨). 모든 치환은 서로소 순환들의 곱으로 유일 분해되고, 위수는 순환 길이들의 lcm.",
+    "href": "subjects/abstract-algebra/ch02.html#def-permutation-group"
+  },
+  "alternating-group": {
+    "ko": "교대군",
+    "en": "alternating group",
+    "short": "짝치환 전체 $A_n$ ($n!/2$개). 호환 분해의 개수는 유일하지 않지만 홀짝은 불변 — 치환행렬의 행렬식이 그 부호다. $A_5$는 최소 비아벨 단순군.",
+    "href": "subjects/abstract-algebra/ch02.html#def-alternating-group"
+  },
+  "cayley-theorem": {
+    "ko": "케일리 정리",
+    "en": "Cayley's theorem",
+    "short": "모든 군은 치환군의 부분군과 동형 — $g \\mapsto$ (왼쪽 곱하기 $\\lambda_g$)가 다리. 케일리 표의 각 행이 치환이라는 스도쿠 성질의 정리화.",
+    "href": "subjects/abstract-algebra/ch02.html#def-cayley-theorem"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {
