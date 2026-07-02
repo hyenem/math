@@ -53,7 +53,7 @@ window.MATH_TOC = [
       { file: "ch01.html", num: 1, title: "벡터공간", ready: true },
       { file: "ch02.html", num: 2, title: "선형변환과 행렬", ready: true },
       { file: "ch03.html", num: 3, title: "기본행렬연산과 연립일차방정식", ready: true },
-      { file: "ch04.html", num: 4, title: "행렬식", ready: false },
+      { file: "ch04.html", num: 4, title: "행렬식", ready: true },
       { file: "ch05.html", num: 5, title: "대각화", ready: false },
       { file: "ch06.html", num: 6, title: "내적공간", ready: false },
       { file: "ch07.html", num: 7, title: "표준형", ready: false }

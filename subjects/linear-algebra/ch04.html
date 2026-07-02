@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4장 행렬식 — 선형대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="linear-algebra" data-chapter="ch04.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">선형대수학 · Friedberg, Insel &amp; Spence, Linear Algebra</p>
+  <h1><span class="ch-num">4</span> 행렬식</h1>
+  <p class="ch-source">행렬식은 “계산 규칙”이 아니라 <strong>부피의 배율</strong>입니다.
+  이 관점 하나로 모든 성질이 당연해집니다.</p>
+</div>
+
+<p>행렬식의 계산법(여인수 전개)은 다들 압니다. 문제는 그 계산이 <em>무엇을 재는지</em>죠.
+답부터: $\det A$는 <strong>선형변환 $L_A$가 부피를 몇 배로 만드는가</strong>입니다
+(부호는 방향 보존/반전). 이 관점에서 읽으면 —
+“$\det = 0$ ⟺ 비가역”은 “부피를 완전히 짜부라뜨리면 되돌릴 수 없다”,
+“$\det(AB) = \det A \det B$”는 “배율은 곱해진다”가 됩니다.</p>
+
+<h2 id="sec-def">1. 정의 — 2×2에서 n×n으로</h2>
+
+<div class="box box-def" id="def-determinant">
+  <span class="box-label">정의 · 행렬식 <span class="label-en">determinant</span></span>
+  <p>$2 \times 2$: $\det \begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix} = ad - bc$
+  — 두 열벡터가 만드는 평행사변형의 (부호 있는) 넓이.</p>
+  <p>$n \times n$ ($n \ge 2$): 첫 행에 대한 <strong>여인수 전개</strong>로 귀납 정의:</p>
+  $$\det A = \sum_{j=1}^{n} (-1)^{1+j} a_{1j} \det \tilde{A}_{1j}$$
+  <p>($\tilde{A}_{1j}$: 1행 $j$열을 지운 $(n-1)$차 부분행렬.
+  사실 아무 행·열로 전개해도 같은 값이 나온다 — 그래서 $0$이 많은 행/열을 고르는 것이
+  계산 요령이다.)</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — 성질 3개가 본질이다</span>
+  <p>행렬식을 특징짓는 것은 계산 공식이 아니라 세 성질입니다:
+  ① 각 행에 대해 <strong>선형</strong> (한 행만 늘이면 값도 그만큼 늘어남 — 넓이의 성질)
+  ② 두 행이 같으면 $0$ (납작한 평행육면체는 부피 $0$)
+  ③ $\det I = 1$ (단위 정육면체의 부피는 1).
+  이 셋을 만족하는 함수는 <strong>행렬식뿐</strong>이고, 모든 계산 규칙이 여기서 나옵니다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 행연산과 행렬식</span>
+  <p><strong>이 정리가 하는 일:</strong> 소거법으로 행렬식을 계산하게 해 준다 —
+  큰 행렬은 전개보다 소거가 압도적으로 빠르다.</p>
+  <p>제1형 (행 교환): $\det$의 부호가 바뀐다.<br>
+  제2형 (행에 $c$ 곱): $\det$이 $c$배가 된다.<br>
+  제3형 (다른 행의 배수를 더함): $\det$ <strong>불변</strong>.</p>
+  <p>따라서: 소거로 상삼각을 만들면 $\det = (\text{부호}) \times (\text{대각성분의 곱})$.
+  덤: $\det(cA) = c^n \det A$ ($n$개 행 각각에 $c$가 곱해지므로 — $c$배가 아니다!).</p>
+</div>
+
+<h2 id="sec-props">2. 두 개의 큰 정리</h2>
+
+<div class="box box-thm"><span class="box-label">정리 · 곱셈 법칙과 가역성 판정</span>
+  <p><strong>(곱셈 법칙)</strong> $\det(AB) = \det A \cdot \det B$.
+  — 배율은 곱해진다: $B$로 $\beta$배, 이어서 $A$로 $\alpha$배 하면 합성은
+  $\alpha\beta$배.</p>
+  <p><strong>(가역성)</strong> $A$ 가역 $\iff \det A \neq 0$, 그리고
+  $\det(A^{-1}) = \dfrac{1}{\det A}$.
+  — 3장의 가역성 판정 목록에 마지막 항목이 합류한다.</p>
+  <p><strong>(전치)</strong> $\det A^t = \det A$ — 그래서 행에 대한 모든 성질이
+  열에 대해서도 성립한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 스케치 <span class="proof-strategy">— 가역이면 기본행렬의 곱으로 분해(3장)하고, 기본행렬 하나짜리 곱셈 법칙을 먼저 확인한다.</span></summary>
+  <p>기본행렬 $E$에 대해 $\det(EB) = \det E \cdot \det B$는 행연산 정리를 다시 읽은
+  것이다 (예: 3형이면 양변 다 $\det B$).
+  $A$가 가역이면 $A = E_k \cdots E_1$ (3장)로 쓰고 귀납 적용.
+  $A$가 비가역이면 $\operatorname{rank}(AB) \le \operatorname{rank}A \lt n$이라 $AB$도
+  비가역 — 양변 다 $0$ (비가역 $\Rightarrow \det = 0$은 소거로 $0$행이 생기는 것에서).</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 계산 두 가지 방식</span>
+  <p>$A = \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 2 &amp; 5 &amp; 3 \\ 1 &amp; 0 &amp; 8 \end{pmatrix}$:
+  소거 ($R_2 - 2R_1$, $R_3 - R_1$, 이후 $R_3 + 2R_2$)로</p>
+  $$\det A = \det \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 0 &amp; 1 &amp; -3 \\ 0 &amp; -2 &amp; 5 \end{pmatrix}
+  = \det \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 0 &amp; 1 &amp; -3 \\ 0 &amp; 0 &amp; -1 \end{pmatrix} = 1 \cdot 1 \cdot (-1) = -1$$
+  <p>3형 연산만 썼으므로 부호 조정 없음. $\det \neq 0$ — 가역이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① $\det(A + B) \neq \det A + \det B$ — 행렬식은 행렬 전체에 대해 선형이 아니라
+  <strong>각 행에 대해</strong> 선형입니다. ($I + I = 2I$에서 $1 + 1 \neq 2^n$.)
+  ② $\det(cA) = c^n \det A$입니다, $c \det A$가 아니라.
+  ③ 행렬식은 정방행렬에만 정의됩니다 — 직사각 행렬의 “가역성”은 rank로만 말할 수
+  있어요.</p>
+</div>
+
+<h2 id="sec-geometry">3. 기하적 의미 — 그리고 크래머</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">부피 배율 관점의 열매</span>
+  <p>$\mathbb{R}^n$의 영역 $S$에 선형변환 $L_A$를 가하면
+  $\operatorname{vol}(L_A(S)) = |\det A| \cdot \operatorname{vol}(S)$ —
+  이것이 다변수 적분의 <strong>치환적분 공식에 야코비안이 등장하는 이유</strong>입니다
+  (미분가능 함수는 국소적으로 선형이고, 그 국소 배율이 $|\det J|$).
+  부호는 방향: $\det \lt 0$이면 공간이 “뒤집힌다” (반사 포함).
+  미분기하에서 방향(orientation)을 정의할 때도 이 부호를 씁니다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 크래머 공식 <span class="label-en">Cramer's rule</span></span>
+  <p>$\det A \neq 0$일 때 $Ax = b$의 유일해는</p>
+  $$x_k = \frac{\det M_k}{\det A} \qquad (M_k:\ A\text{의 } k\text{열을 } b\text{로 교체한 행렬})$$
+  <p>이론적으로 아름답지만 ($n$이 크면) 계산으로는 소거법보다 훨씬 느리다 —
+  실전은 소거, 크래머는 “해가 계수에 연속적으로 의존한다” 같은 <em>이론적</em> 결론이
+  필요할 때 쓴다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">4장의 줄거리</span>
+  <p><a class="term" data-term="determinant">행렬식</a> = 부호 있는 부피 배율
+  (특징: 행마다 선형 + 같은 행이면 0 + $\det I = 1$)
+  → 계산: 여인수 전개(정의) 또는 소거(실전 — 1형은 부호, 2형은 배, 3형은 불변,
+  상삼각이면 대각 곱)
+  → $\det(AB) = \det A \det B$ (배율의 곱), $\det A^t = \det A$
+  → <strong>가역 $\iff \det \neq 0$</strong> — 3장 판정 목록 완성
+  → 기하: 부피 배율(야코비안의 기원), 부호는 방향 → 크래머 공식 (이론용).</p>
+  <p><strong>단 하나만 기억한다면:</strong> $\det = 0$은 “차원이 짜부라졌다”는 신호다 —
+  다음 장에서 $\det(A - \lambda I) = 0$이 “$A - \lambda I$가 무언가를 뭉갠다,
+  즉 고유벡터가 존재한다”로 읽히게 된다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>소거법으로 $\det \begin{pmatrix} 0 &amp; 1 &amp; 3 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 3 &amp; 0 \end{pmatrix}$을
+  계산하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>첫 성분이 $0$이니 행 교환부터 — 부호가 한 번 바뀐다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$R_1 \leftrightarrow R_2$ (부호 $\times(-1)$) 후 $R_3 - 2R_1$:
+    행렬은 $\begin{pmatrix} 1 &amp; 2 &amp; 1 \\ 0 &amp; 1 &amp; 3 \\ 0 &amp; -1 &amp; -2 \end{pmatrix}$,
+    이어서 $R_3 + R_2$로 $\begin{pmatrix} 1 &amp; 2 &amp; 1 \\ 0 &amp; 1 &amp; 3 \\ 0 &amp; 0 &amp; 1 \end{pmatrix}$.</p>
+    <p>$\det = (-1) \times (1 \cdot 1 \cdot 1) = -1$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례. ($A, B$는 $n \times n$.)</p>
+  <p>(1) $\det(AB) = \det(BA)$.<br>
+  (2) $A$가 직교행렬($A^t A = I$)이면 $\det A = \pm 1$.<br>
+  (3) $\det A = \det B$이면 $A$와 $B$는 닮음이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 곱셈 법칙 + 스칼라 곱의 교환. (2) 곱셈 법칙과 전치 불변을 $A^tA = I$에.
+    (3) 행렬식 말고 rank도 닮음 불변량이다 — 값은 같은데 rank가 다른 두 행렬을 찾아라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> $\det(AB) = \det A \det B = \det B \det A = \det(BA)$ —
+    행렬 곱은 교환이 안 되지만 행렬식은 스칼라라 교환된다.</p>
+    <p>(2) <strong>참.</strong> $1 = \det I = \det(A^t A) = \det A^t \det A = (\det A)^2$
+    이므로 $\det A = \pm 1$. ($+1$이면 회전, $-1$이면 반사 — 방향 보존/반전.)</p>
+    <p>(3) <strong>거짓.</strong> $A = I_2$, $B = \begin{pmatrix} 2 &amp; 0 \\ 0 &amp; 1/2 \end{pmatrix}$:
+    둘 다 $\det = 1$이지만 $I$와 닮음인 행렬은 $Q^{-1} I Q = I$뿐이다.
+    (행렬식은 닮음 불변량이지만, 불변량 하나가 같다고 닮음인 것은 아니다 —
+    분류에는 더 많은 불변량이 필요하다: 5·7장의 주제.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Friedberg 4장 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$A$가 홀수 차수($n$ 홀수)의 실행렬이고 $A^t = -A$ (반대칭)이면
+  $\det A = 0$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\det A^t = \det A$와 $\det(-A) = (-1)^n \det A$를 결합하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\det A = \det A^t = \det(-A) = (-1)^n \det A = -\det A$ ($n$ 홀수).</p>
+    <p>$2 \det A = 0$이므로 $\det A = 0$. $\blacksquare$
+    (홀수 차원의 반대칭 행렬은 항상 비가역 — “3차원 외적 연산자가 축 방향을 뭉갠다”는
+    기하적 사실의 대수 버전이다. $n$ 짝수면 거짓: $\begin{pmatrix} 0 &amp; 1 \\ -1 &amp; 0 \end{pmatrix}$은
+    $\det = 1$.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>반데르몽드 행렬식</span>
+  </div>
+  <p>다음을 증명하라 (3차 반데르몽드):</p>
+  $$\det \begin{pmatrix} 1 &amp; 1 &amp; 1 \\ a &amp; b &amp; c \\ a^2 &amp; b^2 &amp; c^2 \end{pmatrix}
+  = (b - a)(c - a)(c - b)$$
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>열 연산 $C_2 - C_1$, $C_3 - C_1$ 후 각 열에서 공통 인수를 뽑아라
+    ($b^2 - a^2 = (b-a)(b+a)$).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$C_2 - C_1$, $C_3 - C_1$ (3형 열연산 — 행렬식 불변):</p>
+    $$\det \begin{pmatrix} 1 &amp; 0 &amp; 0 \\ a &amp; b-a &amp; c-a \\ a^2 &amp; b^2-a^2 &amp; c^2-a^2 \end{pmatrix}
+    = \det \begin{pmatrix} b-a &amp; c-a \\ (b-a)(b+a) &amp; (c-a)(c+a) \end{pmatrix}$$
+    <p>(첫 열로 전개). 각 열에서 $(b-a)$, $(c-a)$를 뽑으면 (열에 대한 선형성):</p>
+    $$(b-a)(c-a) \det \begin{pmatrix} 1 &amp; 1 \\ b+a &amp; c+a \end{pmatrix} = (b-a)(c-a)(c - b) \qquad \blacksquare$$
+    <p>(응용: $a, b, c$가 서로 다르면 $\det \neq 0$ — “서로 다른 점에서의 값으로 2차
+    다항식이 유일하게 결정된다”(라그랑주 보간)의 행렬식 증명이다. 8장 임용 단골.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>가역성 판정 서술</span>
+  </div>
+  <p>실수 $t$에 대해 $A_t = \begin{pmatrix} 1 &amp; t &amp; 0 \\ t &amp; 1 &amp; t \\ 0 &amp; t &amp; 1 \end{pmatrix}$가
+  비가역이 되는 $t$를 모두 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>비가역 $\iff \det = 0$. 첫 행 전개로 $\det A_t$를 $t$의 다항식으로.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>첫 행 전개:
+    $\det A_t = 1 \cdot (1 - t^2) - t \cdot (t - 0) = 1 - 2t^2$.</p>
+    <p>$\det A_t = 0 \iff t^2 = \frac{1}{2} \iff t = \pm \frac{1}{\sqrt{2}}$.
+    그 두 값에서만 비가역이다. (덤: $\det$이 $t$의 연속함수이므로 “거의 모든” $t$에서
+    가역 — 가역성은 일반적(generic) 성질이라는 감각도 함께 챙겨두자.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

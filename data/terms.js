@@ -421,6 +421,15 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/linear-algebra/ch03.html#def-homogeneous-system"
   },
 
+  /* ---------- 선형대수 4장: 행렬식 ---------- */
+
+  "determinant": {
+    "ko": "행렬식",
+    "en": "determinant",
+    "short": "선형변환의 부호 있는 부피 배율. 행마다 선형 + 같은 행이면 $0$ + $\\det I = 1$이 특징짓는다. $\\det(AB) = \\det A \\det B$, 가역 $\\iff \\det \\neq 0$, $\\det(cA) = c^n \\det A$.",
+    "href": "subjects/linear-algebra/ch04.html#def-determinant"
+  },
+
   /* ---------- 선형대수 1장: 벡터공간 ---------- */
 
   "vector-space": {
