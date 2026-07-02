@@ -451,6 +451,25 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/topology/ch03.html#def-connected-component"
   },
 
+  "separation": {
+    "ko": "분리 (위상)",
+    "en": "separation",
+    "short": "공집합 아닌 서로소 열린집합 $U, V$로 $X = U \\cup V$가 되는 것. 분리가 없으면 연결 — 동치: clopen 부분집합이 $\\varnothing, X$뿐.",
+    "href": "subjects/topology/ch03.html#def-separation"
+  },
+  "compact-hausdorff": {
+    "ko": "컴팩트→하우스도르프 자동 위상동형",
+    "en": "compact-to-Hausdorff homeomorphism",
+    "short": "연속 전단사 $f : X \\to Y$에서 $X$ 컴팩트, $Y$ 하우스도르프이면 $f^{-1}$ 연속이 공짜 — 닫힌 것이 컴팩트로, 컴팩트가 닫힘으로 릴레이되기 때문. $[0,2\\pi) \\to S^1$은 컴팩트성 결여로 탈락.",
+    "href": "subjects/topology/ch04.html#def-compact-hausdorff"
+  },
+  "compactness-variants": {
+    "ko": "컴팩트의 세 얼굴",
+    "en": "limit point / sequential compactness",
+    "short": "덮개 컴팩트, 집적점 컴팩트(무한집합마다 집적점), 점열 컴팩트(수렴 부분수열) — 일반 위상공간에선 서로 다르지만 거리공간에서는 동치 (르베그 수 보조정리가 다리).",
+    "href": "subjects/topology/ch04.html#def-compactness-variants"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4장 컴팩트성 — 위상수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="topology" data-chapter="ch04.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§26–28)</p>
+  <h1><span class="ch-num">4</span> 컴팩트성</h1>
+  <p class="ch-source">해석학 2장의 컴팩트가 일반 위상으로 올라옵니다 —
+  하우스도르프와 만나면 특히 강력해지고, “컴팩트의 세 얼굴”이 거리공간에서
+  하나로 합쳐집니다.</p>
+</div>
+
+<p>컴팩트의 정의(모든 열린 덮개에 유한 부분덮개)는 해석학 2장 그대로입니다 —
+애초에 열린집합만 쓰는 정의였으니까요. 새로운 것은 <strong>하우스도르프와의
+  화학반응</strong>, 그리고 “컴팩트”라 부를 만한 다른 후보들(집적점 컴팩트,
+점열 컴팩트)과의 관계 정리입니다.</p>
+
+<h2 id="sec-basic">1. 기본 정리들 — 해석학의 재정비</h2>
+
+<div class="box box-thm"><span class="box-label">정리 · 컴팩트의 기본 문법 (문크레스 §26)</span>
+  <p>① 컴팩트 공간의 <strong>닫힌</strong> 부분공간은 컴팩트 (루딘 2.35와 같은 증명 —
+  여집합 한 장 보태기).</p>
+  <p>② <strong>하우스도르프</strong> 공간의 컴팩트 부분공간은 <strong>닫혀 있다.</strong></p>
+  <p>③ 연속상: $f$ 연속, $X$ 컴팩트 $\Rightarrow$ $f(X)$ 컴팩트 (덮개 당겨오기 —
+  루딘 4.14).</p>
+  <p>④ 컴팩트 공간들의 유한 곱은 컴팩트 (관 보조정리(tube lemma)로; 무한 곱도 성립 —
+  <strong>티호노프 정리</strong>, 일반위상의 가장 깊은 정리 중 하나).</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (②) <span class="proof-strategy">— 해석학 루딘 2.34의 “반지름 절반” 논증에서 거리를 하우스도르프로 대체한 것. 바깥 점과 컴팩트 집합을 열린집합으로 통째로 가른다.</span></summary>
+  <p>$K \subset X$ 컴팩트, $x_0 \notin K$라 하자. 각 $y \in K$마다 하우스도르프로
+  서로소 열린쌍 $U_y \ni x_0$, $V_y \ni y$를 잡는다. $\{V_y\}$는 $K$의 열린 덮개 —
+  컴팩트성으로 유한 개 $V_{y_1}, \dots, V_{y_n}$이 덮는다. 이제</p>
+  $$U = U_{y_1} \cap \cdots \cap U_{y_n}$$
+  <p>은 ($x_0$을 담는) 열린집합이고 — <strong>유한 교라서 열림!</strong> —
+  각 $V_{y_i}$와 서로소이므로 $K$와 만나지 않는다: $U \subset K^c$.
+  $K^c$의 모든 점이 내점 — $K$는 닫혀 있다.</p>
+  <p><em>부산물:</em> 이 논증은 “컴팩트 집합과 바깥 점을 서로소 열린집합으로 가를 수
+  있다”를 보였다 — 5장 정칙성(T₃)의 예고편. 하우스도르프 가정이 빠지면 ②는 거짓:
+  여유한위상에서 모든 부분집합이 컴팩트지만(덮개 한 장이 여유한 개만 남기므로)
+  무한 진부분집합은 닫혀 있지 않다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="def-compact-hausdorff"><span class="box-label">정리 · 컴팩트 → 하우스도르프 연속 전단사는 위상동형 (문크레스 §26)</span>
+  <p><strong>이 정리가 하는 일:</strong> 2장의 골칫거리 — “역함수 연속은 공짜가 아니다” —
+  를 해결하는 조건을 준다.</p>
+  <p>$f : X \to Y$가 연속 전단사, $X$ 컴팩트, $Y$ 하우스도르프이면
+  $f$는 위상동형사상이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $f^{-1}$의 연속 = “$f$가 닫힌집합을 닫힌집합으로 보냄”. 닫힌 ⊂ 컴팩트 → 연속상 컴팩트 → 하우스도르프에서 닫힘: 세 정리의 릴레이.</span></summary>
+  <p>$f^{-1}$가 연속 $\iff$ $(f^{-1})^{-1}(C) = f(C)$가 닫힘 (모든 닫힌 $C \subset X$).
+  $C$가 닫혀 있으면: ①에 의해 $C$ 컴팩트 → ③에 의해 $f(C)$ 컴팩트 →
+  ②에 의해 ($Y$ 하우스도르프) $f(C)$ 닫힘. 끝.</p>
+  <p><em>대조 실험:</em> $[0, 2\pi) \to S^1$이 위상동형이 아니었던 이유가 정확히
+  “$[0, 2\pi)$ 비컴팩트”였다 — 가정 하나가 빠졌을 때 결론이 무너지는 표본.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm"><span class="box-label">정리 · 하이네-보렐과 최대최소 (문크레스 §27)</span>
+  <p>$\mathbb{R}^n$에서: 컴팩트 $\iff$ 닫힘 + 유계 (해석학 루딘 2.41 —
+  이제 “일반 위상공간에서는 ‘유계’ 개념 자체가 없다”는 것도 보인다: 유계는 거리의
+  개념이지 위상의 개념이 아니다).
+  <strong>최대최소 정리</strong>: 컴팩트 공간 위의 연속 실함수는 최댓값·최솟값을 달성
+  (③ + $\mathbb{R}$의 컴팩트 집합이 sup을 포함 — 해석학 4.16의 위상 버전).</p>
+</div>
+
+<h2 id="sec-variants">2. 컴팩트의 세 얼굴</h2>
+
+<div class="box box-def" id="def-compactness-variants">
+  <span class="box-label">정의 · 집적점 컴팩트, 점열 컴팩트 <span class="label-en">limit point / sequentially compact</span></span>
+  <p>· <strong>집적점 컴팩트:</strong> 모든 무한 부분집합이 집적점을 가짐
+  (해석학 하이네-보렐의 조건 (c)).<br>
+  · <strong>점열 컴팩트:</strong> 모든 수열이 수렴하는 부분수열을 가짐
+  (볼차노-바이어슈트라스형).</p>
+  <p>일반 위상공간에서 세 개념은 <strong>전부 다르다</strong> (컴팩트 $\Rightarrow$
+  집적점 컴팩트만 항상 참). 그러나:</p>
+  <p style="text-align:center;"><strong>거리공간에서는 셋이 동치다</strong> (문크레스 §28)</p>
+  <p>— 해석학에서 세 성질을 자유로이 오갔던 것이 “거리공간의 특권”이었음이 드러난다.
+  동치 증명의 다리가 <strong>르베그 수 보조정리</strong>: 컴팩트 거리공간의 열린 덮개에는
+  “르베그 수” $\delta \gt 0$이 있어, 지름 $\delta$ 미만의 집합은 덮개의 한 장 안에
+  통째로 들어간다 (해석학 4.19 균등연속 정리의 숨은 엔진이기도 하다).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① “컴팩트 부분집합은 닫혀 있다”는 <strong>하우스도르프에서만</strong> —
+  여유한위상(무한집합)에서는 모든 부분집합이 컴팩트인데 대부분 닫혀 있지 않다.
+  ② “유계” 개념은 위상만으로는 정의 불가 — “컴팩트 $\iff$ 닫힘+유계”는
+  $\mathbb{R}^n$의 정리이지 컴팩트의 정의가 아니다 (해석학 2장의 경고 재방송,
+  이제 이유까지 명확).
+  ③ 컴팩트는 닫힌 부분공간으로만 유전 — 열린 부분공간은 아니다:
+  $[0,1]$ 컴팩트지만 $(0,1)$은 아니고, 반대로 컴팩트가 아닌 공간이 컴팩트 부분공간을
+  가질 수도 있다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">4장의 줄거리</span>
+  <p>컴팩트(정의는 해석학 그대로) + 위상의 새 정리들:
+  닫힌 부분공간 유전, <strong>하우스도르프에서 컴팩트 ⇒ 닫힘</strong>
+  (서로소 열린집합으로 가르기 — 정칙성의 예고), 연속상 보존, 유한 곱 (티호노프는
+  무한 곱)
+  → 백미: <a class="term" data-term="compact-hausdorff">컴팩트 → 하우스도르프
+  연속 전단사는 자동 위상동형</a> ($[0,2\pi) \to S^1$이 빠져나간 구멍)
+  → 하이네-보렐은 $\mathbb{R}^n$ 전용 (유계는 위상 개념이 아니므로)
+  → 컴팩트의 세 얼굴(덮개/집적점/점열)은 일반 공간에서 다르고
+  <strong>거리공간에서 합쳐진다</strong> (르베그 수 보조정리가 다리).</p>
+  <p><strong>단 하나만 기억한다면:</strong> “컴팩트 + 하우스도르프”는 위상수학의
+  황금 조합이다 — 닫힘이 공짜, 위상동형이 공짜. 5장의 분리공리에서 이 조합은 더
+  올라간다 (컴팩트 하우스도르프 ⇒ 정규).</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>여유한위상을 준 무한집합 $X$에서 (1) 임의의 부분집합이 컴팩트임을 보이고,
+  (2) 이것이 “컴팩트 ⇒ 닫힘”의 반례가 되는 이유를 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>덮개에서 아무 열린집합 하나를 잡으면 — 그 밖에 남는 점이 유한 개다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $A \subset X$와 열린 덮개 $\{U_\alpha\}$를 잡자. 공집합 아닌 $U_{\alpha_0}$
+    하나를 고르면 $X \setminus U_{\alpha_0}$은 유한 — $A$에서 덮이지 않은 점은
+    많아야 유한 개 $a_1, \dots, a_k$다. 각각을 덮는 $U_{\alpha_i}$를 하나씩 보태면
+    유한 부분덮개 완성.</p>
+    <p>(2) $X$는 하우스도르프가 아니므로 (1장) “컴팩트 ⇒ 닫힘” 정리의 가정이 빠진다.
+    실제로 무한 진부분집합 $A$는 컴팩트지만 $\bar{A} = X \neq A$ (1장 임용문제 —
+    무한집합은 조밀) — 닫혀 있지 않다. 하우스도르프 가정의 필요성이 증명되는 반례.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 컴팩트 공간의 연속 실함수는 균등연속이다 — 는 문장은 일반 위상공간에서
+  의미가 있는가?<br>
+  (2) 컴팩트 집합 두 개의 합집합은 컴팩트다.<br>
+  (3) 컴팩트 집합들의 임의 교집합은 컴팩트다 (하우스도르프 공간에서).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 균등연속의 정의에 무엇이 필요한지. (3) “하우스도르프에서 컴팩트 = 닫힘 쪽
+    성질”을 활용.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>의미 없음.</strong> 균등연속은 “모든 지점에서 같은 $\delta$” — 거리
+    (또는 균등구조)가 필요한 개념이라 순수 위상공간에서는 정의되지 않는다. 유계와
+    같은 운명. (거리공간에서는 참 — 해석학 4.19.)</p>
+    <p>(2) <strong>참.</strong> 덮개가 주어지면 각각에서 유한 부분덮개를 뽑아 합친다.</p>
+    <p>(3) <strong>참.</strong> 하우스도르프에서 컴팩트 집합들은 닫혀 있으므로 교집합도
+    닫혀 있고, 교집합은 그중 한 컴팩트 집합의 닫힌 부분집합 — 유전 정리로 컴팩트.
+    (해석학 2장 문제의 재방송이지만, “하우스도르프” 가정이 이제 명시적으로 필요하다 —
+    비하우스도르프 반례가 실제로 존재한다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §26 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$X$가 컴팩트 하우스도르프 공간이고 $A, B \subset X$가 서로소인 닫힌집합이면,
+  서로소인 열린집합 $U \supset A$, $V \supset B$가 존재함을 증명하라
+  (— 컴팩트 하우스도르프 공간은 <strong>정규</strong>(normal)다; 5장의 예고).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>2단 부트스트랩: 먼저 “점 vs 컴팩트”(본문 ② 증명의 부산물)를 쓰고,
+    그것을 “컴팩트 vs 컴팩트”로 올려라 — $A$의 각 점을 $B$와 가르고, $A$의
+    컴팩트성으로 유한 개만 남긴다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>1단 (점 vs 닫힌집합):</strong> $a \in A$를 잡자. $B$는 컴팩트($X$ 컴팩트의
+    닫힌 부분집합)이고 $a \notin B$이므로, 본문 ②의 증명 부산물에 의해 서로소 열린쌍
+    $U_a \ni a$, $V_a \supset B$가 존재한다.</p>
+    <p><strong>2단 (컴팩트 vs 닫힌집합):</strong> $\{U_a\}_{a \in A}$는 컴팩트 집합 $A$의
+    열린 덮개 — 유한 개 $U_{a_1}, \dots, U_{a_n}$이 덮는다. 이제</p>
+    $$U = U_{a_1} \cup \cdots \cup U_{a_n}, \qquad V = V_{a_1} \cap \cdots \cap V_{a_n}$$
+    <p>$U$는 $A$를 덮는 열린집합, $V$는 $B$를 담는 열린집합 (<strong>유한</strong> 교라서
+    열림 — 컴팩트성이 유한성을 공급하는 지점). 서로소: $x \in U$이면 어떤
+    $U_{a_i}$에 속하고, $U_{a_i} \cap V_{a_i} = \varnothing \supset U_{a_i} \cap V$.
+    $\blacksquare$</p>
+    <p>(같은 “각 점에서 가르고 → 컴팩트로 유한화 → 합/교 뒤집기” 패턴이 이 장에서만
+    세 번째다 — 컴팩트 논증의 표준 폼으로 몸에 익혀 둘 것.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>컴팩트-하우스도르프 응용</span>
+  </div>
+  <p>$f : [0, 1] \to Y$가 연속 전단사이고 $Y$가 하우스도르프이면 $Y \approx [0, 1]$임을
+  설명하고, 이 결론이 $f : [0, 1) \to Y$에 대해서는 실패할 수 있음을 예로 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>본문의 자동 위상동형 정리. 실패 예는 2장의 원.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$[0, 1]$은 컴팩트(하이네-보렐)이고 $Y$는 하우스도르프이므로, “컴팩트 →
+    하우스도르프 연속 전단사는 위상동형” 정리에 의해 $f$는 자동으로 위상동형사상 —
+    $Y \approx [0, 1]$.</p>
+    <p>실패 예: $f : [0, 1) \to S^1$, $f(t) = (\cos 2\pi t, \sin 2\pi t)$ — 연속 전단사이고
+    $S^1$은 하우스도르프($\mathbb{R}^2$의 부분공간)지만, $[0, 1)$이 컴팩트가 아니라서
+    정리가 적용되지 않고 실제로 위상동형이 아니다
+    ($S^1$은 컴팩트인데 $[0,1)$은 아니므로 — 컴팩트성은 위상 불변량).
+    가정 하나($[0,1]$의 오른쪽 끝점!)가 결론을 가른다. $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
