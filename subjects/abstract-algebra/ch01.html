@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1장 군 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch01.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§2–5)</p>
+  <h1><span class="ch-num">1</span> 군</h1>
+  <p class="ch-source">공리 세 개짜리 구조가 어떻게 정수·행렬·대칭·시계 산술을
+  한 이론으로 묶는가 — 추상대수의 첫걸음입니다.</p>
+</div>
+
+<p>다음 넷을 보세요: 정수의 덧셈, $0$ 아닌 유리수의 곱셈, 가역행렬의 곱,
+정삼각형을 자기 자신으로 보내는 회전·반사들의 합성. 대상도 연산도 제각각이지만
+공통 뼈대가 있습니다 — <strong>결합법칙이 성립하고, “아무것도 안 하는” 원소가 있고,
+모든 것을 “되돌릴 수” 있다.</strong> 이 뼈대에 이름을 붙이고 그것만으로 무엇이
+증명되는지 보는 것 — 1장에서 벡터공간으로 했던 게임을 더 원초적인 구조에서
+다시 합니다.</p>
+
+<h2 id="sec-binary">1. 이항연산 — 재료 손질</h2>
+
+<div class="box box-def" id="def-binary-operation">
+  <span class="box-label">정의 · 이항연산 <span class="label-en">binary operation</span> (프랄리 §2)</span>
+  <p>집합 $S$의 <strong>이항연산</strong> $*$는 함수 $* : S \times S \to S$ —
+  두 원소를 받아 $S$의 원소를 내놓는 규칙이다.
+  “$S$가 $*$에 <strong>닫혀 있다</strong>”는 조건이 정의에 내장돼 있음에 주의
+  (자연수의 뺄셈은 자연수의 이항연산이 아니다 — $2 - 5 \notin \mathbb{N}$).</p>
+  <p>성질 후보: <strong>결합적</strong> $(a*b)*c = a*(b*c)$,
+  <strong>교환적</strong> $a*b = b*a$. 둘은 독립적인 성질이다 —
+  행렬 곱은 결합적이지만 비교환, 실수의 “평균” $a * b = \frac{a+b}{2}$는 교환적이지만
+  비결합.</p>
+</div>
+
+<h2 id="sec-group">2. 군 — 공리 세 개</h2>
+
+<div class="box box-def" id="def-group">
+  <span class="box-label">정의 · 군 <span class="label-en">group</span> (프랄리 §4)</span>
+  <p><strong>군</strong> $\langle G, * \rangle$은 이항연산 $*$가 주어진 집합 $G$로:</p>
+  <p>($\mathscr{G}_1$) 결합법칙: $(a * b) * c = a * (b * c)$<br>
+  ($\mathscr{G}_2$) <strong>항등원</strong> $e$ 존재: $e * x = x * e = x$ (모든 $x$)<br>
+  ($\mathscr{G}_3$) 각 $x$마다 <strong>역원</strong> $x'$ 존재: $x * x' = x' * x = e$</p>
+  <p>교환법칙까지 성립하면 <strong>아벨군</strong>(abelian)이라 한다.
+  $|G|$ (원소 개수)를 군의 <strong>위수</strong>(order)라 한다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 군 동물원</span>
+  <p><strong>(a)</strong> $\langle \mathbb{Z}, + \rangle$, $\langle \mathbb{Q}^*, \cdot \rangle$,
+  $\langle \mathbb{R}^n, + \rangle$ — 아벨군들. ($\langle \mathbb{Z}, \cdot \rangle$은
+  군이 아니다 — $2$의 역원 부재.)</p>
+  <p><strong>(b)</strong> $\mathbb{Z}_n = \{0, 1, \dots, n-1\}$, 덧셈은 $n$으로 나눈 나머지
+  — <strong>시계 산술</strong>. 유한 아벨군의 대표 선수.</p>
+  <p><strong>(c)</strong> $GL_n(\mathbb{R})$ — 가역 $n \times n$ 행렬, 행렬 곱.
+  $n \ge 2$이면 비아벨. (선형대수 3장의 가역성 판정이 “군의 원소 자격 심사”였던 것.)</p>
+  <p><strong>(d)</strong> $D_3$ — 정삼각형의 대칭들(회전 3개 + 반사 3개), 합성.
+  위수 6의 비아벨군 — “대칭의 군”이 군론의 원래 고향이다 (2장에서 재회).</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 기본 성질 (프랄리 §4)</span>
+  <p><strong>이 정리가 하는 일:</strong> 공리 셋에서 “당연한 것들”을 회수한다 —
+  벡터공간 1장, 해석학 1장과 같은 의식(ritual)이다.</p>
+  <p>① 항등원은 유일하다. ② 각 원소의 역원은 유일하다 (그래서 $a^{-1}$로 쓸 자격이
+  생긴다). ③ <strong>소거법칙</strong>: $a * b = a * c \Rightarrow b = c$.
+  ④ $(a * b)^{-1} = b^{-1} * a^{-1}$ — 순서가 뒤집힌다! (“양말 신고 신발 신기”의
+  역은 “신발 벗고 양말 벗기”.)
+  ⑤ 방정식 $a * x = b$는 유일한 해 $x = a^{-1} * b$를 갖는다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (②, ③) <span class="proof-strategy">— 모두 같은 기술: 양쪽에서 역원을 곱하고 결합법칙으로 괄호를 옮긴다.</span></summary>
+  <p><strong>②</strong> $x'$과 $x''$이 둘 다 $x$의 역원이라 하자:</p>
+  $$x' = x' * e = x' * (x * x'') = (x' * x) * x'' = e * x'' = x''$$
+  <p>(가운데 등호가 결합법칙 — 이 다섯 걸음짜리 사슬이 군론 증명의 기본 보법이다.)</p>
+  <p><strong>③</strong> $a * b = a * c$의 양변 왼쪽에 $a^{-1}$을 곱하면
+  $(a^{-1} * a) * b = (a^{-1} * a) * c$, 즉 $b = c$.</p>
+  <p><em>소거법칙의 시각적 의미:</em> 유한군의 연산표(케일리 표)에서 <strong>각 행과
+  각 열에 모든 원소가 정확히 한 번씩</strong> 나타난다 — 스도쿠 성질. 위수 3 이하의
+  군이 (동형까지) 하나뿐임을 표 채우기로 확인해 보라.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① 군 판정에서 가장 자주 빠뜨리는 검사는 <strong>닫힘</strong>과 <strong>“역원이
+  그 집합 안에”</strong>다. 예: 양의 실수의 뺄셈? 닫힘부터 탈락.
+  홀수 정수의 덧셈? 닫힘 탈락 ($1+1=2$).
+  ② $a*x = b$와 $x*a = b$의 해는 비아벨군에서 <strong>다르다</strong>
+  ($x = a^{-1}b$ vs $x = ba^{-1}$) — 좌우를 섞으면 감점.
+  ③ “유한 + 닫힘 + 결합 + 소거”면 군이다 (역원 존재가 공짜로 나옴 — 연습문제) —
+  하지만 무한에서는 거짓: $\langle \mathbb{N}, + \rangle$은 소거가 되지만 군이 아니다.</p>
+</div>
+
+<h2 id="sec-subgroup">3. 부분군 — 구조 속의 구조</h2>
+
+<div class="box box-def" id="def-subgroup">
+  <span class="box-label">정의 + 판정법 · 부분군 <span class="label-en">subgroup</span> (프랄리 §5)</span>
+  <p>$H \subset G$가 $G$의 연산으로 그 자체 군이면 <strong>부분군</strong>이라 하고
+  $H \le G$로 쓴다. 판정은 셋이면 충분 (선형대수 부분공간 판정법의 형제):</p>
+  <p>(a) 닫힘: $a, b \in H \Rightarrow ab \in H$ &nbsp;
+  (b) $e \in H$ &nbsp; (c) $a \in H \Rightarrow a^{-1} \in H$</p>
+  <p>(유한 부분집합이면 (a) 하나로 끝 — 닫힘이 역원을 강제한다: $a, a^2, a^3, \dots$이
+  유한 집합 안에서 순환하므로.)</p>
+  <p>예: $n\mathbb{Z} \le \mathbb{Z}$ ($n$의 배수 전체), $SL_n \le GL_n$ (행렬식 1 —
+  “행렬식은 곱을 보존”이 닫힘의 이유), 회전들 $\le D_3$.
+  자명한 부분군: $\{e\}$와 $G$ 자신.</p>
+</div>
+
+<div class="box box-def" id="def-element-order">
+  <span class="box-label">정의 · 원소의 위수와 생성 <span class="label-en">order of an element</span></span>
+  <p>$a \in G$에 대해 $a^n = e$가 되는 최소 양의 정수 $n$을 $a$의
+  <strong>위수</strong> $|a|$라 한다 (없으면 무한 위수).
+  $\langle a \rangle = \{ a^n : n \in \mathbb{Z} \}$ — $a$가 <strong>생성하는</strong>
+  부분군 — 은 $a$를 담는 가장 작은 부분군이고, $|\langle a \rangle| = |a|$.
+  예: $\mathbb{Z}_6$에서 $|2| = 3$ ($2 \to 4 \to 0$), $\langle 2 \rangle = \{0, 2, 4\}$.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">1장의 줄거리</span>
+  <p><a class="term" data-term="binary-operation">이항연산</a>(닫힘 내장)
+  → <a class="term" data-term="group">군</a> = 결합 + 항등원 + 역원
+  (동물원: $\mathbb{Z}$, $\mathbb{Z}_n$, $GL_n$, $D_3$)
+  → 기본 성질: 항등원·역원 유일, 소거법칙(케일리 표의 스도쿠 성질),
+  $(ab)^{-1} = b^{-1}a^{-1}$
+  → <a class="term" data-term="subgroup">부분군</a>: 판정 3개 (유한이면 닫힘 하나),
+  $n\mathbb{Z}$, $SL_n$
+  → <a class="term" data-term="element-order">원소의 위수</a>와 생성 부분군
+  $\langle a \rangle$ — 다음 장(순환군)의 주인공.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 군론의 증명 보법은 “양쪽에 역원을 곱하고
+  결합법칙으로 괄호를 밀기”다 — 항등원 유일성 증명의 다섯 걸음 사슬을 손에 익혀라.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>다음이 군인지 판정하라. 아니라면 어느 공리가 깨지는지 명시하라.</p>
+  <p>(1) $\langle \mathbb{Q}, \cdot \rangle$ &nbsp;
+  (2) $\langle \{1, -1, i, -i\}, \cdot \rangle$ (복소수 곱) &nbsp;
+  (3) $\langle \mathbb{R}, * \rangle$, $a * b = a + b + 1$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 어떤 원소가 역원이 없나. (3) 항등원이 $0$이 아닐 수 있다 —
+    $a * e = a$를 직접 풀어라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>아니다.</strong> $0$의 역원이 없다 ($0 \cdot x = 1$ 불가) —
+    $\mathscr{G}_3$ 위반. ($\mathbb{Q}^* = \mathbb{Q} \setminus \{0\}$으로 고치면 군.)</p>
+    <p>(2) <strong>군이다.</strong> $i$의 거듭제곱들 — 닫힘(곱셈표 확인), 항등원 $1$,
+    역원 $i^{-1} = -i$ 등. 위수 4의 순환군 ($\mathbb{Z}_4$와 동형 — 2장 예고).</p>
+    <p>(3) <strong>군이다.</strong> 결합: 양변 다 $a+b+c+2$. 항등원: $a * e = a + e + 1 = a$
+    에서 $e = -1$. 역원: $a * a' = -1$에서 $a' = -a - 2$. 전부 실수 안 — 성립.
+    (항등원이 “당연히 0”이 아니라는 것 — 공리를 정직하게 푸는 연습.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 모든 원소가 $x^2 = e$를 만족하는 군은 아벨군이다.<br>
+  (2) 부분군 두 개의 합집합은 부분군이다.<br>
+  (3) $(ab)^2 = a^2 b^2$이 모든 $a, b$에서 성립하면 아벨군이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $ab = (ab)^{-1} = b^{-1}a^{-1} = ba$. (2) 선형대수 1장의 그 문제와 같은 운명.
+    (3) 가운데를 소거법칙으로 벗겨라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 모든 $x$에서 $x = x^{-1}$이므로
+    $ab = (ab)^{-1} = b^{-1} a^{-1} = ba$. (역원 공식의 순서 뒤집힘이 교환성으로
+    반전되는 묘미.)</p>
+    <p>(2) <strong>거짓.</strong> $\mathbb{Z}$에서 $2\mathbb{Z} \cup 3\mathbb{Z}$:
+    $2 + 3 = 5$가 어느 쪽에도 없다 — 닫힘 실패. (선형대수 “부분공간 합집합”과 동일
+    구조: 한쪽이 다른 쪽을 포함할 때만 부분군.)</p>
+    <p>(3) <strong>참.</strong> $abab = a^2b^2 = aabb$에서 왼쪽 $a$, 오른쪽 $b$를
+    소거법칙으로 지우면 $ba = ab$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §5 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$G$가 군이고 $H = \{ x \in G : xg = gx \ \text{for all } g \in G \}$ —
+  <strong>중심</strong>(center) $Z(G)$ — 가 부분군임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>세 검사. 닫힘: $xy$가 임의의 $g$와 교환함을 $x, y$의 교환성을 두 번 써서.
+    역원: $xg = gx$의 양쪽에 $x^{-1}$을 좌우로.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>항등원:</strong> $eg = g = ge$ ✓.
+    <strong>닫힘:</strong> $x, y \in Z(G)$이면 임의의 $g$에 대해
+    $(xy)g = x(yg) = x(gy) = (xg)y = (gx)y = g(xy)$ ✓.</p>
+    <p><strong>역원:</strong> $xg = gx$에서 양변 왼쪽·오른쪽에 $x^{-1}$을 곱하면
+    $x^{-1}(xg)x^{-1} = x^{-1}(gx)x^{-1}$, 정리하면 $g x^{-1} = x^{-1} g$ ✓.
+    그러므로 $Z(G) \le G$. $\blacksquare$</p>
+    <p>($Z(G) = G \iff$ 아벨군 — 중심은 “군이 얼마나 아벨에 가까운가”의 척도다.
+    $Z(GL_n) = $ 스칼라 행렬들, $Z(D_3) = \{e\}$.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>유한 부분군 판정</span>
+  </div>
+  <p>$G$가 군이고 $H$가 공집합이 아닌 <strong>유한</strong> 부분집합이며 곱셈에 닫혀
+  있으면, $H \le G$임을 증명하라 (— “유한이면 닫힘 하나로 충분”의 정당화).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$a \in H$의 거듭제곱 $a, a^2, a^3, \dots$은 전부 $H$ 안 — 유한하므로
+    $a^i = a^j$ ($i \lt j$)인 반복이 생긴다. 소거하면 $a^{j-i} = e$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$a \in H$를 잡자. 닫힘에 의해 $a, a^2, a^3, \dots \in H$인데 $H$가 유한이므로
+    $a^i = a^j$인 $i \lt j$가 존재한다. $G$에서 소거법칙으로 $a^{j-i} = e$ —
+    $n = j - i \ge 1$로 놓으면:</p>
+    <p>· $e = a^n \in H$ (닫힘으로 $a$의 거듭제곱이니까) ✓<br>
+    · $a^{-1} = a^{n-1} \in H$ ($a \cdot a^{n-1} = a^n = e$이므로; $n = 1$이면
+    $a = e$라 자명) ✓</p>
+    <p>임의의 원소에서 항등원과 역원이 $H$ 안에 있으므로 $H \le G$. $\blacksquare$</p>
+    <p>(무한 반례를 함께 적으면 만점: $\mathbb{N} \subset \mathbb{Z}$은 덧셈에 닫혀
+    있지만 부분군이 아니다 — 유한성이 “거듭제곱의 순환”을 강제하는 것이 핵심.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>위수 논증</span>
+  </div>
+  <p>군 $G$에서 $|a| = n$일 때, $a^k = e$ $\iff$ $n \mid k$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>($\Rightarrow$) $k = qn + r$ ($0 \le r \lt n$)로 나눠라 (나눗셈 정리) —
+    $a^r = e$가 되는데 $r \lt n$이면 위수의 최소성에 걸린다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>($\Leftarrow$) $k = nq$이면 $a^k = (a^n)^q = e^q = e$.</p>
+    <p>($\Rightarrow$) $a^k = e$라 하자. 나눗셈 정리로 $k = qn + r$, $0 \le r \lt n$.
+    그러면</p>
+    $$e = a^k = (a^n)^q \, a^r = a^r$$
+    <p>$r \gt 0$이면 “$a^r = e$인 양의 정수 $r \lt n$”이 되어 위수 $n$의 최소성에 모순.
+    그러므로 $r = 0$, 즉 $n \mid k$. $\blacksquare$</p>
+    <p>(위수 논증의 만능 열쇠 — “나눗셈 정리로 쪼개고 최소성으로 나머지를 죽인다”.
+    이 한 문제의 패턴이 2장 순환군 구조 정리, 3장 라그랑주 응용 전반에서 재사용된다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

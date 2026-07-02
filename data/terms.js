@@ -508,6 +508,33 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/topology/ch06.html#def-complete-revisit"
   },
 
+  /* ---------- 현대대수 ---------- */
+
+  "binary-operation": {
+    "ko": "이항연산",
+    "en": "binary operation",
+    "short": "$* : S \\times S \\to S$ — 닫혀 있음이 정의에 내장. 결합성과 교환성은 서로 독립인 추가 성질이다 (행렬 곱: 결합○ 교환×).",
+    "href": "subjects/abstract-algebra/ch01.html#def-binary-operation"
+  },
+  "group": {
+    "ko": "군",
+    "en": "group",
+    "short": "결합법칙 + 항등원 + 역원의 구조. 항등원·역원은 유일하고 소거법칙이 성립하며 $(ab)^{-1} = b^{-1}a^{-1}$. 교환까지 되면 아벨군. 예: $\\mathbb{Z}$, $\\mathbb{Z}_n$, $GL_n$, 대칭군.",
+    "href": "subjects/abstract-algebra/ch01.html#def-group"
+  },
+  "subgroup": {
+    "ko": "부분군",
+    "en": "subgroup",
+    "short": "그 자체로 군인 부분집합 ($H \\le G$). 판정: 닫힘 + $e$ 포함 + 역원 포함 — 유한이면 닫힘 하나로 충분 (거듭제곱의 순환). 합집합은 일반적으로 부분군이 아니다.",
+    "href": "subjects/abstract-algebra/ch01.html#def-subgroup"
+  },
+  "element-order": {
+    "ko": "원소의 위수",
+    "en": "order of an element",
+    "short": "$a^n = e$인 최소 양의 정수 $n = |a|$. $a^k = e \\iff n \\mid k$ (나눗셈 정리 + 최소성). 생성 부분군 $\\langle a \\rangle$의 크기와 같다.",
+    "href": "subjects/abstract-algebra/ch01.html#def-element-order"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {
