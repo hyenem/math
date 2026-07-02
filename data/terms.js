@@ -270,5 +270,26 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "discontinuity of the first/second kind",
     "short": "한쪽 극한 $f(x+), f(x-)$가 둘 다 존재하면 제1종(도약), 하나라도 없으면 제2종(진동 등). 단조함수의 불연속은 전부 제1종이고 많아야 가산 개다 (Rudin 4.29–4.30).",
     "href": "subjects/analysis/ch04.html#def-discontinuity-kinds"
+  },
+
+  /* ---------- 해석학 5장: 미분 ---------- */
+
+  "derivative": {
+    "ko": "미분계수 / 도함수",
+    "en": "derivative",
+    "short": "$f'(x) = \\lim_{t \\to x} \\frac{f(t)-f(x)}{t-x}$ — 할선 기울기의 극한이자 최선의 일차 근사. 미분가능 $\\Rightarrow$ 연속이지만 역은 거짓이고, 미분가능해도 $f'$이 연속이 아닐 수 있다 ($x^2 \\sin(1/x)$).",
+    "href": "subjects/analysis/ch05.html#def-derivative"
+  },
+  "mean-value-theorem": {
+    "ko": "평균값 정리",
+    "en": "mean value theorem",
+    "short": "$[a,b]$ 연속, $(a,b)$ 미분가능이면 $f(b)-f(a) = (b-a)f'(x)$인 $x$가 존재. 증명: 컴팩트 → 최대최소 → 내부 극값($f'=0$). 단조성 판정·로피탈·테일러가 전부 여기서 나온다.",
+    "href": "subjects/analysis/ch05.html#def-mean-value-theorem"
+  },
+  "taylor-theorem": {
+    "ko": "테일러 정리",
+    "en": "Taylor's theorem",
+    "short": "$f(\\beta) = \\sum_{k \\lt n} \\frac{f^{(k)}(\\alpha)}{k!}(\\beta-\\alpha)^k + \\frac{f^{(n)}(x)}{n!}(\\beta-\\alpha)^n$ — 오차(라그랑주 나머지)가 명시된 다항 근사. $n=1$이면 평균값 정리. 증명은 롤 정리 $n$번 연쇄.",
+    "href": "subjects/analysis/ch05.html#def-taylor-theorem"
   }
 });

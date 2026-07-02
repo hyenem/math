@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5장 미분 — 해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="analysis" data-chapter="ch05.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">해석학 · Rudin, Principles of Mathematical Analysis</p>
+  <h1><span class="ch-num">5</span> 미분</h1>
+  <p class="ch-source">정의·정리 번호는 루딘 3판을 따릅니다.
+  이 장의 심장은 평균값 정리 — 나머지는 전부 그 응용입니다.</p>
+</div>
+
+<p>미분 계산은 이미 잘 하실 겁니다. 이 장의 관심은 계산이 아니라 <strong>구조</strong>예요.
+질문 셋: ① 미분가능은 연속보다 얼마나 강한 조건인가?
+② “구간 어딘가에 평균 기울기와 같은 순간 기울기가 있다”(평균값 정리)는 왜 참이고,
+왜 그렇게 많은 정리의 부모인가?
+③ 함수를 다항식으로 근사할 때 오차는 정확히 얼마인가 (테일러)?</p>
+
+<h2 id="sec-derivative">1. 도함수 — 정의와 첫 성질</h2>
+
+<div class="box box-def" id="def-derivative">
+  <span class="box-label">정의 5.1 · 미분계수 <span class="label-en">derivative</span></span>
+  <p>$f : [a, b] \to \mathbb{R}$와 $x \in [a, b]$에 대해</p>
+  $$f'(x) = \lim_{t \to x} \frac{f(t) - f(x)}{t - x}$$
+  <p>이 극한(<a class="term" data-term="function-limit">함수의 극한</a>, 4장)이 존재하면
+  $f$는 $x$에서 <strong>미분가능</strong>하다고 하고 $f'(x)$를 미분계수라 한다.
+  끝점에서는 한쪽 극한으로 정의한다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$\frac{f(t) - f(x)}{t - x}$는 두 점을 잇는 <strong>할선의 기울기</strong>이고,
+  $t \to x$의 극한은 “확대해 보면 직선처럼 보인다”는 뜻입니다.
+  미분가능 = <strong>국소적으로 일차함수로 잘 근사된다</strong>:
+  $f(t) \approx f(x) + f'(x)(t - x)$, 오차는 $|t - x|$보다 빨리 죽는다.
+  이 “일차 근사” 관점이 테일러 정리(고차 근사)와 다변수 미분(9장)으로 곧장 일반화됩니다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 5.2</span>
+  <p><strong>이 정리가 하는 일:</strong> 미분가능과 연속의 위계를 정한다.</p>
+  <p>$f$가 $x$에서 미분가능하면, $f$는 $x$에서 <a class="term" data-term="continuous-function">연속</a>이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 차이를 “기울기 × 간격”으로 쓰면 간격이 죽을 때 차이도 죽는다.</span></summary>
+  $$f(t) - f(x) = \frac{f(t) - f(x)}{t - x} \cdot (t - x) \xrightarrow{\ t \to x\ } f'(x) \cdot 0 = 0$$
+  <p>(극한의 곱 법칙, 정리 4.4.) 그러므로 $\lim_{t \to x} f(t) = f(x)$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p><strong>역은 거짓입니다</strong> — 연속이라고 미분가능하지 않아요. $|x|$는 $0$에서 연속이지만
+  좌우 기울기가 달라 미분 불가. 더 극단적으로, <em>모든 점에서 연속이지만 어느 점에서도
+  미분 불가능한</em> 함수가 존재합니다 (바이어슈트라스 함수 — 7장에서 균등수렴으로 건설).
+  “연속함수는 대체로 매끄럽다”는 직관은 무한의 세계에서 붕괴합니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 5.6 · 반례 제조기 $x^2 \sin(1/x)$</span>
+  <p>$f(x) = x^2 \sin \frac{1}{x}$ ($x \neq 0$), $f(0) = 0$은 <strong>모든 점에서 미분가능</strong>하지만
+  도함수가 $0$에서 <strong>불연속</strong>이다:</p>
+  <p>$0$에서의 미분계수는 정의로 직접 —
+  $\left| \frac{f(t) - 0}{t - 0} \right| = |t \sin\frac{1}{t}| \le |t| \to 0$이므로 $f'(0) = 0$.
+  그런데 $x \neq 0$에서 $f'(x) = 2x \sin\frac{1}{x} - \cos\frac{1}{x}$는 $x \to 0$에서
+  진동해 극한이 없다.</p>
+  <p>교훈: <strong>“미분가능”은 “도함수가 연속”($C^1$)을 함의하지 않는다.</strong>
+  이 함수 가족($x^a \sin(1/x)$)은 미분 관련 반례의 8할을 생산한다 — 지수 $a$를 조절하며
+  직접 실험해 보라.</p>
+</div>
+
+<p>합·곱·몫의 미분(5.3)과 연쇄법칙(5.5)은 미적분에서 하던 그대로입니다 —
+증명의 요령만 기억하세요: 곱의 법칙은 “더하고 빼기”(3장 정리 3.3(c)와 같은 트릭),
+연쇄법칙은 일차 근사끼리의 합성.</p>
+
+<h2 id="sec-mvt">2. 평균값 정리 — 이 장의 심장</h2>
+
+<div class="box box-thm">
+  <span class="box-label">정리 5.8 · 내부 극값 정리 <span class="label-en">interior extremum / Fermat</span></span>
+  <p><strong>이 정리가 하는 일:</strong> “꼭대기에서는 기울기가 $0$” — 최적화의 출발점이자
+  롤 정리의 재료.</p>
+  <p>$f$가 $(a, b)$의 점 $x$에서 국소 최댓값(또는 최솟값)을 갖고 $f'(x)$가 존재하면,
+  $f'(x) = 0$이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 왼쪽에서 오는 할선은 기울기 ≥ 0, 오른쪽에서 오는 할선은 ≤ 0. 극한이 존재하니 둘 다 = 0.</span></summary>
+  <p>국소 최댓값이라 하자: 어떤 $\delta \gt 0$에 대해 $|t - x| \lt \delta$이면 $f(t) \le f(x)$.
+  $t \in (x - \delta, x)$이면 $\frac{f(t) - f(x)}{t - x} \ge 0$ (분자 $\le 0$, 분모 $\lt 0$)이므로
+  좌극한은 $\ge 0$. $t \in (x, x + \delta)$이면 같은 이유로 몫이 $\le 0$이라 우극한은 $\le 0$.
+  $f'(x)$가 존재하므로 두 값이 같아야 하고, $\ge 0$이면서 $\le 0$인 수는 $0$뿐이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 5.9–5.10 · (일반화) 평균값 정리 <span class="label-en">mean value theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> “구간 전체의 평균 변화율 = 어딘가의 순간 변화율”.
+  도함수의 국소 정보(한 점의 기울기)와 대역 정보(구간의 증감)를 잇는 유일한 다리다.</p>
+  <p id="def-mean-value-theorem"><strong>(5.10, MVT)</strong> $f$가 $[a, b]$에서 연속, $(a, b)$에서 미분가능하면</p>
+  $$f(b) - f(a) = (b - a) f'(x) \quad \text{인 } x \in (a, b) \text{가 존재한다.}$$
+  <p><strong>(5.9, 코시 MVT)</strong> 같은 조건의 $f, g$에 대해
+  $\big[ f(b) - f(a) \big] g'(x) = \big[ g(b) - g(a) \big] f'(x)$인 $x \in (a,b)$가 존재
+  — $g(t) = t$로 두면 5.10이 나온다. 로피탈(5.13)의 재료.</p>
+  <p>특수한 경우 $f(a) = f(b)$가 <strong>롤 정리</strong>: 양 끝 높이가 같으면 어딘가 수평인
+  접선이 있다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— “끝점을 잇는 직선을 빼서” 롤 상황으로 만들고, 최대최소 정리(4.16)로 내부 극값을 얻어 5.8을 쏜다.</span></summary>
+  <p>(5.9를 바로 증명한다.) 다음 보조함수를 두자:</p>
+  $$h(t) = \big[ f(b) - f(a) \big] g(t) - \big[ g(b) - g(a) \big] f(t)$$
+  <p>$h$는 $[a,b]$에서 연속, $(a,b)$에서 미분가능하고, 계산하면 $h(a) = h(b)$
+  (양쪽 다 $f(b)g(a) - f(a)g(b)$).</p>
+  <p>$h$가 상수면 $h' \equiv 0$이라 아무 $x$나 된다. 상수가 아니면 — $[a,b]$는 컴팩트이므로
+  최대최소 정리(4.16)에 의해 $h$는 최댓값과 최솟값을 달성하는데, $h(a) = h(b)$이므로
+  둘 중 하나는 <strong>내부점</strong> $x \in (a,b)$에서 달성된다.
+  정리 5.8에 의해 $h'(x) = 0$, 즉
+  $[f(b) - f(a)] g'(x) = [g(b) - g(a)] f'(x)$.</p>
+  <p><em>구조를 기억하라:</em> 컴팩트(1·2장) → 최대최소(4장) → 내부 극값(5.8) → MVT.
+  해석학 전반부가 한 줄에 꿰인다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 5.11 · 단조성 판정</span>
+  <p><strong>이 정리가 하는 일:</strong> MVT의 첫 열매 — 도함수 부호로 증감을 판정한다.</p>
+  <p>$f$가 $(a, b)$에서 미분가능할 때:
+  $f' \ge 0$이면 단조증가, $f' \equiv 0$이면 상수, $f' \le 0$이면 단조감소.</p>
+  <p>(증명: 임의의 $x_1 \lt x_2$에 MVT를 적용하면
+  $f(x_2) - f(x_1) = (x_2 - x_1) f'(x) $ — 부호가 $f'$을 따른다.
+  특히 <strong>“$f' \equiv 0 \Rightarrow$ 상수”는 미적분학 기본정리(6장)의 유일성 파트를
+  담당하는 핵심 사실</strong>이다.)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 5.12 · 다르부 정리 <span class="label-en">Darboux</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 도함수는 연속이 아니어도(예제 5.6!) 중간값 성질만은
+  반드시 갖는다 — “도함수가 될 수 있는 함수”에 대한 강한 제약.</p>
+  <p>$f$가 $[a, b]$에서 미분가능하고 $f'(a) \lt \lambda \lt f'(b)$이면,
+  $f'(x) = \lambda$인 $x \in (a, b)$가 존재한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $g(t) = f(t) - \lambda t$의 최솟값 지점을 노린다. 끝점의 도함수 부호 때문에 최솟값은 내부에 있을 수밖에 없다.</span></summary>
+  <p>$g(t) = f(t) - \lambda t$로 놓으면 $g'(a) = f'(a) - \lambda \lt 0$,
+  $g'(b) = f'(b) - \lambda \gt 0$.
+  $g$는 연속이고 $[a,b]$는 컴팩트이므로 최솟값을 달성한다(4.16).
+  $g'(a) \lt 0$이므로 $a$ 바로 오른쪽에 $g(t_1) \lt g(a)$인 점이 있어 최솟값은 $a$가 아니고,
+  $g'(b) \gt 0$이므로 $b$ 바로 왼쪽에 $g(t_2) \lt g(b)$인 점이 있어 $b$도 아니다.
+  최솟값 지점 $x$는 내부점이므로 정리 5.8에 의해 $g'(x) = 0$, 즉 $f'(x) = \lambda$.</p>
+  <p><em>따름정리:</em> 도함수는 제1종(도약) 불연속을 가질 수 없다 —
+  도약이 있으면 중간값 성질이 깨지므로. 예제 5.6의 불연속이 “진동형(제2종)”이었던 것은
+  우연이 아니다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-lhopital">3. 로피탈 규칙</h2>
+
+<div class="box box-thm">
+  <span class="box-label">정리 5.13 · 로피탈 규칙 <span class="label-en">L'Hospital's rule</span></span>
+  <p><strong>이 정리가 하는 일:</strong> $\frac{0}{0}$, $\frac{\cdot}{\infty}$ 꼴 극한을
+  도함수의 비로 넘긴다.</p>
+  <p>$f, g$가 $(a, b)$에서 미분가능하고 $g'(x) \neq 0$이며
+  $\dfrac{f'(x)}{g'(x)} \to A$ ($x \to a$)라 하자.
+  다음 중 하나가 성립하면 $\dfrac{f(x)}{g(x)} \to A$이다:</p>
+  <p>(i) $f(x) \to 0$이고 $g(x) \to 0$, 또는 (ii) $g(x) \to \pm\infty$.
+  ($a, b, A$는 $\pm\infty$ 허용. 증명은 코시 MVT(5.9)로 $\frac{f(x)-f(y)}{g(x)-g(y)} = \frac{f'(t)}{g'(t)}$를
+  만들어 조이는 것 — 루딘 본문 참고.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 로피탈 오남용 체크리스트</span>
+  <p>① <strong>부정형인지 먼저 확인</strong>: $\lim_{x\to 0}\frac{x+1}{x+2} = \frac{1}{2}$인데
+  로피탈을 (조건 위반인 채) 쓰면 $1$이 나온다.
+  ② <strong>$f'/g'$의 극한이 존재해야</strong> 결론이 성립: $\frac{x + \sin x}{x}$ ($x \to \infty$)는
+  극한이 $1$이지만 $\frac{f'}{g'} = 1 + \cos x$는 진동 — 로피탈은 침묵할 뿐, “발산”을
+  결론하면 안 된다 (역방향 함의가 아니다!).
+  ③ 순환 논법 주의: $\lim_{x\to 0}\frac{\sin x}{x}$에 로피탈을 쓰는 것은
+  ($(\sin x)' = \cos x$가 이 극한으로 증명되므로) 답안으로는 실격이다.</p>
+</div>
+
+<h2 id="sec-taylor">4. 테일러 정리 — 오차가 명시된 다항 근사</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>미분가능 = 일차함수로 근사 가능이었죠. $n$번 미분가능하면 $n-1$차 다항식으로
+  근사되고, <strong>오차가 정확히 “$n$차 항 꼴”</strong>이라는 것이 테일러 정리입니다.
+  포인트는 급수(무한 전개)가 아니라 <strong>유한 전개 + 오차의 정확한 형태</strong> —
+  그리고 그 증명이 MVT의 반복 적용이라는 것. 테일러 정리는 “MVT의 고차 버전”입니다
+  ($n = 1$로 두면 정확히 MVT가 됩니다).</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 5.15 · <span id="def-taylor-theorem">테일러 정리</span> <span class="label-en">Taylor's theorem</span></span>
+  <p>$f$가 $[a, b]$에서 $f^{(n-1)}$까지 연속이고 $(a, b)$에서 $f^{(n)}$이 존재한다고 하자.
+  서로 다른 $\alpha, \beta \in [a, b]$에 대해 $n-1$차 테일러 다항식을</p>
+  $$P(t) = \sum_{k=0}^{n-1} \frac{f^{(k)}(\alpha)}{k!} (t - \alpha)^k$$
+  <p>라 하면, $\alpha$와 $\beta$ 사이의 어떤 $x$가 존재하여</p>
+  $$f(\beta) = P(\beta) + \frac{f^{(n)}(x)}{n!} (\beta - \alpha)^n$$
+  <p>(라그랑주 나머지항). $n = 1$이면 $f(\beta) = f(\alpha) + f'(x)(\beta - \alpha)$ — MVT다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 오차를 소화하는 상수 $M$을 정의하고, 보조함수 $g(t) = f(t) - P(t) - M(t-\alpha)^n$에 롤 정리를 $n$번 연쇄 적용한다.</span></summary>
+  <p>$f(\beta) = P(\beta) + M(\beta - \alpha)^n$이 되도록 $M$을 정의하자
+  (한 점 조건이므로 그런 $M$은 유일). 보일 것은 $n! M = f^{(n)}(x)$인 $x$의 존재다.</p>
+  <p>$g(t) = f(t) - P(t) - M(t - \alpha)^n$으로 두면:
+  $P$의 구성상 $g(\alpha) = g'(\alpha) = \cdots = g^{(n-1)}(\alpha) = 0$이고,
+  $M$의 선택으로 $g(\beta) = 0$.</p>
+  <p>$g(\alpha) = g(\beta) = 0$ → 롤 정리로 $g'(x_1) = 0$인 $x_1$이 $\alpha, \beta$ 사이에 존재.
+  $g'(\alpha) = g'(x_1) = 0$ → 롤 정리로 $g''(x_2) = 0$인 $x_2$가 존재.
+  … $n$번 반복하면 $g^{(n)}(x_n) = 0$인 $x_n$을 얻는다.
+  그런데 $g^{(n)}(t) = f^{(n)}(t) - n! M$ ($P$는 $n-1$차라 $n$계 도함수가 $0$)이므로
+  $f^{(n)}(x_n) = n! M$. $x = x_n$이 원하던 점이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 오차 추정 실전</span>
+  <p>$\sin$을 $0$에서 3차 다항식 $x - \frac{x^3}{6}$으로 근사하면 ($n = 5$로 적용,
+  4차 항은 $0$), $|x| \le \frac{1}{2}$에서 오차는</p>
+  $$\left| \frac{\sin^{(5)}(c)}{5!} x^5 \right| \le \frac{1}{120} \cdot \frac{1}{32} = \frac{1}{3840} \lt 0.0003$$
+  <p>— “몇 차까지 전개하면 오차가 얼마 이하인가” 유형의 문제는 전부 이 계산이다.
+  나머지항의 $f^{(n)}$에 <em>유계</em>만 있으면 오차가 통제된다는 것이 요점.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">5장의 줄거리</span>
+  <p><a class="term" data-term="derivative">미분계수</a> = 할선 기울기의 극한 = 일차 근사
+  → 미분가능 $\Rightarrow$ 연속 (역 거짓: $|x|$, 바이어슈트라스 함수)
+  → $x^2\sin(1/x)$: 미분가능 $\not\Rightarrow$ $C^1$
+  → 내부 극값에서 $f' = 0$(5.8) + 최대최소 정리(4.16) $\Rightarrow$
+  <a class="term" data-term="mean-value-theorem">평균값 정리</a>(5.10)
+  → MVT의 열매들: 단조성 판정(5.11), $f' \equiv 0 \Rightarrow$ 상수,
+  다르부(도함수의 중간값 성질, 5.12), 로피탈(5.13, 코시 MVT 경유)
+  → <a class="term" data-term="taylor-theorem">테일러 정리</a>(5.15) = 롤 정리 $n$연쇄 =
+  MVT의 고차화.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 이 장의 모든 정리는 MVT에서 나오고,
+  MVT는 “컴팩트 → 최대최소 → 내부 극값”에서 나온다. 임용 서술형에서 “평균값 정리를
+  이용하여”가 보이면 십중팔구 보조함수를 하나 설계해 롤 상황을 만드는 문제다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$f(x) = x |x|$에 대해 $f'(0)$이 존재하는지 판정하고, $f'$을 구하라.
+  $f''(0)$은 존재하는가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>정의로 직접: $\frac{f(t) - f(0)}{t - 0} = \frac{t|t|}{t} = |t|$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\frac{f(t) - f(0)}{t} = |t| \to 0$이므로 $f'(0) = 0$이 존재한다.
+    $x \gt 0$에서 $f(x) = x^2$이라 $f'(x) = 2x$, $x \lt 0$에서 $f(x) = -x^2$이라
+    $f'(x) = -2x$. 종합하면 $f'(x) = 2|x|$.</p>
+    <p>$f''(0)$은 $|x|$의 $0$에서의 미분계수 (의 2배) — 좌우 극한이 $-2, 2$로 달라
+    <strong>존재하지 않는다.</strong> ($C^1$이지만 $C^2$가 아닌 표준 예.
+    $x|x|$ 가족은 “정확히 $k$번만 미분가능한 함수”를 만드는 재료다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) $f'(c) \gt 0$이면 $c$를 포함하는 어떤 구간에서 $f$는 증가한다.<br>
+  (2) $f$가 $(a,b)$에서 미분가능하고 $f'$이 유계이면, $f$는 $(a,b)$에서 균등연속이다.<br>
+  (3) 도함수 $f'$은 도약(제1종) 불연속을 가질 수 있다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $f(x) = x + 2x^2 \sin(1/x)$ 유형 — $f'(0) \gt 0$이어도 근방에서 $f'$의 부호가
+    진동할 수 있다. (2) MVT로 $|f(x) - f(y)| \le M|x - y|$. (3) 다르부 정리.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $f(x) = x + 2x^2 \sin\frac{1}{x}$ ($x \neq 0$), $f(0) = 0$:
+    정의로 $f'(0) = 1 \gt 0$이지만, $x \neq 0$에서
+    $f'(x) = 1 + 4x\sin\frac{1}{x} - 2\cos\frac{1}{x}$는 $0$ 근처에서 음수가 되는 지점이
+    무한히 많아 ($\cos\frac{1}{x} = 1$ 근처) 어떤 근방에서도 단조가 아니다.
+    한 점의 도함수 부호는 <em>그 점에서의</em> 국소 정보일 뿐 — 근방 전체의 증가를 주려면
+    “$f'$이 근방에서 $\gt 0$”(연속인 $f'$ 등)이 필요하다.</p>
+    <p>(2) <strong>참.</strong> $|f'| \le M$이라 하면 임의의 $x, y$에 MVT를 적용해
+    $|f(x) - f(y)| = |f'(c)||x - y| \le M|x - y|$ (립시츠).
+    $\delta = \varepsilon / M$이 전 구간을 감당하므로 균등연속.</p>
+    <p>(3) <strong>거짓.</strong> 다르부 정리(5.12)에 의해 도함수는 중간값 성질을 가지므로
+    도약 불연속이 불가능하다. 도함수의 불연속은 반드시 제2종(진동형)이다 — 예제 5.6.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 5장 연습 1 기반</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>모든 실수 $x, y$에 대해 $|f(x) - f(y)| \le (x - y)^2$이면 $f$는 상수함수임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>몫 $\left|\frac{f(x)-f(y)}{x-y}\right| \le |x - y|$에서 $f'$을 계산해 보라.
+    그다음 정리 5.11.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>임의의 $y$에서, $x \neq y$일 때
+    $\left| \frac{f(x) - f(y)}{x - y} \right| \le |x - y| \xrightarrow{x \to y} 0$.
+    조임 정리에 의해 극한이 존재하고 $f'(y) = 0$ — 모든 $y$에서.
+    정리 5.11($f' \equiv 0 \Rightarrow$ 상수)에 의해 $f$는 상수다. $\blacksquare$</p>
+    <p>(일반화: 지수가 $1$보다 크기만 하면, 즉 $|f(x)-f(y)| \le C|x-y|^{1+\alpha}$
+    ($\alpha \gt 0$)이면 같은 논증으로 상수다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Rudin 5장 연습 2 기반</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$f'(x) \gt 0$이 $(a, b)$ 전체에서 성립하면 $f$는 $(a, b)$에서 순증가함수임을 보이고,
+  역함수 $g = f^{-1}$가 미분가능하며 $g'(f(x)) = \dfrac{1}{f'(x)}$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>순증가는 MVT 한 방. 역함수의 미분은 몫
+    $\frac{g(u) - g(f(x))}{u - f(x)}$에서 $u = f(t)$로 치환하고 — $g$의 연속성이
+    “$u \to f(x) \Rightarrow t \to x$”를 보증한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$x_1 \lt x_2$이면 MVT로 $f(x_2) - f(x_1) = f'(c)(x_2 - x_1) \gt 0$ — 순증가.
+    따라서 $f$는 단사이고 역함수 $g$가 구간 $f((a,b))$에서 정의된다
+    (상이 구간인 것은 중간값 정리).</p>
+    <p>$g$의 연속성: 순증가 연속함수의 역함수는 순증가이고, 상이 구간이므로
+    (단조함수의 불연속은 도약뿐인데 — 정리 4.29 — 도약이 있으면 상에 구멍이 생겨 모순)
+    연속이다.</p>
+    <p>이제 $u \to f(x)$, $u \neq f(x)$라 하고 $t = g(u)$로 놓으면 $g$의 연속성에 의해
+    $t \to x$이고 $t \neq x$이므로</p>
+    $$\frac{g(u) - g(f(x))}{u - f(x)} = \frac{t - x}{f(t) - f(x)} = \frac{1}{\frac{f(t)-f(x)}{t-x}} \longrightarrow \frac{1}{f'(x)}$$
+    <p>($f'(x) \gt 0$이라 분모가 $0$으로 가지 않는다). 그러므로 $g'(f(x)) = 1/f'(x)$. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>MVT 보조함수 설계</span>
+  </div>
+  <p>$f$가 $[0, 1]$에서 연속, $(0, 1)$에서 미분가능하고 $f(0) = 0$, $f(1) = 1$이라 하자.
+  $f'(c) = 2c$인 $c \in (0, 1)$이 존재함을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>결론을 $f'(c) - 2c = 0$으로 읽으면, 도함수가 $f'(x) - 2x$인 함수에 롤 정리를 쓰고
+    싶어진다. $h(x) = f(x) - x^2$의 양 끝값을 확인하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$h(x) = f(x) - x^2$로 놓자. $h$는 $[0,1]$에서 연속, $(0,1)$에서 미분가능하고</p>
+    $$h(0) = f(0) - 0 = 0, \qquad h(1) = f(1) - 1 = 0$$
+    <p>롤 정리에 의해 $h'(c) = 0$인 $c \in (0, 1)$이 존재하고, 즉
+    $f'(c) = 2c$. $\blacksquare$</p>
+    <p>(보조함수 설계의 일반 요령: 원하는 결론 “$f'(c) = \varphi'(c)$”에서
+    $h = f - \varphi$를 만들고 $h$의 끝값이 같아지는지 확인한다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>테일러 정리 응용 서술형</span>
+  </div>
+  <p>$f$가 $[a, b]$에서 두 번 미분가능하고 $f(a) = f(b) = 0$, 그리고 어떤
+  $c \in (a, b)$에서 $f(c) \gt 0$이라 하자. $f''(\xi) \lt 0$인 $\xi \in (a, b)$가
+  존재함을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>MVT를 $[a, c]$와 $[c, b]$에 각각 적용해 기울기 두 개를 얻어라 — 하나는 양수,
+    하나는 음수다. 그 두 기울기에 다시 MVT(도함수 $f'$에 대해).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$[a, c]$에 MVT: $f'(p) = \dfrac{f(c) - f(a)}{c - a} = \dfrac{f(c)}{c - a} \gt 0$인
+    $p \in (a, c)$가 존재.
+    $[c, b]$에 MVT: $f'(q) = \dfrac{f(b) - f(c)}{b - c} = \dfrac{-f(c)}{b - c} \lt 0$인
+    $q \in (c, b)$가 존재.</p>
+    <p>이제 $f'$에 대해 $[p, q]$에서 MVT를 적용하면 ($f'$은 미분가능하므로):</p>
+    $$f''(\xi) = \frac{f'(q) - f'(p)}{q - p} \lt 0 \quad (\text{분자} \lt 0,\ \text{분모} \gt 0)$$
+    <p>인 $\xi \in (p, q) \subset (a, b)$가 존재한다. $\blacksquare$</p>
+    <p>(직관: 양 끝이 $0$인데 가운데가 볼록 솟았다면 어딘가는 아래로 굽어야(오목) 한다 —
+    그 “굽음”을 2계 도함수 부호로 포착하는 문제. MVT 2연쇄는 테일러 정리 증명의
+    축소판이기도 하다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다. 실제 기출의 연도·문항
+표기는 원문 대조로 검증한 뒤에만 붙입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
