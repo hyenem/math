@@ -413,6 +413,31 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/topology/ch01.html#def-limit-point-top"
   },
 
+  "continuous-top": {
+    "ko": "연속 (위상)",
+    "en": "continuous function",
+    "short": "열린집합의 원상이 열림 — 해석학에서 정리였던 것이 위상수학의 정의. 기저원소만 검사해도 충분하고, 양쪽 위상에 의존한다 (정의역이 섬세할수록 연속이 쉽다).",
+    "href": "subjects/topology/ch02.html#def-continuous-top"
+  },
+  "pasting-lemma": {
+    "ko": "붙임 보조정리",
+    "en": "pasting lemma",
+    "short": "닫힌(또는 열린) 조각 $A, B$ 위의 연속함수가 교집합에서 일치하면 이어 붙인 함수도 연속 — 조각별 정의 함수의 연속성 보증서.",
+    "href": "subjects/topology/ch02.html#def-pasting-lemma"
+  },
+  "homeomorphism": {
+    "ko": "위상동형사상",
+    "en": "homeomorphism",
+    "short": "전단사 + 양방향 연속 — 열린집합 구조의 완전한 대응. 역함수 연속은 공짜가 아니다 ($[0,2\\pi) \\to S^1$이 반례; 컴팩트+하우스도르프면 공짜가 된다).",
+    "href": "subjects/topology/ch02.html#def-homeomorphism"
+  },
+  "product-topology": {
+    "ko": "곱위상",
+    "en": "product topology",
+    "short": "열린 직사각형 $U \\times V$를 기저로. 좌표별 연속 $=$ 연속. 무한 곱에서는 \"유한 개 좌표만 제한\"이 옳은 정의 (상자위상이 아니라).",
+    "href": "subjects/topology/ch02.html#def-product-topology"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {

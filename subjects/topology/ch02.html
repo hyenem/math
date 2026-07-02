@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2장 연속함수와 곱공간 — 위상수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="topology" data-chapter="ch02.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§18–20, §22)</p>
+  <h1><span class="ch-num">2</span> 연속함수와 곱공간</h1>
+  <p class="ch-source">해석학 4장에서 “연속의 세 얼굴 중 하나”였던 것이
+  여기서는 연속의 <strong>정의</strong>가 됩니다 — 그리고 공간을 조립하는 법(곱, 몫)을
+  배웁니다.</p>
+</div>
+
+<p>거리 없는 세계에서 $\varepsilon$–$\delta$는 쓸 수 없습니다. 하지만 해석학 4장의
+정리(루딘 4.8)가 이미 답을 줬죠 — “연속 $\iff$ 열린집합의 원상이 열림”은
+열린집합만 쓰는 조건이었으니까. 위상수학은 그 동치 조건을 정의로 채택합니다.</p>
+
+<h2 id="sec-continuity">1. 연속 — 원상 정의</h2>
+
+<div class="box box-def" id="def-continuous-top">
+  <span class="box-label">정의 · 연속함수 <span class="label-en">continuous function</span></span>
+  <p>위상공간 사이의 함수 $f : X \to Y$가 <strong>연속</strong>이라는 것은:</p>
+  <p style="text-align:center;">$Y$의 모든 열린집합 $V$에 대해 $f^{-1}(V)$가 $X$에서 열려 있다.</p>
+  <p>동치 조건들 (문크레스 §18): ① 닫힌집합의 원상이 닫힘
+  ② 모든 $A$에 대해 $f(\bar{A}) \subset \overline{f(A)}$ (“폐포를 앞질러 가지 않는다”)
+  ③ 각 점에서: $f(x)$의 열린 근방 $V$마다 $f(U) \subset V$인 $x$의 열린 근방 $U$ 존재
+  (— $\varepsilon$–$\delta$의 위상 버전).
+  기저가 있으면 <strong>기저원소의 원상만</strong> 검사해도 충분하다 (원상이 합집합을
+  보존하므로).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>연속성은 <strong>양쪽 위상에 의존합니다.</strong> 같은 항등함수
+  $\mathrm{id} : \mathbb{R}_\ell \to \mathbb{R}$ (하한위상 → 표준위상)은 연속이지만
+  ($(a,b)$의 원상 $(a,b)$는 $\mathbb{R}_\ell$에서 열림 — 1장에서 확인),
+  반대 방향 $\mathrm{id} : \mathbb{R} \to \mathbb{R}_\ell$은 불연속입니다
+  ($[a, b)$의 원상 $[a,b)$가 표준위상에서 안 열림).
+  “정의역 위상이 섬세할수록 연속이기 쉽고, 공역 위상이 섬세할수록 어렵다” —
+  극단적으로 정의역이 이산위상이면 <em>모든</em> 함수가 연속.</p>
+</div>
+
+<div class="box box-thm" id="def-pasting-lemma"><span class="box-label">정리 · 붙임 보조정리 <span class="label-en">pasting lemma</span> (문크레스 §18)</span>
+  <p><strong>이 정리가 하는 일:</strong> 조각별로 정의한 함수의 연속성을 보증한다 —
+  “이음새에서 값이 맞으면 붙여도 된다”.</p>
+  <p>$X = A \cup B$ ($A, B$ 닫힌집합)이고 $f : A \to Y$, $g : B \to Y$가 연속이며
+  $A \cap B$에서 $f = g$이면, 이어 붙인 함수 $h : X \to Y$는 연속이다.
+  ($A, B$가 둘 다 열린 경우에도 성립 — 사실 열린 조각은 임의 개수여도 된다.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 닫힌집합 $C$의 원상을 $h^{-1}(C) = f^{-1}(C) \cup g^{-1}(C)$로 쪼갠다: 닫힘 ∪ 닫힘 = 닫힘.</span></summary>
+  <p>$C \subset Y$가 닫혔다고 하자. $f$ 연속이므로 $f^{-1}(C)$는 $A$에서 닫혀 있고,
+  $A$가 $X$에서 닫혀 있으므로 $f^{-1}(C)$는 $X$에서도 닫혀 있다 (부분공간 위상의
+  기본 성질: 닫힌 부분공간에서 닫힌 것은 전체에서도 닫힘). $g$ 쪽도 마찬가지.
+  $h^{-1}(C) = f^{-1}(C) \cup g^{-1}(C)$ — 닫힌집합 둘의 합집합이라 닫혀 있다.
+  “닫힌집합 원상이 닫힘” 동치 조건으로 $h$ 연속.</p>
+  <p><em>어디서 조건이 필요한가:</em> $A = \mathbb{Q}$, $B = \mathbb{R} \setminus \mathbb{Q}$
+  (둘 다 닫히지 않음)에 $f = 1$, $g = 0$을 붙이면 디리클레 함수 — 처참하게 불연속.
+  “닫힌(또는 열린) 조각”이라는 가정이 실전 조건이다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-homeo">2. 위상동형 — “위상적으로 같은 공간”</h2>
+
+<div class="box box-def" id="def-homeomorphism">
+  <span class="box-label">정의 · 위상동형사상 <span class="label-en">homeomorphism</span></span>
+  <p>전단사 $f : X \to Y$에서 <strong>$f$와 $f^{-1}$가 모두 연속</strong>이면 $f$를
+  <strong>위상동형사상</strong>, 두 공간을 <strong>위상동형</strong>($X \approx Y$)이라 한다.
+  — 열린집합 구조가 완벽히 대응되므로, 위상으로 정의되는 모든 성질(연결, 컴팩트,
+  하우스도르프…)이 일치한다. 선형대수의 동형사상(구조 보존 전단사)과 같은 정신.</p>
+  <p>예: $(-1, 1) \approx \mathbb{R}$ ($x \mapsto \tan(\pi x / 2)$) —
+  “유계”는 위상적 성질이 <em>아니라는</em> 증거.
+  $[0, 1) \not\approx (0, 1)$은 어떻게 보이나? — 위상 불변량(연결성 등)으로 3장에서.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — $f^{-1}$의 연속은 공짜가 아니다</span>
+  <p>전단사 + 연속이어도 역함수가 불연속일 수 있습니다. 표준 예:
+  $f : [0, 2\pi) \to S^1$ (원), $f(t) = (\cos t, \sin t)$ — 연속 전단사지만,
+  역함수는 $(1, 0)$에서 불연속 (원에서는 그 점 양옆이 가까운데 원상 $0$과 $2\pi^-$는
+  멀리 찢어짐). 반직선을 원으로 “접합”하는 순간 위상이 달라진 것.
+  (4장에서: 정의역이 <strong>컴팩트</strong>하고 공역이 하우스도르프면 역함수 연속이
+  공짜가 된다 — 이 예제는 $[0, 2\pi)$가 컴팩트가 아니라서 빠져나간 것이다.)</p>
+</div>
+
+<h2 id="sec-product">3. 곱위상 — 공간의 조립</h2>
+
+<div class="box box-def" id="def-product-topology">
+  <span class="box-label">정의 · 곱위상 <span class="label-en">product topology</span></span>
+  <p>$X \times Y$에 “열린 직사각형” $U \times V$ ($U, V$ 각각 열림)들을
+  <a class="term" data-term="basis-topology">기저</a>로 주는 위상.
+  $\mathbb{R} \times \mathbb{R}$에서는 표준위상 $\mathbb{R}^2$와 일치한다
+  (열린 원판과 열린 직사각형이 서로를 담는다 — 기저 비교).</p>
+  <p><strong>사영</strong> $\pi_1(x, y) = x$, $\pi_2(x, y) = y$는 연속이고,
+  핵심 성질 (문크레스 §18–19): $f : Z \to X \times Y$가 연속 $\iff$
+  두 성분 $\pi_1 \circ f$, $\pi_2 \circ f$가 각각 연속 —
+  “좌표별로 연속이면 연속” (곡선 $t \mapsto (\cos t, \sin t)$의 연속성이 이것으로
+  즉시).</p>
+  <p><em>무한 곱 주의사항:</em> $\prod X_\alpha$에서는 “모든 좌표에 열린집합”(상자위상)이
+  아니라 <strong>“유한 개 좌표만 제한”</strong>(곱위상)이 옳은 정의다 —
+  곱위상이어야 “좌표별 연속 = 연속”과 티호노프 정리(컴팩트의 곱, 5장 언급)가
+  살아남는다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 몫위상 간보기 <span class="label-en">quotient topology</span></span>
+  <p>붙이기(식별)로 공간 만들기: $[0, 1]$에서 $0 \sim 1$로 양 끝을 붙이면 원 $S^1$,
+  정사각형의 마주 보는 변을 붙이면 원기둥·뫼비우스 띠·원환면(torus).
+  형식화: 전사 $p : X \to Y$에 대해 “$V$가 열림 $\iff p^{-1}(V)$가 열림”으로 $Y$에
+  위상을 주는 것 (<strong>몫위상</strong>).
+  위 “흔한 오해”의 $[0, 2\pi) \to S^1$이 위상동형이 아니었던 이유를 다시 읽으면:
+  $S^1$은 $[0, 2\pi]$의 <em>몫</em>이지 $[0, 2\pi)$와의 동형이 아니기 때문이다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">2장의 줄거리</span>
+  <p><a class="term" data-term="continuous-top">연속</a> = 열린집합 원상이 열림
+  (해석학의 정리가 정의로; 기저원소만 검사; 양쪽 위상에 의존 —
+  $\mathbb{R}_\ell \to \mathbb{R}$ 항등함수는 한 방향만 연속)
+  → 붙임 보조정리: 닫힌 조각 위 연속함수는 이어 붙일 수 있다
+  → <a class="term" data-term="homeomorphism">위상동형</a> = 전단사 + 양방향 연속
+  (역함수 연속은 공짜가 아님! $[0,2\pi) \to S^1$)
+  → <a class="term" data-term="product-topology">곱위상</a>: 열린 직사각형 기저,
+  좌표별 연속 = 연속, 무한 곱은 “유한 좌표 제한”이 정답
+  → 몫위상: 붙여서 만드는 공간들 ($S^1$, 원환면, 뫼비우스).</p>
+  <p><strong>단 하나만 기억한다면:</strong> 위상수학에서 함수를 다루는 유일한 도구는
+  원상이다 — “$f^{-1}$(열림)이 열림”에서 모든 것이 나온다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$X$가 이산위상, $Y$가 임의의 위상공간일 때 모든 함수 $f : X \to Y$가 연속임을
+  보이고, 반대로 $Y$가 밀착위상이면 모든 함수 $g : X' \to Y$ ($X'$ 임의)가 연속임을
+  보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>원상 정의를 그대로 — 각각 “원상이 뭐든 열려 있다”, “검사할 열린집합이 두 개뿐”.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>이산위상에서는 모든 부분집합이 열려 있으므로 $f^{-1}(V)$가 무엇이든 열려 있다 —
+    연속. 밀착위상의 열린집합은 $\varnothing$과 $Y$뿐인데
+    $g^{-1}(\varnothing) = \varnothing$, $g^{-1}(Y) = X'$ — 둘 다 항상 열려 있다 — 연속.</p>
+    <p>(교훈: 연속성은 함수의 성질이기 전에 두 위상의 “궁합”이다. 정의역이 잘게
+    부서질수록, 공역이 뭉툭할수록 연속은 값싸진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 연속 전단사는 위상동형사상이다.<br>
+  (2) $f : X \to Y$, $g : Y \to Z$가 연속이면 $g \circ f$도 연속이다.<br>
+  (3) $A \times B$의 폐포는 $\bar{A} \times \bar{B}$이다 (곱위상).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 본문의 원 예제. (2) 원상의 원상. (3) 폐포 판정(모든 근방이 만남)을
+    기저원소 $U \times V$로.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $f : [0, 2\pi) \to S^1$, $t \mapsto (\cos t, \sin t)$ —
+    연속 전단사지만 역함수가 $(1,0)$에서 불연속.</p>
+    <p>(2) <strong>참.</strong> $(g \circ f)^{-1}(W) = f^{-1}(g^{-1}(W))$ — 열림의 원상의
+    원상. 원상 정의가 합성에서 얼마나 매끄러운지 보여주는 한 줄이다
+    ($\varepsilon$–$\delta$ 합성 증명과 비교해 보라).</p>
+    <p>(3) <strong>참.</strong> $(x, y) \in \overline{A \times B}$ $\iff$ 모든 기저 근방
+    $U \times V \ni (x,y)$가 $A \times B$와 만남 $\iff$ ($U$가 $A$와 만나고 $V$가 $B$와
+    만남) $\iff$ $x \in \bar{A}$이고 $y \in \bar{B}$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §18 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f, g : X \to Y$가 연속이고 $Y$가 <a class="term" data-term="hausdorff">하우스도르프</a>이면,
+  일치 집합 $E = \{x : f(x) = g(x)\}$가 닫혀 있음을 증명하라.
+  이로부터 “하우스도르프 공역을 갖는 두 연속함수가 조밀한 집합에서 일치하면 전체에서
+  일치한다”를 유도하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>여집합이 열림을 보인다: $f(x) \neq g(x)$이면 두 값을 가르는 서로소 열린집합
+    $U, V$를 잡고 $f^{-1}(U) \cap g^{-1}(V)$를 생각하라. (해석학 4장 연습 —
+    “조밀집합 위의 값이 함수를 결정한다” — 의 완전 일반화다.)</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$x \notin E$라 하자: $f(x) \neq g(x)$. 하우스도르프로 서로소 열린집합
+    $U \ni f(x)$, $V \ni g(x)$를 잡으면 $W = f^{-1}(U) \cap g^{-1}(V)$는 열려 있고
+    ($f, g$ 연속) $x$를 담는다. $W$의 임의의 점 $w$에서 $f(w) \in U$, $g(w) \in V$이고
+    $U \cap V = \varnothing$이므로 $f(w) \neq g(w)$ — 즉 $W \subset E^c$.
+    $E^c$의 모든 점이 내점이므로 $E^c$ 열림, $E$ 닫힘.</p>
+    <p>$D$가 조밀하고 $D \subset E$이면: $X = \bar{D} \subset \bar{E} = E$ ($E$ 닫힘) —
+    전체에서 $f = g$. $\blacksquare$
+    (하우스도르프 가정이 빠지면 거짓 — 밀착위상 공역이면 일치 집합이 아무거나 될 수
+    있다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>연속성 판정 서술</span>
+  </div>
+  <p>함수 $f : \mathbb{R} \to \mathbb{R}_\ell$, $f(x) = x$ (표준위상 → 하한위상)가
+  연속이 아님을 보이고, 어떤 점들에서 “점별 연속” 조건이 깨지는지 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>기저원소 $[a, b)$의 원상이 표준위상에서 열려 있는지. 점별로는:
+    $f(x) = x$의 근방 $[x, x+1)$을 잡았을 때 $f(U) \subset [x, x+1)$일 수 있는
+    표준 열린 근방 $U \ni x$가 있는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>기저원소 $[0, 1)$의 원상은 $[0, 1)$ — 표준위상에서 열려 있지 않다 ($0$이 내점이
+    아님). 그러므로 연속이 아니다.</p>
+    <p>점별 진단: 임의의 $x$에서, 공역 쪽 근방 $V = [x, x+1)$을 제시하면
+    정의역 쪽 어떤 열린 근방 $U = (x - \delta, x + \delta)$를 잡아도
+    $U$에는 $x$보다 작은 점이 있고 그 상은 $[x, x+1)$ 밖이다 — <strong>모든 점에서</strong>
+    점별 연속 조건이 깨진다.
+    (방향을 뒤집은 $\mathrm{id} : \mathbb{R}_\ell \to \mathbb{R}$은 연속 —
+    하한위상이 표준위상보다 순전히 섬세하다는 1장 사실의 함수 버전이다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
