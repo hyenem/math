@@ -406,6 +406,21 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/linear-algebra/ch02.html#def-isomorphism"
   },
 
+  /* ---------- 선형대수 3장: 행렬연산과 연립방정식 ---------- */
+
+  "rank": {
+    "ko": "계수 (rank)",
+    "en": "rank",
+    "short": "$\\operatorname{rank}A = \\dim(\\text{열공간})$ — 일차독립인 열의 최대 개수이며, 행으로 세도 같다. 계산: 소거해서 피벗 개수. 가역 $\\iff \\operatorname{rank} = n$.",
+    "href": "subjects/linear-algebra/ch03.html#def-rank"
+  },
+  "homogeneous-system": {
+    "ko": "동차 연립방정식",
+    "en": "homogeneous system",
+    "short": "$Ax = 0$ — 해집합은 부분공간 $N(L_A)$이고 차원은 $n - \\operatorname{rank}A$ (자유 변수 개수). 비동차 $Ax = b$의 해집합은 특수해 $+ N(L_A)$의 평행이동.",
+    "href": "subjects/linear-algebra/ch03.html#def-homogeneous-system"
+  },
+
   /* ---------- 선형대수 1장: 벡터공간 ---------- */
 
   "vector-space": {
