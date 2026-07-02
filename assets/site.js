@@ -6,19 +6,24 @@
  *   2. toc.js 기반 자동 생성: 홈 과목 카드, 과목별 챕터 목록,
  *      챕터 페이지 사이드바 + 모바일 목차 + 이전/다음 네비
  *   3. terms.js 기반 용어 링크: href 채우기 + 단어장 카드 툴팁
- *   4. KaTeX 수식 렌더링 ($...$, $$...$$)
+ *   4. 정리 자동 링크: 본문의 "정리 N.M" 텍스트를 해당 정리 박스로
+ *      링크하고, 호버 시 정리 원문을 카드로 미리보기 (fetch 기반)
+ *   5. KaTeX 수식 렌더링 ($...$, $$...$$)
  *
  * 페이지 쪽 규약 (body 속성):
  *   data-page    = "home" | "subject" | "chapter" | "plain"
  *   data-subject = 과목 slug (subject/chapter 페이지)
  *   data-chapter = 챕터 파일명, 예: "ch01.html" (chapter 페이지)
+ *
+ * 정리 링크 규약: 정리 박스에 id="thm-N-M" (루딘 번호 N.M).
+ *   "정리 N.M" 텍스트가 자동으로 링크된다 — 같은 페이지면 앵커가
+ *   있을 때만, 다른 챕터면 ready인 챕터만. tools/check_site.py가
+ *   교차 참조의 유효성을 검사한다.
  * ============================================================ */
 
 (function () {
   "use strict";
 
-  // 사이트 루트 절대 경로: 이 스크립트 src에서 "assets/site.js"를 떼어낸다.
-  // 어떤 깊이의 페이지에서 로드해도 루트를 정확히 안다.
   var ROOT = document.currentScript.src.replace(/assets\/site\.js.*$/, "");
 
   function onReady(fn) {
@@ -96,10 +101,6 @@
       ' · <a href="' + ROOT + 'styleguide.html">스타일 가이드</a></footer>'
     );
     body.appendChild(footer);
-
-    /* ---------- 4. 용어 & 수식 ---------- */
-    initTerms();
-    renderMathIn(main || body);
 
     /* ================= 생성 함수들 ================= */
 
@@ -187,25 +188,20 @@
       mainEl.appendChild(nav);
     }
 
-    /* ================= 용어 툴팁 (단어장 카드) ================= */
+    /* ================= 단어장 카드 (용어·정리 공용 툴팁) ================= */
 
-    function initTerms() {
-      var TERMS = window.MATH_TERMS || {};
-      var links = document.querySelectorAll("a.term");
-      if (!links.length) return;
-
-      var card = null;          // 재사용하는 단일 툴팁 요소
+    var cardMgr = (function () {
+      var card = null;
       var hideTimer = null;
-      var currentAnchor = null; // 현재 툴팁이 붙어 있는 앵커
-      var touchMode = window.matchMedia("(hover: none)").matches;
+      var currentAnchor = null;
 
-      function ensureCard() {
+      function ensure() {
         if (card) return card;
         card = el(
           '<div class="term-card hidden" id="term-card" role="tooltip">' +
           '<div class="term-card-title"></div>' +
           '<div class="term-card-body"></div>' +
-          '<a class="term-card-go">정의 보기 →</a>' +
+          '<a class="term-card-go"></a>' +
           "</div>"
         );
         card.addEventListener("mouseenter", cancelHide);
@@ -214,21 +210,27 @@
         return card;
       }
 
-      function show(anchor, term) {
+      /* data: { title, en, body, bodyIsHTML, href, goText } */
+      function show(anchor, data) {
         cancelHide();
-        ensureCard();
+        ensure();
         if (currentAnchor && currentAnchor !== anchor) {
           currentAnchor.removeAttribute("aria-describedby");
         }
         currentAnchor = anchor;
         anchor.setAttribute("aria-describedby", "term-card");
-        card.querySelector(".term-card-title").innerHTML =
-          esc(term.ko) + '<span class="term-card-en">' + esc(term.en) + "</span>";
-        card.querySelector(".term-card-body").textContent = term.short;
-        card.querySelector(".term-card-go").href = ROOT + term.href;
-        renderMathIn(card.querySelector(".term-card-body"));
 
-        // 위치: 앵커 아래. 화면을 벗어나면 좌우 클램프, 아래 공간 부족 시 위로.
+        card.querySelector(".term-card-title").innerHTML =
+          esc(data.title) + (data.en ? '<span class="term-card-en">' + esc(data.en) + "</span>" : "");
+        var bodyEl = card.querySelector(".term-card-body");
+        if (data.bodyIsHTML) bodyEl.innerHTML = data.body;
+        else bodyEl.textContent = data.body;
+        var go = card.querySelector(".term-card-go");
+        go.href = data.href;
+        go.textContent = data.goText || "정의 보기 →";
+        renderMathIn(bodyEl);
+
+        // 위치: 앵커 아래. 좌우 클램프, 아래 공간 부족 시 위로.
         card.classList.remove("hidden");
         card.style.visibility = "hidden";
         var r = anchor.getBoundingClientRect();
@@ -256,6 +258,49 @@
         if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
       }
 
+      document.addEventListener("click", function (e) {
+        if (!card || card.classList.contains("hidden")) return;
+        if (card.contains(e.target)) return;
+        if (currentAnchor && currentAnchor.contains(e.target)) return;
+        hide();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") hide();
+      });
+
+      return {
+        show: show, hide: hide, scheduleHide: scheduleHide, cancelHide: cancelHide,
+        isCurrent: function (a) { return currentAnchor === a; }
+      };
+    })();
+
+    var TOUCH_MODE = window.matchMedia("(hover: none)").matches;
+
+    /* 앵커에 카드 이벤트 배선. getData(cb)는 비동기 지원 */
+    function wireCard(a, getData) {
+      function open() {
+        getData(function (data) { if (data) cardMgr.show(a, data); });
+      }
+      if (TOUCH_MODE) {
+        a.addEventListener("click", function (e) {
+          if (!cardMgr.isCurrent(a)) {
+            e.preventDefault();
+            open();
+          }
+        });
+      } else {
+        a.addEventListener("mouseenter", open);
+        a.addEventListener("mouseleave", cardMgr.scheduleHide);
+        a.addEventListener("focus", open);
+        a.addEventListener("blur", cardMgr.scheduleHide);
+      }
+    }
+
+    /* ================= 용어 링크 ================= */
+
+    function initTerms() {
+      var TERMS = window.MATH_TERMS || {};
+      var links = document.querySelectorAll("a.term");
       links.forEach(function (a) {
         var slug = a.dataset.term;
         var term = TERMS[slug];
@@ -266,34 +311,110 @@
           return;
         }
         a.href = ROOT + term.href;
+        wireCard(a, function (cb) {
+          cb({ title: term.ko, en: term.en, body: term.short, bodyIsHTML: false,
+               href: ROOT + term.href, goText: "정의 보기 →" });
+        });
+      });
+    }
 
-        if (touchMode) {
-          // 터치: 첫 탭은 카드 열기, 카드가 열린 상태의 재탭은 링크 이동
-          a.addEventListener("click", function (e) {
-            if (currentAnchor !== a) {
-              e.preventDefault();
-              show(a, term);
-            }
-          });
-        } else {
-          a.addEventListener("mouseenter", function () { show(a, term); });
-          a.addEventListener("mouseleave", scheduleHide);
-          a.addEventListener("focus", function () { show(a, term); });
-          a.addEventListener("blur", scheduleHide);
+    /* ================= 정리 자동 링크 + 원문 미리보기 ================= */
+
+    function initThmRefs() {
+      if (!subject) return;
+      var mainEl = document.querySelector("main.content");
+      if (!mainEl) return;
+      var currentFile = body.dataset.chapter || "";
+      var readyFiles = {};
+      subject.chapters.forEach(function (c) { if (c.ready) readyFiles[c.file] = true; });
+
+      // 1) 대상 텍스트 노드 수집 (링크·박스 라벨·스크립트 내부는 제외)
+      var nodes = [];
+      (function collect(node) {
+        for (var child = node.firstChild; child; child = child.nextSibling) {
+          if (child.nodeType === 3) {
+            if (child.nodeValue.indexOf("정리") !== -1) nodes.push(child);
+          } else if (child.nodeType === 1) {
+            var tag = child.tagName;
+            if (tag === "SCRIPT" || tag === "STYLE" || tag === "A") continue;
+            if (child.classList.contains("box-label")) continue;
+            collect(child);
+          }
+        }
+      })(mainEl);
+
+      // 2) "정리 N.M" 패턴을 링크로 치환
+      nodes.forEach(function (textNode) {
+        var text = textNode.nodeValue;
+        var re = /정리\s?(\d{1,2})\.(\d{1,2})/g;
+        var frag = null, last = 0, m;
+        while ((m = re.exec(text)) !== null) {
+          var n = m[1], k = m[2];
+          var file = "ch" + (n.length < 2 ? "0" + n : n) + ".html";
+          var anchor = "thm-" + n + "-" + k;
+          var href = null;
+          if (file === currentFile) {
+            if (document.getElementById(anchor)) href = "#" + anchor;
+          } else if (readyFiles[file]) {
+            href = ROOT + "subjects/" + subject.slug + "/" + file + "#" + anchor;
+          }
+          if (!href) continue;
+          if (!frag) frag = document.createDocumentFragment();
+          frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          var a = document.createElement("a");
+          a.className = "thmref";
+          a.href = href;
+          a.textContent = m[0];
+          wireThmPreview(a, file, anchor);
+          frag.appendChild(a);
+          last = m.index + m[0].length;
+        }
+        if (frag) {
+          frag.appendChild(document.createTextNode(text.slice(last)));
+          textNode.parentNode.replaceChild(frag, textNode);
         }
       });
 
-      // 바깥 탭/클릭으로 닫기 (터치 모드)
-      document.addEventListener("click", function (e) {
-        if (!card || card.classList.contains("hidden")) return;
-        if (card.contains(e.target)) return;
-        if (currentAnchor && currentAnchor.contains(e.target)) return;
-        hide();
-      });
-      // ESC로 닫기
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape") hide();
-      });
+      // 3) 미리보기: 대상 페이지에서 정리 박스 원문을 가져와 카드로
+      var docCache = {};
+      function withDoc(file, cb) {
+        if (file === currentFile) { cb(document); return; }
+        var url = ROOT + "subjects/" + subject.slug + "/" + file;
+        if (docCache[url] !== undefined) { cb(docCache[url]); return; }
+        fetch(url).then(function (r) { return r.text(); }).then(function (html) {
+          docCache[url] = new DOMParser().parseFromString(html, "text/html");
+          cb(docCache[url]);
+        }).catch(function () { docCache[url] = null; cb(null); });
+      }
+
+      function wireThmPreview(a, file, anchor) {
+        wireCard(a, function (cb) {
+          withDoc(file, function (doc) {
+            if (!doc) { cb(null); return; }
+            var target = doc.getElementById(anchor);
+            if (!target) { cb(null); return; }
+            var box = target.classList.contains("box") ? target : target.closest(".box");
+            if (!box) { cb(null); return; }
+            var clone = box.cloneNode(true);
+            var label = clone.querySelector(".box-label");
+            var title = label ? label.textContent.trim() : a.textContent;
+            if (label) label.remove();
+            // 미리보기 안의 링크는 동작하지 않도록 텍스트화
+            clone.querySelectorAll("a").forEach(function (inner) {
+              var span = doc.createElement("span");
+              span.textContent = inner.textContent;
+              inner.parentNode.replaceChild(span, inner);
+            });
+            cb({ title: title, en: "", body: clone.innerHTML, bodyIsHTML: true,
+                 href: a.href, goText: "정리로 이동 →" });
+          });
+        });
+      }
     }
+
+    /* ---------- 초기화 (cardMgr 등 모든 정의가 끝난 뒤 실행) ---------- */
+    initThmRefs();
+    initTerms();
+    renderMathIn(main || body);
   });
 })();

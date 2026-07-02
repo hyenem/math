@@ -41,8 +41,7 @@
   3장에서 예고한 실전 투입이다.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 8.1 · 멱급수의 해석적 성질</span>
+<div class="box box-thm" id="thm-8-1"><span class="box-label">정리 8.1 · 멱급수의 해석적 성질</span>
   <p><strong>이 정리가 하는 일:</strong> 수렴반지름 안에서 멱급수는 “다항식처럼” 다뤄도
   된다는 종합 면허.</p>
   <p>$\sum c_n x^n$이 $|x| \lt R$에서 수렴하면:</p>
@@ -64,8 +63,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 8.2 · 아벨의 정리 <span class="label-en">Abel's theorem</span></span>
+<div class="box box-thm" id="thm-8-2"><span class="box-label">정리 8.2 · 아벨의 정리 <span class="label-en">Abel's theorem</span></span>
   <p><strong>이 정리가 하는 일:</strong> 끝점에서 수렴하면, 함숫값이 끝점까지 연속으로
   이어진다.</p>
   <p>$\sum c_n$이 수렴하면 $\displaystyle\lim_{x \to 1^-} \sum_{n=0}^{\infty} c_n x^n = \sum_{n=0}^{\infty} c_n$.</p>
@@ -90,7 +88,7 @@
   <span class="box-label">쉽게 말하면 — “되찾기”의 목록</span>
   <p>정의는 급수 한 줄이지만, 알던 성질이 전부 <em>정리로</em> 복구됩니다:
   $E(0) = 1$, $E(-z) = 1/E(z)$ (지수법칙에서), $E(x) \gt 0$ (실수에서),
-  항별 미분으로 $E'(x) = E(x)$, 순증가, $E(1) = e$ (3장의 그 $e$와 일치, 정리 3.31),
+  항별 미분으로 $E'(x) = E(x)$, 순증가, $E(1) = e$ (3장의 그 $e$와 일치 — 루딘 3.31),
   유리수 $p/q$에서 $E(p/q) = e^{p/q}$ — 그리고 연속성으로 <strong>무리수 지수까지 확장</strong>
   (4장 연습에서 예고했던 “조밀집합 위의 값이 전체를 결정한다”가 실제로 쓰이는 곳).
   $x$가 무리수일 때 $e^x$의 정의가 비로소 완성됩니다.</p>
@@ -130,7 +128,7 @@
 </div>
 
 <div class="box box-example">
-  <span class="box-label">예제 · $e$는 무리수다 (정리 3.32 회수)</span>
+  <span class="box-label">예제 · $e$는 무리수다 (루딘 3.32 회수)</span>
   <p>$e = \sum \frac{1}{n!}$이 유리수 $\frac{p}{q}$라 가정하자. 꼬리 추정</p>
   $$0 \lt e - \sum_{n=0}^{q} \frac{1}{n!} = \sum_{n \gt q} \frac{1}{n!} \lt \frac{1}{q!} \cdot \frac{1}{q}$$
   <p>(기하급수 비교)에서 양변에 $q!$을 곱하면 $0 \lt q!\,e - (\text{정수}) \lt \frac{1}{q} \le 1$ —
@@ -160,8 +158,7 @@
   $\frac{1}{2\pi}\int_{-\pi}^{\pi} e^{inx} e^{-imx} dx = \delta_{nm}$ ($n = m$이면 $1$, 아니면 $0$).</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 8.11–8.16 · 세 개의 큰 사실</span>
+<div class="box box-thm" id="thm-8-11"><span class="box-label">정리 8.11–8.16 · 세 개의 큰 사실</span>
   <p><strong>① 최적 근사 (8.11):</strong> 차수 $N$의 삼각다항식 중 $f$를
   평균제곱 오차로 가장 잘 근사하는 것은 정확히 푸리에 부분합 $s_N$이다.</p>
   <p><strong>② 베셀 부등식과 파세발 정리 (8.16):</strong></p>

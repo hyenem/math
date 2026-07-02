@@ -49,8 +49,7 @@
   이 “일차 근사” 관점이 테일러 정리(고차 근사)와 다변수 미분(9장)으로 곧장 일반화됩니다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 5.2</span>
+<div class="box box-thm" id="thm-5-2"><span class="box-label">정리 5.2</span>
   <p><strong>이 정리가 하는 일:</strong> 미분가능과 연속의 위계를 정한다.</p>
   <p>$f$가 $x$에서 미분가능하면, $f$는 $x$에서 <a class="term" data-term="continuous-function">연속</a>이다.</p>
 </div>
@@ -58,7 +57,7 @@
 <details class="proof">
   <summary>증명 <span class="proof-strategy">— 차이를 “기울기 × 간격”으로 쓰면 간격이 죽을 때 차이도 죽는다.</span></summary>
   $$f(t) - f(x) = \frac{f(t) - f(x)}{t - x} \cdot (t - x) \xrightarrow{\ t \to x\ } f'(x) \cdot 0 = 0$$
-  <p>(극한의 곱 법칙, 정리 4.4.) 그러므로 $\lim_{t \to x} f(t) = f(x)$.</p>
+  <p>(극한의 곱 법칙 — 4장 극한 연산.) 그러므로 $\lim_{t \to x} f(t) = f(x)$.</p>
   <p class="qed"></p>
 </details>
 
@@ -89,8 +88,7 @@
 
 <h2 id="sec-mvt">2. 평균값 정리 — 이 장의 심장</h2>
 
-<div class="box box-thm">
-  <span class="box-label">정리 5.8 · 내부 극값 정리 <span class="label-en">interior extremum / Fermat</span></span>
+<div class="box box-thm" id="thm-5-8"><span class="box-label">정리 5.8 · 내부 극값 정리 <span class="label-en">interior extremum / Fermat</span></span>
   <p><strong>이 정리가 하는 일:</strong> “꼭대기에서는 기울기가 $0$” — 최적화의 출발점이자
   롤 정리의 재료.</p>
   <p>$f$가 $(a, b)$의 점 $x$에서 국소 최댓값(또는 최솟값)을 갖고 $f'(x)$가 존재하면,
@@ -106,8 +104,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 5.9–5.10 · (일반화) 평균값 정리 <span class="label-en">mean value theorem</span></span>
+<div class="box box-thm" id="thm-5-9"><span class="box-label">정리 5.9–5.10 · (일반화) 평균값 정리 <span class="label-en">mean value theorem</span></span>
   <p><strong>이 정리가 하는 일:</strong> “구간 전체의 평균 변화율 = 어딘가의 순간 변화율”.
   도함수의 국소 정보(한 점의 기울기)와 대역 정보(구간의 증감)를 잇는 유일한 다리다.</p>
   <p id="def-mean-value-theorem"><strong>(5.10, MVT)</strong> $f$가 $[a, b]$에서 연속, $(a, b)$에서 미분가능하면</p>
@@ -135,8 +132,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 5.11 · 단조성 판정</span>
+<div class="box box-thm" id="thm-5-11"><span class="box-label">정리 5.11 · 단조성 판정</span>
   <p><strong>이 정리가 하는 일:</strong> MVT의 첫 열매 — 도함수 부호로 증감을 판정한다.</p>
   <p>$f$가 $(a, b)$에서 미분가능할 때:
   $f' \ge 0$이면 단조증가, $f' \equiv 0$이면 상수, $f' \le 0$이면 단조감소.</p>
@@ -146,8 +142,7 @@
   담당하는 핵심 사실</strong>이다.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 5.12 · 다르부 정리 <span class="label-en">Darboux</span></span>
+<div class="box box-thm" id="thm-5-12"><span class="box-label">정리 5.12 · 다르부 정리 <span class="label-en">Darboux</span></span>
   <p><strong>이 정리가 하는 일:</strong> 도함수는 연속이 아니어도(예제 5.6!) 중간값 성질만은
   반드시 갖는다 — “도함수가 될 수 있는 함수”에 대한 강한 제약.</p>
   <p>$f$가 $[a, b]$에서 미분가능하고 $f'(a) \lt \lambda \lt f'(b)$이면,
@@ -170,8 +165,7 @@
 
 <h2 id="sec-lhopital">3. 로피탈 규칙</h2>
 
-<div class="box box-thm">
-  <span class="box-label">정리 5.13 · 로피탈 규칙 <span class="label-en">L'Hospital's rule</span></span>
+<div class="box box-thm" id="thm-5-13"><span class="box-label">정리 5.13 · 로피탈 규칙 <span class="label-en">L'Hospital's rule</span></span>
   <p><strong>이 정리가 하는 일:</strong> $\frac{0}{0}$, $\frac{\cdot}{\infty}$ 꼴 극한을
   도함수의 비로 넘긴다.</p>
   <p>$f, g$가 $(a, b)$에서 미분가능하고 $g'(x) \neq 0$이며
@@ -204,8 +198,7 @@
   ($n = 1$로 두면 정확히 MVT가 됩니다).</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 5.15 · <span id="def-taylor-theorem">테일러 정리</span> <span class="label-en">Taylor's theorem</span></span>
+<div class="box box-thm" id="thm-5-15"><span class="box-label">정리 5.15 · <span id="def-taylor-theorem">테일러 정리</span> <span class="label-en">Taylor's theorem</span></span>
   <p>$f$가 $[a, b]$에서 $f^{(n-1)}$까지 연속이고 $(a, b)$에서 $f^{(n)}$이 존재한다고 하자.
   서로 다른 $\alpha, \beta \in [a, b]$에 대해 $n-1$차 테일러 다항식을</p>
   $$P(t) = \sum_{k=0}^{n-1} \frac{f^{(k)}(\alpha)}{k!} (t - \alpha)^k$$

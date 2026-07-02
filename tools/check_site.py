@@ -14,7 +14,10 @@ node가 PATH에 있어야 한다.
   [오류] terms.js의 href가 존재하지 않는 파일/앵커를 가리킴
   [오류] terms.js의 href 앵커가 #def-<slug> 규약을 어김
   [오류] toc.js에서 ready:true인 챕터의 HTML 파일이 없음
+  [오류] "정리 N.M" 교차 참조 대상 앵커(thm-N-M)가 대상 챕터에 없음
+         (site.js가 자동 링크하므로 깨진 링크가 됨)
   [경고] 본문 id="def-*" 앵커에 대응하는 terms.js 항목이 없음
+  [경고] 같은 페이지의 "정리 N.M" 참조에 앵커가 없음 (링크 생략됨)
   [경고] 파일 내 '$' 개수가 홀수 (수식 구분자 짝 안 맞음 의심)
 
 오류가 하나라도 있으면 종료 코드 1.
@@ -191,7 +194,31 @@ def main():
             if i.startswith("def-") and i[4:] not in terms:
                 warnings.append(f"{rel}: 정의 앵커 id=\"{i}\"가 terms.js에 없음 (용어 등록 권장)")
 
-    # 6. $ 짝 검사 (경고)
+    # 6. "정리 N.M" 참조 유효성 (site.js 자동 링크 대상)
+    thm_re = re.compile(r"정리\s?(\d{1,2})\.(\d{1,2})")
+    for rel, p in pages.items():
+        mm = re.match(r"subjects/([a-z0-9-]+)/ch\d+\.html$", rel.replace(os.sep, "/"))
+        if not mm:
+            continue
+        subj = mm.group(1)
+        with open(os.path.join(ROOT, rel), encoding="utf-8") as fh:
+            src = fh.read()
+        seen_refs = set()
+        for m in thm_re.finditer(src):
+            n, k = m.group(1), m.group(2)
+            if (n, k) in seen_refs:
+                continue
+            seen_refs.add((n, k))
+            target = os.path.join("subjects", subj, f"ch{int(n):02d}.html")
+            anchor = f"thm-{n}-{k}"
+            if target == rel:
+                if anchor not in p.ids:
+                    warnings.append(f"{rel}: 같은 페이지 참조 '정리 {n}.{k}'의 앵커 없음 (링크 생략)")
+            elif target in pages:
+                if anchor not in pages[target].ids:
+                    errors.append(f"{rel}: '정리 {n}.{k}' 교차 참조 앵커가 {target}에 없음")
+
+    # 7. $ 짝 검사 (경고)
     for rel, p in pages.items():
         if p.dollar_count % 2 == 1:
             warnings.append(f"{rel}: '$' 개수가 홀수({p.dollar_count}) — 수식 구분자 확인")

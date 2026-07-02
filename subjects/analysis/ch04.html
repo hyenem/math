@@ -52,8 +52,7 @@
   ② $p$는 집적점이어야 합니다 — 접근할 점들이 없으면 게임 자체가 성립하지 않으니까.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.2 · 수열 판정법</span>
+<div class="box box-thm" id="thm-4-2"><span class="box-label">정리 4.2 · 수열 판정법</span>
   <p><strong>이 정리가 하는 일:</strong> 함수의 극한을 3장(수열)으로 환원한다 —
   극한이 <em>없음</em>을 보일 때 특히 강력하다.</p>
   <p>$\lim_{x \to p} f(x) = q$ $\iff$ $p$로 수렴하는 ($p_n \neq p$인) $E$의 <strong>모든</strong>
@@ -76,8 +75,7 @@
   (극한이 존재하고, 함숫값과 일치). $p$가 고립점이면 자동으로 연속이다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.8 · 위상적 특징 <span class="label-en">topological characterization</span></span>
+<div class="box box-thm" id="thm-4-8"><span class="box-label">정리 4.8 · 위상적 특징 <span class="label-en">topological characterization</span></span>
   <p><strong>이 정리가 하는 일:</strong> 연속을 $\varepsilon$–$\delta$ 없이, 열린집합만으로
   다시 정의한다 — 이 장 전체의 엔진이자, 위상수학으로 가는 문.</p>
   <p>$f : X \to Y$가 연속 $\iff$ $Y$의 모든 <a class="term" data-term="open-set">열린집합</a>
@@ -113,8 +111,7 @@
 
 <h2 id="sec-compactness">3. 연속과 컴팩트 — 최대최소와 균등연속</h2>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.14</span>
+<div class="box box-thm" id="thm-4-14"><span class="box-label">정리 4.14</span>
   <p><strong>이 정리가 하는 일:</strong> 컴팩트성은 연속함수를 통과해도 살아남는다.</p>
   <p>$f : X \to Y$가 연속이고 $X$가 <a class="term" data-term="compact">컴팩트</a>이면,
   상 $f(X)$는 컴팩트다.</p>
@@ -129,8 +126,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.16 · 최대최소 정리 <span class="label-en">extreme value theorem</span></span>
+<div class="box box-thm" id="thm-4-16"><span class="box-label">정리 4.16 · 최대최소 정리 <span class="label-en">extreme value theorem</span></span>
   <p><strong>이 정리가 하는 일:</strong> 미적분에서 “닫힌구간에서 연속이면 최댓값을 갖는다”로
   외웠던 그 정리 — 진짜 이유는 컴팩트성이다.</p>
   <p>$f : X \to \mathbb{R}$가 연속이고 $X$가 컴팩트이면, $f$는 최댓값과 최솟값을
@@ -174,8 +170,7 @@
   균등연속 $\Rightarrow$ 연속은 자명하고, 역은 거짓 ($1/x$).</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.19 · 하이네 정리 <span class="label-en">Heine / uniform continuity theorem</span></span>
+<div class="box box-thm" id="thm-4-19"><span class="box-label">정리 4.19 · 하이네 정리 <span class="label-en">Heine / uniform continuity theorem</span></span>
   <p><strong>이 정리가 하는 일:</strong> 컴팩트 위에서는 연속과 균등연속의 구분이 사라진다 —
   임용 서술형 단골 중의 단골.</p>
   <p>$f : X \to Y$가 연속이고 $X$가 컴팩트이면, $f$는 균등연속이다.</p>
@@ -209,8 +204,7 @@
 
 <h2 id="sec-ivt">4. 연속과 연결 — 중간값 정리</h2>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.22</span>
+<div class="box box-thm" id="thm-4-22"><span class="box-label">정리 4.22</span>
   <p><strong>이 정리가 하는 일:</strong> 연결성도 연속함수를 통과해 살아남는다.</p>
   <p>$f : X \to Y$가 연속이고 $E \subset X$가 <a class="term" data-term="connected-set">연결</a>이면,
   $f(E)$도 연결이다.</p>
@@ -229,8 +223,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.23 · 중간값 정리 <span class="label-en">intermediate value theorem</span></span>
+<div class="box box-thm" id="thm-4-23"><span class="box-label">정리 4.23 · 중간값 정리 <span class="label-en">intermediate value theorem</span></span>
   <p><strong>이 정리가 하는 일:</strong> “붓을 떼지 않으면 중간 높이를 다 지난다” —
   연결성(2.47)의 직접 열매.</p>
   <p>$f : [a, b] \to \mathbb{R}$가 연속이고 $f(a) \lt c \lt f(b)$ (또는 반대 부등호)이면,
@@ -262,8 +255,7 @@
   <a class="term" data-term="density-of-q">조밀성</a> 때문에 어느 점에서도 한쪽 극한이 없다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 4.29–4.30 · 단조함수의 불연속</span>
+<div class="box box-thm" id="thm-4-29"><span class="box-label">정리 4.29–4.30 · 단조함수의 불연속</span>
   <p><strong>이 정리가 하는 일:</strong> 단조함수는 불연속조차 얌전하다 —
   종류도 제1종뿐, 개수도 많아야 가산.</p>
   <p>$f$가 $(a, b)$에서 단조이면: ① 모든 점에서 $f(x+), f(x-)$가 존재한다

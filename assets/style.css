@@ -334,10 +334,20 @@ a.term-missing {
   color: var(--red);
 }
 
+/* 정리 참조 링크 (site.js가 "정리 N.M" 텍스트에 자동 부여) */
+a.thmref {
+  color: var(--pen);
+  text-decoration: underline;
+  text-decoration-color: rgba(47, 93, 168, 0.35);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+a.thmref:hover { text-decoration-color: var(--pen); }
+
 .term-card {
   position: absolute;
   z-index: 60;
-  width: min(21rem, calc(100vw - 2rem));
+  width: min(24rem, calc(100vw - 2rem));
   font-family: var(--gothic);
   font-size: 0.86rem;
   line-height: 1.7;
@@ -374,7 +384,14 @@ a.term-missing {
   color: var(--pencil);
   margin-left: 0.4em;
 }
-.term-card .term-card-body { color: var(--ink-soft); }
+.term-card .term-card-body {
+  color: var(--ink-soft);
+  max-height: 16rem;
+  overflow-y: auto;
+}
+.term-card .term-card-body > :first-child { margin-top: 0; }
+.term-card .term-card-body > :last-child { margin-bottom: 0; }
+.term-card .term-card-body .katex-display { overflow-x: auto; }
 .term-card .term-card-go {
   display: inline-block;
   margin-top: 0.5rem;

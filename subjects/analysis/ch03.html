@@ -60,8 +60,7 @@
   발산하는 수열이 됩니다. 2장의 교훈(성질은 어디서 보느냐에 달렸다)이 그대로 이어져요.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.2 · 기본 성질</span>
+<div class="box box-thm" id="thm-3-2"><span class="box-label">정리 3.2 · 기본 성질</span>
   <p><strong>이 정리가 하는 일:</strong> 수렴의 기초 문법 — 극한은 하나뿐이고,
   수렴하면 유계이며, 집적점은 수열로 붙잡을 수 있다.</p>
   <p>(a) $p_n \to p$ $\iff$ $p$의 모든 근방이 $p_n$을 유한 개만 빼고 전부 담는다.<br>
@@ -84,8 +83,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.3 · 극한의 연산</span>
+<div class="box box-thm" id="thm-3-3"><span class="box-label">정리 3.3 · 극한의 연산</span>
   <p><strong>이 정리가 하는 일:</strong> 극한 계산을 “부품 조립”으로 만들어 준다.</p>
   <p>$s_n \to s$, $t_n \to t$ (실수 또는 복소수 수열)이면:</p>
   <p>(a) $s_n + t_n \to s + t$ &nbsp; (b) $c\, s_n \to c\, s$ &nbsp;
@@ -114,8 +112,7 @@
   $(-1)^n$처럼.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.6 · 볼차노-바이어슈트라스 <span class="label-en">Bolzano–Weierstrass</span></span>
+<div class="box box-thm" id="thm-3-6"><span class="box-label">정리 3.6 · 볼차노-바이어슈트라스 <span class="label-en">Bolzano–Weierstrass</span></span>
   <p><strong>이 정리가 하는 일:</strong> 2장의 컴팩트가 수열의 언어로 열매를 맺는다 —
   유계이기만 하면 수렴하는 조각을 건질 수 있다.</p>
   <p>(a) <a class="term" data-term="compact">컴팩트</a> 거리공간의 수열은 수렴하는 부분수열을
@@ -159,8 +156,7 @@
   <p>모든 코시 수열이 수렴하는 거리공간을 <strong>완비</strong>(complete)라 한다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.11</span>
+<div class="box box-thm" id="thm-3-11"><span class="box-label">정리 3.11</span>
   <p><strong>이 정리가 하는 일:</strong> “수렴 ⇒ 코시”는 공짜이고, 역은 공간을 탄다 —
   컴팩트 공간과 $\mathbb{R}^k$에서는 성립한다.</p>
   <p>(a) 수렴하는 수열은 코시 수열이다.<br>
@@ -192,8 +188,7 @@
   ($\mathbb{R}$에서 두 성질은 서로를 유도한다).</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.14 · 단조수렴 정리 <span class="label-en">monotone convergence theorem</span></span>
+<div class="box box-thm" id="thm-3-14"><span class="box-label">정리 3.14 · 단조수렴 정리 <span class="label-en">monotone convergence theorem</span></span>
   <p><strong>이 정리가 하는 일:</strong> 단조수열에게 수렴 판정을 공짜로 준다 —
   “유계인가?”만 물으면 된다.</p>
   <p>단조수열(증가 또는 감소) $\{s_n\} \subset \mathbb{R}$이 수렴 $\iff$ 유계.</p>
@@ -226,7 +221,7 @@
   <p>실수열 $\{s_n\}$에 대해, $E$를 $\{s_n\}$의 부분수열 극한 전체의 집합이라 하자
   (확장실수 $\pm\infty$ 허용). <strong>상극한</strong>과 <strong>하극한</strong>은</p>
   $$\limsup_{n\to\infty} s_n = \sup E, \qquad \liminf_{n\to\infty} s_n = \inf E$$
-  <p>동치인 실용적 특징 (정리 3.17): $s^* = \limsup s_n$은 다음 둘을 만족하는
+  <p><span id="thm-3-17"></span>동치인 실용적 특징 (정리 3.17): $s^* = \limsup s_n$은 다음 둘을 만족하는
   <strong>유일한</strong> 값이다.</p>
   <p>(i) $s^*$ 자신이 어떤 부분수열의 극한이다 ($s^* \in E$ — 최고 기록은 실제로 달성된다)<br>
   (ii) $x \gt s^*$이면, $s_n \ge x$인 $n$은 유한 개뿐이다 ($s^*$ 위쪽은 결국 텅 빈다)</p>
@@ -265,8 +260,7 @@
   수열 이론의 번역이다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.22–3.23 · 코시 판정과 필요조건</span>
+<div class="box box-thm" id="thm-3-22"><span class="box-label">정리 3.22–3.23 · 코시 판정과 필요조건</span>
   <p><strong>이 정리가 하는 일:</strong> 코시 조건을 급수의 언어로 번역하고,
   가장 값싼 필요조건을 얻는다.</p>
   <p>$\sum a_n$ 수렴 $\iff$ 임의의 $\varepsilon \gt 0$에 대해 $N$이 있어
@@ -284,8 +278,7 @@
   “$a_n \to 0$”은 입장권일 뿐, 수렴을 보증하지 않습니다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.25 · 비교판정법 <span class="label-en">comparison test</span></span>
+<div class="box box-thm" id="thm-3-25"><span class="box-label">정리 3.25 · 비교판정법 <span class="label-en">comparison test</span></span>
   <p><strong>이 정리가 하는 일:</strong> 모든 판정법의 어머니 — 모르는 급수를 아는 급수에
   포갠다.</p>
   <p>(a) 어느 시점 이후 $|a_n| \le c_n$이고 $\sum c_n$이 수렴하면, $\sum a_n$도 수렴한다.<br>
@@ -294,21 +287,19 @@
   그 재고를 다음 두 정리가 채워 준다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.26 · 기하급수 <span class="label-en">geometric series</span></span>
+<div class="box box-thm" id="thm-3-26"><span class="box-label">정리 3.26 · 기하급수 <span class="label-en">geometric series</span></span>
   <p>$0 \le x \lt 1$이면 $\displaystyle\sum_{n=0}^{\infty} x^n = \frac{1}{1 - x}$.
   $x \ge 1$이면 발산.
   (부분합 $s_n = \frac{1 - x^{n+1}}{1 - x}$의 극한 — 유일하게 합을 “손으로” 아는 급수라서
   모든 비교의 원점이 된다.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.27–3.28 · 응집판정법과 $p$-급수 <span class="label-en">condensation test</span></span>
+<div class="box box-thm" id="thm-3-27"><span class="box-label">정리 3.27–3.28 · 응집판정법과 $p$-급수 <span class="label-en">condensation test</span></span>
   <p><strong>이 정리가 하는 일:</strong> 감소하는 양항 급수의 수렴을 “듬성듬성 뽑은
   지수 부분합”으로 판정한다 — 그리고 $p$-급수를 단칼에 정리한다.</p>
   <p>(3.27) $a_1 \ge a_2 \ge \cdots \ge 0$이면:
   $\sum a_n$ 수렴 $\iff$ $\sum_{k=0}^{\infty} 2^k a_{2^k}$ 수렴.</p>
-  <p>(3.28) $\displaystyle\sum \frac{1}{n^p}$는 $p \gt 1$이면 수렴, $p \le 1$이면 발산.</p>
+  <p><span id="thm-3-28"></span>(3.28) $\displaystyle\sum \frac{1}{n^p}$는 $p \gt 1$이면 수렴, $p \le 1$이면 발산.</p>
 </div>
 
 <details class="proof">
@@ -321,8 +312,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.33 · 근판정법 <span class="label-en">root test</span></span>
+<div class="box box-thm" id="thm-3-33"><span class="box-label">정리 3.33 · 근판정법 <span class="label-en">root test</span></span>
   <p><strong>이 정리가 하는 일:</strong> 급수를 기하급수와 “점근적으로” 비교한다.
   상극한이 실전 투입되는 첫 무대.</p>
   <p>$\alpha = \limsup_{n\to\infty} \sqrt[n]{|a_n|}$이라 하자.</p>
@@ -340,8 +330,7 @@
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.34 · 비판정법 <span class="label-en">ratio test</span></span>
+<div class="box box-thm" id="thm-3-34"><span class="box-label">정리 3.34 · 비판정법 <span class="label-en">ratio test</span></span>
   <p>$\displaystyle\limsup_{n\to\infty} \left| \frac{a_{n+1}}{a_n} \right| \lt 1$이면 수렴,
   어느 시점 이후 $\left| \frac{a_{n+1}}{a_n} \right| \ge 1$이면 발산.</p>
   <p><strong>근판정법과의 관계 (정리 3.37):</strong> 비판정법이 판정하면 근판정법도 반드시
@@ -351,8 +340,7 @@
   근은 $\sqrt[n]{|a_n|} \to \frac{1}{2}$라 근판정법으로 수렴.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.43 · 교대급수 판정법 <span class="label-en">alternating series test, Leibniz</span></span>
+<div class="box box-thm" id="thm-3-43"><span class="box-label">정리 3.43 · 교대급수 판정법 <span class="label-en">alternating series test, Leibniz</span></span>
   <p><strong>이 정리가 하는 일:</strong> 부호가 번갈아 나오는 급수의 전용 판정법.</p>
   <p>$c_1 \ge c_2 \ge c_3 \ge \cdots \ge 0$이고 $c_n \to 0$이면,
   $\displaystyle\sum_{n=1}^{\infty} (-1)^{n+1} c_n$은 수렴한다.</p>
@@ -379,16 +367,14 @@
   <strong>원하는 어떤 값으로든 수렴하게 만들 수 있습니다.</strong> 이것이 리만의 정리입니다.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.54 · 리만 재배열 정리 <span class="label-en">Riemann rearrangement theorem</span></span>
+<div class="box box-thm" id="thm-3-54"><span class="box-label">정리 3.54 · 리만 재배열 정리 <span class="label-en">Riemann rearrangement theorem</span></span>
   <p>$\sum a_n$이 조건수렴하는 실수 급수라 하자. 임의의
   $-\infty \le \alpha \le \beta \le +\infty$에 대해, 재배열 $\sum a_{n}'$이 존재하여
   부분합의 하극한이 $\alpha$, 상극한이 $\beta$가 되게 할 수 있다.
   (특히 $\alpha = \beta$로 잡으면: <strong>아무 값으로나 수렴시킬 수 있다.</strong>)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 3.55</span>
+<div class="box box-thm" id="thm-3-55"><span class="box-label">정리 3.55</span>
   <p><strong>이 정리가 하는 일:</strong> 절대수렴이 “순서 걱정 없이 더해도 되는 면허”임을
   보증한다.</p>
   <p>$\sum a_n$이 절대수렴하면, 모든 재배열이 같은 값으로 수렴한다.</p>

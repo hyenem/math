@@ -31,8 +31,11 @@ tools/check_site.py        링크/앵커/용어 무결성 검사
 1. `subjects/<과목>/chNN.html` 작성 — `styleguide.html`의 블록 견본을 따른다.
    블록 순서 규칙: 직관(형광펜) → 정의(파란펜) → 예시 → 흔한 오해(빨간펜).
 2. 새 용어의 정의 박스에 `id="def-<slug>"`를 달고 `data/terms.js`에 등록.
-3. `data/toc.js`에서 해당 챕터의 `ready: true`로 변경.
-4. 검사 실행: `python3 tools/check_site.py`
+3. 정리 박스에 `id="thm-N-M"` (교재 번호 N.M)을 단다. 본문의 "정리 N.M" 텍스트는
+   site.js가 자동으로 링크하고, 호버하면 정리 원문 카드를 띄운다.
+   (같은 페이지는 앵커가 있을 때만, 다른 챕터는 ready인 챕터만 링크된다.)
+4. `data/toc.js`에서 해당 챕터의 `ready: true`로 변경.
+5. 검사 실행: `python3 tools/check_site.py` — 링크·앵커·용어·정리 참조를 전부 검사한다.
 
 ## 콘텐츠 원칙
 

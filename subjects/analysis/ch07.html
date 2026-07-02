@@ -91,8 +91,7 @@ $$\lim_{x \to x_0} \lim_{n \to \infty} f_n(x) \overset{?}{=} \lim_{n \to \infty}
   적분 교환도 깨진다.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 7.10 · 바이어슈트라스 M-판정법 <span class="label-en">Weierstrass M-test</span></span>
+<div class="box box-thm" id="thm-7-10"><span class="box-label">정리 7.10 · 바이어슈트라스 M-판정법 <span class="label-en">Weierstrass M-test</span></span>
   <p><strong>이 정리가 하는 일:</strong> 함수<em>급수</em> $\sum f_n$의 균등수렴을
   숫자 급수 하나로 판정한다 — 이 장에서 가장 많이 쓰는 도구.</p>
   <p id="def-m-test">$|f_n(x)| \le M_n$ (모든 $x \in E$)이고 $\sum M_n$이 수렴하면,
@@ -112,8 +111,7 @@ $$\lim_{x \to x_0} \lim_{n \to \infty} f_n(x) \overset{?}{=} \lim_{n \to \infty}
 
 <h2 id="sec-exchange">3. 무엇이 유전되는가 — 연속·적분·미분</h2>
 
-<div class="box box-thm">
-  <span class="box-label">정리 7.12 · 균등수렴과 연속</span>
+<div class="box box-thm" id="thm-7-12"><span class="box-label">정리 7.12 · 균등수렴과 연속</span>
   <p><strong>이 정리가 하는 일:</strong> 균등수렴은 연속성을 극한까지 운반한다 —
   극한 순서 교환의 첫 승리.</p>
   <p>$f_n \to f$ 균등수렴이고 각 $f_n$이 $E$에서 연속이면, $f$도 $E$에서 연속이다.</p>
@@ -143,8 +141,7 @@ $$\lim_{x \to x_0} \lim_{n \to \infty} f_n(x) \overset{?}{=} \lim_{n \to \infty}
   조건 점검 연습으로 좋다.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 7.16 · 균등수렴과 적분</span>
+<div class="box box-thm" id="thm-7-16"><span class="box-label">정리 7.16 · 균등수렴과 적분</span>
   <p><strong>이 정리가 하는 일:</strong> 균등수렴이면 $\lim$과 $\int$를 바꿔도 된다.</p>
   <p>$f_n \in \mathscr{R}[a,b]$이고 $f_n \to f$ 균등수렴이면, $f \in \mathscr{R}$이고</p>
   $$\int_a^b f\, dx = \lim_{n \to \infty} \int_a^b f_n\, dx$$
@@ -164,8 +161,7 @@ $$\lim_{x \to x_0} \lim_{n \to \infty} f_n(x) \overset{?}{=} \lim_{n \to \infty}
   <p class="qed"></p>
 </details>
 
-<div class="box box-thm">
-  <span class="box-label">정리 7.17 · 균등수렴과 미분</span>
+<div class="box box-thm" id="thm-7-17"><span class="box-label">정리 7.17 · 균등수렴과 미분</span>
   <p><strong>이 정리가 하는 일:</strong> 미분 교환의 올바른 조건을 준다 — 조건이
   <em>도함수 쪽</em>에 붙는 것에 주의.</p>
   <p>$f_n$이 $[a, b]$에서 미분가능하고, ① 어떤 한 점 $x_0$에서 $\{f_n(x_0)\}$이 수렴하며
@@ -184,8 +180,7 @@ $$\lim_{x \to x_0} \lim_{n \to \infty} f_n(x) \overset{?}{=} \lim_{n \to \infty}
   거대해진다 — 균등하게 가까운 두 함수의 기울기는 얼마든지 다를 수 있다.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 7.18 · 바이어슈트라스의 괴물</span>
+<div class="box box-thm" id="thm-7-18"><span class="box-label">정리 7.18 · 바이어슈트라스의 괴물</span>
   <p><strong>이 정리가 하는 일:</strong> 균등수렴 이론의 극적인 응용 —
   “모든 점에서 연속, 모든 점에서 미분 불가능”인 함수를 실제로 짓는다.</p>
   $$f(x) = \sum_{n=0}^{\infty} \left( \frac{3}{4} \right)^n \varphi(4^n x)$$
@@ -206,8 +201,7 @@ $$\lim_{x \to x_0} \lim_{n \to \infty} f_n(x) \overset{?}{=} \lim_{n \to \infty}
   <p>— 균등연속의 “함수족 버전”: $\delta$ 하나가 모든 지점 <em>그리고 모든 함수</em>를 감당.</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 7.25 · 아르젤라-아스콜리 <span class="label-en">Arzelà–Ascoli</span></span>
+<div class="box box-thm" id="thm-7-25"><span class="box-label">정리 7.25 · 아르젤라-아스콜리 <span class="label-en">Arzelà–Ascoli</span></span>
   <p><strong>이 정리가 하는 일:</strong> “함수 공간의 볼차노-바이어슈트라스” —
   함수열에서 균등수렴 부분수열을 뽑을 조건.</p>
   <p>컴팩트 $K$ 위의 연속함수열 $\{f_n\}$이 <strong>점별 유계</strong>이고
@@ -217,8 +211,7 @@ $$\lim_{x \to x_0} \lim_{n \to \infty} f_n(x) \overset{?}{=} \lim_{n \to \infty}
   미분방정식의 해 존재 정리 등 현대 해석학 곳곳의 엔진.)</p>
 </div>
 
-<div class="box box-thm">
-  <span class="box-label">정리 7.26 · 스톤-바이어슈트라스 (다항식 근사) <span class="label-en">Weierstrass approximation</span></span>
+<div class="box box-thm" id="thm-7-26"><span class="box-label">정리 7.26 · 스톤-바이어슈트라스 (다항식 근사) <span class="label-en">Weierstrass approximation</span></span>
   <p><strong>이 정리가 하는 일:</strong> 연속함수는 다항식으로 균등 근사된다 —
   “다항식만 다룰 줄 알면 연속함수는 다 다룰 수 있다”는 면허.</p>
   <p>$f$가 $[a, b]$에서 연속이면, 다항식열 $P_n$이 존재하여 $P_n \to f$ <strong>균등</strong>수렴.</p>
