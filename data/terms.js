@@ -470,6 +470,25 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/topology/ch04.html#def-compactness-variants"
   },
 
+  "countability-axioms": {
+    "ko": "가산공리",
+    "en": "countability axioms",
+    "short": "제1가산(각 점에 가산 국소기저), 제2가산(위상 전체에 가산 기저) — 제2가산 $\\Rightarrow$ 가분·린델뢰프. 거리공간에선 가분 $=$ 제2가산이라, 가분인데 제2가산 아닌 $\\mathbb{R}_\\ell$은 거리화 불가.",
+    "href": "subjects/topology/ch05.html#def-countability-axioms"
+  },
+  "separation-axioms": {
+    "ko": "분리공리 (T 사다리)",
+    "en": "separation axioms",
+    "short": "$T_1$(점 닫힘) ⊂ $T_2$(하우스도르프) ⊂ $T_3$(정칙: 점 vs 닫힌집합) ⊂ $T_4$(정규: 닫힌집합 vs 닫힌집합). 거리공간·컴팩트 하우스도르프는 $T_4$. 정규성만 부분공간·곱 유전이 안 된다.",
+    "href": "subjects/topology/ch05.html#def-separation-axioms"
+  },
+  "urysohn-lemma": {
+    "ko": "우리손 보조정리",
+    "en": "Urysohn lemma",
+    "short": "정규공간의 서로소 닫힌집합 $A, B$에 대해 $A$에서 $0$, $B$에서 $1$인 연속함수가 존재 — 위상 조건에서 연속함수를 창조하는 정리. 이진 유리수 층 쌓기로 증명하며, 거리화 정리의 엔진이다.",
+    "href": "subjects/topology/ch05.html#def-urysohn-lemma"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {
