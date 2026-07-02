@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13장 갈루아 이론 Ⅱ — 갈루아 대응과 5차방정식 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch13.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§53–56)</p>
+  <h1><span class="ch-num">13</span> 갈루아 이론 Ⅱ — 갈루아 대응과 5차방정식</h1>
+  <p class="ch-source">“체의 질문을 군의 질문으로 번역하는 사전” — 두 세계를 잇는 대정리,
+  그리고 그 사전이 내리는 최종 판결: 일반 5차방정식에는 근의 공식이 없다.
+  현대대수학 전권의 종착역입니다.</p>
+</div>
+
+<p>12장에서 우리는 유한 갈루아 확대 $E/F$마다 <a class="term" data-term="galois-group">갈루아 군</a>
+$G = \operatorname{Gal}(E/F)$를 붙였습니다 — $F$를 고정한 채 $E$를 뒤섞는 자기동형사상들.
+이 장의 주인공은 하나의 문장입니다: <strong>$E/F$의 중간체들과 $G$의 부분군들은,
+사실 같은 격자다</strong>(위아래만 뒤집혀 있을 뿐). 이 대응이 “갈루아 대정리”이고,
+이것으로 <strong>체론의 문제가 유한군의 문제로 완전히 번역</strong>됩니다. 마지막에는 이 사전이
+300년 묵은 물음 — “5차방정식의 근의 공식은?” — 에 답합니다. 답은 방정식이 어려워서가
+아니라, <a class="term" data-term="alternating-group">$A_5$</a>가 단순비아벨군이라는
+군론적 사실 때문에 결정됩니다.</p>
+
+<h2 id="sec-correspondence">1. 갈루아 기본정리 — 체와 군을 잇는 사전</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>유한 갈루아 확대 $E/F$를 놓고 두 개의 “층 그림(격자)”을 그립니다.</p>
+  <p>· <strong>체 쪽:</strong> $F$와 $E$ 사이에 낀 중간체 $K$들 ($F \subseteq K \subseteq E$).
+  맨 아래 $F$, 맨 위 $E$.<br>
+  · <strong>군 쪽:</strong> $G = \operatorname{Gal}(E/F)$의 부분군 $H$들. 맨 위 $G$
+  전체, 맨 아래 $\{e\}$.</p>
+  <p>대정리의 주장: <strong>이 두 격자는 완전히 똑같다 — 단, 위아래가 뒤집혀 있다.</strong>
+  큰 체는 작은 군에, 작은 체는 큰 군에 대응한다. 맨 아래 $F$는 맨 위 $G$ 전체에,
+  맨 위 $E$는 맨 아래 $\{e\}$에 붙는다. “$K$를 크게 잡을수록 그것을 고정하는
+  자기동형은 적어진다” — 이 반비례가 사전의 문법이다.</p>
+</div>
+
+<div class="box box-thm" id="def-galois-correspondence">
+  <span class="box-label">정리 · 갈루아 기본정리 <span class="label-en">fundamental theorem of Galois theory</span> (프랄리 §53–54)</span>
+  <p><strong>이 정리가 하는 일:</strong> 무한할 수도 있는 중간체 찾기 문제를,
+  <strong>유한군의 부분군 격자를 그리는 유한한 조합론 문제</strong>로 바꾼다 —
+  이것이 갈루아 이론 전체의 심장이다.</p>
+  <p>유한 <a class="term" data-term="galois-group">갈루아 확대</a> $E/F$와 그
+  갈루아 군 $G = \operatorname{Gal}(E/F)$에 대하여, 서로 <strong>역함수인 두 사상</strong></p>
+  $$K \;\longmapsto\; \operatorname{Gal}(E/K), \qquad H \;\longmapsto\; E^H
+  = \{\,\alpha \in E : \sigma(\alpha) = \alpha \ \ \forall \sigma \in H\,\}$$
+  <p>이 {중간체 $F \subseteq K \subseteq E$}와 {부분군 $H \le G$} 사이의
+  <strong>포함 역순 전단사</strong>를 이룬다. 성질:</p>
+  <p>① (역순) $K_1 \subseteq K_2 \iff \operatorname{Gal}(E/K_1) \supseteq \operatorname{Gal}(E/K_2)$.<br>
+  ② (차수 = 위수·지수) $\;[E : K] = |H|, \qquad [K : F] = (G : H) = |G|/|H|$.<br>
+  ③ (정규성 대응) $K/F$가 <strong><a class="term" data-term="normal-extension">정규</a>(=갈루아)</strong> $\iff H = \operatorname{Gal}(E/K)$가
+  $G$의 <a class="term" data-term="normal-subgroup">정규부분군</a> ($H \trianglelefteq G$).
+  그리고 그때</p>
+  $$\operatorname{Gal}(K/F) \;\cong\; G/H.$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 아틴 정리(부분군이 곧 고정체의 갈루아 군)로 전단사를, 제한 준동형 $\sigma \mapsto \sigma|_K$로 정규성 대응을 얻는다.</span></summary>
+  <p><strong>두 사상이 서로 역:</strong> 핵심은 <em>아틴 정리</em> — 유한 부분군
+  $H \le G$에 대해 $E/E^H$는 갈루아이고 $\operatorname{Gal}(E/E^H) = H$,
+  따라서 $[E : E^H] = |H|$. 이것은 “$H$로 시작하면 $E^H$를 거쳐 다시 $H$로
+  돌아온다”($\operatorname{Gal}(E/E^H) = H$)를 뜻한다. 반대 방향: 중간체 $K$에
+  대해 $E/K$도 갈루아(정규·분리가 위로 유전)이므로, 갈루아 확대의 정의상 그 군의
+  고정체는 바로 밑의 체 — 즉 $E^{\operatorname{Gal}(E/K)} = K$. 두 왕복이 모두 제자리
+  귀환이므로 두 사상은 서로 역인 전단사다.</p>
+  <p><strong>차수 = 지수:</strong> $[E : K] = |\operatorname{Gal}(E/K)| = |H|$
+  (갈루아 확대에서 차수 = 군의 위수, 12장). 탑 법칙(7장)으로
+  $[K : F] = [E : F]/[E : K] = |G|/|H| = (G : H)$.</p>
+  <p><strong>정규성 대응:</strong> 각 $\sigma \in G$를 $K$로 <strong>제한</strong>하는 사상을
+  본다. $\sigma(K) = K$가 모든 $\sigma$에 대해 성립할 필요충분조건이 $K/F$의 정규성
+  (정규 = “한 근을 담으면 켤레근을 전부 담음” = 자기동형에 닫힘). 이때
+  $$\rho : G \to \operatorname{Gal}(K/F), \qquad \sigma \mapsto \sigma|_K$$
+  는 잘 정의된 <strong>전사 준동형</strong>이고, 그 핵은 “$K$를 통째로 고정하는
+  $\sigma$” $= \operatorname{Gal}(E/K) = H$. 핵은 언제나 정규이므로 $H \trianglelefteq G$이고,
+  제1동형정리(4장)로 $\operatorname{Gal}(K/F) = \rho(G) \cong G/H$
+  (<a class="term" data-term="factor-group">잉여군</a>). 거꾸로
+  $H \trianglelefteq G$이면 $\sigma(K) = K$가 나와 $K/F$가 정규.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 ①</span>
+  <p><strong>대응은 갈루아 확대에서만 성립한다</strong>(정규 + 분리). 정규성이
+  깨지면 사전이 무너진다: $\mathbb{Q}(\sqrt[3]2)/\mathbb{Q}$는 정규가 아니다
+  ($x^3 - 2$의 켤레근 $\omega\sqrt[3]2$를 담지 않으니까). 이 확대의 자기동형은
+  항등뿐 — $\operatorname{Gal}(\mathbb{Q}(\sqrt[3]2)/\mathbb{Q}) = \{e\}$ — 이라서
+  $E^{\{e\}} = \mathbb{Q}(\sqrt[3]2) \neq \mathbb{Q}$. “군 쪽에서 본 밑바닥”이
+  진짜 밑바닥 $\mathbb{Q}$까지 내려오지 못한다. 갈루아 확대라야 $E^G = F$가
+  보장되어 사전이 성립한다.</p>
+</div>
+
+<h2 id="sec-lattice">2. 격자 두 개를 직접 그려 보기</h2>
+
+<div class="box box-example">
+  <span class="box-label">예제 (a) · 클라인 4원군 $\;\mathbb{Q}(\sqrt2, \sqrt3)/\mathbb{Q}$</span>
+  <p>$[\mathbb{Q}(\sqrt2, \sqrt3) : \mathbb{Q}] = 4$ (7장에서 탑 법칙으로 증명).
+  자기동형은 $\sqrt2 \mapsto \pm\sqrt2$, $\sqrt3 \mapsto \pm\sqrt3$의 네 조합으로
+  전부 결정된다:</p>
+  <p>$\quad \mathrm{id};\quad \sigma:(\sqrt2 \mapsto -\sqrt2,\ \sqrt3 \mapsto \sqrt3);
+  \quad \tau:(\sqrt2 \mapsto \sqrt2,\ \sqrt3 \mapsto -\sqrt3);\quad \sigma\tau.$</p>
+  <p>모두 위수 2, $\sigma\tau = \tau\sigma$ — 즉
+  $G \cong \mathbb{Z}_2 \times \mathbb{Z}_2$
+  (<a class="term" data-term="direct-product">직접곱</a>, 클라인 4원군).
+  진부분군은 <strong>위수 2짜리 셋</strong>뿐이니, 진중간체도 <strong>정확히 셋</strong>이어야
+  한다(대응!). 고정체를 계산하면:</p>
+  <p>$\quad \langle\sigma\rangle \leftrightarrow E^{\langle\sigma\rangle}
+  = \mathbb{Q}(\sqrt3)$ ($\sigma$가 $\sqrt3$를 고정);
+  $\quad \langle\tau\rangle \leftrightarrow \mathbb{Q}(\sqrt2)$;<br>
+  $\quad \langle\sigma\tau\rangle \leftrightarrow \mathbb{Q}(\sqrt6)$
+  ($\sigma\tau$는 $\sqrt6 = \sqrt2\,\sqrt3 \mapsto (-\sqrt2)(-\sqrt3) = \sqrt6$ 고정).</p>
+  <p>격자는 위아래 뒤집힌 쌍둥이다. $G$가 아벨이라 <strong>모든 부분군이 정규</strong> →
+  <strong>세 중간체 모두 $\mathbb{Q}$ 위에서 정규(갈루아)</strong> — 실제로 전부 2차
+  확대라 자동으로 정규이고, 각각 $\operatorname{Gal} \cong \mathbb{Z}_2$
+  ($= G/H$와 일치).</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 (b) · 대칭군 $S_3\;$: $\;\mathbb{Q}(\sqrt[3]2, \omega)/\mathbb{Q}$</span>
+  <p>$\omega = e^{2\pi i/3}$ (1의 원시 세제곱근). 이 체는 $x^3 - 2$의
+  <a class="term" data-term="splitting-field">분해체</a> — 세 근 $\sqrt[3]2,\ \omega\sqrt[3]2,\ \omega^2\sqrt[3]2$를
+  전부 담는다. $[\mathbb{Q}(\sqrt[3]2, \omega) : \mathbb{Q}] = 6$이고
+  $G \cong S_3$: 갈루아 군은 <strong>세 근을 뒤섞는 치환</strong>으로 작동한다.
+  생성원은</p>
+  <p>$\quad \sigma$ (위수 3): $\sqrt[3]2 \mapsto \omega\sqrt[3]2$, $\omega \mapsto \omega$
+  — 세 근의 순환;<br>
+  $\quad \tau$ (위수 2, 복소켤레): $\sqrt[3]2 \mapsto \sqrt[3]2$, $\omega \mapsto \omega^2$
+  — 두 허근의 교환.</p>
+  <p><strong>부분군 격자(6개):</strong> $\{e\}$; 위수 2짜리 셋
+  $\langle\tau\rangle, \langle\sigma\tau\rangle, \langle\sigma^2\tau\rangle$;
+  위수 3짜리 하나 $A_3 = \langle\sigma\rangle$; 전체 $S_3$.
+  <strong>중간체 격자(대응, 뒤집힘):</strong></p>
+  <p>$\quad \{e\} \leftrightarrow E$ (전체, 6차);<br>
+  $\quad A_3 = \langle\sigma\rangle \leftrightarrow E^{A_3} = \mathbb{Q}(\omega)$
+  (2차) — <strong>$A_3 \trianglelefteq S_3$ (지수 2, 정규)</strong>이므로
+  <strong>$\mathbb{Q}(\omega)/\mathbb{Q}$는 정규</strong>. 실제로 $\mathbb{Q}(\omega)$는
+  $x^2 + x + 1$의 분해체(2차)라 갈루아이고
+  $\operatorname{Gal}(\mathbb{Q}(\omega)/\mathbb{Q}) \cong S_3/A_3 \cong \mathbb{Z}_2$;<br>
+  $\quad \langle\tau\rangle \leftrightarrow \mathbb{Q}(\sqrt[3]2)$ (3차),
+  $\langle\sigma\tau\rangle \leftrightarrow \mathbb{Q}(\omega\sqrt[3]2)$,
+  $\langle\sigma^2\tau\rangle \leftrightarrow \mathbb{Q}(\omega^2\sqrt[3]2)$ — 세 개의 3차
+  중간체. 이 세 부분군은 <strong>정규가 아니고</strong>(서로 켤레), 그래서 세 중간체도
+  <strong>정규가 아니다</strong>: $\mathbb{Q}(\sqrt[3]2)$는 실근 하나만 담고 켤레근을
+  빠뜨린다.</p>
+  <p><strong>사전이 눈에 보이는 순간:</strong> “정규부분군 $A_3$ ↔ 정규확대
+  $\mathbb{Q}(\omega)$”, “비정규 $\langle\tau\rangle$ ↔ 비정규 $\mathbb{Q}(\sqrt[3]2)$”.
+  군의 정규성과 확대의 정규성이 <strong>같은 단어인 이유</strong>가 이것이다 — 우연한
+  용어 중복이 아니라 대정리 ③이다.</p>
+</div>
+
+<h2 id="sec-cyclotomic">3. 원분확대 — 그리고 작도 문제의 완결</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$1$의 $n$제곱근들 $1, \zeta, \zeta^2, \dots, \zeta^{n-1}$ ($\zeta = e^{2\pi i/n}$)은
+  복소평면 위 정 $n$각형의 꼭짓점이다. 이 근들을 전부 $\mathbb{Q}$에 이어 붙인 체
+  $\mathbb{Q}(\zeta_n)$이 <strong>원분체</strong> — 문자 그대로 “원을 나누는 체”.
+  이 확대의 갈루아 군은 놀랍도록 얌전하다: <strong>아벨군</strong>이고, 정수론의
+  $(\mathbb{Z}/n\mathbb{Z})^\times$와 똑같다.</p>
+</div>
+
+<div class="box box-def" id="def-cyclotomic-extension">
+  <span class="box-label">정의 + 정리 · 원분확대 <span class="label-en">cyclotomic extension</span> (프랄리 §55)</span>
+  <p>$\zeta_n$을 $1$의 <strong>원시 $n$제곱근</strong>(위수가 정확히 $n$인 근)이라 할 때,
+  $\mathbb{Q}(\zeta_n)$을 <strong>$n$차 원분체</strong>라 한다 — 이것은 $x^n - 1$의
+  <a class="term" data-term="splitting-field">분해체</a>다(다른 근이 전부 $\zeta_n$의
+  거듭제곱이므로).</p>
+  <p><strong>갈루아 군 = 정수론:</strong> 임의의 자기동형 $\sigma$는 원시근을 다시 원시근으로
+  보내야 하므로 $\sigma(\zeta_n) = \zeta_n^{\,k}$ ($\gcd(k, n) = 1$). 대응
+  $\sigma \mapsto k$가 동형사상</p>
+  $$\operatorname{Gal}\!\big(\mathbb{Q}(\zeta_n)/\mathbb{Q}\big) \;\cong\;
+  (\mathbb{Z}/n\mathbb{Z})^\times \quad (\text{아벨군})$$
+  <p>을 준다. 따라서 $[\mathbb{Q}(\zeta_n):\mathbb{Q}] = \big|(\mathbb{Z}/n\mathbb{Z})^\times\big|
+  = \varphi(n)$ (오일러 피 함수)이며, $\zeta_n$의 최소다항식은
+  <strong>원분다항식</strong>
+  $\Phi_n(x) = \prod_{\gcd(k,n)=1}(x - \zeta_n^{\,k})$ — 차수 $\varphi(n)$이고
+  <strong>$\mathbb{Q}$ 위에서 기약</strong>(정수론과의 접점). 예:
+  $\Phi_1 = x-1,\ \Phi_2 = x+1,\ \Phi_3 = x^2+x+1,\ \Phi_4 = x^2+1,\ \Phi_6 = x^2-x+1$,
+  소수 $p$에 대해 $\Phi_p = x^{p-1} + \cdots + x + 1$ (아이젠슈타인으로 기약).</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 정 $n$각형 작도의 완전 판정 (11장의 완결, 가우스)</span>
+  <p>11장에서 “<a class="term" data-term="constructible-number">작도 가능한 수</a>는
+  $\mathbb{Q}$ 위 차수가 $2^k$인 층으로만 도달된다”를 보았습니다. 갈루아 대응이
+  그 <strong>역</strong>까지 채워 완전 판정을 완성합니다. 정 $n$각형을 작도한다는 것은
+  $\zeta_n$을 작도한다는 것이고,</p>
+  $$\text{정 } n \text{각형 작도 가능} \iff [\mathbb{Q}(\zeta_n):\mathbb{Q}]
+  = \varphi(n) \text{ 이 2의 거듭제곱}.$$
+  <p>(⇐ 방향이 갈루아 이론의 몫: $\mathbb{Q}(\zeta_n)/\mathbb{Q}$는 <strong>아벨</strong>
+  갈루아 확대라, 위수 $2^k$인 아벨군의 부분군 사슬 —
+  $\{e\} \trianglelefteq H_1 \trianglelefteq \cdots \trianglelefteq G$, 각 지수 2 — 이
+  대응으로 <strong>2차 확대의 탑</strong>을 만들어 주고, 2차 확대는 제곱근 하나 —
+  작도 가능. 부분군 격자가 곧 작도 절차의 설계도다.) 초등정수론으로
+  $\varphi(n)$이 2의 거듭제곱 $\iff$</p>
+  $$n = 2^k\, p_1 p_2 \cdots p_r \quad (p_i \text{ 는 서로 다른 페르마 소수}).$$
+  <p>페르마 소수 = $2^{2^m}+1$ 꼴 소수: $3, 5, 17, 257, 65537$. 그래서 정 $17$각형은
+  작도 가능하고($\varphi(17) = 16 = 2^4$ — <strong>가우스, 1796, 열아홉 살</strong>),
+  정 $15$각형도 가능($15 = 3\cdot5$, 서로 다른 페르마 소수,
+  $\varphi(15) = 8$). 반면 정 $7$각형($\varphi(7) = 6$)·정 $9$각형($\varphi(9) = 6$,
+  $3$이 <strong>중복</strong>)·정 $11$각형은 불가능. 고대의 자·컴퍼스 문제가 원분체의
+  갈루아 군 하나로 완전히 결판난다.</p>
+</div>
+
+<h2 id="sec-solvable">4. 가해군과 5차방정식의 불가해성</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — “근호로 푼다”가 무슨 뜻인가</span>
+  <p>2·3·4차방정식에는 근의 공식이 있다. 공통점은 계수에서 출발해 사칙연산과
+  <strong>거듭제곱근</strong>($\sqrt{\ },\ \sqrt[3]{\ },\dots$)만으로 근에 도달한다는 것.
+  이것을 체의 언어로 옮기면 <strong>근호탑</strong>이다: 밑체 $F$ 위에 제곱근·세제곱근을
+  차례로 이어 붙인 탑</p>
+  <p style="text-align:center;">$F = F_0 \subseteq F_1 \subseteq \cdots \subseteq F_m,
+  \qquad F_{i+1} = F_i(\sqrt[n_i]{a_i})$</p>
+  <p>이 근을 전부 담을 때 “근호로 풀린다”고 한다. 갈루아의 통찰: <strong>이 탑이
+  존재하는지 여부가, 갈루아 군이 “가해군”인지 여부와 정확히 같다</strong>. 근호 하나를
+  이어 붙일 때마다 군에서는 아벨인 층 하나가 쌓이기 때문이다.</p>
+</div>
+
+<div class="box box-def" id="def-solvable-group">
+  <span class="box-label">정의 · 가해군 <span class="label-en">solvable group</span> (프랄리 §35, §56)</span>
+  <p>군 $G$가 <strong>가해</strong>라 함은, 정규열(subnormal series)</p>
+  $$\{e\} = H_0 \trianglelefteq H_1 \trianglelefteq \cdots \trianglelefteq H_n = G$$
+  <p>이 존재하여 각 <strong>몫 $H_{i+1}/H_i$가 모두 아벨군</strong>인 것을 말한다.
+  (“비아벨 덩어리를 아벨 조각들로 쌓아 올릴 수 있다”.)</p>
+  <p><strong>가해군 동물원:</strong><br>
+  · 모든 <strong>아벨군</strong>은 가해 ($\{e\} \trianglelefteq G$ 한 층, 몫 $= G$ 아벨).<br>
+  · 모든 <strong>$p$-군</strong>은 가해 (중심이 비자명 → 귀납).<br>
+  · <strong>$S_3$ 가해:</strong> $\{e\} \trianglelefteq A_3 \trianglelefteq S_3$,
+  몫은 $\mathbb{Z}_3, \mathbb{Z}_2$ — 둘 다 아벨. ✓<br>
+  · <strong>$S_4$ 가해:</strong> $\{e\} \trianglelefteq V \trianglelefteq A_4 \trianglelefteq S_4$
+  ($V = $ 클라인 4원군), 몫은 $\mathbb{Z}_2\times\mathbb{Z}_2,\ \mathbb{Z}_3,\ \mathbb{Z}_2$
+  — 전부 아벨. ✓</p>
+  <p><strong>유전 성질:</strong> 가해군의 부분군·몫군은 가해이고, 가해군을 가해군으로
+  확대한 것도 가해. (이것이 뒤에서 “$S_5$가 $A_5$를 부분군으로 가지므로 비가해”
+  논증의 근거.)</p>
+</div>
+
+<div class="box box-thm" id="def-radical-solvability">
+  <span class="box-label">정의 + 정리 · 근호에 의한 가해성과 갈루아 대정리 <span class="label-en">solvability by radicals</span> (프랄리 §56)</span>
+  <p><strong>이 정리가 하는 일:</strong> “방정식에 근의 공식이 있는가?”라는
+  <strong>해석적 질문</strong>을, “그 갈루아 군이 가해군인가?”라는
+  <strong>순수 군론적 질문</strong>으로 완전히 번역한다.</p>
+  <p>다항식 $f \in F[x]$ (표수 0)가 <strong>근호로 풀린다</strong>고 함은, 그 근들이
+  $F$의 원소로부터 사칙연산과 거듭제곱근만으로 표현되는 것, 즉 근을 담는 근호탑이
+  존재하는 것이다. 갈루아 대정리:</p>
+  $$f \text{ 가 근호로 풀림} \iff \operatorname{Gal}(E/F) \text{ 가 가해군}
+  \quad (E = f \text{ 의 분해체}).$$
+  <p>직관적 이유(대응이 하는 일): 근호탑 $F_i \subseteq F_{i+1}$의 각 층은 (원시근을
+  미리 넣어 두면) <strong>순환 갈루아 확대</strong> — 대응으로 갈루아 군 쪽에서
+  <strong>아벨 몫으로 이루어진 정규열</strong>이 된다. 근호탑의 존재와 가해 정규열의
+  존재가 사전을 통해 같은 것이 된다.</p>
+</div>
+
+<div class="box box-thm" id="thm-abel-ruffini">
+  <span class="box-label">정리 · 아벨–루피니 · 5차방정식의 불가해성 <span class="label-en">Abel–Ruffini theorem</span> (프랄리 §56)</span>
+  <p><strong>이 정리가 하는 일:</strong> 위 사전을 하나의 군론적 사실에 적용해,
+  일반 5차방정식에는 근의 공식이 <strong>있을 수 없음</strong>을 확정한다.</p>
+  <p><strong>심장은 $A_5$의 단순성이다.</strong> $A_5$는 위수 60의
+  <strong>단순비아벨군</strong>(자명하지 않은 정규부분군이 전혀 없다). 그렇다면 $A_5$의
+  정규열은 $\{e\} \trianglelefteq A_5$ 하나뿐이고 그 몫 $A_5$는 <strong>비아벨</strong> —
+  즉 <strong>$A_5$는 가해가 아니다</strong>. $A_5 \le S_5$이고 가해군의 부분군은
+  가해여야 하므로 <strong>$S_5$도 비가해</strong>. 더 일반적으로 $n \ge 5$이면 $A_n$이
+  단순이라 $S_n$은 비가해다.</p>
+  <p>일반 5차방정식(계수가 서로 독립인 문자)의 갈루아 군은 <strong>$S_5$ 전체</strong>다.
+  $S_5$가 비가해 → 대정리로 <strong>근호로 풀 수 없음</strong> → <strong>차수 5 이상의
+  일반 방정식에는 근의 공식이 존재할 수 없다.</strong> 2·3·4차가 풀렸던 것은
+  $S_2, S_3, S_4$가 (우연히도) 전부 가해였기 때문이다 — 5차에서 그 행운이 끝난다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 근호로 못 푸는 구체적 5차식 &nbsp;/&nbsp; 표수 있는 경우의 대조</span>
+  <p><strong>구체적 반례:</strong> $f(x) = x^5 - 6x + 3 \in \mathbb{Q}[x]$는
+  아이젠슈타인($p = 3$)으로 기약. 미적분으로 실근이 정확히 3개(허근 2개)임을 보이면,
+  복소켤레가 두 허근을 맞바꾸는 <strong>호환(transposition)</strong>이 되고, 기약 5차라
+  갈루아 군은 5차 순환치환을 품는다. <strong>5-순환 + 호환 → $S_5$ 생성</strong>이므로
+  $\operatorname{Gal} = S_5$ — 비가해. 이 방정식의 실제 근은 근호로 절대 쓸 수 없다.</p>
+  <p><strong>표수 있는 세계는 얌전하다(7장의 완결):</strong> 유한체 확대
+  $\mathbb{F}_{p^n}/\mathbb{F}_p$의 갈루아 군은 <strong>프로베니우스 사상</strong>
+  $\phi : x \mapsto x^p$ (<a class="term" data-term="characteristic">표수</a> $p$의
+  “신입생의 꿈”)가 생성하는 <strong>위수 $n$의
+  <a class="term" data-term="cyclic-group">순환군</a></strong>
+  $\cong \mathbb{Z}_n$이다 — 순환이니 아벨이고, 아벨이니 가해. 유한체 위에서는
+  “불가해 방정식” 같은 사건이 일어나지 않는다. 5차 불가해는 $\mathbb{Q}$처럼 큰
+  갈루아 군($S_5$)이 나타날 수 있는 세계의 이야기다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 ②</span>
+  <p>① <strong>정규부분군 ↔ 정규(갈루아) 중간체.</strong> 부분군의 정규성과 확대의
+  정규성은 같은 단어를 쓰는데, 이것은 대정리 ③ 때문이지 우연이 아니다. 중간체
+  $K/F$가 정규 $\iff$ 대응하는 $H = \operatorname{Gal}(E/K)$가 $G$에서 정규.
+  ② <strong>“가해성”은 방정식이 아니라 <em>군</em>의 성질이다.</strong> “가해군”은 정규열의
+  몫이 아벨인 군을 가리키는 순수 군론 용어; 방정식이 “근호로 가해”라는 것은 그 갈루아
+  군이 가해군일 때를 부르는 이름일 뿐 — 대정리가 두 “가해”를 다리 놓는다.
+  ③ <strong>5차 불가해의 심장은 “$A_5$가 단순비아벨”이라는 사실이다.</strong> 5차가
+  “계산이 복잡해서” 못 푸는 게 아니라, $S_5$의 유일한 비자명 정규부분군 $A_5$가 단순해서
+  더 이상 아벨 층으로 쪼갤 수 없기 때문이다. $A_5$가 만약 가해였다면 근의 공식이
+  존재했을 것이다.
+  ④ <strong>대정리는 유한 <em>갈루아</em> 확대 전용이다.</strong> 정규 또는 분리가
+  깨지면 $E^G \neq F$가 되어 전단사가 성립하지 않는다(오해 ①의 $\mathbb{Q}(\sqrt[3]2)$).</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 현대대수학의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">13장의 줄거리</span>
+  <p><a class="term" data-term="galois-correspondence">갈루아 기본정리</a>: 유한 갈루아
+  확대에서 {중간체}와 {부분군}이 <strong>포함 역순 전단사</strong>
+  ($K \mapsto \operatorname{Gal}(E/K)$, $H \mapsto E^H$); $[E:K] = |H|$,
+  $[K:F] = (G:H)$; <strong>$K/F$ 정규 $\iff H \trianglelefteq G$이고 그때
+  $\operatorname{Gal}(K/F) \cong G/H$</strong>
+  → 격자 예제: $\mathbb{Q}(\sqrt2,\sqrt3)$ ($\mathbb{Z}_2\times\mathbb{Z}_2$, 세
+  중간체 ↔ 세 부분군), $\mathbb{Q}(\sqrt[3]2,\omega)$ ($S_3$, $\mathbb{Q}(\omega)$만
+  정규 ↔ $A_3$만 정규)
+  → <a class="term" data-term="cyclotomic-extension">원분확대</a>
+  $\operatorname{Gal}(\mathbb{Q}(\zeta_n)/\mathbb{Q}) \cong (\mathbb{Z}/n\mathbb{Z})^\times$,
+  차수 $\varphi(n)$ — 정 $n$각형 작도 $\iff \varphi(n) = 2^k$ (가우스, 정17각형)
+  → <a class="term" data-term="solvable-group">가해군</a>(아벨 몫의 정규열),
+  <a class="term" data-term="radical-solvability">근호 가해성</a> $\iff$ 갈루아 군이
+  가해; <strong>$A_5$ 단순비아벨 → $S_5$ 비가해 → 일반 5차는 근의 공식 없음</strong>.</p>
+  <p><strong>현대대수학 전권 되돌아보기:</strong> 군(1–4장: 대칭의 대수, 라그랑주와
+  동형정리) → 환·체(5–7장: 두 연산, 아이디얼·몫·다항식·확대) → 심화 군구조와
+  작도(8–11장) → <strong>갈루아 이론(12–13장): 군과 체의 결혼</strong>. 처음에 “근의
+  대칭”을 재려고 태어난 군론이, 마지막에 “그 방정식이 풀리는가”를 판결한다 — 두 세계가
+  하나였음이 드러나는 것이 이 과목의 결말이다.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 갈루아 대응은 <strong>“체의 질문을 유한군의
+  질문으로 번역하는 사전”</strong>이고, 5차방정식이 안 풀리는 이유는 방정식이 어려워서가
+  아니라 <strong>$S_5$(정확히는 그 속의 $A_5$)가 가해군이 아니기 때문</strong>이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$E = \mathbb{Q}(\sqrt2, \sqrt3)$, $G = \operatorname{Gal}(E/\mathbb{Q}) \cong
+  \mathbb{Z}_2 \times \mathbb{Z}_2$에 대해, (1) 세 위수-2 부분군을 쓰고 각각의 고정체를
+  구하라. (2) 이 세 중간체가 모두 $\mathbb{Q}$ 위에서 정규임을 대정리로 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\sigma:\sqrt2\mapsto-\sqrt2$, $\tau:\sqrt3\mapsto-\sqrt3$. 고정체는 “각 자기동형이
+    안 건드리는 원소”. $G$가 아벨이면 부분군의 정규성은?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\langle\sigma\rangle \leftrightarrow \mathbb{Q}(\sqrt3)$,
+    $\langle\tau\rangle \leftrightarrow \mathbb{Q}(\sqrt2)$,
+    $\langle\sigma\tau\rangle \leftrightarrow \mathbb{Q}(\sqrt6)$
+    ($\sigma\tau$가 $\sqrt6 \mapsto (-\sqrt2)(-\sqrt3) = \sqrt6$을 고정).
+    각 $[E:K] = |H| = 2$, $[K:\mathbb{Q}] = (G:H) = 2$ ✓.</p>
+    <p>(2) $G$가 아벨이므로 <strong>모든 부분군이 정규</strong> —
+    대정리 ③에 의해 대응하는 세 중간체 모두 $\mathbb{Q}$ 위에서 정규이고,
+    $\operatorname{Gal}(K/\mathbb{Q}) \cong G/H \cong \mathbb{Z}_2$. (직접 봐도 각각
+    2차 확대라 자동 정규.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) $\operatorname{Gal}(\mathbb{Q}(\zeta_5)/\mathbb{Q})$의 구조와
+  $[\mathbb{Q}(\zeta_5):\mathbb{Q}]$를 구하고 $\Phi_5(x)$를 써라.
+  (2) $n = 7, 9, 15, 17$ 중 정 $n$각형이 작도 가능한 것을 모두 고르고 근거를 대라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\operatorname{Gal} \cong (\mathbb{Z}/n\mathbb{Z})^\times$, 위수 $\varphi(n)$.
+    작도 가능 $\iff \varphi(n)$이 2의 거듭제곱.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\operatorname{Gal}(\mathbb{Q}(\zeta_5)/\mathbb{Q}) \cong
+    (\mathbb{Z}/5\mathbb{Z})^\times \cong \mathbb{Z}_4$ (순환, 위수 4),
+    $[\mathbb{Q}(\zeta_5):\mathbb{Q}] = \varphi(5) = 4$,
+    $\Phi_5(x) = x^4 + x^3 + x^2 + x + 1$.</p>
+    <p>(2) $\varphi(7) = 6$ (✗), $\varphi(9) = 6$ (✗ — $9 = 3^2$, 소인수 $3$ 중복),
+    $\varphi(15) = \varphi(3)\varphi(5) = 2\cdot4 = 8 = 2^3$ (✓ — $3, 5$ 서로 다른 페르마
+    소수), $\varphi(17) = 16 = 2^4$ (✓ — $17$은 페르마 소수). 따라서
+    <strong>정 15각형과 정 17각형만 작도 가능</strong>.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §53 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$E = \mathbb{Q}(\sqrt[3]2, \omega)$ ($\omega = e^{2\pi i/3}$),
+  $G = \operatorname{Gal}(E/\mathbb{Q}) \cong S_3$. (1) $E$의 중간체를 전부 나열하라.
+  (2) 그중 $\mathbb{Q}$ 위에서 정규인 것은 어느 것이며, 대응하는 정규부분군은 무엇인가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$S_3$의 부분군은 $\{e\}$, 위수 2짜리 셋, $A_3$, $S_3$ — 정확히 6개. 대정리로
+    중간체도 6개. 정규부분군은 $\{e\}, A_3, S_3$뿐.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 부분군 6개에 대응하여 중간체 6개:
+    $\{e\}\leftrightarrow E$;
+    $A_3\leftrightarrow \mathbb{Q}(\omega)$ (2차);
+    세 위수-2 부분군 $\leftrightarrow \mathbb{Q}(\sqrt[3]2),\ \mathbb{Q}(\omega\sqrt[3]2),\
+    \mathbb{Q}(\omega^2\sqrt[3]2)$ (각 3차);
+    $S_3 \leftrightarrow \mathbb{Q}$.</p>
+    <p>(2) $S_3$의 정규부분군은 $\{e\}, A_3, S_3$뿐 → 대응하는 정규 중간체는
+    $E,\ \mathbb{Q}(\omega),\ \mathbb{Q}$. 진중간체 중 <strong>정규인 것은
+    $\mathbb{Q}(\omega)$ 하나</strong>이고 <strong>정규부분군 $A_3$에 대응</strong>.
+    세 3차 중간체는 비정규(대응 부분군이 서로 켤레라 비정규): $\mathbb{Q}(\sqrt[3]2)$는
+    실근만 담고 켤레근 $\omega\sqrt[3]2$를 빠뜨려 정규가 아니다. 확인:
+    $\operatorname{Gal}(\mathbb{Q}(\omega)/\mathbb{Q}) \cong S_3/A_3 \cong \mathbb{Z}_2$.
+    $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>가해군 판정</span>
+  </div>
+  <p>(1) $S_4$가 가해군임을 정규열을 명시하여 보이고, 각 몫을 구하라.
+  (2) $A_5$가 가해가 아닌 이유를 “단순성”을 근거로 서술하라. (3) 이로부터 $S_5$가
+  비가해임을 유도하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $V = \{e, (12)(34), (13)(24), (14)(23)\}$를 사용. (2) $A_5$의 정규열은?
+    (3) “가해군의 부분군은 가해”의 대우.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\{e\} \trianglelefteq V \trianglelefteq A_4 \trianglelefteq S_4$.
+    몫: $V/\{e\} \cong \mathbb{Z}_2 \times \mathbb{Z}_2$,
+    $A_4/V \cong \mathbb{Z}_3$, $S_4/A_4 \cong \mathbb{Z}_2$ — 모두 아벨이므로
+    $S_4$는 가해. ✓</p>
+    <p>(2) $A_5$는 <strong>단순비아벨</strong>: 자명하지 않은 정규부분군이 없으므로
+    유일한 정규열은 $\{e\} \trianglelefteq A_5$이고, 그 몫은 $A_5$ 자체 — <strong>비아벨</strong>.
+    “아벨 몫의 정규열”을 결코 만들 수 없으니 $A_5$는 비가해.</p>
+    <p>(3) $A_5 \le S_5$이고 <strong>가해군의 부분군은 가해</strong>. 대우: 부분군
+    $A_5$가 비가해이므로 $S_5$도 비가해. $\blacksquare$ (이것이 5차 불가해의 핵심
+    엔진이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>불가해성 서술형</span>
+  </div>
+  <p>$f(x) = x^5 - 6x + 3 \in \mathbb{Q}[x]$가 근호로 풀리지 않음을 다음 순서로
+  증명하라. (i) $f$가 $\mathbb{Q}$ 위에서 기약. (ii) $f$의 실근이 정확히 3개.
+  (iii) 갈루아 군 $G$가 5-순환치환과 호환을 모두 포함. (iv) $G = S_5$이고 비가해.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(i) 아이젠슈타인 $p = 3$. (ii) $f' = 5x^4 - 6$로 극대·극소값의 부호. (iii)
+    기약 5차 → $5 \mid |G|$ → 코시로 5-순환; 실근 3·허근 2 → 복소켤레가 호환.
+    (iv) $S_5$에서 5-순환 + 호환은 전체를 생성.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(i) 소수 $p = 3$: $3 \mid 6, 3$ (중간·상수), $3 \nmid 1$ (최고차),
+    $9 \nmid 3$ (상수) — 아이젠슈타인으로 <strong>기약</strong>.</p>
+    <p>(ii) $f'(x) = 5x^4 - 6 = 0 \Rightarrow x = \pm(6/5)^{1/4} \approx \pm1.046$.
+    극대 $f(-1.046) \approx 8.0 \gt 0$, 극소 $f(1.046) \approx -2.0 \lt 0$이고
+    $f(\pm\infty) = \pm\infty$ — 증감표로 <strong>실근이 정확히 3개</strong>(따라서 허근 2개).</p>
+    <p>(iii) $f$가 기약 5차이므로 근 하나가 $[\mathbb{Q}(\alpha):\mathbb{Q}] = 5$를 주고
+    $5 \mid [E:\mathbb{Q}] = |G|$. 코시 정리로 $G$에 위수 5 원소 — 5개 근을 섞는 $S_5$
+    안에서 위수 5는 <strong>5-순환치환</strong>. 또 두 허근은 서로 켤레이고 실근은
+    복소켤레가 고정하므로, 복소켤레 자기동형은 두 허근만 맞바꾸는 <strong>호환</strong>.</p>
+    <p>(iv) $S_5$는 <strong>하나의 5-순환과 하나의 호환으로 생성</strong>된다(표준 사실).
+    따라서 $G = S_5$. $A_5$가 단순비아벨이라 $S_5$는 비가해 → 갈루아 대정리로 $f$는
+    <strong>근호로 풀리지 않는다</strong>. $\blacksquare$</p>
+    <p>(교훈: “특정 5차식이 못 풀린다”는 결국 “그 갈루아 군이 $S_5$까지 커진다”로
+    귀착된다 — 불가해성은 <em>군의 크기</em>의 문제다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>대응의 필요성 서술형</span>
+  </div>
+  <p>갈루아 대응이 <strong>갈루아 확대에서만</strong> 성립함을 $\mathbb{Q}(\sqrt[3]2)/\mathbb{Q}$로
+  설명하라. 구체적으로 $\operatorname{Gal}(\mathbb{Q}(\sqrt[3]2)/\mathbb{Q})$를 구하고,
+  $E^G \neq \mathbb{Q}$임을 보여 전단사가 깨지는 지점을 지적하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\mathbb{Q}(\sqrt[3]2)$는 실수체의 부분체 — 자기동형이 $\sqrt[3]2$를 어디로
+    보낼 수 있는가? 켤레근 $\omega\sqrt[3]2$는 이 체 안에 없다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>자기동형 $\sigma$는 $\sqrt[3]2$를 $x^3 - 2$의 근 중 <strong>$E$ 안에 있는 것</strong>으로만
+    보낼 수 있다. 그런데 $\mathbb{Q}(\sqrt[3]2) \subset \mathbb{R}$은 실근
+    $\sqrt[3]2$ 하나만 담고 허근 $\omega\sqrt[3]2, \omega^2\sqrt[3]2$를 담지 않는다 —
+    갈 곳이 자기 자신뿐. 따라서
+    $\operatorname{Gal}(\mathbb{Q}(\sqrt[3]2)/\mathbb{Q}) = \{\mathrm{id}\}$.</p>
+    <p>그러면 고정체는 $E^G = E^{\{\mathrm{id}\}} = \mathbb{Q}(\sqrt[3]2) \neq \mathbb{Q}$.
+    “군 쪽의 밑바닥 $\{e\}$”가 “체 쪽의 밑바닥 $\mathbb{Q}$”로 내려오지 못하고
+    $\mathbb{Q}(\sqrt[3]2)$에 걸린다 — <strong>$K \mapsto \operatorname{Gal}(E/K)$가
+    단사가 아님</strong>: $\mathbb{Q}$와 $\mathbb{Q}(\sqrt[3]2)$가 똑같이 자명군에
+    대응한다. 이 확대는 정규가 아니므로($x^3-2$의 켤레근 결여) 갈루아가 아니고,
+    대정리의 전제가 무너져 대응이 성립하지 않는다. $\blacksquare$
+    (비교: 12장에서 배운 “정규 = 자기동형에 닫힘”이 대응 성립의 진짜 조건임을 보여
+    주는 표준 반례.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

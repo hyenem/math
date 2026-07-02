@@ -73,7 +73,13 @@ window.MATH_TOC = [
       { file: "ch04.html", num: 4, title: "준동형사상과 잉여군", ready: true },
       { file: "ch05.html", num: 5, title: "환과 체", ready: true },
       { file: "ch06.html", num: 6, title: "아이디얼과 잉여환", ready: true },
-      { file: "ch07.html", num: 7, title: "다항식환과 체의 확대", ready: true }
+      { file: "ch07.html", num: 7, title: "다항식환과 체의 확대", ready: true },
+      { file: "ch08.html", num: 8, title: "직접곱과 유한생성 아벨군", ready: true },
+      { file: "ch09.html", num: 9, title: "군의 작용과 궤도", ready: true },
+      { file: "ch10.html", num: 10, title: "실로우 정리와 유한군의 분류", ready: true },
+      { file: "ch11.html", num: 11, title: "대수적 확대와 작도 불가능성", ready: true },
+      { file: "ch12.html", num: 12, title: "갈루아 이론 Ⅰ — 분해체·정규·분리확대", ready: true },
+      { file: "ch13.html", num: 13, title: "갈루아 이론 Ⅱ — 갈루아 대응과 5차방정식", ready: true }
     ]
   },
   {

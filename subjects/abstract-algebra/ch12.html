@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12장 갈루아 이론 Ⅰ — 분해체·정규·분리확대 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch12.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§48–51)</p>
+  <h1><span class="ch-num">12</span> 갈루아 이론 Ⅰ — 분해체·정규·분리확대</h1>
+  <p class="ch-source">방정식은 왜 풀리는가 — 근들을 서로 맞바꾸는 대칭이 군을 이루고,
+  그 군이 확대체의 뼈대를 통째로 베낀다. 스무 살 갈루아가 놓은 다리, 그 첫 번째 판.</p>
+</div>
+
+<p>7장에서 우리는 근을 <strong>제조</strong>했습니다 — 크로네커의 공장에서.
+이제 그 근들을 다르게 봅니다. $x^3 - 2$의 세 근 $\sqrt[3]2,\ \omega\sqrt[3]2,\ \omega^2\sqrt[3]2$은
+서로 “같은 자격”을 가진 형제입니다: $\mathbb{Q}$-계수 방정식 하나가 셋을 동시에 낳았으니,
+<strong>이름을 바꿔 불러도 대수 법칙은 그대로</strong>여야 합니다. 이렇게 근들을 맞바꾸는
+대칭(체의 자기동형)을 모으면 군이 되고 — 이것이 <strong>갈루아 군</strong>입니다.
+갈루아 이론의 심장은 한 문장입니다: <em>이 군이 확대체의 중간 구조를 완전히 반영한다</em>.
+이 장은 그 다리의 교각 — 분해체·분리·정규 — 을 놓고, 다리 자체(대응 정리)는 다음 장으로 넘깁니다.</p>
+
+<h2 id="sec-automorphism">1. 체 자기동형과 갈루아 군 — 근을 맞바꾸는 대칭</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$\mathbb{Q}(\sqrt2) = \{a + b\sqrt2\}$에서 “$\sqrt2$”라는 이름은 사실 임의적입니다 —
+  $x^2 - 2$의 두 근 $\sqrt2, -\sqrt2$ 중 어느 쪽을 $\sqrt2$라 부를지는 약속일 뿐.
+  그래서 $a + b\sqrt2 \mapsto a - b\sqrt2$로 <strong>부호를 통째로 뒤집는 사상</strong>은
+  덧셈·곱셈을 완벽히 보존합니다 (이것이 “<a class="term" data-term="field">체</a>의 자기동형”).
+  이런 대칭이 몇 개나 있는지, 그것들이 이루는 <a class="term" data-term="group">군</a>이
+  무엇인지가 확대체 $\mathbb{Q}(\sqrt2)/\mathbb{Q}$의 성격을 말해 줍니다.</p>
+</div>
+
+<div class="box box-def" id="def-field-automorphism">
+  <span class="box-label">정의 · 체의 자기동형 <span class="label-en">field automorphism</span> (프랄리 §48)</span>
+  <p>체 $E$에서 자기 자신으로 가는 <strong>전단사 환동형사상</strong>
+  $\sigma : E \to E$를 <strong>자기동형</strong>이라 한다 — 즉
+  $\sigma(a+b) = \sigma(a)+\sigma(b)$, $\sigma(ab) = \sigma(a)\sigma(b)$, 전단사.
+  자동으로 $\sigma(0)=0$, $\sigma(1)=1$이 따라온다.</p>
+  <p>$E$의 자기동형 전체는 합성 $\circ$을 연산으로 <strong>군</strong>을 이룬다 —
+  이를 $\operatorname{Aut}(E)$라 쓴다 (항등사상이 항등원, 전단사라 역사상이 존재).</p>
+  <p><strong>결정적 관찰:</strong> $\sigma(1)=1$이면 $\sigma(n\cdot 1)=n\cdot 1$, 나아가
+  $\sigma$는 소체(prime field, <a class="term" data-term="characteristic">표수</a>가 낳는
+  최소 부분체 $\mathbb{Q}$ 또는 $\mathbb{Z}_p$)를 <strong>항상 통째로 고정</strong>한다.
+  자기동형은 “뼈대(소체)는 못 건드리고 살(확대 부분)만 흔든다.”</p>
+</div>
+
+<div class="box box-def" id="def-galois-group">
+  <span class="box-label">정의 · 갈루아 군과 고정체 <span class="label-en">Galois group, fixed field</span> (프랄리 §48, §53)</span>
+  <p>확대 $E \supseteq F$에 대해, <strong>$F$의 모든 원소를 고정하는</strong> $E$의 자기동형만 모은 것</p>
+  $$\operatorname{Gal}(E/F) = \{\, \sigma \in \operatorname{Aut}(E) : \sigma(a) = a \ \ \forall a \in F \,\}$$
+  <p>을 <strong>$F$ 위에서 $E$의 갈루아 군</strong>이라 한다 — $\operatorname{Aut}(E)$의
+  <a class="term" data-term="subgroup">부분군</a>이다 (항등원 포함, 합성·역에 닫힘).
+  “$F$를 고정”이 핵심 자격 조건: 밑바닥 $F$는 손대지 않고 그 위층만 재배열하는 대칭들.</p>
+  <p>거꾸로, 자기동형들의 집합 $H \le \operatorname{Aut}(E)$가 주어지면
+  <strong>고정체</strong></p>
+  $$E^H = \{\, x \in E : \sigma(x) = x \ \ \forall \sigma \in H \,\}$$
+  <p>는 $E$의 부분체가 된다 (고정되는 원소끼리는 합·곱·역에 닫힘). $\operatorname{Gal}$과
+  $E^{(\cdot)}$은 서로 반대 방향의 대응 — 다음 장 <strong>갈루아 대응</strong>의 두 화살표다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 자기동형은 근을 근으로 옮긴다 <span class="label-en">automorphisms permute conjugates</span> (프랄리 §48)</span>
+  <p><strong>이 정리가 하는 일:</strong> 갈루아 군을 유한 대칭군 안에 가둬 —
+  “무한한 대칭”처럼 보이던 것을 <strong>근들의 치환</strong>이라는 유한한 대상으로 만든다.</p>
+  <p>$\sigma \in \operatorname{Gal}(E/F)$이고 $f(x) \in F[x]$, $\alpha \in E$가 $f(\alpha)=0$이면
+  $f(\sigma\alpha) = 0$ — 즉 $\sigma$는 <strong>$f$의 근을 $f$의 근으로 옮긴다</strong>
+  (켤레근끼리의 치환).</p>
+  <p>따라서 $E = F(\alpha_1,\dots,\alpha_n)$이 유한생성이면 각 $\sigma$는 생성원들이
+  만족하는 최소다항식의 근들을 서로 바꿀 뿐이므로, $\operatorname{Gal}(E/F)$는
+  <strong>유한군</strong>이고 그 원소는 근의 치환으로 완전히 결정된다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— $\sigma$를 $F$-계수 다항식 식에 그냥 통과시키기. 준동형성이 전부다.</span></summary>
+  <p>$f(x) = c_0 + c_1 x + \cdots + c_n x^n$ ($c_i \in F$)이라 하자. $\sigma$는 환동형이고
+  $c_i \in F$를 고정하므로</p>
+  $$\sigma(f(\alpha)) = \sigma\!\Big(\sum c_i \alpha^i\Big) = \sum \sigma(c_i)\,\sigma(\alpha)^i
+  = \sum c_i (\sigma\alpha)^i = f(\sigma\alpha).$$
+  <p>그런데 $f(\alpha)=0$이므로 좌변은 $\sigma(0)=0$. 따라서 $f(\sigma\alpha)=0$이다.</p>
+  <p>특히 $\alpha$가 $F$ 위에서 대수적이고 최소다항식 $\operatorname{irr}(\alpha,F)$의 근이
+  $E$ 안에 유한 개뿐이므로, $\sigma\alpha$는 그 유한 집합 안에 있어야 한다 —
+  생성원마다 유한 개의 선택지, 그 선택이 $\sigma$를 결정한다. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 갈루아 군 첫 계산</span>
+  <p><strong>(a) $\operatorname{Gal}(\mathbb{Q}(\sqrt2)/\mathbb{Q})$.</strong>
+  $\sigma$는 $\mathbb{Q}$를 고정하고 $\sqrt2$를 $x^2-2$의 근, 즉 $\pm\sqrt2$로 보낸다.
+  두 선택 → 자기동형 두 개: 항등 $\iota$와 $\tau:\sqrt2\mapsto-\sqrt2$. $\tau^2=\iota$이므로
+  $\operatorname{Gal} = \{\iota,\tau\} \cong \mathbb{Z}_2$.
+  마침 $[\mathbb{Q}(\sqrt2):\mathbb{Q}]=2$와 위수가 같다 (우연이 아님 — §4에서 밝혀진다).</p>
+  <p><strong>(b) $\operatorname{Gal}(\mathbb{C}/\mathbb{R})$.</strong> $\mathbb{R}$을 고정하고
+  $i$를 $x^2+1$의 근 $\pm i$로 보낸다 → 항등과 <strong>복소켤레</strong> $z\mapsto\bar z$.
+  역시 $\cong\mathbb{Z}_2$, $[\mathbb{C}:\mathbb{R}]=2$.</p>
+  <p><strong>(c) 비교용 반례 예고: $\operatorname{Gal}(\mathbb{Q}(\sqrt[3]2)/\mathbb{Q})$.</strong>
+  $\sigma$는 $\sqrt[3]2$를 $x^3-2$의 근으로 보내야 하는데, $\mathbb{Q}(\sqrt[3]2)\subset\mathbb{R}$
+  안에는 $x^3-2$의 근이 실근 $\sqrt[3]2$ <strong>하나뿐</strong>이다 (나머지 둘은 허수).
+  그래서 $\sigma(\sqrt[3]2)=\sqrt[3]2$ 강제 → $\operatorname{Gal}=\{\iota\}$, 위수 $1$.
+  그런데 $[\mathbb{Q}(\sqrt[3]2):\mathbb{Q}]=3$ — <strong>위수와 차수가 어긋난다</strong>.
+  이 어긋남의 정체가 §2–§4의 주제다.</p>
+</div>
+
+<h2 id="sec-splitting">2. 분해체 — 근이 전부 사는 최소 세계</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>(c)의 어긋남은 “근을 <strong>다 담지 못한</strong> 확대”에서 왔습니다. $\mathbb{Q}(\sqrt[3]2)$은
+  세 형제 중 하나만 데리고 있어서 대칭이 움직일 공간이 없었죠. 대칭이 제대로 놀려면
+  <strong>한 다항식의 근을 전부, 그리고 딱 그만큼만</strong> 담은 확대가 필요합니다 —
+  그것이 분해체입니다. “$f$가 완전히 1차식으로 부서지는 가장 작은 세계.”</p>
+</div>
+
+<div class="box box-def" id="def-splitting-field">
+  <span class="box-label">정의 · 분해체 <span class="label-en">splitting field</span> (프랄리 §50)</span>
+  <p>$f(x) \in F[x]$에 대해, 확대체 $E \supseteq F$가 다음 둘을 만족하면 <strong>$F$ 위에서
+  $f$의 분해체</strong>라 한다.</p>
+  <p>① $f$가 $E[x]$에서 <strong>1차식들의 곱</strong>으로 완전분해:
+  $f(x) = c(x-\alpha_1)(x-\alpha_2)\cdots(x-\alpha_n)$, $\alpha_i \in E$.<br>
+  ② $E$가 그 근들로 <strong>생성</strong>: $E = F(\alpha_1,\dots,\alpha_n)$ (군더더기 없는 최소성).</p>
+  <p>“$f$의” 분해체임을 강조하라 — 분해체는 <strong>특정 다항식에 딸린</strong> 개념이지
+  체 자체의 성질이 아니다. 여러 다항식의 곱(또는 족)의 분해체도 같은 방식으로 정의한다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 분해체의 존재와 유일성 <span class="label-en">existence &amp; uniqueness</span> (프랄리 §50)</span>
+  <p><strong>이 정리가 하는 일:</strong> “근이 다 사는 최소 세계”가 <strong>항상 있고,
+  본질적으로 하나뿐</strong>임을 보증 — 그래서 “$f$의 분해체”라 부를 자격이 생긴다.</p>
+  <p><strong>존재:</strong> <a class="term" data-term="kronecker">크로네커</a>를 반복한다.
+  $f$의 기약인수 하나의 근 $\alpha_1$을 몫환으로 만들어 붙이고, $f$를 $F(\alpha_1)$ 위에서
+  다시 인수분해하고, 남은 기약인수의 근을 또 붙인다 — 차수가 유한이라 유한 번에 끝난다.</p>
+  <p><strong>유일성(동형까지):</strong> <strong>동형 확장 정리</strong> — $F \cong F'$인 두 밑체
+  위의 “대응하는” 다항식들의 분해체 $E, E'$는 그 동형을 확장하는 동형 $E \cong E'$로
+  연결된다. 따라서 분해체는 동형을 무시하면 유일하다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 분해체와 그 차수</span>
+  <p><strong>(a) $x^2 - 2$ over $\mathbb{Q}$.</strong> 근 $\pm\sqrt2$ 모두
+  $\mathbb{Q}(\sqrt2)$ 안에 있고 $\mathbb{Q}(\sqrt2)=\mathbb{Q}(\sqrt2,-\sqrt2)$ —
+  분해체는 $\mathbb{Q}(\sqrt2)$, 차수 $2$.</p>
+  <p><strong>(b) $x^3 - 2$ over $\mathbb{Q}$.</strong> 근은
+  $\sqrt[3]2,\ \omega\sqrt[3]2,\ \omega^2\sqrt[3]2$ ($\omega = e^{2\pi i/3}$은 1의 원시 세제곱근).
+  실근 하나만으론 부족하므로 $\omega$까지 붙여야 한다 — 분해체
+  $\mathbb{Q}(\sqrt[3]2,\ \omega)$. 차수는
+  <a class="term" data-term="extension-field">탑 법칙</a>으로
+  $[\mathbb{Q}(\sqrt[3]2,\omega):\mathbb{Q}] = [\,\cdot:\mathbb{Q}(\sqrt[3]2)]\,[\mathbb{Q}(\sqrt[3]2):\mathbb{Q}]
+  = 2 \cdot 3 = 6$
+  ($\omega$의 최소다항식 $x^2+x+1$이 $\mathbb{Q}(\sqrt[3]2)\subset\mathbb{R}$ 위에서도 기약이라 $2$).
+  대조하라: $\mathbb{Q}(\sqrt[3]2)$은 근 하나만 담은 <strong>분해체가 아닌</strong> 확대다.</p>
+  <p><strong>(c) $x^2 + 1$ over $\mathbb{R}$.</strong> 분해체는 $\mathbb{C}$, 차수 $2$ —
+  7장의 $\mathbb{R}[x]/\langle x^2+1\rangle \cong \mathbb{C}$가 곧 “$x^2+1$의 분해체 건설”이었다.</p>
+</div>
+
+<h2 id="sec-separable">3. 분리확대 — 중근이라는 병리</h2>
+
+<div class="box box-def" id="def-separable-extension">
+  <span class="box-label">정의 · 분리다항식과 분리확대 <span class="label-en">separable polynomial, separable extension</span> (프랄리 §51)</span>
+  <p>다항식 $f \in F[x]$가 그 분해체 안에서 <strong>중근을 갖지 않으면</strong>
+  (근이 전부 서로 다르면) <strong>분리다항식</strong>이라 한다. 실전 판정은
+  <a class="term" data-term="polynomial-ring">형식적 도함수</a>를 쓴다:</p>
+  $$f \text{ 분리적} \iff \gcd(f, f') = 1.$$
+  <p>(중근 $\alpha$가 있으면 $(x-\alpha)^2 \mid f$라 $f, f'$이 $(x-\alpha)$를 공유 — 밑체를
+  안 벗어나고 $\gcd$만 계산하면 중근 유무를 안다.)</p>
+  <p>대수적 원소 $\alpha$가 <strong>분리적</strong>이란 $\operatorname{irr}(\alpha,F)$이 분리다항식인 것.
+  확대 $E/F$의 <strong>모든</strong> 원소가 $F$ 위에서 분리적이면 <strong>분리확대</strong>라 한다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 표수 0·완전체 위에서는 모두 분리적 <span class="label-en">perfect fields</span> (프랄리 §51)</span>
+  <p><strong>이 정리가 하는 일:</strong> 임용·학부에서 다루는 거의 모든 무대
+  ($\mathbb{Q}, \mathbb{R}, \mathbb{C}$, 유한체)에서 <strong>분리성은 공짜</strong>임을 보증 —
+  그래서 대개 정규성만 신경 쓰면 된다.</p>
+  <p><a class="term" data-term="characteristic">표수</a> $0$이거나 <strong>완전체</strong>
+  (표수 $p$이면서 프로베니우스 $x\mapsto x^p$가 전사 — 유한체가 대표)에서는
+  <strong>모든 기약다항식이 분리적</strong>이다. 따라서 그 위의 모든 대수적 확대는 분리확대다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 기약 + 도함수 논증: 중근이 있으려면 $f'=0$이어야 하는데, 표수 0에선 불가능.</span></summary>
+  <p>$f$가 기약이고 중근을 가지면 $\gcd(f,f') \neq 1$. 그런데 $\gcd(f,f')$은 $f$의 약수이고
+  $f$는 기약이므로 $\gcd$는 $1$ 아니면 $f$의 동반원. $\deg f' < \deg f$이므로 후자가 되려면
+  <strong>$f' = 0$</strong>이어야 한다.</p>
+  <p><strong>표수 0:</strong> $f = \sum c_i x^i$의 도함수 $f' = \sum i c_i x^{i-1}$이 $0$이려면
+  모든 $i \ge 1$에서 $i c_i = 0$, 즉 $c_i = 0$ — $f$가 상수라 기약에 모순. 그러므로 $f'\neq0$,
+  $\gcd=1$, 분리적.</p>
+  <p><strong>완전체(표수 $p$):</strong> $f'=0$이면 $f$는 $x^p$의 다항식 $g(x^p)$ 꼴.
+  프로베니우스가 전사라 $g$의 계수를 전부 $p$제곱근으로 바꿔
+  $g(x^p) = (h(x))^p$로 쓸 수 있어 $f$가 <strong>가약</strong> — 기약에 모순. 그러므로 $f'\neq0$. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 비분리의 유일한 서식지 $\mathbb{F}_p(t)$</span>
+  <p>비분리 예를 만들려면 <strong>완전하지 않은 체</strong>가 필요하다 — 표준 예는
+  유리함수체 $F = \mathbb{F}_p(t)$ (변수 $t$의 유리식). 여기서</p>
+  $$f(x) = x^p - t \in \mathbb{F}_p(t)[x]$$
+  <p>를 보자. $f' = p x^{p-1} = 0$ (표수 $p$!). $f$는 $\mathbb{F}_p(t)$ 위에서 <strong>기약</strong>이지만
+  (아이젠슈타인, 소원소 $t$), 분해체에서 근 $\alpha$ ($\alpha^p = t$) 하나가
+  $x^p - t = x^p - \alpha^p = (x - \alpha)^p$ — <strong>$p$중근</strong>이다.
+  근이 하나뿐인데 중복도 $p$. 전형적 <strong>비분리 기약다항식</strong>이며,
+  $\mathbb{F}_p(t)(\alpha)/\mathbb{F}_p(t)$가 비분리확대다.</p>
+</div>
+
+<h2 id="sec-normal">4. 정규확대·갈루아 확대 — 대칭이 차수만큼 산다</h2>
+
+<div class="box box-def" id="def-normal-extension">
+  <span class="box-label">정의 · 정규확대와 갈루아 확대 <span class="label-en">normal &amp; Galois extension</span> (프랄리 §51)</span>
+  <p>대수적 확대 $E/F$가 <strong>정규</strong>(normal)라는 것은, $E$가 $F[x]$의 어떤 다항식(족)의
+  <a class="term" data-term="splitting-field">분해체</a>인 것이다. 동치인 실전 판정:</p>
+  <p style="text-align:center;"><em>$F$ 위 기약다항식이 $E$ 안에 근을 <strong>하나라도</strong> 가지면,
+  그 다항식은 $E$ 안에서 <strong>완전분해</strong>된다.</em></p>
+  <p>“근 하나를 들이면 형제 전부가 딸려 온다” — 켤레근을 도중에 흘리지 않는 확대.
+  유한 확대 $E/F$가 <strong>정규 + 분리</strong>이면 <strong>갈루아 확대</strong>라 부른다.
+  (표수 0·유한체 위에선 분리가 공짜라, 사실상 <strong>정규 = 갈루아</strong>.)</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 갈루아 확대의 핵심정리 (아르틴) <span class="label-en">main theorem, Artin</span> (프랄리 §48, §53)</span>
+  <p><strong>이 정리가 하는 일:</strong> §1에서 “우연히” 맞아떨어졌던
+  $|\operatorname{Gal}| = [E:F]$가 <strong>갈루아일 때만, 그리고 항상</strong> 성립함을 확정 —
+  대칭의 개수를 세는 일을 차수 계산으로 바꿔 준다.</p>
+  <p>유한 갈루아 확대 $E/F$에 대해</p>
+  $$|\operatorname{Gal}(E/F)| = [E:F], \qquad E^{\operatorname{Gal}(E/F)} = F.$$
+  <p>더 일반적으로 임의의 유한 확대에선 $|\operatorname{Gal}(E/F)| \le [E:F]$이고,
+  <strong>등호 성립 $\iff$ 갈루아</strong>다. 역방향(아르틴): 유한군 $H \le \operatorname{Aut}(E)$에
+  대해 $F = E^H$로 두면 $E/F$는 갈루아이고 $\operatorname{Gal}(E/F) = H$, $[E:F] = |H|$.
+  — 군과 중간체가 한 치의 어긋남 없이 맞물린다는 다음 장 <strong>갈루아 대응</strong>의 씨앗이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 갈루아인 것과 아닌 것</span>
+  <p><strong>(a) $\mathbb{Q}(\sqrt2)/\mathbb{Q}$ — 갈루아.</strong> $x^2-2$의 분해체(정규),
+  표수 0(분리). $|\operatorname{Gal}| = 2 = [\mathbb{Q}(\sqrt2):\mathbb{Q}]$ ✓,
+  고정체 $\mathbb{Q}(\sqrt2)^{\{\iota,\tau\}} = \mathbb{Q}$ (부호가 뒤집혀도 안 변하는 건 $b=0$, 즉 유리수).</p>
+  <p><strong>(b) $\mathbb{Q}(\sqrt[3]2)/\mathbb{Q}$ — 정규 아님(=갈루아 아님).</strong>
+  $x^3-2$가 $\mathbb{Q}(\sqrt[3]2)$ 안에 근 $\sqrt[3]2$를 갖지만 완전분해되지 않는다
+  (허근 둘이 밖에 있음). $|\operatorname{Gal}| = 1 < 3 = [E:F]$ — 등호 실패가
+  “갈루아 아님”의 지문이다. 고정체는 $E$ 전체($\ne\mathbb{Q}$).</p>
+  <p><strong>(c) $\mathbb{Q}(\sqrt[3]2,\omega)/\mathbb{Q}$ — 갈루아.</strong> $x^3-2$의 <strong>분해체</strong>라
+  정규. 갈루아 군은 세 근 $\{\sqrt[3]2,\omega\sqrt[3]2,\omega^2\sqrt[3]2\}$의 치환으로
+  대칭군 $S_3$에 들어가고, 위수 $6 = [E:F]$라 $\operatorname{Gal} \cong S_3$.
+  “정규 아닌 $\mathbb{Q}(\sqrt[3]2)$을 근을 마저 채워 갈루아로 키운” 것이 (c)다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>$F$ 고정은 자격 조건.</strong> $F$를 고정하지 않는 자기동형은 아무리 예뻐도
+  $\operatorname{Gal}(E/F)$의 원소가 아니다 — 예컨대 $\mathbb{Q}(\sqrt2)$에서 $\sqrt2$를 고정하고
+  유리수를 흔드는 사상 따위는 애초에 존재하지 않지만(소체는 항상 고정), “밑체 고정”을
+  빠뜨린 답은 감점.
+  ② <strong>$|\operatorname{Gal}(E/F)| = [E:F]$는 갈루아일 때만.</strong> 비정규(또는 비분리)면
+  <strong>미달</strong>한다: $\mathbb{Q}(\sqrt[3]2)/\mathbb{Q}$가 $1 < 3$의 반례. 이 등식을
+  무조건 쓰는 것이 가장 흔한 실수다 — 먼저 정규·분리를 확인하라.
+  ③ <strong>분해체는 “$f$의” 분해체.</strong> “$E$의 분해체”라는 말은 성립하지 않는다;
+  반드시 어떤 다항식(또는 족)에 딸린 개념이다.
+  ④ <strong>정규는 추이적이지 않다.</strong> $\mathbb{Q}\subset\mathbb{Q}(\sqrt2)\subset\mathbb{Q}(\sqrt[4]2)$에서
+  아래 두 층은 각각 정규지만 $\mathbb{Q}(\sqrt[4]2)/\mathbb{Q}$은 정규가 아니다
+  ($x^4-2$의 허근이 빠짐).</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">12장의 줄거리</span>
+  <p><a class="term" data-term="field-automorphism">체의 자기동형</a>($\operatorname{Aut}(E)$,
+  소체는 항상 고정) → $F$를 고정하는 것만 골라
+  <a class="term" data-term="galois-group">갈루아 군</a> $\operatorname{Gal}(E/F)$;
+  자기동형은 <strong>근을 켤레근으로 치환</strong>하므로 유한군
+  → 대칭이 놀 무대인 <a class="term" data-term="splitting-field">분해체</a>
+  (존재=크로네커 반복, 유일=동형 확장; $x^3-2$ → 차수 6의 $\mathbb{Q}(\sqrt[3]2,\omega)$)
+  → 중근이라는 병리를 배제한 <a class="term" data-term="separable-extension">분리확대</a>
+  (표수 0·유한체에선 공짜, 비분리는 $\mathbb{F}_p(t)$의 $x^p-t$에서만)
+  → <a class="term" data-term="normal-extension">정규확대</a>(=분해체)와 <strong>갈루아=정규+분리</strong>;
+  핵심정리 $|\operatorname{Gal}(E/F)| = [E:F]$, $E^{\operatorname{Gal}} = F$.</p>
+  <p><strong>단 하나만 기억한다면:</strong> $\operatorname{Gal}(\mathbb{Q}(\sqrt2)/\mathbb{Q})\cong\mathbb{Z}_2$
+  (갈루아, $2=2$)와 $\operatorname{Gal}(\mathbb{Q}(\sqrt[3]2)/\mathbb{Q})=\{\iota\}$
+  (비정규, $1<3$)의 대비. 전자는 근을 다 담아 대칭이 살고, 후자는 형제를 흘려 대칭이 죽는다.
+  <em>확대의 대칭성 = 근을 온전히 품는가</em> — 이것이 다음 장 갈루아 대응의 전제다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 갈루아 군의 원소를 모두 구하고 위수를 밝힌 뒤, 갈루아 확대인지 판정하라.</p>
+  <p>(1) $\operatorname{Gal}(\mathbb{Q}(\sqrt5)/\mathbb{Q})$ &nbsp;&nbsp;
+  (2) $\operatorname{Gal}(\mathbb{Q}(\sqrt[3]7)/\mathbb{Q})$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>자기동형은 생성원을 그 최소다항식의 근으로 보낸다. 그 근이 확대체 <strong>안에</strong>
+    몇 개나 있는지가 관건. $|\operatorname{Gal}| = [E:F]$인지 비교하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\sqrt5 \mapsto$ ($x^2-5$의 근) $= \pm\sqrt5$, 둘 다 $\mathbb{Q}(\sqrt5)$ 안에 있음.
+    항등 $\iota$와 $\tau:\sqrt5\mapsto-\sqrt5$ 두 개, $\operatorname{Gal}\cong\mathbb{Z}_2$, 위수 $2$.
+    $[\mathbb{Q}(\sqrt5):\mathbb{Q}]=2=|\operatorname{Gal}|$ — <strong>갈루아</strong>
+    ($x^2-5$의 분해체이자 표수 0이라 분리).</p>
+    <p>(2) $\sqrt[3]7 \mapsto$ ($x^3-7$의 근). 세 근 중 실근은 $\sqrt[3]7$ 하나뿐이고
+    $\mathbb{Q}(\sqrt[3]7)\subset\mathbb{R}$이라 나머지 허근은 밖에 있다 → $\sqrt[3]7\mapsto\sqrt[3]7$ 강제.
+    $\operatorname{Gal}=\{\iota\}$, 위수 $1$. $1 < 3 = [E:F]$ — <strong>갈루아 아님</strong>
+    (분해체가 아니라 정규가 깨짐).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 다항식의 분리성을 $\gcd(f,f')$로 판정하라.</p>
+  <p>(1) $f = x^3 - x \in \mathbb{Q}[x]$ &nbsp;&nbsp;
+  (2) $f = x^4 + 1 \in \mathbb{Q}[x]$ &nbsp;&nbsp;
+  (3) $f = x^p - t \in \mathbb{F}_p(t)[x]$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>표수 0에서 기약이 아니어도 도함수가 살아 있으면 분리적일 수 있다. (3)은 표수 $p$라
+    도함수가 죽는다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>분리적.</strong> $f' = 3x^2 - 1$. $f = x(x-1)(x+1)$의 근 $0,\pm1$이 모두
+    다르니 중근 없음; $\gcd(f,f')=1$ ($f$의 근을 $f'$이 하나도 죽이지 않음).</p>
+    <p>(2) <strong>분리적.</strong> 표수 0이고 $f' = 4x^3 \neq 0$. 실제로 $x^4+1$은 $\mathbb{Q}$에서
+    기약이며 표수 0 기약다항식이라 자동 분리 (근은 서로 다른 네 개의 1의 8제곱근).</p>
+    <p>(3) <strong>비분리적.</strong> $f' = p x^{p-1} = 0$ (표수 $p$)이라 $\gcd(f,f')=f\neq1$.
+    분해체에서 $x^p - t = (x-\alpha)^p$ ($\alpha^p=t$) — $p$중근. 완전하지 않은 체
+    $\mathbb{F}_p(t)$ 위에서만 나타나는 병리다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §50 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$E = \mathbb{Q}(\sqrt2,\sqrt3)$에 대해 (1) $\operatorname{Gal}(E/\mathbb{Q})$의 원소를 모두 나열하고
+  (2) 군 구조를 판정한 뒤 (3) $|\operatorname{Gal}(E/\mathbb{Q})| = [E:\mathbb{Q}]$를 확인하고
+  $E/\mathbb{Q}$가 갈루아임을 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>자기동형은 $\sqrt2\mapsto\pm\sqrt2$, $\sqrt3\mapsto\pm\sqrt3$을 독립적으로 정한다.
+    $[E:\mathbb{Q}]=4$는 7장 결과. 각 비항등원의 위수를 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\sqrt2\mapsto\pm\sqrt2$ (2택), $\sqrt3\mapsto\pm\sqrt3$ (2택) → 자기동형
+    $2\times2=4$개: $\iota$, $\sigma:(\sqrt2\mapsto-\sqrt2,\ \sqrt3\mapsto\sqrt3)$,
+    $\tau:(\sqrt2\mapsto\sqrt2,\ \sqrt3\mapsto-\sqrt3)$, $\sigma\tau$ (둘 다 뒤집음).
+    $E$가 $x^2-2$와 $x^2-3$의 분해체라 네 조합이 실제로 모두 자기동형으로 존재한다.</p>
+    <p>(2) $\sigma^2=\tau^2=(\sigma\tau)^2=\iota$ — 비항등원이 전부 위수 2. 위수 4에 위수 2뿐이므로
+    <strong>클라인 4원군</strong> $\operatorname{Gal}(E/\mathbb{Q}) \cong \mathbb{Z}_2\times\mathbb{Z}_2$
+    (순환군 $\mathbb{Z}_4$가 아님).</p>
+    <p>(3) $|\operatorname{Gal}|=4=[E:\mathbb{Q}]$ ✓. $E$는 $(x^2-2)(x^2-3)$의 분해체(정규)이고
+    표수 0(분리)이라 <strong>갈루아</strong>. 핵심정리대로 등호가 성립한다.
+    (덤: 세 위수-2 부분군의 고정체가 각각 $\mathbb{Q}(\sqrt3),\mathbb{Q}(\sqrt2),\mathbb{Q}(\sqrt6)$ —
+    다음 장 갈루아 대응의 미리보기.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>분해체·갈루아 군 서술형</span>
+  </div>
+  <p>$\mathbb{Q}$ 위에서 $x^3 - 2$의 분해체 $E$에 대해, (1) $E$를 명시하고 $[E:\mathbb{Q}]$를
+  탑 법칙으로 구하라. (2) $\operatorname{Gal}(E/\mathbb{Q}) \cong S_3$임을 근의 치환 논증으로
+  증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>근은 $\sqrt[3]2,\omega\sqrt[3]2,\omega^2\sqrt[3]2$. 갈루아 군은 세 근의 치환으로 $S_3$에
+    들어가고, 위수가 $[E:\mathbb{Q}]$와 같음을 보이면 전사.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 근 $\sqrt[3]2,\ \omega\sqrt[3]2,\ \omega^2\sqrt[3]2$ ($\omega=e^{2\pi i/3}$)이므로
+    $E = \mathbb{Q}(\sqrt[3]2,\omega)$. 탑:
+    $[\mathbb{Q}(\sqrt[3]2):\mathbb{Q}]=3$ ($x^3-2$ 기약, 아이젠슈타인 $p=2$),
+    $[\mathbb{Q}(\sqrt[3]2,\omega):\mathbb{Q}(\sqrt[3]2)]=2$
+    ($\omega$의 최소다항식 $x^2+x+1$이 실체 $\mathbb{Q}(\sqrt[3]2)$ 위에서 근이 없어 기약).
+    따라서 $[E:\mathbb{Q}] = 3\cdot2 = 6$.</p>
+    <p>(2) 각 $\sigma\in\operatorname{Gal}(E/\mathbb{Q})$은 세 근을 세 근으로 치환하고
+    (자기동형은 근을 근으로), $E$가 근들로 생성되므로 $\sigma$는 그 치환으로 <strong>완전히 결정</strong> —
+    단사 준동형 $\operatorname{Gal}(E/\mathbb{Q}) \hookrightarrow S_3$을 얻는다.
+    $E/\mathbb{Q}$는 분해체라 정규, 표수 0이라 분리 → 갈루아이므로 핵심정리로
+    $|\operatorname{Gal}(E/\mathbb{Q})| = [E:\mathbb{Q}] = 6 = |S_3|$.
+    단사이고 크기가 같으니 전사, $\operatorname{Gal}(E/\mathbb{Q}) \cong S_3$. $\blacksquare$</p>
+    <p>(서술 뼈대: 근 나열 → 분해체 명시 → 탑 법칙으로 차수 → $S_3$ 매장 → 갈루아라
+    위수 6 → 동형. 마지막 “정규·분리 확인”을 빠뜨리면 위수 계산의 근거가 사라진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>정규성 판정과 반례</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례를 들라.</p>
+  <p>(1) 차수 2인 모든 확대 $E/F$ (표수 $\neq 2$)는 갈루아다.<br>
+  (2) $\mathbb{Q}(\sqrt[4]2)/\mathbb{Q}$은 정규확대다.<br>
+  (3) 자기동형 $\sigma \in \operatorname{Gal}(E/F)$이 $F$의 원소를 고정하지 않아도 된다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 2차 확대는 최소다항식이 2차 — 근 하나가 있으면 나머지 근은? (2) $x^4-2$의 근이
+    다 들어오는가. (3) 갈루아 군의 정의 자체.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> $\alpha\in E\setminus F$이면 $E=F(\alpha)$, $\operatorname{irr}(\alpha,F)$은
+    2차. 한 근 $\alpha$가 $E$에 있으면 다른 근은 $\beta = (\text{합근}) - \alpha \in E$
+    (근과 합이 $F$ 계수라) — 완전분해, 정규. 표수 $\neq2$라 2차 기약다항식은 분리적
+    (도함수 $\neq0$). 정규+분리 → <strong>갈루아</strong>.</p>
+    <p>(2) <strong>거짓.</strong> $\operatorname{irr}(\sqrt[4]2,\mathbb{Q}) = x^4-2$의 근은
+    $\pm\sqrt[4]2,\ \pm i\sqrt[4]2$. $\mathbb{Q}(\sqrt[4]2)\subset\mathbb{R}$은 허근 $\pm i\sqrt[4]2$를
+    담지 못한다 — 기약다항식이 근 하나($\sqrt[4]2$)만 갖고 완전분해 실패, <strong>정규 아님</strong>.
+    (분해체는 $\mathbb{Q}(\sqrt[4]2,\,i)$로 차수 8.)</p>
+    <p>(3) <strong>거짓.</strong> $\operatorname{Gal}(E/F)$의 <strong>정의</strong>가 “$F$를 점별 고정하는
+    자기동형”이다 — $F$ 고정은 선택이 아니라 소속 조건. 고정하지 않는 자기동형은
+    $\operatorname{Aut}(E)$에는 있을 수 있어도 $\operatorname{Gal}(E/F)$에는 없다.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

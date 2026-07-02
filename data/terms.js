@@ -597,6 +597,24 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "short": "$G/\\ker\\phi \\cong \\phi(G)$ — 몫군 계산의 만능 도구: 핵이 $H$인 준동형을 설계하면 $G/H$가 그 상이다. $GL_n/SL_n \\cong \\mathbb{R}^*$, $S_n/A_n \\cong \\mathbb{Z}_2$. 선형대수 차원정리의 군론 쌍둥이.",
     "href": "subjects/abstract-algebra/ch04.html#def-first-isomorphism"
   },
+  "second-isomorphism": {
+    "ko": "제2동형정리",
+    "en": "second isomorphism theorem",
+    "short": "$H \\le G$, $N \\trianglelefteq G$이면 $HN/N \\cong H/(H \\cap N)$ — 격자에서 마름모 모양이라 다이아몬드 정리. 겹치는 부분 $H\\cap N$만큼이 뭉개진다. $N$이 정규여야 $HN$이 부분군.",
+    "href": "subjects/abstract-algebra/ch04.html#def-second-isomorphism"
+  },
+  "third-isomorphism": {
+    "ko": "제3동형정리",
+    "en": "third isomorphism theorem",
+    "short": "$K \\le H$, $H, K \\trianglelefteq G$이면 $(G/K)/(H/K) \\cong G/H$ — 몫의 몫을 분수처럼 약분. 두 번 뭉갠 것은 한 번에 크게 뭉갠 것과 같다.",
+    "href": "subjects/abstract-algebra/ch04.html#def-third-isomorphism"
+  },
+  "correspondence-theorem": {
+    "ko": "대응정리 (격자 동형정리)",
+    "en": "correspondence theorem",
+    "short": "$N \\trianglelefteq G$이면 $G/N$의 부분군 전체 $= \\{H/N : N \\le H \\le G\\}$ — 몫군의 부분군을 원본에서 직접 읽는다(포함·지수·정규성 보존). $\\mathbb{Z}_n$의 부분군이 약수와 대응하는 이유.",
+    "href": "subjects/abstract-algebra/ch04.html#def-correspondence-theorem"
+  },
 
   "ring": {
     "ko": "환",
@@ -665,6 +683,135 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "field extension, degree",
     "short": "$E \\supset F$는 $F$-벡터공간이고 $[E:F] = \\dim_F E$. $[F(\\alpha):F] = \\deg \\operatorname{irr}(\\alpha, F)$, 탑 법칙 $[K:F] = [K:E][E:F]$ — 차수의 라그랑주. 작도 불가능성 증명의 엔진.",
     "href": "subjects/abstract-algebra/ch07.html#def-extension-field"
+  },
+
+  /* ---------- 현대대수 8–13장 (심화) ---------- */
+
+  "direct-product": {
+    "ko": "직접곱",
+    "en": "direct product",
+    "short": "군들의 데카르트 곱에 성분별 연산을 준 것. $|G\\times H|=|G||H|$이고 원소 위수는 $|(a,b)|=\\operatorname{lcm}(|a|,|b|)$. 내적 조건: $G=HK$, $H\\cap K=\\{e\\}$, 둘 다 정규이면 $G\\cong H\\times K$.",
+    "href": "subjects/abstract-algebra/ch08.html#def-direct-product"
+  },
+  "finitely-generated-abelian": {
+    "ko": "유한생성 아벨군의 기본정리",
+    "en": "fundamental theorem of finitely generated abelian groups",
+    "short": "모든 유한생성 아벨군은 $\\mathbb{Z}^r\\times\\mathbb{Z}_{p_1^{k_1}}\\times\\cdots$ (기본인자 꼴), 동치로 $d_1\\mid\\cdots\\mid d_s$인 불변인자 꼴로 유일 분해. 위수 $n=\\prod p_i^{a_i}$ 아벨군의 개수는 $\\prod P(a_i)$ (분할 수).",
+    "href": "subjects/abstract-algebra/ch08.html#def-finitely-generated-abelian"
+  },
+  "group-action": {
+    "ko": "군의 작용",
+    "en": "group action",
+    "short": "군 $G$가 집합 $X$를 뒤섞는 방식 — 공리 $e\\cdot x=x$, $(gh)\\cdot x=g\\cdot(h\\cdot x)$. 준동형 $G\\to\\operatorname{Sym}(X)$를 주는 것과 동치. 왼쪽 곱·켤레·잉여류 작용이 대표.",
+    "href": "subjects/abstract-algebra/ch09.html#def-group-action"
+  },
+  "orbit-stabilizer": {
+    "ko": "궤도-안정자 정리",
+    "en": "orbit-stabilizer theorem",
+    "short": "궤도 $Gx$($X$의 부분집합)와 안정자 $G_x$($G$의 부분군)를 잇는 $|Gx|=[G:G_x]$. 궤도가 $X$를 분할하고 그 크기는 $|G|$의 약수 — 라그랑주 정리의 일반화.",
+    "href": "subjects/abstract-algebra/ch09.html#def-orbit-stabilizer"
+  },
+  "class-equation": {
+    "ko": "류방정식",
+    "en": "class equation",
+    "short": "켤레작용에 궤도-안정자를 적용한 회계 장부 $|G|=|Z(G)|+\\sum[G:C(a_i)]$. 각 항이 $|G|$의 약수라는 제약으로 $p$-군의 중심 비자명, 위수 $p^2$ 군의 아벨성을 증명.",
+    "href": "subjects/abstract-algebra/ch09.html#def-class-equation"
+  },
+  "burnside-counting": {
+    "ko": "번사이드 계수정리",
+    "en": "Burnside's counting theorem",
+    "short": "궤도의 수 $=\\frac{1}{|G|}\\sum_{g}|X^g|$ (고정점의 평균). 대칭을 무시한 ‘본질적으로 다른’ 색칠·목걸이를 세는 도구 — 정육각형 2색 회전 색칠은 14가지.",
+    "href": "subjects/abstract-algebra/ch09.html#def-burnside-counting"
+  },
+  "cauchy-theorem-group": {
+    "ko": "코시 정리 (군론)",
+    "en": "Cauchy's theorem",
+    "short": "$p\\mid|G|$ ($p$ 소수)이면 위수 $p$인 원소가 존재 — 라그랑주의 최소한의 역. 비아벨에서도 성립. McKay의 $p$-튜플에 $\\mathbb{Z}_p$ 회전을 걸어 고정점을 세는 증명. 위수 $p^i$ 부분군 존재의 씨앗.",
+    "href": "subjects/abstract-algebra/ch10.html#def-cauchy-theorem-group"
+  },
+  "sylow-theorems": {
+    "ko": "실로우 정리",
+    "en": "Sylow theorems",
+    "short": "$|G|=p^k m$ ($p\\nmid m$)에서 (1) 위수 $p^k$ 부분군(실로우 $p$-부분군) 존재, (2) 모두 서로 켤레, (3) 개수 $n_p\\equiv1\\pmod p$이고 $n_p\\mid m$. $n_p=1\\iff$ 정규 — 유한군 분류의 주력 엔진.",
+    "href": "subjects/abstract-algebra/ch10.html#def-sylow-theorems"
+  },
+  "simple-group": {
+    "ko": "단순군",
+    "en": "simple group",
+    "short": "자명하지 않은 정규부분군이 없는 군 — 군의 ‘소수/원자’. 아벨 단순군은 $\\mathbb{Z}_p$뿐, 최소 비아벨 단순군은 $A_5$(위수 60). $A_5$의 단순성이 5차방정식 불가해의 심장.",
+    "href": "subjects/abstract-algebra/ch10.html#def-simple-group"
+  },
+  "algebraic-extension": {
+    "ko": "대수적 확대",
+    "en": "algebraic extension",
+    "short": "모든 원소가 $F$ 위에서 대수적인 확대 $E/F$. 유한이면 자동으로 대수적이지만 역은 거짓 — $\\overline{\\mathbb{Q}}/\\mathbb{Q}$는 무한 대수확대. 대수적 원소는 중간체를 이루고, 대수적 위의 대수적은 다시 대수적이다.",
+    "href": "subjects/abstract-algebra/ch11.html#def-algebraic-extension"
+  },
+  "algebraically-closed": {
+    "ko": "대수적으로 닫힌 체",
+    "en": "algebraically closed field",
+    "short": "상수 아닌 다항식이 모두 근을 갖는(일차식으로 완전분해되는) 체. 대수적 폐포 $\\overline{F}$는 존재(선택공리)·유일(동형까지). $\\mathbb{C}$는 닫혀 있고(대수학의 기본정리), $\\overline{\\mathbb{Q}}\\subsetneq\\mathbb{C}$ (가산 vs 비가산).",
+    "href": "subjects/abstract-algebra/ch11.html#def-algebraically-closed"
+  },
+  "constructible-number": {
+    "ko": "작도 가능수",
+    "en": "constructible number",
+    "short": "자와 컴퍼스로 얻는 길이. 전체가 체이고 양수의 제곱근에 닫혀 있다. 작도 가능 $\\Rightarrow [\\mathbb{Q}(\\gamma):\\mathbb{Q}]=2^k$ (필요조건, 역은 거짓). 배적·각의 3등분·원적 불가능성의 대수적 근거.",
+    "href": "subjects/abstract-algebra/ch11.html#def-constructible-number"
+  },
+  "field-automorphism": {
+    "ko": "체의 자기동형",
+    "en": "field automorphism",
+    "short": "체 $E$에서 자신으로 가는 전단사 환동형 $\\sigma$ — 소체(prime field)는 항상 고정하고, $F$-계수 다항식의 근을 근으로 옮긴다. 전체가 합성으로 군 $\\operatorname{Aut}(E)$를 이룬다.",
+    "href": "subjects/abstract-algebra/ch12.html#def-field-automorphism"
+  },
+  "galois-group": {
+    "ko": "갈루아 군",
+    "en": "Galois group",
+    "short": "$F$를 점별 고정하는 $E$의 자기동형들 $\\operatorname{Gal}(E/F) \\le \\operatorname{Aut}(E)$. 근을 켤레근으로 치환하므로 유한군. 갈루아 확대에서는 $|\\operatorname{Gal}(E/F)| = [E:F]$이고 고정체가 $F$.",
+    "href": "subjects/abstract-algebra/ch12.html#def-galois-group"
+  },
+  "splitting-field": {
+    "ko": "분해체",
+    "en": "splitting field",
+    "short": "$f \\in F[x]$가 1차식들로 완전분해되는 최소 확대 $E = F(\\alpha_1,\\dots,\\alpha_n)$. 크로네커 반복으로 존재, 동형 확장 정리로 (동형까지) 유일. $x^3-2$의 분해체는 $\\mathbb{Q}(\\sqrt[3]2,\\omega)$, 차수 6.",
+    "href": "subjects/abstract-algebra/ch12.html#def-splitting-field"
+  },
+  "separable-extension": {
+    "ko": "분리확대",
+    "en": "separable extension",
+    "short": "중근 없는(분리) 기약다항식만 최소다항식으로 갖는 확대. 판정은 $\\gcd(f,f')=1$. 표수 0·완전체(유한체)에선 자동, 비분리는 $\\mathbb{F}_p(t)$ 위 $x^p-t$처럼 완전하지 않은 체에서만 생긴다.",
+    "href": "subjects/abstract-algebra/ch12.html#def-separable-extension"
+  },
+  "normal-extension": {
+    "ko": "정규확대",
+    "en": "normal extension",
+    "short": "어떤 다항식족의 분해체인 대수적 확대 — 동치로, $F$ 위 기약다항식이 $E$ 안에 근 하나를 가지면 $E$ 안에서 완전분해. 정규+분리 = 갈루아. $\\mathbb{Q}(\\sqrt[3]2)/\\mathbb{Q}$은 비정규 반례($|\\operatorname{Gal}|=1\\lt3$).",
+    "href": "subjects/abstract-algebra/ch12.html#def-normal-extension"
+  },
+  "galois-correspondence": {
+    "ko": "갈루아 기본정리",
+    "en": "fundamental theorem of Galois theory",
+    "short": "유한 갈루아 확대 $E/F$에서 {중간체 $K$}와 {부분군 $H\\le G$} 사이의 포함 역순 전단사 $K\\mapsto\\operatorname{Gal}(E/K)$, $H\\mapsto E^H$. $[E:K]=|H|$, $[K:F]=(G:H)$; $K/F$ 정규 $\\iff H\\trianglelefteq G$이고 $\\operatorname{Gal}(K/F)\\cong G/H$.",
+    "href": "subjects/abstract-algebra/ch13.html#def-galois-correspondence"
+  },
+  "cyclotomic-extension": {
+    "ko": "원분확대",
+    "en": "cyclotomic extension",
+    "short": "$1$의 원시 $n$제곱근을 이어 붙인 체 $\\mathbb{Q}(\\zeta_n)$ — $x^n-1$의 분해체. $\\operatorname{Gal}(\\mathbb{Q}(\\zeta_n)/\\mathbb{Q})\\cong(\\mathbb{Z}/n\\mathbb{Z})^\\times$(아벨), 차수 $\\varphi(n)$. 정 $n$각형 작도 $\\iff\\varphi(n)$이 2의 거듭제곱(페르마 소수).",
+    "href": "subjects/abstract-algebra/ch13.html#def-cyclotomic-extension"
+  },
+  "solvable-group": {
+    "ko": "가해군",
+    "en": "solvable group",
+    "short": "정규열 $\\{e\\}\\trianglelefteq H_1\\trianglelefteq\\cdots\\trianglelefteq G$의 몫이 전부 아벨인 군. 아벨·$p$-군·$S_3$·$S_4$는 가해, $A_5$(단순비아벨)부터 비가해. 방정식의 근호 가해성과 대응.",
+    "href": "subjects/abstract-algebra/ch13.html#def-solvable-group"
+  },
+  "radical-solvability": {
+    "ko": "근호에 의한 가해성",
+    "en": "solvability by radicals",
+    "short": "다항식 $f$의 근이 계수의 사칙연산과 거듭제곱근만으로 표현됨 = 근호탑 존재. 갈루아 대정리: $f$ 근호로 풀림 $\\iff\\operatorname{Gal}(E/F)$가 가해군. $S_5$ 비가해 → 일반 5차는 근의 공식 없음.",
+    "href": "subjects/abstract-algebra/ch13.html#def-radical-solvability"
   },
 
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */

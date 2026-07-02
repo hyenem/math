@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10장 실로우 정리와 유한군의 분류 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch10.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§36–37)</p>
+  <h1><span class="ch-num">10</span> 실로우 정리와 유한군의 분류</h1>
+  <p class="ch-source">“라그랑주는 부분군의 위수가 $|G|$를 나눈다고만 했다” —
+  이 장은 그 역이 어디까지 참인지를, 소수 거듭제곱의 힘으로 되찾아 온다.</p>
+</div>
+
+<p>3장의 <a class="term" data-term="lagrange-theorem">라그랑주 정리</a>는 필요조건 하나만
+줬습니다: 부분군의 위수는 $|G|$를 나눈다. 하지만 <strong>역은 거짓</strong>이었죠 —
+위수 12인 $A_4$에는 위수 6인 부분군이 없습니다 ($6 \mid 12$인데도!). 그렇다면 라그랑주의
+역은 완전히 무너진 걸까요? 아닙니다. <strong>소수 거듭제곱 위수</strong>에 한해서는
+역이 정확히 살아납니다 — 이것이 실로우(Sylow)의 세 정리이고, 이 장의 심장입니다.
+그 준비물로 먼저 코시 정리($p$가 위수를 나누면 위수 $p$인 원소가 반드시 있다)를 세우고,
+마지막엔 이 도구들로 “어떤 위수의 군은 단 한 종류뿐” “어떤 위수엔 단순군이 없다”는
+분류의 문장들을 증명합니다.</p>
+
+<h2 id="sec-cauchy">1. 코시 정리 — 소수는 위수 $p$인 원소를 낳는다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>라그랑주의 역이 통째로는 거짓이지만, 가장 약한 형태 — “위수 $p$인 <em>원소</em>가
+  존재하는가?” — 는 소수 $p$에 대해 언제나 참입니다.
+  $p \mid |G|$이기만 하면 $a^p = e$인 $e$ 아닌 원소가 반드시 숨어 있다는 것.
+  이 한 알의 씨앗($\langle a \rangle$, 위수 $p$인 <a class="term" data-term="cyclic-group">순환</a>
+  부분군)에서 실로우 이론 전체가 자랍니다.</p>
+</div>
+
+<div class="box box-thm" id="def-cauchy-theorem-group">
+  <span class="box-label">정리 · 코시 정리 <span class="label-en">Cauchy's theorem</span> (프랄리 §36)</span>
+  <p><strong>이 정리가 하는 일:</strong> 라그랑주의 최소한의 역 —
+  소수가 위수를 나누면 그 소수를 위수로 갖는 원소를 “발굴”해 준다.</p>
+  <p>유한군 $G$와 소수 $p$에 대해</p>
+  $$p \mid |G| \;\Longrightarrow\; \text{위수 } p \text{인 원소가 존재한다.}$$
+  <p>(따라서 위수 $p$인 부분군 $\langle a \rangle$도 존재. 아벨이 아니어도 성립한다는 것이
+  핵심 — 아벨군에 대한 초등 증명과 달리, 일반 군에서도 참이다.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 전략: McKay의 $p$-튜플 논법. $\mathbb{Z}_p$가 회전으로 작용하는 집합의 고정점을 센다 — “크기가 $p$로 나눠지는데 고정점이 하나 있으면, 고정점은 $p$개 이상”.</span></summary>
+  <p><strong>무대 세우기.</strong> 곱이 항등원이 되는 $p$-튜플의 집합을 본다:</p>
+  $$S = \{(a_1, a_2, \dots, a_p) \in G^p : a_1 a_2 \cdots a_p = e\}.$$
+  <p>앞의 $p-1$개 성분은 자유롭게 고르고 $a_p = (a_1 \cdots a_{p-1})^{-1}$로 결정되므로
+  $|S| = |G|^{p-1}$. $p \mid |G|$이니 <strong>$p \mid |S|$</strong>.</p>
+  <p><strong>회전 작용.</strong> $\mathbb{Z}_p$가 성분을 한 칸씩 돌려 $S$에 작용한다:</p>
+  $$(a_1, a_2, \dots, a_p) \longmapsto (a_2, \dots, a_p, a_1).$$
+  <p>이것이 다시 $S$에 들어감은 켤레 한 줄로 확인된다:
+  $a_2 \cdots a_p a_1 = a_1^{-1}(a_1 a_2 \cdots a_p)a_1 = a_1^{-1} e\, a_1 = e$.
+  궤도의 크기는 $|\mathbb{Z}_p| = p$의 약수, 즉 $1$ 또는 $p$뿐(소수라서).</p>
+  <p><strong>고정점 세기.</strong> 크기 $1$인 궤도(고정점) = 모든 성분이 같은 튜플
+  $(a, a, \dots, a)$, 곧 $a^p = e$인 원소들. 궤도 크기의 합으로
+  $|S| = (\text{고정점 수}) + p\cdot(\text{크기 } p \text{ 궤도 수})$이므로</p>
+  $$(\text{고정점 수}) \equiv |S| \equiv 0 \pmod p.$$
+  <p>그런데 고정점은 적어도 하나 있다 — $(e, \dots, e)$. 고정점 수가 $p$의 배수이면서
+  $\ge 1$이니 <strong>$\ge p \ge 2$</strong>. 따라서 $(e,\dots,e)$ 말고도 고정점이 있고,
+  그 $a \neq e$는 $a^p = e$를 만족한다. $p$가 소수라 $|a| \mid p$이고 $a \neq e$이므로
+  $|a| = p$. $\blacksquare$</p>
+</details>
+
+<div class="box box-def">
+  <span class="box-label">정의 · $p$-군 <span class="label-en">p-group</span> (프랄리 §36)</span>
+  <p>모든 원소의 위수가 $p$의 거듭제곱인 군을 <strong>$p$-군</strong>이라 한다.
+  유한군에서는 코시 정리에 의해</p>
+  $$G \text{가 } p\text{-군} \iff |G| = p^k \ (\text{어떤 } k \ge 0).$$
+  <p>(만약 $|G|$에 $p$ 아닌 소수 $q$가 있으면 코시가 위수 $q$인 원소를 만들어 내니
+  “위수가 $p$-거듭제곱뿐”에 어긋난다. 위수가 소수 거듭제곱인 군이 실로우 정리의
+  주인공이다.)</p>
+</div>
+
+<h2 id="sec-sylow">2. 실로우 세 정리 — 존재·켤레·개수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$|G| = p^k m$에서 $p$의 몫을 끝까지 짜낸 부분($p^k$)을 위수로 갖는 부분군을
+  <strong>실로우 $p$-부분군</strong>이라 부릅니다 — $p$-거듭제곱 부분군 중 가장 큰 것.
+  실로우의 세 정리는 이 “최대 $p$-덩어리”에 대한 세 가지 보증입니다:
+  <strong>(1) 반드시 있다, (2) 전부 서로 켤레다(사실상 하나의 대칭 복사본들), (3) 그 개수가
+  $p$로 나눈 나머지 $1$이고 $m$을 나눈다.</strong> 특히 개수가 $1$이면 그 유일한 실로우가
+  <a class="term" data-term="normal-subgroup">정규부분군</a>이 됩니다 — 이 한 줄이 분류의
+  만능 열쇠입니다.</p>
+</div>
+
+<div class="box box-thm" id="def-sylow-theorems">
+  <span class="box-label">정리 · 실로우 세 정리 <span class="label-en">Sylow theorems</span> (프랄리 §36–37)</span>
+  <p><strong>이 정리가 하는 일:</strong> 라그랑주의 <em>부분적 역</em>을 완성한다 —
+  소수 거듭제곱 위수 부분군의 존재를 보장하고, 그 개수까지 산술로 옭아맨다.</p>
+  <p>유한군 $G$의 위수를 $|G| = p^k m$ ($p$ 소수, $p \nmid m$)이라 하자.
+  위수 $p^k$인 부분군을 <strong>실로우 $p$-부분군</strong>이라 한다.</p>
+  <p><strong>제1정리(존재).</strong> $0 \le i \le k$인 모든 $i$에 대해 위수 $p^i$인 부분군이
+  존재한다. 특히 실로우 $p$-부분군(위수 $p^k$)이 존재한다. 게다가 위수 $p^i$인 부분군은
+  위수 $p^{i+1}$인 어떤 부분군의 정규부분군으로 들어간다(탑 쌓기).</p>
+  <p><strong>제2정리(켤레).</strong> 임의의 두 실로우 $p$-부분군 $P, P'$은 서로 켤레다 —
+  $gPg^{-1} = P'$인 $g \in G$가 존재. 나아가 모든 $p$-부분군은 어떤 실로우
+  $p$-부분군에 포함된다.</p>
+  <p><strong>제3정리(개수).</strong> 실로우 $p$-부분군의 개수 $n_p$는</p>
+  $$n_p \equiv 1 \pmod p \qquad\text{그리고}\qquad n_p \mid m.$$
+  <p>특히 $n_p = 1 \iff$ 유일한 실로우 $p$-부분군이 존재 $\iff$ 그것이 정규부분군.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 전략: 전부 “작용시키고 고정점을 세는” 한 가지 기법. 존재는 유별방정식으로 중심을 파고들고, 켤레·개수는 실로우 집합에 켤레작용을 걸어 $\bmod p$로 읽는다.</span></summary>
+  <p>세 정리 모두 <a class="term" data-term="group-action">군의 작용</a>과
+  <a class="term" data-term="class-equation">유별 방정식</a>,
+  <a class="term" data-term="orbit-stabilizer">궤도-안정자군 정리</a>가 엔진이다(정의는 해당 장 참조).</p>
+  <p><strong>제1(존재)의 스케치.</strong> $|G|$에 대한 귀납. 유별 방정식
+  $|G| = |Z(G)| + \sum [G : C(a_i)]$에서, $p \mid |G|$이면 어느 $[G:C(a_i)]$가 $p$로 안
+  나눠지거나 — 그러면 그 $C(a_i)$가 더 작은 군이라 귀납 — 아니면 모든 비중심 항이
+  $p$로 나눠져 $p \mid |Z(G)|$. 후자에선 아벨군 $Z(G)$에 코시를 써 위수 $p$인 중심원소
+  $a$를 얻고, $\langle a \rangle \trianglelefteq G$로 몫 $G/\langle a\rangle$을 만들어
+  귀납. 이렇게 $p^i$ 부분군을 한 층씩 쌓는다.</p>
+  <p><strong>제3($n_p \equiv 1$)의 스케치.</strong> 실로우 $p$-부분군 전체 집합
+  $\mathcal{S}$($|\mathcal{S}| = n_p$)에 한 실로우 $P$를 켤레로 작용시킨다.
+  궤도 크기는 $p$-군 $P$의 지수라 $1$ 또는 $p$의 배수. 고정점은 $P Q P^{-1} = Q$인
+  실로우 $Q$인데, 이런 $Q$는 $P$뿐임을 보일 수 있다(같은 $p$-부분군 정규화 논증).
+  그래서 고정점이 정확히 하나 → $n_p = 1 + (p\text{의 배수}) \equiv 1 \pmod p$.</p>
+  <p><strong>제2·제3($n_p \mid m$)의 스케치.</strong> $G$ 전체를 $\mathcal{S}$에 켤레로 작용시키면
+  이 작용은 <em>추이적</em>(모든 실로우가 켤레, 곧 제2정리)이다. 궤도-안정자군으로
+  $n_p = [G : N_G(P)]$이고, 이것은 $|G| = p^k m$을 나눈다. $n_p \equiv 1 \pmod p$라
+  $p \nmid n_p$이므로 결국 $n_p \mid m$. $\blacksquare$</p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $n_p$를 실제로 좁혀 보기</span>
+  <p><strong>(a) 위수 $12 = 2^2 \cdot 3$.</strong>
+  $n_3 \equiv 1 \pmod 3$이고 $n_3 \mid 4$ → $n_3 \in \{1, 4\}$.
+  $n_2 \equiv 1 \pmod 2$이고 $n_2 \mid 3$ → $n_2 \in \{1, 3\}$.
+  실제로 $A_4$는 $n_3 = 4$(네 개의 $\langle(1\,2\,3)\rangle$류), $n_2 = 1$
+  (클라인 4-군 $V$가 정규); $\mathbb{Z}_{12}$는 $n_2 = n_3 = 1$.</p>
+  <p><strong>(b) 위수 $p^k$인 $p$-군.</strong> $m = 1$이라 $n_p \mid 1$, 곧 $n_p = 1$ —
+  자기 자신이 유일한 실로우 $p$-부분군. (당연하지만, “$p$-군은 자기 자신이 실로우”라는
+  경계 사례를 짚어 두면 논증에서 헷갈리지 않는다.)</p>
+  <p><strong>(c) 위수 $35 = 5 \cdot 7$.</strong>
+  $n_7 \mid 5$, $n_7 \equiv 1 \pmod 7$ → $n_7 = 1$;
+  $n_5 \mid 7$, $n_5 \equiv 1 \pmod 5$ → $n_5 = 1$.
+  둘 다 유일·정규 — 이 관찰이 다음 절 “위수 $35$는 순환군”으로 곧장 이어진다.</p>
+</div>
+
+<h2 id="sec-simple">3. 단순군과 $n_p$ 논증 — 분류의 실전</h2>
+
+<div class="box box-def" id="def-simple-group">
+  <span class="box-label">정의 · 단순군 <span class="label-en">simple group</span> (프랄리 §37)</span>
+  <p>자명하지 않은 정규부분군이 없는(자명군이 아닌) 군을 <strong>단순군</strong>이라 한다 —
+  정규부분군이 $\{e\}$와 $G$뿐.</p>
+  <p><em>직관:</em> 더 이상 <a class="term" data-term="factor-group">잉여군</a>으로 쪼갤 수 없는
+  군 — 정수에서의 소수, 물질에서의 원자에 해당한다. 유한 단순군은 20세기의 거대한 협업으로
+  <strong>완전히 분류</strong>되었다(“유한 단순군 분류 정리”). 아벨 단순군은
+  <strong>$\mathbb{Z}_p$(소수 위수)뿐</strong>이고(정규성이 공짜라, 진부분군이 있으면
+  단순할 수 없다 → 부분군이 자명해야 → 소수 위수), 최소의 <em>비아벨</em> 단순군은
+  <a class="term" data-term="alternating-group">교대군</a> $A_5$(위수 $60$)이다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면 — $n_p = 1$이 왜 “정규”인가</span>
+  <p>켤레는 실로우 $p$-부분군을 실로우 $p$-부분군으로 보냅니다($|gPg^{-1}| = |P| = p^k$).
+  그러니 실로우가 <strong>단 하나뿐</strong>이면 갈 곳이 자기밖에 없어
+  $gPg^{-1} = P$ (모든 $g$) — 곧 <strong>$P \trianglelefteq G$</strong>.
+  역으로 $P$가 정규면 제2정리(모든 실로우는 켤레)에 의해 켤레가 전부 $P$ 자신이라
+  실로우는 하나뿐. 정리하면</p>
+  $$n_p = 1 \iff \text{실로우 } p\text{-부분군이 정규}.$$
+  <p>단순군을 “없다”고 증명하는 표준 전략은 <strong>어떤 $p$에 대해 $n_p = 1$을 강제</strong>
+  하는 것 — 그러면 자명하지 않은 정규부분군이 생겨 단순성이 깨집니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 위수 $pq$는 (조건이 맞으면) 순환군</span>
+  <p><strong>주장.</strong> $|G| = pq$, $p \lt q$ 소수, $p \nmid q - 1$이면
+  $G \cong \mathbb{Z}_{pq}$ (순환).</p>
+  <p><strong>큰 소수 쪽부터.</strong> $n_q \mid p$, $n_q \equiv 1 \pmod q$.
+  $n_q \in \{1, p\}$인데 $p \lt q$라 $p \not\equiv 1 \pmod q$(즉 $p \ne 1$이고 $p \lt q$),
+  따라서 $n_q = 1$ — 실로우 $q$-부분군 $Q \trianglelefteq G$.</p>
+  <p><strong>작은 소수 쪽.</strong> $n_p \mid q$, $n_p \equiv 1 \pmod p$ → $n_p \in \{1, q\}$.
+  $n_p = q$이려면 $q \equiv 1 \pmod p$, 곧 $p \mid q - 1$ — 그런데 가정이 이를 금지.
+  그러므로 $n_p = 1$ — 실로우 $p$-부분군 $P \trianglelefteq G$.</p>
+  <p><strong>조립.</strong> $P, Q$가 둘 다 정규, 위수 $p, q$가 서로소라
+  $P \cap Q = \{e\}$이고 $|PQ| = pq = |G|$. 따라서
+  $G \cong P \times Q \cong \mathbb{Z}_p \times \mathbb{Z}_q \cong \mathbb{Z}_{pq}$
+  (<a class="term" data-term="direct-product">직접곱</a> 분해; $\gcd(p,q)=1$이라 순환).
+  <br><strong>사례.</strong> 위수 $15 = 3 \cdot 5$: $3 \nmid 5 - 1 = 4$ ✓ →
+  위수 $15$인 군은 $\mathbb{Z}_{15}$ 하나뿐. 위수 $35, 33, 65$ 등도 같은 이유로 순환.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 단순군이 <em>없는</em> 두 위수</span>
+  <p><strong>(a) 위수 $30 = 2 \cdot 3 \cdot 5$ (원소 세기 논법).</strong>
+  $n_5 \mid 6$, $n_5 \equiv 1 \pmod 5$ → $n_5 \in \{1, 6\}$;
+  $n_3 \mid 10$, $n_3 \equiv 1 \pmod 3$ → $n_3 \in \{1, 10\}$.
+  단순군이라 가정해 $n_5 = 6$, $n_3 = 10$을 강제하자.
+  서로 다른 실로우 $5$-부분군은 위수 $5$라 교집합이 $\{e\}$뿐 → 위수 $5$ 원소가
+  $6 \times 4 = 24$개. 마찬가지로 위수 $3$ 원소가 $10 \times 2 = 20$개.
+  그런데 $24 + 20 = 44 \gt 30$ — <strong>모순</strong>. 그러므로 $n_5 = 1$ 또는 $n_3 = 1$,
+  어느 쪽이든 정규 실로우가 생겨 단순군이 아니다.</p>
+  <p><strong>(b) 위수 $36 = 2^2 \cdot 3^2$ (작용 → $S_4$ 매장 논법).</strong>
+  $n_3 \mid 4$, $n_3 \equiv 1 \pmod 3$ → $n_3 \in \{1, 4\}$.
+  $n_3 = 1$이면 곧장 정규. $n_3 = 4$이면 $G$가 네 개의 실로우 $3$-부분군에 켤레로 작용해
+  준동형 $\varphi : G \to S_4$가 생긴다. $|G| = 36 \gt 24 = |S_4|$이므로 $\varphi$는
+  단사가 될 수 없어 $\ker\varphi \neq \{e\}$. 이 핵은 정규부분군이고, 작용이 자명하지 않아
+  $\ker\varphi \neq G$ — <strong>자명하지 않은 정규부분군</strong>이 나온다. 단순군 아님.</p>
+  <p>(a)는 서로소 위수 실로우들의 원소가 겹치지 않음을, (b)는 “$n_p$개의 실로우에 작용 →
+  $S_{n_p}$로의 준동형, 위수 초과면 핵이 산다”를 쓴다 — 임용에서 가장 자주 나오는 두 패턴이다.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>라그랑주의 역은 여전히 거짓</strong>이다 — $A_4$(위수 12)에 위수 6 부분군은
+  없다. 실로우가 보장하는 것은 오직 <strong>소수 거듭제곱 위수 $p^i$</strong>의 부분군이지,
+  $|G|$의 임의의 약수 $d$가 아니다.
+  ② $n_p \mid m$이지 <strong>$n_p \mid |G|$ 전체가 아니다</strong> — 여기서 $m = |G|/p^k$.
+  $p$-거듭제곱 쪽은 이미 실로우가 삼켰으므로 개수는 $p$와 서로소인 부분만 나눈다.
+  ③ 방향을 헷갈리지 말 것: “<strong>유일 ⇒ 정규</strong>”와 “<strong>정규 ⇒ 유일</strong>”이
+  모두 참이라 $n_p = 1 \iff$ 정규다. 하지만 “정규부분군이 있다”가 “실로우가 정규다”를
+  뜻하진 않는다 — 다른 정규부분군일 수도 있다.
+  ④ 실로우 제1정리는 위수 $p^k$ 부분군의 <em>존재</em>만 준다 — 그것이 유일하거나
+  정규라는 뜻은 전혀 아니다($A_4$의 실로우 $3$-부분군은 네 개, 전부 비정규).</p>
+</div>
+
+<h2 id="sec-classification">4. 작은 위수 군 개관 — 어디까지 강제되는가</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>실로우 논증은 “이 위수의 군은 몇 종류인가”를 강력하게 좁힙니다. 소수 위수는 무조건
+  순환($\mathbb{Z}_p$), $p^2$ 위수는 반드시 아벨($\mathbb{Z}_{p^2}$ 또는
+  $\mathbb{Z}_p \times \mathbb{Z}_p$), $pq$ 위수는 조건이 맞으면 순환.
+  여러 소수의 실로우가 <strong>모두 정규</strong>이고 위수가 서로소이면 $G$는 그들의
+  <a class="term" data-term="direct-product">직접곱</a>으로 통째로 분해됩니다
+  (위수 15가 $\mathbb{Z}_3 \times \mathbb{Z}_5$인 것처럼). 아래는 위수 $1$부터 $15$까지의
+  분류 지도입니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 위수 $1$–$15$ 군의 분류표</span>
+  <table style="width:100%; border-collapse:collapse; font-size:0.92em;">
+    <thead>
+      <tr style="border-bottom:1px solid var(--rule); text-align:left; font-family:var(--gothic); font-size:0.85em;">
+        <th style="padding:0.3rem;">위수</th><th>군의 개수</th><th>목록 (동형까지)</th><th>이유</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$1$</td><td>1</td><td>$\{e\}$</td><td>자명군</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$2,3,5,7,11,13$</td><td>각 1</td><td>$\mathbb{Z}_p$</td><td>소수 위수 → 순환</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$4$</td><td>2</td><td>$\mathbb{Z}_4,\ \mathbb{Z}_2 \times \mathbb{Z}_2$</td><td>$p^2$ → 아벨</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$6$</td><td>2</td><td>$\mathbb{Z}_6,\ S_3(\cong D_3)$</td><td>$2\cdot3$, $2 \mid 3-1$이라 비아벨 가능</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$8$</td><td>5</td><td>$\mathbb{Z}_8,\ \mathbb{Z}_4{\times}\mathbb{Z}_2,\ \mathbb{Z}_2^3,\ D_4,\ Q_8$</td><td>$p^3$ — 아벨 3 + 비아벨 2</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$9$</td><td>2</td><td>$\mathbb{Z}_9,\ \mathbb{Z}_3 \times \mathbb{Z}_3$</td><td>$p^2$ → 아벨</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$10$</td><td>2</td><td>$\mathbb{Z}_{10},\ D_5$</td><td>$2\cdot5$, $2 \mid 5-1$</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$12$</td><td>5</td><td>$\mathbb{Z}_{12},\ \mathbb{Z}_2{\times}\mathbb{Z}_6,\ A_4,\ D_6,\ \mathrm{Dic}_3$</td><td>$2^2\cdot3$ — 아벨 2 + 비아벨 3</td></tr>
+      <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.3rem;">$14$</td><td>2</td><td>$\mathbb{Z}_{14},\ D_7$</td><td>$2\cdot7$, $2 \mid 7-1$</td></tr>
+      <tr><td style="padding:0.3rem;">$15$</td><td>1</td><td>$\mathbb{Z}_{15}$</td><td>$3\cdot5$, $3 \nmid 5-1$ → 순환뿐</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:0.5rem;">읽는 법: 비아벨이 나타나는 위수($6, 8, 10, 12, 14$)는 항상 “작은 소수가 큰 소수 마이너스
+  1을 나눈다”($p \mid q-1$)거나 소수 거듭제곱이라 비순환 $p$-군이 가능한 곳이다.
+  위수 $15$처럼 그 통로가 막히면 순환군 단 하나로 강제된다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $A_5$ — 최소 비아벨 단순군</span>
+  <p>위수 $60$ 미만의 모든 군은 소수 위수($\mathbb{Z}_p$)를 빼면 단순군이 아니다 —
+  실로우 논증이 항상 어딘가에서 정규부분군을 찾아 준다. 그 벽을 처음으로 넘는 것이
+  <a class="term" data-term="alternating-group">$A_5$</a>(위수 $60 = 2^2 \cdot 3 \cdot 5$):
+  $n_5 = 6,\ n_3 = 10,\ n_2 = 5$가 모두 $1$보다 커서 정규 실로우가 없고, 실제로
+  자명하지 않은 정규부분군이 전혀 없다. $A_5$는 <strong>최소 비아벨 단순군</strong>이며,
+  이 단순성이 “$5$차 이상 일반 방정식은 근호로 풀 수 없다”(갈루아)의 대수적 심장이다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">10장의 줄거리</span>
+  <p><a class="term" data-term="cauchy-theorem-group">코시 정리</a>: $p \mid |G|$ →
+  위수 $p$인 원소 존재 (McKay의 $p$-튜플 + $\mathbb{Z}_p$ 회전, 고정점 세기)
+  → <a class="term" data-term="sylow-theorems">실로우 세 정리</a>:
+  위수 $p^k$ 부분군 <strong>존재</strong>, 전부 <strong>켤레</strong>,
+  개수 $n_p \equiv 1 \pmod p$이고 $n_p \mid m$ — 라그랑주의 부분적 역
+  → $n_p = 1 \iff$ 실로우가 정규 → <a class="term" data-term="simple-group">단순군</a>이
+  “없음”을 증명하는 표준기: 위수 $pq$ 순환, 위수 $30$은 원소 세기, 위수 $36$은 $S_4$ 매장
+  → 여러 실로우가 정규면 <a class="term" data-term="direct-product">직접곱</a> 분해,
+  최소 비아벨 단순군은 $A_5$(위수 60).</p>
+  <p><strong>단 하나만 기억한다면:</strong> “위수 $n$인 군의 구조를 규명하라”의 정석은
+  각 소수 $p$마다 $n_p \equiv 1 \pmod p$와 $n_p \mid m$으로 $n_p$의 값을 좁히고,
+  <strong>$n_p = 1$을 강제할 수 있으면 정규 실로우</strong>를 손에 넣는 것이다 —
+  거기서 단순성 배제·직접곱 분해·순환성이 줄줄이 따라 나온다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 각 위수에 대해 실로우 정리가 허용하는 $n_p$의 값을 모두 구하라.</p>
+  <p>(1) 위수 $20 = 2^2 \cdot 5$의 $n_5$ &nbsp;
+  (2) 위수 $20$의 $n_2$ &nbsp;
+  (3) 위수 $56 = 2^3 \cdot 7$의 $n_7$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$n_p \equiv 1 \pmod p$이면서 $n_p \mid m$ (여기서 $m$은 $p$-거듭제곱을 뺀 나머지 부분).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $n_5 \mid 4$, $n_5 \equiv 1 \pmod 5$ → $\{1, 4\}$ 중 $\equiv 1$인 것:
+    $1 \equiv 1$, $4 \equiv 4$ → <strong>$n_5 = 1$</strong>뿐. (위수 20 군은 실로우
+    5-부분군이 항상 정규!)</p>
+    <p>(2) $n_2 \mid 5$, $n_2 \equiv 1 \pmod 2$(홀수) → $\{1, 5\}$ 모두 홀수 →
+    <strong>$n_2 \in \{1, 5\}$</strong>.</p>
+    <p>(3) $n_7 \mid 8$, $n_7 \equiv 1 \pmod 7$ → 약수 $\{1,2,4,8\}$ 중 $\equiv 1 \pmod 7$:
+    $1 \equiv 1$, $8 \equiv 1$ → <strong>$n_7 \in \{1, 8\}$</strong>.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) $p \mid |G|$이면 위수 $p$인 부분군이 존재한다.<br>
+  (2) $d \mid |G|$인 모든 $d$에 대해 위수 $d$인 부분군이 존재한다.<br>
+  (3) 실로우 $p$-부분군이 유일하면 정규부분군이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 코시. (2) $A_4$와 $d = 6$. (3) 켤레는 실로우를 실로우로 보낸다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 코시 정리 — 위수 $p$인 원소 $a$가 있고 $\langle a \rangle$이
+    위수 $p$ 부분군.</p>
+    <p>(2) <strong>거짓.</strong> $A_4$는 위수 $12$이고 $6 \mid 12$이지만 위수 $6$인 부분군이
+    없다 — 라그랑주 역의 대표 반례. (실로우는 소수 거듭제곱 위수에 대해서만 존재를 보장한다.)</p>
+    <p>(3) <strong>참.</strong> 임의의 $g$에 대해 $gPg^{-1}$도 위수 $p^k$라 실로우인데
+    유일하니 $gPg^{-1} = P$ — 정규. (역도 참이라 $n_p = 1 \iff$ 정규.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §37 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>위수 $45$인 군은 아벨군임을 보여라. (힌트 없이 실로우로.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$45 = 3^2 \cdot 5$. 두 실로우가 모두 정규이면 직접곱; 위수 $p^2$ 군은 아벨.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$n_3 \mid 5$, $n_3 \equiv 1 \pmod 3$ → $\{1, 5\}$ 중 $5 \equiv 2$이므로
+    $n_3 = 1$. $n_5 \mid 9$, $n_5 \equiv 1 \pmod 5$ → $\{1,3,9\}$ 중 $\equiv 1$은
+    $1$뿐, $n_5 = 1$. 실로우 $3$-부분군 $P$(위수 9)와 $5$-부분군 $Q$(위수 5)가 모두 정규.</p>
+    <p>서로소 위수라 $P \cap Q = \{e\}$, $|PQ| = 45$ → $G \cong P \times Q$.
+    위수 $5$인 $Q \cong \mathbb{Z}_5$는 아벨, 위수 $3^2$인 $P$도 아벨(위수 $p^2$ 군은
+    항상 아벨). 아벨군의 직접곱은 아벨 → $G$는 아벨군. $\blacksquare$
+    (더 나아가 $G \cong \mathbb{Z}_{45}$ 또는 $\mathbb{Z}_3 \times \mathbb{Z}_{15}$
+    두 가지뿐.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>원소 세기 서술형</span>
+  </div>
+  <p>위수 $30$인 군은 단순군이 아님을 증명하라. (실로우 개수와 원소 세기를 사용할 것.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>단순이라 가정하면 $n_5, n_3$가 최댓값으로 강제된다. 위수 5·위수 3 원소를 세어
+    $|G| = 30$을 초과시켜 모순을 만든다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$|G| = 30 = 2 \cdot 3 \cdot 5$. 실로우로
+    $n_5 \in \{1, 6\}$, $n_3 \in \{1, 10\}$.</p>
+    <p>$G$가 단순이라 하자. 그러면 어떤 정규 실로우도 없어야 하므로 $n_5 = 6$, $n_3 = 10$.
+    서로 다른 실로우 $5$-부분군은 위수 $5$(소수)라 교집합이 $\{e\}$뿐 →
+    위수 $5$ 원소가 $6 \times (5-1) = 24$개.
+    같은 논리로 위수 $3$ 원소가 $10 \times (3-1) = 20$개.</p>
+    <p>이 원소들은 서로 겹치지 않으니(위수가 다름) 적어도 $24 + 20 = 44$개 —
+    그런데 $|G| = 30 \lt 44$. <strong>모순.</strong></p>
+    <p>따라서 $n_5 = 1$ 또는 $n_3 = 1$이고, 그 유일한 실로우가 자명하지 않은 정규부분군.
+    $G$는 단순군이 아니다. $\blacksquare$
+    (서술 뼈대: 실로우로 후보 좁히기 → 단순 가정으로 최댓값 강제 → 원소 세기 초과 → 모순.
+    세 단계를 모두 적는 것이 만점 답안.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>작용·매장 서술형</span>
+  </div>
+  <p>$|G| = p^2 q$ ($p, q$ 서로 다른 소수)이면 $G$는 단순군이 아님을 증명하라.
+  (두 경우 $p \gt q$, $p \lt q$로 나누어 실로우 개수를 분석.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$n_p$ 또는 $n_q$ 중 하나가 $1$로 강제됨을 보인다. 실로우가 여럿이면
+    “실로우 집합에 작용 → 대칭군으로의 준동형, 위수 초과면 핵이 산다”를 쓴다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>경우 1: $p \gt q$.</strong> $n_p \mid q$, $n_p \equiv 1 \pmod p$ →
+    $n_p \in \{1, q\}$. $n_p = q$이려면 $q \equiv 1 \pmod p$, 곧 $p \mid q - 1$ →
+    $p \le q - 1 \lt q$ — 그런데 $p \gt q$라 불가능. 따라서 $n_p = 1$ →
+    실로우 $p$-부분군(위수 $p^2$)이 정규. 단순 아님.</p>
+    <p><strong>경우 2: $p \lt q$.</strong> $n_q \mid p^2$, $n_q \equiv 1 \pmod q$ →
+    $n_q \in \{1, p, p^2\}$. $p \lt q$라 $p \not\equiv 1$이니 $n_q \ne p$. 남은 것은
+    $n_q = 1$ 또는 $n_q = p^2$.</p>
+    <p>· $n_q = 1$이면 실로우 $q$-부분군이 정규 — 끝.<br>
+    · $n_q = p^2$이면 위수 $q$ 원소가 $p^2(q-1)$개 → 위수 $q$가 아닌 원소는
+    $p^2 q - p^2(q-1) = p^2$개. 그런데 실로우 $p$-부분군(위수 $p^2$)은 위수 $q$ 원소를
+    담지 않으므로 이 $p^2$개 자리에 정확히 들어맞아 실로우 $p$-부분군이
+    <strong>유일</strong> → $n_p = 1$, 정규. 끝.</p>
+    <p>어느 경우든 자명하지 않은 정규부분군이 존재하므로 $G$는 단순군이 아니다.
+    $\blacksquare$ (사례: 위수 $12, 18, 20, 45, 50, 75, 98, 63$ 등이 전부 여기 해당.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>구조 규명</span>
+  </div>
+  <p>위수 $255 = 3 \cdot 5 \cdot 17$인 군은 순환군임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>먼저 $n_{17} = 1$을 얻어 정규 실로우 $17$-부분군을 확보하고, 몫군이나 정규자
+    논증으로 나머지 실로우도 정규임을 밀어붙인다. 세 실로우가 모두 정규이면 직접곱.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>$17$쪽.</strong> $n_{17} \mid 15$, $n_{17} \equiv 1 \pmod{17}$ →
+    $\{1,3,5,15\}$ 중 $\equiv 1 \pmod{17}$은 $1$뿐 → $n_{17} = 1$. 실로우 $17$-부분군
+    $P_{17} \trianglelefteq G$.</p>
+    <p><strong>$5$쪽.</strong> $n_5 \mid 51$, $n_5 \equiv 1 \pmod 5$ →
+    약수 $\{1,3,17,51\}$ 중 $\equiv 1 \pmod 5$은 $1$과 $51$($51 = 50+1$). 만약 $n_5 = 51$이면
+    위수 $5$ 원소가 $51 \times 4 = 204$개인데, 정규 $P_{17}$과의 곱 구조를 보면 위수 $85$인
+    부분군 $H = P_{17}P_5$(위수 $5 \cdot 17$)가 생기고 이는 위수 $pq$형($5 \lt 17$,
+    $5 \nmid 16$)이라 순환·유일한 실로우 5-부분군을 강제 → $n_5 = 1$로 귀결.
+    간단히는 $G/P_{17}$이 위수 $15$라 순환이고, 그 유일한 위수 5 부분군의 당김이 정규
+    실로우를 준다. 결국 $n_5 = 1$, $P_5 \trianglelefteq G$.</p>
+    <p><strong>$3$쪽.</strong> $n_3 \mid 85$, $n_3 \equiv 1 \pmod 3$ →
+    $\{1,5,17,85\}$ 중 $\equiv 1 \pmod 3$은 $1$과 $85$; 같은 몫군 논증
+    ($G/P_{17} \cong \mathbb{Z}_{15}$가 위수 3 부분군 유일)으로 $n_3 = 1$,
+    $P_3 \trianglelefteq G$.</p>
+    <p>세 실로우 $P_3, P_5, P_{17}$이 모두 정규이고 위수 $3, 5, 17$이 쌍마다 서로소 →
+    $G \cong P_3 \times P_5 \times P_{17} \cong \mathbb{Z}_3 \times \mathbb{Z}_5 \times
+    \mathbb{Z}_{17} \cong \mathbb{Z}_{255}$ (순환). $\blacksquare$
+    (교훈: 가장 큰 소수의 실로우가 정규가 되기 쉽고, 그것을 발판으로 몫군을 순환군으로
+    떨어뜨려 나머지 정규성을 회수한다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

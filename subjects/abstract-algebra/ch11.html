@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11장 대수적 확대와 작도 불가능성 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch11.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§31–32)</p>
+  <h1><span class="ch-num">11</span> 대수적 확대와 작도 불가능성</h1>
+  <p class="ch-source">7장의 확대차수 $[E:F]$와 탑 법칙이 무기가 되어,
+  2000년 묵은 자와 컴퍼스의 세 난제를 대수학 한 줄로 처형하는 장.</p>
+</div>
+
+<p>7장에서 우리는 확대체 $E \supset F$가 $F$ 위의 <a class="term" data-term="extension-field">벡터공간</a>이고
+그 차원 $[E:F]$에 대해 <strong>탑 법칙</strong> $[K:F] = [K:E]\,[E:F]$가 성립함을 봤습니다.
+그때 예고만 하고 지나간 문장 — “작도 가능한 수의 차수는 $2^k$뿐” — 을 이 장에서
+정확히 증명합니다. 재료는 세 가지입니다: <strong>대수적 확대</strong>(모든 원소가 근이 되는 확대),
+<strong>대수적으로 닫힌 체</strong>(근이 더는 도망갈 곳 없는 종착지), 그리고
+<strong>작도 가능수</strong>(자와 컴퍼스가 그려낼 수 있는 길이). 마지막에 배적·3등분·원적이라는
+고대 3대 작도 난제가 이 세 개념 앞에서 어떻게 쓰러지는지 봅니다.</p>
+
+<h2 id="sec-algebraic">1. 대수적 확대 — 모든 원소가 근인 확대</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>7장에서 “$\alpha$가 $F$ 위에서 <strong>대수적</strong>”이란 $\alpha$가 $F$-계수 다항식의
+  근이라는 뜻이었습니다 ($\sqrt2$는 $x^2-2$의 근이라 대수적, $\pi$는 어떤 유리계수 다항식의
+  근도 아니라 초월적). 이제 시선을 원소 하나에서 확대 전체로 넓힙니다:
+  <strong>확대 $E/F$의 모든 원소가 하나도 빠짐없이 $F$ 위에서 대수적일 때</strong>,
+  이 확대를 대수적 확대라 부릅니다. 핵심 소식은 “<strong>유한하면 자동으로 대수적</strong>”이라는
+  것 — 차원이 유한하면 $1, \alpha, \alpha^2, \dots$가 언젠가 일차종속이 되어 다항식 관계를
+  강제로 낳기 때문입니다.</p>
+</div>
+
+<div class="box box-def" id="def-algebraic-extension">
+  <span class="box-label">정의 · 대수적 확대 <span class="label-en">algebraic extension</span> (프랄리 §31)</span>
+  <p>확대체 $E \supseteq F$의 <strong>모든</strong> 원소 $\alpha$가 $F$ 위에서 대수적이면
+  ($F$-계수 다항식 중 $\alpha$를 근으로 갖는 것이 존재하면) $E$를 $F$의
+  <strong>대수적 확대</strong>라 한다. 하나라도 초월적 원소가 있으면 <strong>초월적 확대</strong>다.</p>
+  <p>예: $\mathbb{Q}(\sqrt2)$, $\mathbb{Q}(\sqrt2,\sqrt3)$, 유한체 $\mathbb{F}_{p^n}$은
+  모두 $\mathbb{Q}$ 또는 $\mathbb{Z}_p$의 대수적 확대. 반면 유리함수체 $\mathbb{Q}(x)$는
+  $x$가 초월적이므로 초월적 확대다.</p>
+</div>
+
+<div class="box box-thm" id="thm-finite-algebraic">
+  <span class="box-label">정리 · 유한이면 대수적, 그리고 대수적 원소는 체를 이룬다 <span class="label-en">finite ⇒ algebraic</span> (프랄리 §31)</span>
+  <p><strong>이 정리가 하는 일:</strong> “차원이 유한하다”는 선형대수적 조건에서 “모든 원소가
+  다항식의 근”이라는 대수적 결론을 뽑아낸다 — 7장 벡터공간 관점의 첫 배당금이다.</p>
+  <p>① <strong>유한 $\Rightarrow$ 대수적:</strong> $[E:F] = n \lt \infty$이면 $E$는 $F$의
+  대수적 확대이고, 각 $\alpha \in E$에 대해 $[F(\alpha):F] = \deg\operatorname{irr}(\alpha,F)$는
+  $n$의 약수다 (탑 법칙).</p>
+  <p>② <strong>대수적 원소는 중간체를 이룬다:</strong> $E$에서 $F$ 위 대수적인 원소 전체
+  $\overline{F}_E = \{\alpha \in E : \alpha \text{ 대수적}\}$은 $F$와 $E$ 사이의 체다
+  ($E$ 안에서의 $F$의 <strong>대수적 폐포</strong>).</p>
+  <p>③ <strong>대수적 위의 대수적은 대수적:</strong> $F \subseteq E \subseteq K$에서
+  $E/F$가 대수적이고 $K/E$가 대수적이면 $K/F$도 대수적이다 (유한성이 탑을 타고 전달된다).</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 유한차원 벡터공간에서 $n+1$개 벡터는 일차종속. 곱·합의 대수성은 “작은 유한 확대 안에 가둔다”는 탑 논법.</span></summary>
+  <p><strong>① 유한 ⇒ 대수적:</strong> $\alpha \in E$를 잡으면 $1, \alpha, \alpha^2, \dots, \alpha^n$은
+  $n$차원 $F$-벡터공간 $E$ 안의 $n+1$개 벡터 — 반드시 일차종속이다. 즉 모두 $0$은 아닌
+  $c_0, \dots, c_n \in F$로 $c_0 + c_1\alpha + \cdots + c_n\alpha^n = 0$. 이는 $\alpha$를 근으로
+  갖는 $0$ 아닌 다항식이니 $\alpha$는 대수적. 차수는 $[F(\alpha):F]\mid[E:F]=n$ (탑 법칙,
+  $F \subseteq F(\alpha) \subseteq E$).</p>
+  <p><strong>② 체를 이룸:</strong> $\alpha, \beta$가 $F$ 위 대수적이라 하자. $\beta$는 $F$ 위
+  대수적이므로 $F(\alpha)$ 위에서도 대수적 — $[F(\alpha,\beta):F(\alpha)]\lt\infty$이고
+  $[F(\alpha):F]\lt\infty$이라, 탑 법칙으로 $[F(\alpha,\beta):F]\lt\infty$. 그런데 ①에 의해
+  유한 확대의 모든 원소는 대수적이므로, $F(\alpha,\beta)$에 사는
+  $\alpha\pm\beta,\ \alpha\beta,\ \alpha/\beta\ (\beta\neq0)$가 전부 $F$ 위 대수적이다.
+  대수적 원소 집합이 사칙연산에 닫혔으니 체다.</p>
+  <p><strong>③ 대수적 위 대수적:</strong> $\gamma \in K$를 잡으면 $\gamma$는 $E$ 위 대수적 —
+  어떤 $g(x) = b_0 + \cdots + b_{m-1}x^{m-1} + x^m \in E[x]$의 근이다. 계수
+  $b_0,\dots,b_{m-1}$은 유한 개이고 각각 $F$ 위 대수적이므로 $L = F(b_0,\dots,b_{m-1})$은
+  $F$의 유한 확대. $\gamma$는 $L$ 위 대수적이니 $[L(\gamma):L]\lt\infty$. 탑 법칙:
+  $[L(\gamma):F] = [L(\gamma):L]\,[L:F]\lt\infty$이므로 $\gamma$는 ($L(\gamma)$의 원소로서)
+  $F$ 위 대수적이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 역은 거짓 — 무한한데도 대수적인 확대</span>
+  <p><strong>“유한 ⇒ 대수적”의 역은 성립하지 않는다.</strong> 대수적 수 전체
+  $\overline{\mathbb{Q}} = \{\alpha \in \mathbb{C} : \alpha \text{ 는 } \mathbb{Q} \text{ 위 대수적}\}$을
+  보자 (정리 ②로 이것이 체임을 안다 — 대수적 수의 합·곱·역이 다시 대수적).</p>
+  <p>$\overline{\mathbb{Q}}/\mathbb{Q}$는 정의상 <strong>대수적</strong>이다. 그런데 유한이
+  아니다: 각 $n$에 대해 $\sqrt[n]{2}$는 $x^n - 2$ (아이젠슈타인 $p=2$로 기약)의 근이라
+  $[\mathbb{Q}(\sqrt[n]{2}):\mathbb{Q}] = n$. 이런 원소가 $\overline{\mathbb{Q}}$ 안에
+  모두 있으니 $[\overline{\mathbb{Q}}:\mathbb{Q}]$는 어떤 자연수보다도 크다 — 즉
+  $[\overline{\mathbb{Q}}:\mathbb{Q}] = \infty$.</p>
+  <p>결론: <strong>“대수적”과 “유한 차수”는 다른 개념이다.</strong> 유한이면 반드시 대수적이지만,
+  대수적이라고 유한인 것은 아니다 — $\overline{\mathbb{Q}}$가 그 살아있는 반례.</p>
+</div>
+
+<h2 id="sec-closed">2. 대수적으로 닫힌 체 — 근이 도망갈 곳이 없는 종착지</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p><a class="term" data-term="kronecker">크로네커의 정리</a>는 “근이 없는 다항식이 있으면 근이
+  사는 체를 만들면 된다”고 했습니다. 이 제조를 <strong>더는 할 필요가 없는 종착지</strong>가
+  있을까요? 즉 “상수 아닌 다항식이면 무엇이든 이미 근을 갖고 있는” 체 말입니다.
+  그것이 <strong>대수적으로 닫힌 체</strong>입니다. 모든 체 $F$는 이런 종착지 하나를 갖는데,
+  그것이 $F$의 <strong>대수적 폐포</strong> $\overline{F}$입니다 — $F$ 위 대수적이면서
+  그 자신은 대수적으로 닫힌, 근을 위한 최종 안식처.</p>
+</div>
+
+<div class="box box-def" id="def-algebraically-closed">
+  <span class="box-label">정의 · 대수적으로 닫힌 체와 대수적 폐포 <span class="label-en">algebraically closed field, algebraic closure</span> (프랄리 §31)</span>
+  <p>체 $F$가 <strong>대수적으로 닫혀 있다</strong>는 것은 다음 동치 조건 중 하나(모두 같은 뜻):</p>
+  <p>① $F[x]$의 상수 아닌 모든 다항식이 $F$ 안에 근을 갖는다;<br>
+  ② $F[x]$의 모든 다항식이 $F$ 위에서 일차식들의 곱으로 완전분해된다;<br>
+  ③ $F$ 위의 기약다항식은 일차식뿐이다;<br>
+  ④ $F$는 자기 자신 말고는 대수적 확대를 갖지 않는다 (진짜 확대가 없다).</p>
+  <p>체 $F$의 <strong>대수적 폐포</strong> $\overline{F}$란, $F$의 대수적 확대이면서
+  <em>그 자신이 대수적으로 닫힌</em> 체를 말한다. 두 성질을 동시에 요구하는 것이 핵심:
+  “$F$에서 시작해 대수적으로만 뻗었는데, 뻗을 만큼 다 뻗어 더는 근이 새지 않는” 상태다.</p>
+</div>
+
+<div class="box box-thm" id="thm-closure-exists">
+  <span class="box-label">정리 · 폐포의 존재와 유일성, 대수학의 기본정리 <span class="label-en">existence &amp; uniqueness of closure; FTA</span> (프랄리 §31)</span>
+  <p><strong>이 정리가 하는 일:</strong> “근을 계속 첨가하다 보면 언젠가 끝난다”는 직관에
+  존재·유일성이라는 엄밀한 보증을 붙인다.</p>
+  <p>① <strong>존재:</strong> 모든 체 $F$는 대수적 폐포 $\overline{F}$를 갖는다 (증명은
+  <strong>선택공리</strong>가 필요 — 모든 기약다항식마다 근을 첨가하는 초한 과정을 초른의
+  보조정리로 완결한다).</p>
+  <p>② <strong>유일성:</strong> $F$의 두 대수적 폐포는 $F$를 고정하는 동형사상으로 서로 같다
+  (동형까지 유일). 그래서 “<em>그</em> 대수적 폐포 $\overline{F}$”라고 정관사를 붙여 말한다.</p>
+  <p>③ <strong>대수학의 기본정리(FTA):</strong> $\mathbb{C}$는 대수적으로 닫혀 있다 — 복소계수
+  상수 아닌 다항식은 반드시 복소근을 갖는다. (순수 대수만으로는 증명되지 않고, 해석/위상의
+  힘이 필요하다: 복소해석의 리우빌 정리 또는 편각 원리. 증명은 복소해석에서 다룬다.)
+  따라서 $\mathbb{C} = \overline{\mathbb{R}}$이고 $[\mathbb{C}:\mathbb{R}] = 2$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\overline{\mathbb{Q}} \subsetneq \mathbb{C}$ — 크기가 다르다</span>
+  <p>$\mathbb{Q}$의 대수적 폐포는 무엇일까? 바로 앞 절의 대수적 수 체
+  $\overline{\mathbb{Q}}$다 — $\mathbb{Q}$ 위 대수적이면서(정의상), 대수적으로 닫혀 있다
+  ($\overline{\mathbb{Q}}$-계수 다항식의 근도 “대수적 위의 대수적”이라 다시 대수적, 정리 ③).
+  그러므로 $\overline{\mathbb{Q}}$는 $\mathbb{Q}$의 대수적 폐포이며, $\mathbb{C}$ 안에 들어 있다.</p>
+  <p>그렇다면 $\overline{\mathbb{Q}} = \mathbb{C}$일까? <strong>아니다 — 진부분집합이다.</strong>
+  이유는 <strong>개수(농도)</strong>다. 유리계수 다항식은 가산 개이고 각 다항식의 근은 유한
+  개이니, 그 근 전체인 $\overline{\mathbb{Q}}$는 <strong>가산집합</strong>이다. 반면
+  $\mathbb{C}$는 <strong>비가산</strong>. 가산 $\subsetneq$ 비가산이므로 “거의 모든” 복소수는
+  대수적이 아니라 <strong>초월적</strong>이다 ($\pi, e$가 그 유명한 예). 대수적 수는
+  복소평면 위 먼지 같은 소수다.</p>
+</div>
+
+<h2 id="sec-constructible">3. 작도 가능수 — 자와 컴퍼스의 산술</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>그리스 기하의 규칙: <strong>눈금 없는 자</strong>(두 점을 잇는 직선)와 <strong>컴퍼스</strong>(한
+  점 중심, 주어진 반지름의 원)만 사용. 시작 재료는 두 점 $(0,0),(1,0)$ 즉 “길이 $1$”뿐입니다.
+  이 도구로 유한 번의 작도 끝에 얻을 수 있는 길이를 <strong>작도 가능수</strong>라 합니다.
+  놀랍게도 이 수들의 정체는 순수하게 대수적입니다: 새 점은 (직선∩직선), (직선∩원),
+  (원∩원)의 교점으로만 태어나는데, 이 교점의 좌표는 기존 좌표들로 이루어진
+  <strong>1차 또는 2차 방정식</strong>의 해입니다. 즉 <strong>작도의 매 단계는 차수를 최대
+  2배만 키운다</strong> — 그래서 탑 법칙이 곧바로 작동합니다.</p>
+</div>
+
+<div class="box box-def" id="def-constructible-number">
+  <span class="box-label">정의 · 작도 가능수 <span class="label-en">constructible number</span> (프랄리 §32)</span>
+  <p>평면에 $(0,0)$과 $(1,0)$이 주어졌을 때, 이미 작도된 점들로부터 자(두 점을 잇는 직선)와
+  컴퍼스(한 점 중심으로 이미 작도된 두 점 사이 거리를 반지름 삼는 원)를 유한 번 써서
+  얻어지는 교점을 <strong>작도 가능한 점</strong>, 그 점의 좌표(또는 작도 가능한 두 점 사이
+  거리)로 나타나는 실수를 <strong>작도 가능수</strong>라 한다.</p>
+  <p><strong>작도 가능수 전체 $\mathcal{C}$는 체다.</strong> 두 작도 가능수 $a,b$에 대해
+  $a\pm b,\ ab,\ a/b\ (b\neq0)$가 모두 작도 가능하다 (닮은 삼각형·평행선 작도로 곱셈·나눗셈을,
+  선분 이어붙이기로 덧셈·뺄셈을 실현). 더 나아가 <strong>$\mathcal{C}$는 양수의 제곱근에
+  닫혀 있다</strong>: $a\gt0$이 작도 가능하면 $\sqrt a$도 작도 가능하다 (반원과 수선의
+  높이 = 기하평균 작도). 즉 $\mathbb{Q}\subseteq\mathcal{C}$이고 제곱근 첨가로 계속 커진다.</p>
+</div>
+
+<div class="box box-thm" id="thm-constructible-degree">
+  <span class="box-label">정리 · 작도 가능수의 차수는 2의 거듭제곱 <span class="label-en">degree of a constructible number</span> (프랄리 §32)</span>
+  <p><strong>이 정리가 하는 일:</strong> “작도할 수 있다”는 기하학적 사실을 “차수가 $2^k$”라는
+  대수학적 <strong>필요조건</strong>으로 번역한다 — 이 한 줄이 고대 3대 난제의 사형선고문이다.</p>
+  <p>실수 $\gamma$가 작도 가능하면</p>
+  $$[\mathbb{Q}(\gamma) : \mathbb{Q}] = 2^k \quad (\text{어떤 정수 } k \ge 0)$$
+  <p>즉 작도 가능수의 $\mathbb{Q}$ 위 차수(= <a class="term" data-term="irreducible-polynomial">최소다항식</a>의
+  차수)는 반드시 $2$의 거듭제곱이다. <strong>대우:</strong> 차수가 $2$의 거듭제곱이 아니면
+  (예: $3$으로 나누어지면) 그 수는 작도 불가능하다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 작도 한 단계 = 1·2차 방정식 풀기 → 차수 최대 2배 → 탑을 쌓으면 $[\text{꼭대기}:\mathbb{Q}]=2^m$ → 탑 법칙으로 $[\mathbb{Q}(\gamma):\mathbb{Q}]$가 그 약수.</span></summary>
+  <p><strong>한 단계의 대수:</strong> 이미 얻은 점들의 좌표가 모두 체 $F$에 들어 있다고 하자.
+  다음 교점의 좌표를 구하는 세 경우:</p>
+  <p>· <strong>직선∩직선:</strong> $F$-계수 일차식 두 개의 연립 — 해는 $F$ 안에 있다 (차수 불변,
+  $\times1$).<br>
+  · <strong>직선∩원, 원∩원:</strong> $F$-계수 이차식으로 귀착된다 (원∩원은 두 원의 방정식을
+  빼면 이차항이 소거되어 직선∩원으로 환원). 근의 공식에 $\sqrt{d}\,(d\in F)$가 등장하므로
+  새 좌표는 $F$ 또는 $F(\sqrt d)$에 들어간다 — <strong>$[F(\sqrt d):F]$는 $1$ 또는 $2$</strong>.</p>
+  <p><strong>탑 쌓기:</strong> 작도가 $n$단계라면 체의 탑</p>
+  $$\mathbb{Q} = F_0 \subseteq F_1 \subseteq \cdots \subseteq F_n, \qquad [F_{i+1}:F_i] \in \{1,2\}$$
+  <p>이 만들어지고 $\gamma \in F_n$. 탑 법칙을 곱하면
+  $[F_n:\mathbb{Q}] = \prod_i [F_{i+1}:F_i] = 2^m$ (어떤 $m\le n$).</p>
+  <p><strong>마무리:</strong> $\mathbb{Q}\subseteq\mathbb{Q}(\gamma)\subseteq F_n$이므로 탑 법칙으로
+  $[\mathbb{Q}(\gamma):\mathbb{Q}]$는 $[F_n:\mathbb{Q}]=2^m$의 약수다. $2^m$의 약수는 다시
+  $2$의 거듭제곱뿐이니 $[\mathbb{Q}(\gamma):\mathbb{Q}]=2^k$. $\ \blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">이 정리를 오용하지 않기 — 필요조건일 뿐</span>
+  <p>정리는 <strong>“작도 가능 $\Rightarrow$ 차수 $2^k$”</strong>라는 <strong>한 방향</strong>만
+  말한다. 역 <strong>“차수 $2^k$ $\Rightarrow$ 작도 가능”은 거짓</strong>이다. 예컨대
+  기약 4차식(차수 $4=2^2$)의 실근 중에는 작도 불가능한 것이 있다 — 갈루아군이 $2$-군이
+  아니면 아무리 차수가 $2$의 거듭제곱이라도 작도되지 않는다. 정확한 판정(필요충분조건)은
+  “$\mathbb{Q}(\gamma)$를 품는 <em>갈루아 확대</em>의 차수가 $2$의 거듭제곱”이며, 이는 갈루아
+  이론의 영역이다. 이 장에서 쓰는 것은 <strong>불가능성을 증명하는 대우</strong>뿐이다:
+  차수가 $2^k$가 아님을 보이면 작도 불가능이 확정된다.</p>
+</div>
+
+<h2 id="sec-ancient">4. 고대 3대 난제 — 한 정리에 무너지다</h2>
+
+<p>기원전부터 그리스 기하학자들을 괴롭힌 세 작도 문제가 있습니다. 2000년 넘게 “아직 못
+찾았을 뿐”이라 여겨졌지만, 19세기 대수학은 이들이 <strong>원리적으로 불가능</strong>함을
+증명했습니다. 무기는 방금의 “작도 가능 $\Rightarrow$ 차수 $2^k$” 하나입니다.</p>
+
+<div class="box box-example">
+  <span class="box-label">난제 (a) · 배적 문제 — 정육면체 부피 2배 만들기</span>
+  <p><strong>문제:</strong> 주어진 정육면체의 <strong>부피를 2배</strong>로 하는 정육면체의 한
+  변을 작도하라 (델로스 문제). 단위 정육면체라면 새 변의 길이는 $\gamma = \sqrt[3]{2}$.</p>
+  <p><strong>해결:</strong> $\sqrt[3]{2}$는 $x^3 - 2$의 근이고, 이 다항식은 아이젠슈타인 판정법
+  ($p=2$)으로 $\mathbb{Q}$ 위 기약. 따라서
+  $[\mathbb{Q}(\sqrt[3]{2}):\mathbb{Q}] = 3$. 그런데 $3$은 $2$의 거듭제곱이 아니다 — 작도 정리의
+  대우로 <strong>$\sqrt[3]{2}$는 작도 불가능</strong>. 정육면체의 배적은 불가능하다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">난제 (b) · 각의 3등분 — $60°$를 세 조각으로</span>
+  <p><strong>문제:</strong> 임의로 주어진 각을 자와 컴퍼스로 <strong>3등분</strong>하라.
+  “임의의 각”이 핵심 — 반례 하나면 “일반적으로 불가능”이 증명된다. $60°$를 3등분하려면
+  $20°$를 작도해야 하고, 그러려면 $\cos 20°$가 작도 가능해야 한다.</p>
+  <p><strong>해결:</strong> 삼배각 공식 $\cos 3\theta = 4\cos^3\theta - 3\cos\theta$에
+  $\theta = 20°$ ($\cos 60° = \tfrac12$)를 넣고 $x = \cos 20°$라 두면</p>
+  $$4x^3 - 3x = \tfrac12 \quad\Longrightarrow\quad 8x^3 - 6x - 1 = 0.$$
+  <p>$8x^3 - 6x - 1$은 $\mathbb{Q}$ 위 기약이다 (유리근 후보 $\pm1,\pm\tfrac12,\pm\tfrac14,\pm\tfrac18$을
+  모두 대입해도 $0$이 아니므로, 3차식이 유리근이 없어 기약). 따라서
+  $[\mathbb{Q}(\cos 20°):\mathbb{Q}] = 3$ — $2$의 거듭제곱이 아니다. <strong>$\cos 20°$는 작도
+  불가능</strong>하므로 $60°$는 3등분되지 않는다. “임의의 각의 3등분”은 불가능하다.</p>
+  <p><em>주의:</em> 이것은 “<strong>모든</strong> 각을 3등분할 수는 없다”는 뜻이지, 어떤 각도
+  3등분 못 한다는 말이 아니다 — $90°$의 3등분($30°$)은 얼마든지 작도된다. 반례 $60°$ 하나로
+  “보편적 방법은 없다”가 증명될 뿐이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">난제 (c) · 원적 문제 — 원과 같은 넓이의 정사각형</span>
+  <p><strong>문제:</strong> 주어진 원과 <strong>같은 넓이</strong>의 정사각형을 작도하라
+  (“원을 정사각형으로”). 반지름 $1$인 원의 넓이는 $\pi$이니, 정사각형의 한 변은
+  $\gamma = \sqrt{\pi}$.</p>
+  <p><strong>해결:</strong> $\sqrt\pi$가 작도 가능하다면 $\mathcal{C}$가 체이므로
+  $(\sqrt\pi)^2 = \pi$도 작도 가능하다. 그런데 작도 가능수는 모두 대수적인데
+  ($[\mathbb{Q}(\gamma):\mathbb{Q}]=2^k\lt\infty$이니 대수적), <strong>$\pi$는 초월적</strong>이다
+  (<strong>린데만 정리</strong>, 1882 — $\pi$는 어떤 $0$ 아닌 유리계수 다항식의 근도 아니다).
+  초월수는 작도 가능수일 수 없으니 $\pi$는, 따라서 $\sqrt\pi$도 <strong>작도 불가능</strong>.
+  원적은 불가능하다.</p>
+  <p><em>본질:</em> 원적 불가의 이유는 $\pi$가 무리수라서가 아니라 <strong>초월적</strong>이기
+  때문이다. $\sqrt2$도 무리수지만 차수 $2$라 작도된다 — 무리성만으로는 아무것도 못 막는다.
+  결정타는 “$\pi$가 대수적이지조차 않다”는 훨씬 강한 사실이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">난제 (d) · 정 $n$각형 — 가우스와 페르마 소수 (13장 예고)</span>
+  <p>정 $n$각형의 작도는 $\cos\frac{2\pi}{n}$의 작도로 귀착된다. <strong>가우스–방첼 정리:</strong>
+  정 $n$각형이 작도 가능 $\iff$ $n = 2^s \, p_1 p_2 \cdots p_r$ (서로 다른
+  <strong>페르마 소수</strong> $p_i = 2^{2^t}+1$들의 곱). 알려진 페르마 소수는
+  $3, 5, 17, 257, 65537$뿐이다.</p>
+  <p>그래서 정삼각형·정오각형·정 $17$각형은 작도 가능하지만(가우스가 19세에 정 $17$각형
+  작도를 발견해 수학의 길로 들어섰다는 일화), 정칠각형·정구각형은 불가능하다 (정구각형은
+  $40°$가 필요한데 $\cos 40°$의 차수가 $3$ — 사실상 난제 (b)와 같은 벽). 이 판정의 배경인
+  원분확대와 $\cos\frac{2\pi}{n}$의 차수 $\varphi(n)/2$ 계산은 <strong>13장(원분확대)</strong>에서
+  다룬다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>“대수적 = 유한 차수”가 아니다.</strong> 유한이면 대수적이지만 역은 거짓 —
+  $\overline{\mathbb{Q}}/\mathbb{Q}$는 무한 차수의 대수적 확대다. “대수적”은 원소 하나하나가
+  다항식의 근이라는 조건이고, “유한”은 벡터공간 차원의 조건이다.<br>
+  ② <strong>“차수 $2^k$ $\Rightarrow$ 작도 가능”은 성립하지 않는다.</strong> 정리는 필요조건이지
+  충분조건이 아니다 (정확한 판정은 갈루아 이론). 이 장에서 정당한 사용은 오직
+  <strong>불가능성 증명(대우)</strong> — “차수가 $2^k$가 아니다 $\Rightarrow$ 작도 불가”뿐이다.<br>
+  ③ <strong>원적 불가의 본질은 무리성이 아니라 초월성.</strong> $\pi$가 그저 무리수여서가 아니라
+  <em>대수적이지조차 않아서</em> 작도가 막힌다. 무리수 $\sqrt2$는 차수 $2$라 멀쩡히 작도된다.<br>
+  ④ <strong>“각의 3등분은 불가능”을 “어떤 각도 못 나눈다”로 읽으면 안 된다.</strong>
+  <em>임의의</em> 각에 통하는 보편적 작도법이 없다는 뜻 — $90°,\ 180°$ 등 특정 각은 3등분된다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">11장의 줄거리</span>
+  <p><a class="term" data-term="algebraic-extension">대수적 확대</a> = 모든 원소가 $F$ 위
+  다항식의 근인 확대. <strong>유한 $\Rightarrow$ 대수적</strong>($n+1$개 거듭제곱이 일차종속),
+  역은 거짓($\overline{\mathbb{Q}}/\mathbb{Q}$은 무한 대수확대). 대수적 원소는 체를 이루고
+  (탑으로 유한성에 가둠), 대수적 위 대수적은 다시 대수적
+  → <a class="term" data-term="algebraically-closed">대수적으로 닫힌 체</a> = 상수 아닌
+  다항식이 모두 근을 갖는 종착지; <strong>대수적 폐포 $\overline{F}$</strong>는 존재(선택공리)·
+  유일(동형까지). $\mathbb{C}$는 닫혀 있고(FTA), $\overline{\mathbb{Q}}\subsetneq\mathbb{C}$
+  (가산 $\subsetneq$ 비가산 — 거의 모든 복소수는 초월적)
+  → <a class="term" data-term="constructible-number">작도 가능수</a>는 체이고 양수 제곱근에
+  닫힘; <strong>작도 가능 $\Rightarrow [\mathbb{Q}(\gamma):\mathbb{Q}]=2^k$</strong> (작도 =
+  1·2차 방정식의 연쇄 → <a class="term" data-term="extension-field">탑 법칙</a>)
+  → <strong>고대 3대 난제 사망</strong>: 배적($\sqrt[3]{2}$ 차수 3), 3등분($\cos20°$가
+  $8x^3-6x-1$의 근, 차수 3), 원적($\pi$ 초월 — 린데만). 정 $n$각형은 페르마 소수(가우스),
+  자세히는 13장.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 작도 불가능성 증명의 정석은 “문제의 수 $\gamma$를
+  대수적으로 번역 → $[\mathbb{Q}(\gamma):\mathbb{Q}]$ 계산 → $2$의 거듭제곱이 아님을 보이기”
+  세 단계다. 7장의 탑 법칙이 여기서 결정적 무기가 된다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>각 실수에 대해 $[\mathbb{Q}(\gamma):\mathbb{Q}]$를 구하고, 작도 가능한지 판정하라.</p>
+  <p>(1) $\gamma = \sqrt2 + \sqrt5$ &nbsp; (2) $\gamma = \sqrt[3]{7}$ &nbsp;
+  (3) $\gamma = \sqrt{1 + \sqrt[3]{2}}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>차수가 $2$의 거듭제곱 $\iff$ 작도 가능성의 <strong>필요조건</strong> 통과.
+    (3) $\gamma^2 = 1 + \sqrt[3]{2}$에서 $\sqrt[3]{2} = \gamma^2 - 1 \in \mathbb{Q}(\gamma)$
+    — 어떤 수의 배수가 차수에 숨어 있는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>차수 $4$, 작도 가능.</strong> $\mathbb{Q}\subseteq\mathbb{Q}(\sqrt2)\subseteq
+    \mathbb{Q}(\sqrt2,\sqrt5)$에서 각 층이 차수 $2$ ($\sqrt5\notin\mathbb{Q}(\sqrt2)$),
+    탑 법칙으로 $[\mathbb{Q}(\sqrt2,\sqrt5):\mathbb{Q}]=4$. $\gamma=\sqrt2+\sqrt5$는 이 체를
+    생성하므로 (최소다항식 $x^4-14x^2+9$) 차수 $4=2^2$ — 작도 가능.</p>
+    <p>(2) <strong>차수 $3$, 작도 불가능.</strong> $x^3-7$은 아이젠슈타인 $p=7$로 기약이라
+    차수 $3$. $2$의 거듭제곱이 아니므로 대우로 작도 불가능.</p>
+    <p>(3) <strong>차수 $6$, 작도 불가능.</strong> $\sqrt[3]{2}=\gamma^2-1\in\mathbb{Q}(\gamma)$이니
+    $\mathbb{Q}(\sqrt[3]{2})\subseteq\mathbb{Q}(\gamma)$, 따라서 $3=[\mathbb{Q}(\sqrt[3]{2}):\mathbb{Q}]$이
+    $[\mathbb{Q}(\gamma):\mathbb{Q}]$를 나눈다. 한편 $\gamma$는
+    $\mathbb{Q}(\sqrt[3]{2})$ 위 $x^2-(1+\sqrt[3]{2})$의 근이라 그 위 차수 $2$ —
+    탑 법칙으로 $[\mathbb{Q}(\gamma):\mathbb{Q}]=2\cdot3=6$. $6$은 $2$의 거듭제곱이 아니므로
+    작도 불가능. (차수에 $3$이 섞이면 곧바로 탈락.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 유한 확대는 대수적 확대다.<br>
+  (2) 대수적 확대는 유한 확대다.<br>
+  (3) 작도 가능수의 최소다항식 차수는 항상 $2$의 거듭제곱이다.<br>
+  (4) $[\mathbb{Q}(\gamma):\mathbb{Q}]=2^k$이면 $\gamma$는 작도 가능하다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) $\overline{\mathbb{Q}}$. (4) 정리의 <strong>역</strong> — 성립할까?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> $[E:F]=n$이면 각 $\alpha$에 대해 $1,\alpha,\dots,\alpha^n$이
+    일차종속 → 다항식 관계 → 대수적.</p>
+    <p>(2) <strong>거짓.</strong> $\overline{\mathbb{Q}}/\mathbb{Q}$는 대수적이지만
+    $[\overline{\mathbb{Q}}:\mathbb{Q}]=\infty$ (모든 $\sqrt[n]{2}$를 품어 차수가 무한).</p>
+    <p>(3) <strong>참.</strong> 작도 가능수 $\gamma$는 $[\mathbb{Q}(\gamma):\mathbb{Q}]=2^k$이고,
+    이 차수가 곧 최소다항식 $\operatorname{irr}(\gamma,\mathbb{Q})$의 차수다.</p>
+    <p>(4) <strong>거짓.</strong> 정리는 필요조건일 뿐 충분조건이 아니다. 갈루아군이 $S_4$인
+    기약 4차식(예: $x^4-x-1$)의 실근은 차수 $4=2^2$이지만 작도 불가능하다. 정확한 판정은
+    갈루아 이론이 필요하다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §32 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$8x^3 - 6x - 1$이 $\mathbb{Q}$ 위 기약임을 보이고, 이를 이용해 각 $60°$가 자와 컴퍼스로
+  <strong>3등분될 수 없음</strong>을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>3차식은 유리근이 없으면 기약. 유리근 후보는 $\pm\dfrac{1\text{의 약수}}{8\text{의 약수}}$.
+    삼배각 공식 $\cos3\theta = 4\cos^3\theta-3\cos\theta$, $\theta=20°$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>기약성:</strong> 유리근 정리로 후보는
+    $\pm1,\pm\tfrac12,\pm\tfrac14,\pm\tfrac18$. 대입하면
+    $f(1)=1,\ f(-1)=-3,\ f(\tfrac12)=-3,\ f(-\tfrac12)=1,\ f(\tfrac14)=-\tfrac{17}{8},\dots$ —
+    어느 것도 $0$이 아니다. 3차식이 유리근을 갖지 않으므로 (일차 인수가 없으니 이차×일차 분해
+    불가) $\mathbb{Q}$ 위 기약.</p>
+    <p><strong>3등분 불가:</strong> $60°$가 3등분되면 $20°$가, 따라서 $\cos20°$가 작도 가능해야
+    한다. 삼배각 공식에 $\theta=20°$를 넣으면 ($\cos60°=\tfrac12$)
+    $$4\cos^3 20° - 3\cos 20° = \tfrac12 \ \Rightarrow\ 8x^3-6x-1=0,\quad x=\cos20°.$$
+    이 다항식이 기약이므로 $\operatorname{irr}(\cos20°,\mathbb{Q})=8x^3-6x-1$ (최고차 정규화),
+    즉 $[\mathbb{Q}(\cos20°):\mathbb{Q}]=3$. $3$은 $2$의 거듭제곱이 아니므로 $\cos20°$는 작도
+    불가능 — $60°$는 3등분되지 않는다. $\blacksquare$</p>
+    <p>(서술 뼈대: 기약성 판정 → 차수 $3$ 확정 → “작도$\Rightarrow2^k$”의 대우 → 결론.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>배적 문제 서술형</span>
+  </div>
+  <p>주어진 정육면체의 부피를 정확히 2배로 하는 정육면체의 한 변을 자와 컴퍼스로 작도할 수
+  없음을 증명하라. (작도 가능수의 차수에 관한 정리를 인용하되, 필요한 기약성은 스스로 밝힐 것.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>단위 정육면체에서 새 변은 $\sqrt[3]{2}$. $x^3-2$의 기약성을 아이젠슈타인으로.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>일반성을 잃지 않고 단위 정육면체(부피 $1$)에서 시작하면, 부피 $2$인 정육면체의 한 변은
+    $\gamma$로서 $\gamma^3=2$, 즉 $\gamma=\sqrt[3]{2}$. 이것이 작도 가능한지 묻는 문제다.</p>
+    <p><strong>차수 계산:</strong> $x^3-2$는 아이젠슈타인 판정법($p=2$: $2\mid -2$, $2\nmid1$,
+    $4\nmid2$)으로 $\mathbb{Q}$ 위 기약. 따라서
+    $[\mathbb{Q}(\sqrt[3]{2}):\mathbb{Q}] = \deg(x^3-2) = 3$.</p>
+    <p><strong>결론:</strong> 작도 가능수 $\gamma$는 반드시
+    $[\mathbb{Q}(\gamma):\mathbb{Q}]=2^k$를 만족한다. 그러나 $3$은 $2$의 거듭제곱이 아니므로
+    $\sqrt[3]{2}$는 작도 불가능 — 정육면체의 배적은 자와 컴퍼스로 불가능하다. $\blacksquare$</p>
+    <p>(만점 답안의 세 요소: ① 문제를 $\sqrt[3]{2}$의 작도로 번역, ② 기약성으로 차수 $3$ 확정,
+    ③ “작도 $\Rightarrow 2^k$” 정리의 대우 적용.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>대수적 원소가 체를 이룸</span>
+  </div>
+  <p>$E \supseteq F$가 체의 확대이고 $\alpha,\beta\in E$가 $F$ 위에서 대수적이라 하자.
+  $\alpha+\beta$와 $\alpha\beta$가 $F$ 위에서 대수적임을 증명하라. (탑 법칙과 “유한 $\Rightarrow$
+  대수적”을 사용하라.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\alpha,\beta$를 직접 다루지 말고, 이들을 품는 <strong>유한 확대</strong> $F(\alpha,\beta)$를
+    한 덩어리로 잡아라. 유한 확대의 원소는 무엇이든 대수적이다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>유한성 확보:</strong> $\alpha$가 $F$ 위 대수적이므로
+    $[F(\alpha):F]=\deg\operatorname{irr}(\alpha,F)=m\lt\infty$. 또 $\beta$는 $F$ 위 대수적이니
+    더 큰 체 $F(\alpha)$ 위에서도 대수적($F$-계수 다항식이 그대로 $F(\alpha)$-계수 다항식) —
+    $[F(\alpha,\beta):F(\alpha)]\le\deg\operatorname{irr}(\beta,F)\lt\infty$. 탑 법칙으로
+    $$[F(\alpha,\beta):F] = [F(\alpha,\beta):F(\alpha)]\,[F(\alpha):F] \lt \infty.$$
+    <strong>대수성 회수:</strong> $F(\alpha,\beta)$는 $F$의 유한 확대이므로 그 안의 모든 원소가
+    $F$ 위 대수적이다 (거듭제곱 $1,\gamma,\gamma^2,\dots$가 유한 차원에서 일차종속). 그런데
+    $\alpha+\beta,\ \alpha\beta \in F(\alpha,\beta)$이므로 둘 다 $F$ 위 대수적이다. $\blacksquare$</p>
+    <p>(핵심 아이디어: 대수성을 직접 다항식으로 확인하는 것은 어렵지만, “유한한 방 안에 가두면
+    자동으로 대수적”이라는 우회로가 표준이다. 같은 논법으로 $\alpha-\beta,\ \alpha/\beta\,(\beta\neq0)$도
+    대수적 — 대수적 원소 전체가 체를 이룬다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>원적 문제 · 초월성</span>
+  </div>
+  <p>(1) 작도 가능한 모든 실수는 $\mathbb{Q}$ 위에서 대수적임을 설명하라.
+  (2) 이를 이용해, $\pi$가 초월수라는 사실(린데만 정리)로부터 반지름 $1$인 원과 넓이가 같은
+  정사각형을 작도할 수 없음을 보여라. (3) “$\pi$가 무리수이므로 원적이 불가능하다”는 서술이
+  왜 논리적으로 불충분한지 한 문장으로 지적하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 작도 가능 $\Rightarrow$ 차수 $2^k\lt\infty$ $\Rightarrow$ 대수적. (2) 정사각형의 변은
+    $\sqrt\pi$, 그러면 $\pi$도 작도 가능. (3) 무리수 중에도 작도되는 것이 있는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1)</strong> $\gamma$가 작도 가능하면 $[\mathbb{Q}(\gamma):\mathbb{Q}]=2^k$로
+    <strong>유한</strong>하다. 유한 확대의 원소는 대수적이므로 ($1,\gamma,\dots,\gamma^{2^k}$이
+    일차종속) $\gamma$는 $\mathbb{Q}$ 위 대수적이다. 즉 <strong>작도 가능 $\Rightarrow$ 대수적</strong>.</p>
+    <p><strong>(2)</strong> 넓이 $\pi$인 정사각형의 한 변은 $\sqrt\pi$. 만약 $\sqrt\pi$가 작도
+    가능하면 작도 가능수의 체 성질로 $(\sqrt\pi)^2=\pi$도 작도 가능하고, (1)에 의해 $\pi$가
+    대수적이어야 한다. 그러나 린데만 정리로 $\pi$는 <strong>초월수</strong>(대수적이 아님) —
+    모순. 따라서 $\sqrt\pi$는 작도 불가능하고 원적은 불가능하다. $\blacksquare$</p>
+    <p><strong>(3)</strong> 무리수 중에도 $\sqrt2$처럼 차수 $2$라 작도되는 것이 있으므로,
+    “무리수”라는 사실만으로는 작도 불가능이 따라 나오지 않는다 — 결정적인 것은 무리성이 아니라
+    <strong>초월성</strong>($\pi$가 대수적이지조차 않다는 것)이다.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

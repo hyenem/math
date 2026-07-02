@@ -17,10 +17,10 @@
 <main class="content">
 
 <div class="chapter-head">
-  <p class="ch-eyebrow">현대대수학 · Fraleigh (§13–15)</p>
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§13–15, §34)</p>
   <h1><span class="ch-num">4</span> 준동형사상과 잉여군</h1>
   <p class="ch-source">군론의 중앙역 — 구조 보존 사상, 잉여류로 만드는 새 군,
-  그리고 둘을 잇는 제1동형정리. 선형대수 2장과 완벽히 평행한 이야기입니다.</p>
+  그리고 넷의 동형정리(제1·제2·제3·대응). 선형대수 2장과 완벽히 평행한 이야기입니다.</p>
 </div>
 
 <p>선형대수 2장의 줄거리를 기억하세요 — 구조 보존 함수(선형변환), 그 핵과 상,
@@ -133,6 +133,103 @@
   몫이 같아도 “조립 방식”(확대)은 다를 수 있다.</p>
 </div>
 
+<h2 id="sec-more-iso">4. 나머지 동형정리 — 몫을 다루는 대수 규칙</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>제1동형정리가 “핵으로 나눈 몫 = 상”이라는 <strong>발견 도구</strong>였다면,
+  나머지 셋은 잉여군을 <strong>분수처럼 다루는 계산 규칙</strong>입니다:
+  부분군을 곱해서 몫을 만들고(제2), 몫의 몫을 약분하고(제3),
+  몫군 $G/N$의 부분군을 원본 $G$에서 직접 읽는(대응) — 세 가지 모두
+  “좋은 준동형 하나를 설계해 제1동형정리에 넣는다”는 같은 한 수로 증명됩니다.</p>
+</div>
+
+<div class="box box-thm" id="def-second-isomorphism"><span class="box-label">정리 · 제2동형정리 <span class="label-en">second isomorphism theorem</span> (프랄리 §34)</span>
+  <p><strong>이 정리가 하는 일:</strong> 부분군 $H$와 정규부분군 $N$을 “섞었을 때”
+  생기는 몫을 계산한다 — 격자에서 마름모(다이아몬드) 모양이라 <em>다이아몬드 정리</em>라고도.</p>
+  <p>$H \le G$이고 $N \trianglelefteq G$이면, $HN = \{hn\}$은 $G$의 부분군,
+  $N \trianglelefteq HN$, $H \cap N \trianglelefteq H$이고</p>
+  $$HN/N \;\cong\; H/(H \cap N).$$
+  <p>(좌변은 “$H$를 $N$ 위로 올린 몫”, 우변은 “$H$를 $H$와 $N$의 겹침으로 나눈 몫” —
+  겹치는 부분 $H\cap N$만큼이 정확히 뭉개진다.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 제1동형정리에 넣을 준동형 $\phi: H \to HN/N$ 하나면 끝.</span></summary>
+  <p>$\phi : H \to HN/N$, $\phi(h) = hN$로 정의. 준동형은 $\phi(h_1 h_2) = h_1 h_2 N
+  = (h_1 N)(h_2 N)$ (여기서 $N$이 정규라 $HN/N$이 군). <strong>전사:</strong> $HN/N$의
+  임의 원소는 $hnN = hN = \phi(h)$. <strong>핵:</strong>
+  $\ker\phi = \{h \in H : hN = N\} = \{h \in H : h \in N\} = H \cap N$.
+  제1동형정리로 $H/(H\cap N) \cong \phi(H) = HN/N$. ($HN$이 부분군임과
+  $H\cap N \trianglelefteq H$는 이 과정에서 부산물로 확인된다.)</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\mathbb{Z}$에서 만져보기</span>
+  <p>$G = \mathbb{Z}$(덧셈), $H = 4\mathbb{Z}$, $N = 6\mathbb{Z}$. 아벨이라 전부 정규.
+  $HN = H + N = 4\mathbb{Z} + 6\mathbb{Z} = \gcd(4,6)\mathbb{Z} = 2\mathbb{Z}$,
+  $H \cap N = \operatorname{lcm}(4,6)\mathbb{Z} = 12\mathbb{Z}$.</p>
+  <p>제2동형정리: $\dfrac{2\mathbb{Z}}{6\mathbb{Z}} \cong \dfrac{4\mathbb{Z}}{12\mathbb{Z}}$
+  — 양변 모두 위수 3 순환군 $\mathbb{Z}_3$ ✓. “$\gcd$로 합치고 $\operatorname{lcm}$으로
+  겹치는” 정수론적 그림이 그대로 군의 동형으로 나타난다.</p>
+</div>
+
+<div class="box box-thm" id="def-third-isomorphism"><span class="box-label">정리 · 제3동형정리 <span class="label-en">third isomorphism theorem</span> (프랄리 §34)</span>
+  <p><strong>이 정리가 하는 일:</strong> 몫의 몫을 <strong>약분</strong>한다 — 분수 $\frac{a/c}{b/c} = \frac{a}{b}$와 똑같이.</p>
+  <p>$H, K \trianglelefteq G$이고 $K \le H$이면, $H/K \trianglelefteq G/K$이고</p>
+  $$\big(G/K\big)\big/\big(H/K\big) \;\cong\; G/H.$$
+  <p>분자·분모에서 $K$를 “약분”하면 남는 것이 $G/H$. 두 번 뭉갠 결과는 한 번에
+  더 크게 뭉갠 것과 같다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 자연스러운 사상 $gK \mapsto gH$ (K ≤ H라 잘 정의됨).</span></summary>
+  <p>$\psi : G/K \to G/H$, $\psi(gK) = gH$. <strong>잘 정의됨:</strong> $gK = g'K
+  \Rightarrow g^{-1}g' \in K \subseteq H \Rightarrow gH = g'H$ ($K \le H$가 여기서
+  쓰인다). 준동형·전사는 즉시. <strong>핵:</strong> $\psi(gK) = H \iff g \in H
+  \iff gK \in H/K$, 즉 $\ker\psi = H/K$. 제1동형정리로 결론. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 약분 확인</span>
+  <p>$G = \mathbb{Z}$, $K = 12\mathbb{Z}$, $H = 4\mathbb{Z}$ ($K \le H$ ✓).
+  $$\frac{\mathbb{Z}/12\mathbb{Z}}{4\mathbb{Z}/12\mathbb{Z}}
+  = \frac{\mathbb{Z}_{12}}{\langle 4 \rangle} \cong \mathbb{Z}/4\mathbb{Z} = \mathbb{Z}_4.$$
+  이 장 연습문제 1에서 $\mathbb{Z}_{12}/\langle 4 \rangle \cong \mathbb{Z}_4$를 직접
+  계산했는데, 제3동형정리는 그것을 “$12$에서 $12$를 약분하고 $4$만 남긴다”로 즉시 준다.</p>
+</div>
+
+<div class="box box-def" id="def-correspondence-theorem">
+  <span class="box-label">정리 · 대응정리 (격자 동형정리) <span class="label-en">correspondence theorem</span> (프랄리 §34)</span>
+  <p><strong>이 정리가 하는 일:</strong> 몫군 $G/N$의 부분군을 <strong>원본 $G$ 안에서 직접</strong>
+  읽게 해 준다 — 몫을 “$N$ 위의 층 구조”로 보는 관점.</p>
+  <p>$N \trianglelefteq G$일 때, $G/N$의 부분군 전체는 정확히</p>
+  $$\{\, H/N \;:\; N \le H \le G \,\}$$
+  <p>이고, 이 대응 $H \leftrightarrow H/N$은 <strong>포함관계·지수·정규성을 모두 보존</strong>한다
+  ($H_1 \le H_2 \iff H_1/N \le H_2/N$; $H \trianglelefteq G \iff H/N \trianglelefteq G/N$).
+  즉 “$G/N$의 부분군 격자”는 “$N$을 포함하는 $G$의 부분군 격자”를 그대로 베낀 것.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 왜 $\mathbb{Z}_{12}$의 부분군이 약수와 대응하는가</span>
+  <p>$\mathbb{Z}_{12} = \mathbb{Z}/12\mathbb{Z}$의 부분군은, 대응정리로,
+  $12\mathbb{Z} \le H \le \mathbb{Z}$인 $H = d\mathbb{Z}$들 — 즉 $d \mid 12$인 약수들과
+  일대일: $d \in \{1,2,3,4,6,12\}$. 2장에서 “$\mathbb{Z}_n$의 부분군은 각 약수마다
+  정확히 하나”라고 배운 사실의 구조적 근거가 바로 대응정리다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① 제2동형정리에서 <strong>$N$은 정규</strong>여야 $HN$이 부분군이 된다 —
+  $H$는 정규가 아니어도 좋다 (비대칭에 주의).
+  ② 제3동형정리의 약분은 $K \le H$이고 <strong>둘 다 $G$에 정규</strong>일 때만.
+  ③ 대응정리는 <strong>$N$을 포함하는</strong> 부분군만 대응시킨다 — $N$을 포함하지
+  않는 부분군은 $G/N$에서 사라지거나 다른 것과 뭉개진다.
+  “$G/N$의 부분군을 세라”는 문제는 결국 “$N \supseteq$ 이상 부분군을 세라”로 번역된다.</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약</h2>
 
 <div class="box box-intuition">
@@ -145,10 +242,14 @@
   → <a class="term" data-term="factor-group">잉여군</a> $G/H$ = “$H$의 차이를 무시한
   세계” ($\mathbb{Z}/n\mathbb{Z} = \mathbb{Z}_n$, $\mathbb{R}/\mathbb{Z} = S^1$)
   → <a class="term" data-term="first-isomorphism">제1동형정리</a>:
-  $G/\ker\phi \cong \phi(G)$ — 몫군 계산 = 좋은 준동형 설계.</p>
+  $G/\ker\phi \cong \phi(G)$ — 몫군 계산 = 좋은 준동형 설계
+  → 나머지 세 정리(<a class="term" data-term="second-isomorphism">제2</a>: $HN/N \cong H/(H\cap N)$,
+  <a class="term" data-term="third-isomorphism">제3</a>: 몫의 몫 약분,
+  <a class="term" data-term="correspondence-theorem">대응</a>: $G/N$의 부분군 = $N$ 포함 부분군)
+  — 전부 “좋은 준동형을 제1동형정리에 넣는” 같은 한 수.</p>
   <p><strong>단 하나만 기억한다면:</strong> “$G/H$를 구하라”는 문제의 정석 풀이는
   핵이 $H$인 준동형사상을 하나 만드는 것이다 — 잉여류를 직접 곱해보는 것은
-  최후의 수단.</p>
+  최후의 수단. 네 동형정리는 모두 이 한 문장의 변주다.</p>
 </div>
 
 <section class="problems">
@@ -274,6 +375,57 @@
     <p>(잉여군의 위력이 압축된 문제 — “몫에서의 산술이 원본의 원소에 대한 결론을
     준다”. 정규성이 없으면 $G/N$이 군이 아니라서 이 논증 전체가 무너진다는 점을
     답안 첫 줄에 명시하는 것이 좋다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §34 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>제2·제3 동형정리를 이용해 다음을 계산하라.</p>
+  <p>(1) $G = \mathbb{Z}$, $H = 6\mathbb{Z}$, $N = 9\mathbb{Z}$일 때 $HN/N$의 위수.<br>
+  (2) $\big(\mathbb{Z}_{18}/\langle 6 \rangle\big)$을 잉여류 계산 없이 제3동형정리로 판정하라.
+  ($\mathbb{Z}_{18} = \mathbb{Z}/18\mathbb{Z}$, $\langle 6 \rangle = 6\mathbb{Z}/18\mathbb{Z}$.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $HN = \gcd(6,9)\mathbb{Z}$, $H\cap N = \operatorname{lcm}(6,9)\mathbb{Z}$.
+    (2) 분자·분모에서 $18\mathbb{Z}$를 약분.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $HN = 3\mathbb{Z}$, $H \cap N = 18\mathbb{Z}$. 제2동형정리로
+    $HN/N = 3\mathbb{Z}/9\mathbb{Z} \cong H/(H\cap N) = 6\mathbb{Z}/18\mathbb{Z}$ —
+    양변 위수 $3$. 답: $3$.</p>
+    <p>(2) 제3동형정리: $\dfrac{\mathbb{Z}/18\mathbb{Z}}{6\mathbb{Z}/18\mathbb{Z}}
+    \cong \mathbb{Z}/6\mathbb{Z} = \mathbb{Z}_6$. 잉여류를 하나도 곱하지 않고
+    “$18$을 약분하고 $6$만 남긴다”로 끝난다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>대응정리 서술형</span>
+  </div>
+  <p>$N \trianglelefteq G$이고 $(G : N)$이 소수 $p$이면, $N$과 $G$ 사이에 진부분군인
+  중간군이 없음을(즉 $N \le H \le G \Rightarrow H = N$ 또는 $H = G$) 대응정리로
+  증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>중간군 $H$는 $G/N$의 부분군 $H/N$에 대응하고, $|G/N| = p$.
+    소수 위수 군의 부분군은?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>대응정리로 $N \le H \le G$인 $H$는 $G/N$의 부분군 $H/N$과 일대일 대응한다.
+    $|G/N| = (G:N) = p$는 소수이므로 라그랑주 정리에 의해 $G/N$의 부분군은
+    자명한 둘($\{N/N\}$과 $G/N$)뿐이다. 따라서 $H/N = \{N\}$ 또는 $H/N = G/N$,
+    즉 $H = N$ 또는 $H = G$. $\blacksquare$</p>
+    <p>(“몫군에서의 부분군 구조 = 원본에서 $N$ 위의 부분군 구조”라는 대응정리의
+    번역이 핵심. 7장의 “소수 차수 체확대에는 중간체가 없다”(탑 법칙)와 정확히
+    평행한 논증이다 — 군의 라그랑주 ↔ 체의 탑 법칙.)</p>
   </details>
 </div>
 

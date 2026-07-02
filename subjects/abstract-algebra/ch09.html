@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9장 군의 작용과 궤도 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch09.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§16–17)</p>
+  <h1><span class="ch-num">9</span> 군의 작용과 궤도</h1>
+  <p class="ch-source">“군은 무엇이다”가 아니라 “군은 무엇을 하는가” —
+  군을 대칭성을 <strong>움직이는 존재</strong>로 보면, 세는 문제와 구조 정리가
+  한꺼번에 쏟아집니다.</p>
+</div>
+
+<p>지금까지 군은 <em>스스로 완결된 대수 구조</em>였습니다. 이 장에서 관점을 한 번
+뒤집습니다 — 군을 “집합을 뒤섞는 대칭 조작들의 모임”으로 보는 것.
+정삼각형을 회전·반사시키는 $D_3$, 정육면체를 돌리는 회전군, 카드를 섞는 $S_{52}$ —
+이들은 전부 <strong>어떤 집합 위에서 작동</strong>합니다.
+이 “작동”을 공리로 다듬은 것이 <a class="term" data-term="group-action">군의 작용</a>이고,
+거기서 <a class="term" data-term="orbit-stabilizer">궤도-안정자 정리</a>(라그랑주의
+가장 강력한 일반화), <a class="term" data-term="class-equation">류방정식</a>($p$-군의
+비밀을 여는 열쇠), <a class="term" data-term="burnside-counting">번사이드 계수정리</a>(“본질적으로
+다른 색칠은 몇 가지인가”를 세는 도구)가 줄줄이 따라 나옵니다.</p>
+
+<h2 id="sec-action">1. 군의 작용 — 군을 “동사”로 읽기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>군 $G$의 원소 하나하나가 집합 $X$를 뒤섞는 <strong>순열</strong> 하나에 대응하고,
+  그 대응이 군 연산과 아귀가 맞는 상황입니다. “$g$를 적용한 뒤 $h$를 적용”한 결과가
+  “$hg$를 한 번에 적용”한 결과와 같아야 하고($ (hg)\cdot x = h\cdot(g\cdot x)$),
+  항등원은 아무것도 안 해야 합니다($e\cdot x = x$). 딱 이 두 규칙뿐.
+  본질은 <strong>“$G$의 원소 = $X$의 순열, 곱셈 = 순열의 합성”</strong>이라는
+  번역이고, 이 번역이 <a class="term" data-term="cayley-theorem">케일리 정리</a>를
+  일반화합니다.</p>
+</div>
+
+<div class="box box-def" id="def-group-action">
+  <span class="box-label">정의 · 군의 작용 <span class="label-en">group action</span> (프랄리 §16)</span>
+  <p>군 $G$가 집합 $X$에 <strong>작용</strong>한다는 것은, 함수
+  $G \times X \to X$, $(g, x) \mapsto g\cdot x$가 다음 두 공리를 만족하는 것이다.</p>
+  $$e\cdot x = x, \qquad (gh)\cdot x = g\cdot(h\cdot x) \quad (\forall g,h\in G,\ \forall x\in X)$$
+  <p>이때 $X$를 <strong>$G$-집합</strong>이라 한다.</p>
+  <p><strong>동치 정의 — 이것이 진짜 얼굴이다:</strong> 작용을 주는 것은
+  준동형사상</p>
+  $$\rho : G \longrightarrow \operatorname{Sym}(X)$$
+  <p>하나를 주는 것과 <strong>완전히 같다</strong>. 각 $g$에
+  “$x \mapsto g\cdot x$”라는 순열 $\rho_g$를 대응시키면, 두 공리가 정확히
+  “$\rho_e = \mathrm{id}$, $\rho_{gh} = \rho_g \circ \rho_h$” — 즉 $\rho$가
+  준동형이라는 진술이 된다. 역으로 준동형 $\rho$가 있으면 $g\cdot x := \rho_g(x)$가
+  작용이다. <strong>작용과 순열표현은 같은 것의 두 언어다.</strong></p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 작용 동물원 (세 마리가 이 장의 주인공)</span>
+  <p><strong>(a) 왼쪽 곱 작용 (정칙작용):</strong> $X = G$ 자기 자신,
+  $g\cdot x = gx$. 공리 확인: $e x = x$, $(gh)x = g(hx)$ — 결합법칙 그 자체.
+  대응하는 준동형 $\rho : G \to \operatorname{Sym}(G)$는 단사이므로
+  ($gx = x \Rightarrow g = e$), $G$는 $\operatorname{Sym}(G)$의 부분군과 동형 —
+  이것이 바로 <a class="term" data-term="cayley-theorem">케일리 정리</a>다.
+  케일리 정리는 “정칙작용”이라는 특수한 작용의 그림자였던 것.</p>
+  <p><strong>(b) 켤레작용:</strong> $X = G$, $g\cdot x = gxg^{-1}$.
+  공리 확인: $exe^{-1} = x$, $(gh)x(gh)^{-1} = g(hxh^{-1})g^{-1}$ ✓.
+  이 작용의 궤도가 <strong>켤레류</strong>, 안정자가 <strong>중심화군</strong>이 되어
+  3절의 류방정식을 낳는다.</p>
+  <p><strong>(c) 잉여류 집합 위 작용:</strong> $H \le G$, $X = G/H$ (왼쪽
+  <a class="term" data-term="coset">잉여류</a> 집합), $g\cdot(aH) = (ga)H$.
+  잘 정의됨(대표원 무관)과 두 공리가 곧바로 확인된다. 대응하는 준동형
+  $G \to \operatorname{Sym}(G/H) \cong S_n$ ($n = [G:H]$)의 핵은
+  “$H$ 안에 든 가장 큰 정규부분군”이 되어, 유한 단순군 판정의 강력한 무기가 된다
+  (연습문제 5).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① 작용 공리 $(gh)\cdot x = g\cdot(h\cdot x)$는 “오른쪽 것을 먼저”다 —
+  $h$를 먼저 적용한 뒤 $g$. 순서를 뒤집어 $\rho_{gh} = \rho_h\circ\rho_g$로 쓰면
+  준동형이 아니라 <strong>반준동형</strong>이 되어 정리들이 어긋난다.
+  (오른쪽 작용 $x\cdot g$을 쓰면 이 순서가 자연스러워진다 — 교재마다 관례가 다르니
+  “어느 쪽 작용인지”를 늘 확인하라.)
+  ② “작용 = 준동형 $G \to \operatorname{Sym}(X)$”는 정의의 재포장일 뿐 정리가
+  아니다. 문제에서 작용이 주어지면 곧바로 순열표현으로 바꿔 생각하는 습관이 이 장의
+  핵심 기술이다.</p>
+</div>
+
+<h2 id="sec-orbit">2. 궤도-안정자 정리 — 라그랑주의 완성형</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>한 점 $x$를 붙잡고 $G$ 전체를 적용해 봅니다. $x$가 돌아다니며 닿는 곳 전체가
+  <strong>궤도</strong> $Gx$ — “$x$가 여행하는 세계”. 반대로 $x$를 <em>제자리에
+  묶어두는</em> $g$들을 모으면 <strong>안정자</strong> $G_x$ — 이건 $G$의
+  <a class="term" data-term="subgroup">부분군</a>입니다.
+  궤도-안정자 정리는 이 둘의 크기를 하나로 묶습니다:
+  $$|\,\text{궤도}\,| = [G : \text{안정자}].$$
+  “점이 멀리 여행할수록(궤도가 클수록) 그 점을 묶어두는 힘은 약하다(안정자가
+  작다)” — 여행 거리와 구속력의 반비례. 안정자를 자명군($\{e\}$)으로 두면
+  $|Gx| = |G|$, 라그랑주 정리의 잉여류 세기가 이 정리의 한 특수 경우로 흡수됩니다.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 궤도와 안정자 <span class="label-en">orbit, stabilizer</span> (프랄리 §16)</span>
+  <p>$G$가 $X$에 작용할 때, $x \in X$에 대해</p>
+  <p style="text-align:center;">
+  <strong>궤도</strong> $\;Gx = \{\, g\cdot x : g\in G \,\} \subseteq X$,
+  &nbsp;&nbsp;&nbsp;
+  <strong>안정자</strong> $\;G_x = \{\, g\in G : g\cdot x = x \,\} \le G$.</p>
+  <p>안정자가 부분군임은 즉시 확인된다: $e\in G_x$; $g,h\in G_x$면
+  $(gh)\cdot x = g\cdot(h\cdot x) = g\cdot x = x$; $g\cdot x = x$면 양변에 $g^{-1}$을
+  작용해 $x = g^{-1}\cdot x$. — 반면 <strong>궤도는 $X$의 부분집합일 뿐 부분군이
+  아니다</strong> (애초에 $X$에 곱셈이 없다).</p>
+  <p>“같은 궤도에 있다”($x \sim y \iff y = g\cdot x$)는 $X$ 위의
+  <strong>동치관계</strong>이므로, <strong>궤도들이 $X$를 서로소 조각으로
+  분할한다</strong>. $X$를 궤도로 자르는 것 — 이것이 이 장 모든 계산의 무대다.</p>
+</div>
+
+<div class="box box-thm" id="def-orbit-stabilizer">
+  <span class="box-label">정리 · 궤도-안정자 정리 <span class="label-en">orbit-stabilizer theorem</span> (프랄리 §16)</span>
+  <p><strong>이 정리가 하는 일:</strong> 눈에 보이는 궤도의 크기를, 눈에 안 보이는
+  부분군의 지수로 번역한다 — 세기(counting) 문제를 군론 문제로 바꾸는 환율.</p>
+  <p>$G$가 $X$에 작용하면, 각 $x\in X$에 대해</p>
+  $$|Gx| = [G : G_x].$$
+  <p>특히 $G$가 유한이면 $|Gx| = \dfrac{|G|}{|G_x|}$ — <strong>궤도의 크기는 항상
+  $|G|$의 약수</strong>다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 궤도의 점과 안정자의 잉여류를 일대일 대응시킨다. 라그랑주 증명의 판박이.</span></summary>
+  <p><strong>대응 설계:</strong> 안정자의 왼쪽 잉여류 집합 $G/G_x$에서 궤도 $Gx$로
+  가는 함수를 만든다:</p>
+  $$\Phi : G/G_x \longrightarrow Gx, \qquad \Phi(gG_x) = g\cdot x.$$
+  <p><strong>잘 정의됨 &amp; 단사 (한 번에):</strong>
+  $$gG_x = hG_x \iff h^{-1}g \in G_x \iff (h^{-1}g)\cdot x = x
+  \iff g\cdot x = h\cdot x.$$
+  좌변의 “같은 잉여류”와 우변의 “같은 상”이 <strong>서로 동치</strong>이므로,
+  $\Phi$는 잘 정의되면서 동시에 단사다 (이 한 줄이 증명의 심장).</p>
+  <p><strong>전사:</strong> 궤도의 임의의 점은 정의상 $g\cdot x = \Phi(gG_x)$ 꼴.</p>
+  <p>따라서 $\Phi$는 전단사, $|Gx| = |G/G_x| = [G:G_x]$. $G$가 유한이면
+  라그랑주로 $[G:G_x] = |G|/|G_x|$. </p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 정육면체의 회전은 몇 개인가</span>
+  <p>회전군 $G$가 정육면체의 <strong>6개 면</strong>에 작용한다.
+  임의의 면은 회전으로 어느 면으로든 갈 수 있으니 궤도는 6개 면 전체:
+  $|Gx| = 6$. 한 면을 고정하는 회전은 그 면 중심을 축으로 한 $0^\circ,90^\circ,
+  180^\circ,270^\circ$ 회전, 즉 $|G_x| = 4$. 궤도-안정자로</p>
+  $$|G| = |Gx|\cdot|G_x| = 6 \times 4 = 24.$$
+  <p>정육면체 회전군은 위수 24 (사실 $S_4$와 동형). — <strong>대상을 세지 않고
+  “궤도 $\times$ 안정자”로 군의 크기를 역산</strong>하는 이 기법이 정리의 진짜
+  쓸모다. 꼭짓점(궤도 8, 안정자 3)이나 모서리(궤도 12, 안정자 2)로 세도 똑같이
+  $24$가 나온다 — 검산까지 공짜.</p>
+</div>
+
+<h2 id="sec-class">3. 켤레류와 류방정식 — $p$-군의 심장을 열다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>이번엔 군이 <em>자기 자신</em>에 켤레로 작용합니다($g\cdot x = gxg^{-1}$).
+  이 작용의 궤도가 <strong>켤레류</strong>(서로 켤레인 원소들의 모임), 안정자가
+  <strong>중심화군</strong> $C(a) = \{g : ga = ag\}$ — “$a$와 교환하는 원소들”입니다.
+  궤도-안정자 정리를 이 작용에 그대로 대입하면 켤레류의 크기가 $[G:C(a)]$.
+  그런데 궤도가 <strong>크기 1</strong>인 원소는 정확히 “모두와 교환하는 원소”,
+  즉 <a class="term" data-term="normal-subgroup">중심</a> $Z(G)$의 원소입니다.
+  궤도들이 $G$를 분할한다는 사실을 “크기 1짜리(중심) + 나머지”로 쪼개 적으면
+  바로 류방정식이 나옵니다.</p>
+</div>
+
+<div class="box box-thm" id="def-class-equation">
+  <span class="box-label">정리 · 류방정식 <span class="label-en">class equation</span> (프랄리 §16–17)</span>
+  <p><strong>이 정리가 하는 일:</strong> 군의 위수를 “중심의 크기 + 큰 켤레류들의
+  크기”로 쪼갠 회계 장부. 각 항이 $|G|$의 약수라는 제약이 구조를 강제한다.</p>
+  <p>켤레작용에서 궤도 = 켤레류, 안정자 = 중심화군 $C(a)$이므로 궤도-안정자 정리는
+  “켤레류 크기 $= [G:C(a)]$”를 준다. 궤도 분할을 중심원소(크기 1인 켤레류)와
+  나머지로 나눠 적으면, 유한군 $G$에 대해</p>
+  $$|G| = |Z(G)| + \sum_{i} [G : C(a_i)]$$
+  <p>($a_i$는 크기 $\ge 2$인 각 켤레류의 대표원). 우변 합의 모든 항 $[G:C(a_i)]$는
+  <strong>$1$보다 크면서 $|G|$의 약수</strong>다 — 이 약수 조건이 다음 응용들의
+  전부다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 궤도 분할을 “크기 1 vs 큰 것”으로 분리해 세기.</span></summary>
+  <p>켤레작용의 궤도(켤레류)들이 $G$를 분할하므로 $|G| = \sum_{\text{궤도}} |\text{궤도}|$.
+  한 원소 $a$의 궤도가 크기 $1$인 것은</p>
+  $$gag^{-1} = a\ (\forall g) \iff ga = ag\ (\forall g) \iff a \in Z(G).$$
+  즉 크기 $1$인 궤도들의 합은 정확히 $|Z(G)|$. 나머지 궤도들은 크기 $\ge 2$이고
+  각 크기는 궤도-안정자로 $[G:C(a_i)]$. 두 덩어리를 합치면 류방정식.
+  각 $[G:C(a_i)]$가 $|G|$의 약수임은 라그랑주. </p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 류방정식이 증명하는 두 정리</span>
+  <p><strong>(a) $p$-군의 중심은 자명하지 않다.</strong> $|G| = p^n$ ($p$ 소수,
+  $n\ge 1$)이라 하자. 류방정식의 각 $[G:C(a_i)]$는 $1$보다 큰 $p^n$의 약수이므로
+  $p$로 나누어진다. $|G| = p^n$도 $p$로 나누어진다. 따라서</p>
+  $$|Z(G)| = |G| - \sum_i [G:C(a_i)]$$
+  <p>도 $p$의 배수. 그런데 $e \in Z(G)$이니 $|Z(G)|\ge 1$ — $p$의 배수이면서
+  $1$ 이상이므로 $|Z(G)| \ge p > 1$. <strong>$p$-군은 항상 비자명한 중심을
+  갖는다.</strong> (실루-정리로 가는 관문이자, 아래 (b)의 재료.)</p>
+  <p><strong>(b) 위수 $p^2$인 군은 아벨군이다.</strong> (a)로 $Z(G)\ne\{e\}$이니
+  $|Z(G)|\in\{p, p^2\}$. 만약 $|Z(G)| = p$라면 $|G/Z(G)| = p$라서 $G/Z(G)$는
+  <a class="term" data-term="cyclic-group">순환군</a>. 여기서 표준 보조정리
+  “$G/Z(G)$가 순환이면 $G$는 아벨”을 쓰면 $G$가 아벨, 곧 $Z(G) = G$가 되어
+  $|Z(G)| = p$에 모순. 따라서 $|Z(G)| = p^2$, 즉 $G = Z(G)$ — <strong>아벨.</strong>
+  덤: 위수 $p^2$ 군은 $\mathbb{Z}_{p^2}$ 아니면 $\mathbb{Z}_p\times\mathbb{Z}_p$
+  둘뿐이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>궤도와 안정자를 혼동하지 말 것</strong> — 궤도 $Gx$는 <em>$X$의
+  부분집합</em>, 안정자 $G_x$는 <em>$G$의 부분군</em>. 사는 세계가 다르다.
+  궤도-안정자 정리는 이 둘을 잇는 다리이지 둘이 같다는 말이 결코 아니다.
+  ② “$G/Z(G)$가 순환 $\Rightarrow$ $G$ 아벨”은 참이지만, 그 역인
+  “$G$ 아벨 $\Rightarrow$ $G/Z(G)$ 순환”이나 “$Z(G)$가 순환 $\Rightarrow$ $G$
+  아벨”은 거짓이다 — (b)에서 쓰는 것은 <strong>몫</strong> $G/Z(G)$가 순환이라는
+  조건뿐임에 주의.
+  ③ 켤레류의 크기는 $|G|$의 약수이지 $|G|/(\text{켤레류 개수})$ 같은 “평균”이
+  아니다. $S_3$의 류방정식 $6 = 1 + 2 + 3$처럼 크기가 제각각일 수 있다.</p>
+</div>
+
+<h2 id="sec-burnside">4. 번사이드 계수정리 — “본질적으로 다른 것”을 세다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>정육각형 꼭짓점을 두 색으로 칠하는 방법은 순진하게 세면 $2^6 = 64$가지.
+  하지만 회전시켜 겹치는 색칠은 “같은 것”으로 본다면? 궤도(=회전으로 서로 옮겨지는
+  색칠들)의 <strong>개수</strong>를 세야 합니다. 궤도를 일일이 그려 세는 건 지옥이죠.
+  번사이드의 마법: <strong>궤도의 수 = 고정점의 평균</strong>.
+  각 대칭 $g$가 <em>움직이지 않고 그대로 두는</em> 색칠의 수 $|X^g|$를 세서
+  $|G|$로 평균 내면, 그게 곧 궤도(본질적으로 다른 색칠)의 개수입니다.
+  “세기 어려운 궤도”를 “세기 쉬운 고정점”으로 바꾸는 환전소.</p>
+</div>
+
+<div class="box box-thm" id="def-burnside-counting">
+  <span class="box-label">정리 · 번사이드 계수정리 <span class="label-en">Burnside's counting theorem</span> (프랄리 §17)</span>
+  <p><strong>이 정리가 하는 일:</strong> 궤도의 개수를, 각 군원소의 고정점 수의
+  평균으로 계산한다 — 대칭을 무시한 “본질적으로 다른” 배열의 가짓수를 세는 표준 도구.</p>
+  <p>유한군 $G$가 유한집합 $X$에 작용할 때, 궤도의 개수 $N$은</p>
+  $$N = \frac{1}{|G|}\sum_{g\in G} |X^g|, \qquad X^g = \{\, x\in X : g\cdot x = x \,\}$$
+  <p>($X^g$는 $g$가 <strong>고정하는 점들</strong>). 즉 “궤도 수 = 고정점 수의
+  평균”. (이름은 번사이드지만 코시·프로베니우스가 먼저 알았기에 “세지 않는 자의
+  보조정리”라고도 불린다.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— “깃발이 서 있는 쌍” $(g,x)$의 개수를 두 방향으로 세기(이중 계산).</span></summary>
+  <p>집합 $S = \{(g,x) : g\cdot x = x\}$의 크기를 두 가지로 센다.</p>
+  <p><strong>세로로 (군원소 기준):</strong> 각 $g$마다 고정점이 $|X^g|$개이므로
+  $|S| = \sum_{g} |X^g|$.</p>
+  <p><strong>가로로 (점 기준):</strong> 각 $x$마다 $x$를 고정하는 $g$는 안정자
+  $G_x$이므로 $|S| = \sum_{x} |G_x|$. 궤도-안정자로 $|G_x| = |G|/|Gx|$이니</p>
+  $$|S| = \sum_{x\in X} \frac{|G|}{|Gx|} = |G|\sum_{x\in X}\frac{1}{|Gx|}.$$
+  <p>한 궤도 $\mathcal{O}$ 안에서는 $|Gx| = |\mathcal{O}|$가 일정하므로
+  $\sum_{x\in\mathcal{O}} \frac1{|Gx|} = |\mathcal{O}|\cdot\frac1{|\mathcal{O}|} = 1$
+  — <strong>궤도마다 정확히 $1$</strong>이 모인다. 따라서 그 합은 궤도의 수 $N$이고
+  $|S| = |G|\,N$. 두 계산을 등치하면 $\sum_g |X^g| = |G|\,N$. </p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 정육각형 꼭짓점 2색 회전 색칠은 몇 가지?</span>
+  <p>$G = $ 회전군 $\cong \mathbb{Z}_6$ (회전 $r^k$, $k=0,\dots,5$)이 6개 꼭짓점의
+  $2^6$가지 색칠 집합 $X$에 작용한다. 회전 $r^k$가 고정하는 색칠은 <strong>그 회전의
+  순환마다 색이 일정</strong>해야 하는 색칠이므로, 순환 개수만큼 자유롭게 색을 고른다.
+  $r^k$가 꼭짓점에 만드는 순환의 개수는 $\gcd(6,k)$개:</p>
+  $$|X^{r^k}| = 2^{\gcd(6,k)}.$$
+  <p>표로 세면</p>
+  $$k=0{:}\,2^6,\ k=1{:}\,2^1,\ k=2{:}\,2^2,\ k=3{:}\,2^3,\ k=4{:}\,2^2,\ k=5{:}\,2^1.$$
+  <p>합 $= 64+2+4+8+4+2 = 84$. 번사이드로</p>
+  $$N = \frac{84}{6} = 14.$$
+  <p>회전 대칭을 무시하면 <strong>본질적으로 다른 색칠은 14가지</strong>다
+  (목걸이 세기의 표준형). 만약 반사까지 허용해 $G = D_6$ ($|G|=12$)로 세면 결과가
+  달라진다 — “같다”의 기준(=어떤 군으로 작용하는가)이 답을 바꾼다는 점이 이 도구의
+  핵심 교훈이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① 번사이드는 색칠의 총수 $|X|$를 세는 것이 <strong>아니다</strong> —
+  “대칭으로 겹치는 것을 하나로 본” <strong>궤도의 수</strong>를 센다.
+  $\frac1{|G|}\sum|X^g|$은 항상 <em>정수</em>가 나와야 하며(궤도 수니까), 안 나오면
+  계산 실수다.
+  ② $|X^g|$는 “$g$가 고정하는 <strong>색칠</strong>”의 수이지 “$g$가 고정하는
+  <strong>꼭짓점</strong>”의 수가 아니다. 둘을 헷갈리면 지수 자리가 어긋난다.
+  ③ 정칙작용(왼쪽 곱)은 항등원 말고는 고정점이 없어($gx = x\Rightarrow g=e$)
+  번사이드가 $N = |G|/|G| = 1$ — 자기 자신에 왼쪽 곱은 언제나 한 궤도(추이적).
+  그래서 케일리 정리의 작용은 “세기”엔 안 쓰이고 “묻기(embedding)”에 쓰인다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">9장의 줄거리</span>
+  <p><a class="term" data-term="group-action">군의 작용</a> = 준동형
+  $G\to\operatorname{Sym}(X)$ (공리 $e\cdot x=x$, $(gh)\cdot x = g\cdot(h\cdot x)$).
+  세 주연: 왼쪽 곱(→<a class="term" data-term="cayley-theorem">케일리</a>), 켤레
+  ($gxg^{-1}$), <a class="term" data-term="coset">잉여류</a> 집합 위 작용
+  → <a class="term" data-term="orbit-stabilizer">궤도-안정자 정리</a>
+  $|Gx| = [G:G_x]$ (궤도는 $X$의 부분집합, 안정자는 $G$의
+  <a class="term" data-term="subgroup">부분군</a>; 궤도가 $X$를 분할;
+  <a class="term" data-term="lagrange-theorem">라그랑주</a>의 일반화 — 정육면체
+  회전 24개)
+  → <a class="term" data-term="class-equation">류방정식</a>
+  $|G| = |Z(G)| + \sum[G:C(a_i)]$ (켤레작용판; $p$-군 중심 비자명, 위수 $p^2$ 아벨)
+  → <a class="term" data-term="burnside-counting">번사이드 계수정리</a>
+  $N = \frac1{|G|}\sum_g |X^g|$ (궤도 수 = 고정점 평균; 목걸이·색칠 세기 —
+  정육각형 2색 회전 14가지).</p>
+  <p><strong>단 하나만 기억한다면:</strong> “군을 명사에서 동사로 바꿔라” —
+  군이 <em>무엇에 어떻게 작용하는가</em>를 정하는 순간, 세는 문제(궤도-안정자,
+  번사이드)와 구조 문제(류방정식)가 같은 원리의 두 얼굴로 풀린다. 문제를 만나면
+  먼저 물어라: <em>“여기서 어떤 군이 어떤 집합에 작용하고 있는가?”</em></p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$S_4$가 $X = \{1,2,3,4\}$에 자연스럽게 작용한다 ($\sigma\cdot i = \sigma(i)$).
+  (1) 점 $1$의 궤도 $S_4\cdot 1$과 안정자 $(S_4)_1$를 구하라.
+  (2) 궤도-안정자 정리를 이 경우에 검증하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$1$을 어디로든 보낼 수 있는가? $1$을 고정하는 치환은 나머지 $\{2,3,4\}$를
+    어떻게 다루는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 어떤 $j$든 $1$을 $j$로 보내는 치환이 있으니 <strong>궤도 =
+    $\{1,2,3,4\}$</strong>, $|S_4\cdot 1| = 4$ (작용이 추이적).
+    $1$을 고정하는 치환은 $\{2,3,4\}$를 자기들끼리 섞으므로
+    <strong>안정자 $= \{\sigma : \sigma(1)=1\} \cong S_3$</strong>,
+    $|(S_4)_1| = 6$.</p>
+    <p>(2) $|S_4\cdot 1| = 4$이고 $[S_4 : (S_4)_1] = 24/6 = 4$ ✓.
+    궤도 크기 $4$가 $|S_4| = 24$의 약수임도 확인된다.
+    (일반화: $S_n$의 한 점 안정자는 $S_{n-1}$, 궤도는 전체 $n$점 —
+    $n = n!/(n-1)!$이 궤도-안정자다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$D_4 = \langle r, s \mid r^4 = s^2 = e,\ srs = r^{-1}\rangle$ (위수 8)의
+  켤레류를 모두 구하고 류방정식을 써라. 이로부터 $|Z(D_4)|$를 확인하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$r^2$은 다른 모든 원소와 교환하는가? 반사 $s$와 $r^2 s$는 서로 켤레인가?
+    켤레류 크기의 합이 $8$이 되어야 한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>켤레류: $\{e\}$, $\{r^2\}$, $\{r, r^3\}$, $\{s, r^2 s\}$,
+    $\{rs, r^3 s\}$ — 각각 크기 $1, 1, 2, 2, 2$.
+    (예: $r s r^{-1} = r^2 s$이므로 $s \sim r^2 s$; $r$과 $r^3 = r^{-1}$은
+    $s r s^{-1} = r^{-1}$로 켤레.)</p>
+    <p>류방정식:</p>
+    $$8 = \underbrace{1 + 1}_{|Z(D_4)|} + 2 + 2 + 2.$$
+    <p>크기 $1$인 켤레류가 $\{e\}, \{r^2\}$ 둘이므로
+    <strong>$Z(D_4) = \{e, r^2\}$, $|Z(D_4)| = 2$</strong> ✓.
+    (위수 $8 = 2^3$인 $p$-군이라 중심이 비자명 — 3절 정리의 실물.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §17 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>정사각형의 네 꼭짓점을 $3$가지 색으로 칠한다. 회전군
+  $\mathbb{Z}_4 = \{e, r, r^2, r^3\}$ ($90^\circ$ 회전)로 겹치는 색칠을 같다고 볼 때,
+  본질적으로 다른 색칠의 수를 번사이드로 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$r^k$가 고정하는 색칠 수 $= 3^{(\text{순환 개수})} = 3^{\gcd(4,k)}$.
+    $\gcd(4,0)=4,\ \gcd(4,1)=1,\ \gcd(4,2)=2,\ \gcd(4,3)=1$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>고정점 수:
+    $|X^e| = 3^4 = 81$, $|X^{r}| = 3^1 = 3$, $|X^{r^2}| = 3^2 = 9$,
+    $|X^{r^3}| = 3^1 = 3$.</p>
+    <p>번사이드:</p>
+    $$N = \frac{1}{4}(81 + 3 + 9 + 3) = \frac{96}{4} = 24.$$
+    <p><strong>24가지.</strong> (정수로 떨어짐이 검산.
+    덤 — 반사까지 넣어 $D_4$ ($|G|=8$)로 세면 반사 4개의 고정점이
+    각각 $3^{2}, 3^{2}, 3^{3}, 3^{3}$ (대각선 반사 $2$개는 순환 $3$개, 변 중점
+    반사 $2$개는 순환 $2$개)이라 합 $= 96 + (9+9+27+27) = 168$,
+    $N = 168/8 = 21$ — 반사를 허용하면 21가지로 줄어든다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>류방정식 서술형</span>
+  </div>
+  <p>$p$가 소수이고 $|G| = p^2$이면 $G$가 아벨군임을 류방정식을 이용해 증명하라.
+  (보조정리 “$G/Z(G)$가 순환군이면 $G$는 아벨군”은 사용해도 좋다.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>먼저 류방정식으로 $Z(G) \neq \{e\}$를 보이고, $|Z(G)| \in \{p, p^2\}$에서
+    $p$인 경우가 모순임을 보조정리로 밀어붙여라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>1단계 (중심 비자명):</strong> 류방정식
+    $|G| = |Z(G)| + \sum_i [G:C(a_i)]$에서 각 $[G:C(a_i)]$는 $1$보다 큰 $p^2$의
+    약수이므로 $p$로 나누어진다. $|G| = p^2$도 $p$로 나누어지므로
+    $|Z(G)| = |G| - \sum_i[G:C(a_i)]$도 $p$의 배수. $e\in Z(G)$이니
+    $|Z(G)| \ge 1$ — 따라서 $|Z(G)| \ge p$, 특히 $Z(G) \neq \{e\}$.</p>
+    <p><strong>2단계 (아벨):</strong> 라그랑주로 $|Z(G)| \in \{p, p^2\}$.
+    만약 $|Z(G)| = p$라면 $|G/Z(G)| = p^2/p = p$라서 $G/Z(G)$는 위수 $p$인
+    순환군. 보조정리에 의해 $G$는 아벨, 그러면 $Z(G) = G$라서 $|Z(G)| = p^2$ —
+    $|Z(G)| = p$에 모순. 따라서 $|Z(G)| = p^2$, 즉 $Z(G) = G$, $G$는
+    <strong>아벨군</strong>. $\blacksquare$</p>
+    <p>(만점 답안 뼈대: ① 류방정식의 약수 논증으로 중심 비자명 → ② 위수 $p$
+    경우를 $G/Z$ 순환 보조정리로 배제. 두 단계를 모두 적는 것이 핵심.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>잉여류 작용 서술형</span>
+  </div>
+  <p>$H \le G$이고 $[G:H] = n$이라 하자. $G$의 왼쪽 잉여류 집합 $G/H$ 위의 작용
+  $g\cdot(aH) = (ga)H$로부터 준동형 $\rho : G \to S_n$을 얻는다.
+  (1) $\ker\rho \subseteq H$임을 보여라.
+  (2) $G$가 유한 단순군이고 $1 < n < |G|$이면 $|G|$가 $n!$을 나눔을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $g\in\ker\rho$면 모든 잉여류를 고정 — 특히 $gH = H$.
+    (2) $\ker\rho$는 정규부분군; 단순군에서 정규부분군은 $\{e\}$ 또는 $G$뿐.
+    $G$ 전체는 왜 안 되는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $g\in\ker\rho$이면 $\rho_g$가 항등 순열이라 모든 $aH$를 고정한다.
+    특히 $a = e$에 대해 $gH = (ge)H = H$, 즉 $g\in H$. 따라서
+    <strong>$\ker\rho \subseteq H$</strong>.</p>
+    <p>(2) $\ker\rho$는 준동형의 핵이라 $G$의 정규부분군. $G$가 단순이므로
+    $\ker\rho = \{e\}$ 또는 $\ker\rho = G$. 만약 $\ker\rho = G$라면 (1)에서
+    $G = \ker\rho \subseteq H$, 즉 $G = H$가 되어 $n = [G:H] = 1$ — 가정
+    $n > 1$에 모순. 따라서 $\ker\rho = \{e\}$, 곧 $\rho$는 <strong>단사</strong>.
+    제1동형정리로 $G \cong \rho(G) \le S_n$이므로 라그랑주에 의해</p>
+    $$|G| \mid |S_n| = n!. \qquad \blacksquare$$
+    <p>(이 “잉여류 작용 → $S_n$ 매장” 기법은 작은 위수 군의 비단순성 증명의
+    표준 무기다. 예: $|G| = 36$이고 지수 $4$인 부분군이 있으면 $36 \nmid 4! = 24$라
+    핵이 비자명 → 단순군이 아니다. 케일리 정리는 $H = \{e\}$, $n = |G|$인 특수
+    경우로 이 논증에 흡수된다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
