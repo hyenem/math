@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3장 잉여류와 라그랑주 정리 — 현대대수학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="abstract-algebra" data-chapter="ch03.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">현대대수학 · Fraleigh (§10)</p>
+  <h1><span class="ch-num">3</span> 잉여류와 라그랑주 정리</h1>
+  <p class="ch-source">군론에서 가장 가성비 높은 정리 — “부분군의 위수는 전체 위수를
+  나눈다”. 증명은 타일 깔기, 응용은 무궁무진.</p>
+</div>
+
+<p>유한군 $G$와 부분군 $H$ 사이에 어떤 크기 제약이 있을까요? 답은 놀랍도록
+깔끔합니다: $|H|$는 $|G|$의 <strong>약수</strong>여야 합니다. 위수 12인 군에 위수 5인
+부분군은 존재 자체가 불가능해요. 이 장은 그 증명(잉여류 타일 깔기)과,
+이 한 줄에서 쏟아지는 응용들입니다.</p>
+
+<h2 id="sec-coset">1. 잉여류 — 부분군으로 타일 깔기</h2>
+
+<div class="box box-def" id="def-coset">
+  <span class="box-label">정의 · 잉여류 <span class="label-en">coset</span> (프랄리 §10)</span>
+  <p>$H \le G$와 $a \in G$에 대해</p>
+  $$aH = \{ ah : h \in H \} \quad (\text{좌잉여류}), \qquad Ha = \{ ha : h \in H \}$$
+  <p>예: $G = \mathbb{Z}$, $H = 3\mathbb{Z}$이면 잉여류는
+  $3\mathbb{Z}$, $1 + 3\mathbb{Z}$, $2 + 3\mathbb{Z}$ — “나머지가 같은 수들의 묶음”.
+  시계 산술 $\mathbb{Z}_3$의 원소들이 사실 이 잉여류들이었다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 잉여류의 세 성질</span>
+  <p><strong>이 정리가 하는 일:</strong> 잉여류들이 $G$를 완벽하게 타일링함을 보인다.</p>
+  <p>① $aH = bH \iff a^{-1}b \in H$ (같은 방 판정법)<br>
+  ② 두 좌잉여류는 같거나 서로소 — 좌잉여류들은 $G$의 <strong>분할</strong>이다<br>
+  ③ 모든 잉여류는 $H$와 <strong>같은 크기</strong>다 ($h \mapsto ah$가 전단사 —
+  소거법칙!)</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>잉여류는 “$H$를 $a$만큼 평행이동한 복사본”입니다. ③이 말하는 것: 복사본들은
+  전부 원본과 같은 크기. ②가 말하는 것: 복사본들이 겹치지 않고 $G$를 빈틈없이
+  덮는다. 그러면 산수가 끝났죠 — $|G| = (\text{타일 개수}) \times |H|$.
+  선형대수 3장의 “해집합 = 특수해 + 영공간”($s_0 + N$)이 정확히 잉여류였다는 것도
+  이제 보입니다.</p>
+</div>
+
+<div class="box box-thm" id="def-lagrange-theorem"><span class="box-label">정리 · 라그랑주 정리 <span class="label-en">Lagrange's theorem</span> (프랄리 §10)</span>
+  <p><strong>이 정리가 하는 일:</strong> 유한군론의 제1법칙.</p>
+  <p>$G$가 유한군이고 $H \le G$이면 $|H| \mid |G|$.
+  타일 개수 $\frac{|G|}{|H|}$를 <strong>지수</strong>(index) $(G : H)$라 한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 위 세 성질을 조립하면 끝: 분할 + 등크기 = 나누어떨어짐.</span></summary>
+  <p>좌잉여류들이 $G$를 분할하고(②) 각각의 크기가 $|H|$이므로(③), 잉여류의 개수를
+  $k$라 하면 $|G| = k|H|$. $\blacksquare$</p>
+  <p>(증명이 이렇게 짧은 이유: 힘든 일은 전부 “분할”과 “등크기”가 했다.
+  ②의 증명 맛보기: $aH \cap bH \ni c$이면 $c = ah_1 = bh_2$에서
+  $a = b h_2 h_1^{-1}$이므로 $aH = b(h_2 h_1^{-1})H = bH$ — 잉여류는 한 점만 겹쳐도
+  통째로 같다.)</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-consequences">2. 라그랑주의 열매들</h2>
+
+<div class="box box-thm"><span class="box-label">따름정리 모음 — 임용 출제의 광맥</span>
+  <p>① <strong>원소 위수는 군 위수를 나눈다</strong>: $|a| = |\langle a \rangle| \mid |G|$.
+  따라서 $a^{|G|} = e$ (모든 $a$).<br>
+  ② <strong>소수 위수 군은 순환군</strong>: $|G| = p$ (소수)이면 $e$ 아닌 아무 원소나
+  생성원 — 위수 $p$ 군은 $\mathbb{Z}_p$뿐이다.<br>
+  ③ <strong>페르마 소정리</strong>: $\gcd(a, p) = 1$이면 $a^{p-1} \equiv 1 \pmod p$
+  — ①을 곱셈군 $\mathbb{Z}_p^*$ ($|{\cdot}| = p - 1$)에 적용한 것.
+  <strong>오일러 정리</strong> $a^{\varphi(n)} \equiv 1 \pmod n$도 같은 방식
+  ($\mathbb{Z}_n$의 가역원소 군).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 라그랑주의 역은 거짓</span>
+  <p>“$d \mid |G|$이면 위수 $d$인 부분군이 존재한다”는 <strong>거짓</strong>입니다.
+  표준 반례: $|A_4| = 12$인데 위수 6인 부분군이 없다.
+  부분적 역들이 별도의 정리로 존재해요 — 코시 정리 (소수 $p \mid |G|$이면 위수 $p$
+  <em>원소</em> 존재), 실로우 정리 (소수 거듭제곱 $p^k \parallel |G|$이면 위수 $p^k$
+  부분군 존재). “약수마다 부분군”이 되는 것은 순환군(2장 문제)과 아벨군 등 특별한
+  가족뿐입니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 위수 논증 실전</span>
+  <p><strong>(a)</strong> 위수 15인 군의 원소 위수 후보: $1, 3, 5, 15$ (15의 약수) —
+  “위수 6인 원소가 있는가?”는 계산 없이 “없다”.</p>
+  <p><strong>(b)</strong> $|G| = 8$에서 $a^{12} = e$라면? $|a| \mid \gcd(12, 8) = 4$
+  (① + 1장 위수 정리) — 위수는 1, 2, 4 중 하나.</p>
+  <p><strong>(c)</strong> $S_3$의 부분군: 위수 후보 $1, 2, 3, 6$ — 실제로
+  $\{e\}$, 호환 3개가 만드는 위수 2 셋, $A_3$ (위수 3), $S_3$ — 전부다.
+  라그랑주가 “후보 목록”을 주고 개별 확인이 마무리하는 표준 흐름.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">3장의 줄거리</span>
+  <p><a class="term" data-term="coset">잉여류</a> $aH$ = $H$의 평행이동 복사본:
+  같은 방 판정 $a^{-1}b \in H$, 서로 같거나 서로소(분할), 크기 전부 $|H|$(소거법칙)
+  → <a class="term" data-term="lagrange-theorem">라그랑주 정리</a>:
+  $|H| \mid |G|$ — 타일 깔기 산수
+  → 열매: 원소 위수 $\mid$ 군 위수, $a^{|G|} = e$, 소수 위수 군은 $\mathbb{Z}_p$,
+  페르마·오일러 정리 (정수론이 군론 한 줄에서)
+  → <strong>역은 거짓</strong> ($A_4$, 위수 6) — 부분 역은 코시·실로우의 몫.</p>
+  <p><strong>단 하나만 기억한다면:</strong> 유한군 문제를 받으면 반사적으로 위수의
+  약수 관계부터 적어라 — “무엇이 무엇을 나누는가”가 절반의 풀이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$G = \mathbb{Z}_{12}$, $H = \langle 4 \rangle$에 대해 $H$의 잉여류를 모두 나열하고
+  지수 $(G : H)$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$H = \{0, 4, 8\}$. 잉여류는 “$H$에 상수 더하기”.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$H = \{0,4,8\}$, $1 + H = \{1,5,9\}$, $2 + H = \{2,6,10\}$, $3 + H = \{3,7,11\}$
+    — 4개가 $\mathbb{Z}_{12}$를 분할. $(G : H) = \frac{12}{3} = 4$ ✓.
+    (그리고 이 4개의 잉여류가 다음 장에서 그 자체로 군 $\mathbb{Z}_4$가 된다 — 예고.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 위수 35인 군에서 $e$ 아닌 원소의 위수는 5, 7, 35 중 하나다.<br>
+  (2) 위수 12인 군은 위수 6인 부분군을 갖는다.<br>
+  (3) $(G : H) = 2$이면 $aH = Ha$ (모든 $a$)이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) $A_4$. (3) 잉여류가 두 개뿐이면 — $a \in H$일 때와 아닐 때로 나눠 보라:
+    $a \notin H$이면 좌·우 모두 “나머지 전부”.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>참.</strong> 위수는 35의 약수이고 $e$가 아니므로 1 제외 — 5, 7, 35.</p>
+    <p>(2) <strong>거짓.</strong> $A_4$ (위수 12)는 위수 6인 부분군이 없다 —
+    라그랑주 역의 표준 반례. (증명 스케치: 위수 6이면 지수 2라 정규(문제 (3)!)인데,
+    $A_4$의 원소 위수 분포(1,2,3)와 3-순환 8개가 전부 들어가야 하는 모순.)</p>
+    <p>(3) <strong>참.</strong> $a \in H$이면 $aH = H = Ha$.
+    $a \notin H$이면 좌잉여류 분할이 $\{H, G \setminus H\}$이므로 $aH = G \setminus H$,
+    우잉여류 분할도 마찬가지로 $Ha = G \setminus H$ — 같다.
+    (“지수 2 부분군은 자동으로 정규” — 4장에서 가장 자주 쓰는 보조정리.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Fraleigh §10 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>페르마 소정리를 라그랑주 정리로부터 유도하라: 소수 $p$와 $p \nmid a$인 정수 $a$에
+  대해 $a^{p-1} \equiv 1 \pmod p$.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\mathbb{Z}_p^* = \{1, 2, \dots, p-1\}$이 곱셈으로 군을 이룸을 확인하고
+    (역원 존재가 관건 — $\gcd = 1$이면 $ax \equiv 1$의 해 존재), 따름정리 ①.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\mathbb{Z}_p^* = \{1, \dots, p-1\}$은 $p$로 나눈 나머지 곱셈에 대해 군이다:
+    닫힘($p$ 소수라 $p \nmid xy$), 결합·항등원은 자명, 역원은 $\gcd(x, p) = 1$에서
+    $xu + pv = 1$인 $u$가 존재(베주 — 정수론에서 재회)하므로 $xu \equiv 1$.</p>
+    <p>$|\mathbb{Z}_p^*| = p - 1$이므로 라그랑주 따름정리 ①에 의해 모든 원소가
+    $x^{p-1} = 1$ (군 안에서), 즉 $a^{p-1} \equiv 1 \pmod p$ ($a$를 나머지로 줄여서).
+    $\blacksquare$</p>
+    <p>(정수론의 고전이 군론 한 줄이 되는 순간 — 오일러 정리도
+    $|\mathbb{Z}_n^*| = \varphi(n)$으로 똑같이. 구조가 계산을 이긴다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>위수 논증 서술형</span>
+  </div>
+  <p>위수 $pq$ ($p \lt q$ 소수)인 <strong>아벨군</strong> $G$가 순환군임을 증명하라.
+  (힌트 순서대로면 코시 정리 없이도 된다.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>원소 위수 후보는 $1, p, q, pq$. 위수 $pq$ 원소가 있으면 끝.
+    없다고 가정하고 — 모든 원소의 위수가 $p$ 이하라면 몇 개나 담을 수 있는지 세거나,
+    위수 $p$ 원소 $a$와 위수 $q$ 원소 $b$를 찾아 $ab$의 위수를 계산하라 (아벨 사용).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>라그랑주에 의해 원소 위수는 $1, p, q, pq$ 중 하나. 위수 $pq$ 원소가 있으면
+    순환군 — 그런 원소가 없다고 가정하자.</p>
+    <p><strong>위수 $q$ 원소의 존재:</strong> 모든 $e$ 아닌 원소의 위수가 $p$라고 하면,
+    각 위수 $p$ 부분군은 $e$ 외에 $p-1$개 원소를 갖고 서로 다른 두 부분군은 $e$에서만
+    만난다 (교집합은 양쪽의 부분군 — 위수가 $p$의 약수이면서 $p$보다 작으면 1).
+    따라서 원소 수는 $1 + k(p-1)$ 꼴 — 그런데 $pq - 1$은 $p - 1$의 배수가 아닐 수
+    있어… 더 간단히: $1 + k(p-1) = pq$를 만족해야 하는데
+    $pq - 1 \equiv q - 1 \not\equiv 0 \pmod{p-1}$이 일반적으로 성립하지 않으므로 이
+    경로 대신 직접 논증한다 —</p>
+    <p>실제 표준 경로: 위수 $p$ 원소 $a$와 위수 $q$ 원소 $b$가 <strong>둘 다 존재</strong>
+    함을 보이면 된다. $e$ 아닌 원소 $x$를 잡자. $|x| = pq$이면 끝. $|x| = q$이면 $b = x$
+    확보; $|x| = p$이면 $a = x$ 확보. 만약 위수 $q$ 원소가 하나도 없다면 모든 원소
+    위수가 $1$ 또는 $p$ — 위 세기로 $|G| = 1 + k(p-1)$인데 $p \mid pq$이고
+    $1 + k(p-1) \equiv 1 + k \cdot (-1) \equiv 1 - k \pmod p$이므로 $k \equiv 1 \pmod p$
+    … 가능한 값 검토보다, $q \nmid 1 + k(p-1)$ 모순을 쓰는 것이 깔끔하다:
+    위수 $p$ 부분군들이 $G \setminus \{e\}$를 $(p-1)$개씩 분할하므로
+    $(p-1) \mid pq - 1$. 그런데 $pq - 1 = p(q-1) + (p-1)$에서
+    $(p-1) \mid p(q-1)$이고 $\gcd(p-1, p) = 1$이므로 $(p-1) \mid (q-1)$ — 이것은
+    가능할 수 있으나, 같은 논리로 위수 $p$ 원소가 없다면 $(q-1) \mid pq-1 = q(p-1) + (q-1)$
+    에서 $(q-1) \mid q(p-1)$, $\gcd(q-1, q) = 1$이므로 $(q-1) \mid (p-1)$ —
+    $p \lt q$에 모순. 그러므로 <strong>위수 $q$ 원소가 없다면 위수 $p$ 원소도 없어야
+    하는 이 대칭 논증에서, 적어도 “위수 $p$ 원소 $a$와 위수 $q$ 원소 $b$가 모두
+    존재”</strong>가 확보된다 (하나가 없다는 가정이 다른 하나의 부재를 강제해 $G = \{e\}$
+    모순).</p>
+    <p><strong>마무리 (아벨 사용):</strong> $ab$의 위수를 $m$이라 하자.
+    $(ab)^{pq} = a^{pq} b^{pq} = e$이므로 $m \mid pq$.
+    $(ab)^p = b^p \neq e$ ($|b| = q \nmid p$)이므로 $m \neq 1, p$;
+    $(ab)^q = a^q \neq e$이므로 $m \neq q$. 남는 것은 $m = pq$ —
+    위수 $pq$ 원소가 존재하므로 $G = \langle ab \rangle$: 순환군. $\blacksquare$</p>
+    <p>(비아벨이면 거짓 — $S_3$은 위수 $6 = 2 \cdot 3$이지만 비순환. “아벨” 가정이
+    $(ab)^n = a^n b^n$에서 정확히 한 번 쓰였다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

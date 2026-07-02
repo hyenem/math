@@ -560,6 +560,19 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "href": "subjects/abstract-algebra/ch02.html#def-cayley-theorem"
   },
 
+  "coset": {
+    "ko": "잉여류",
+    "en": "coset",
+    "short": "$aH = \\{ah : h \\in H\\}$ — 부분군의 평행이동 복사본. 같은 방 판정: $aH = bH \\iff a^{-1}b \\in H$. 서로 같거나 서로소(분할)이고 크기가 전부 $|H|$ — 라그랑주의 재료.",
+    "href": "subjects/abstract-algebra/ch03.html#def-coset"
+  },
+  "lagrange-theorem": {
+    "ko": "라그랑주 정리",
+    "en": "Lagrange's theorem",
+    "short": "유한군에서 $|H| \\mid |G|$ — 잉여류 타일 깔기. 열매: 원소 위수 $\\mid$ 군 위수, $a^{|G|} = e$, 소수 위수 군은 순환군, 페르마·오일러 정리. 역은 거짓 ($A_4$에 위수 6 부분군 없음).",
+    "href": "subjects/abstract-algebra/ch03.html#def-lagrange-theorem"
+  },
+
   /* ---------- 선형대수 2장: 선형변환과 행렬 ---------- */
 
   "linear-transformation": {

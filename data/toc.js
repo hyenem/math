@@ -69,7 +69,7 @@ window.MATH_TOC = [
     chapters: [
       { file: "ch01.html", num: 1, title: "군", ready: true },
       { file: "ch02.html", num: 2, title: "순환군과 치환군", ready: true },
-      { file: "ch03.html", num: 3, title: "잉여류와 라그랑주 정리", ready: false },
+      { file: "ch03.html", num: 3, title: "잉여류와 라그랑주 정리", ready: true },
       { file: "ch04.html", num: 4, title: "준동형사상과 잉여군", ready: false },
       { file: "ch05.html", num: 5, title: "환과 체", ready: false },
       { file: "ch06.html", num: 6, title: "아이디얼과 잉여환", ready: false },
