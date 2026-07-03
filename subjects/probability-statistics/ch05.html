@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5장 표본분포와 극한정리 — 확률과 통계 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="probability-statistics" data-chapter="ch05.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">확률과 통계 · Hogg (§4–5)</p>
+  <h1><span class="ch-num">5</span> 표본분포와 극한정리</h1>
+  <p class="ch-source">“왜 세상의 그 많은 것이 종 모양인가” —
+  개별의 혼돈이 평균 앞에서 하나의 정규곡선으로 수렴하는, 확률론의 중력을
+  설명하는 장.</p>
+</div>
+
+<p>지금까지는 <strong>분포가 주어졌을 때</strong> 확률과 기댓값을 계산했습니다. 이제
+방향이 뒤집힙니다 — <strong>모집단은 모르고, 손에는 표본뿐</strong>인 상황. 표본에서
+계산한 값(통계량)도 뽑을 때마다 달라지는 <strong>확률변수</strong>이고, 그 변동의
+법칙을 아는 것이 통계적 추론의 출발점입니다. 이 장의 세 기둥은 ① 통계량의 분포인
+<strong>표본분포</strong>, ② 표본이 커지면 표본평균이 참값으로 굳는다는 <strong>큰 수의
+법칙</strong>, ③ 그 변동이 모집단과 무관하게 정규분포로 수렴한다는 <strong>중심극한정리</strong>
+— 6·7장의 추정과 검정이 모두 이 세 정리를 연료로 돌아갑니다.</p>
+
+<h2 id="sec-sampling">1. 확률표본과 표본분포 — 통계량도 확률변수다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">먼저 직관</span>
+  <p>한 반의 키 평균을 재려고 학생 $n$명을 무작위로 뽑아 평균 $\bar X$를 낸다. 다시
+  뽑으면 $\bar X$ 값이 조금 달라진다 — <strong>$\bar X$ 자체가 확률변수</strong>이고 자기만의
+  분포(퍼짐)를 갖는다. 이 “통계량의 분포”가 <strong>표본분포</strong>다. 표본분포를 알아야
+  “내 $\bar X$가 참 평균에서 얼마나 벗어날 수 있나”를 확률로 말할 수 있다.</p>
+</div>
+
+<div class="box box-def" id="def-sampling-distribution">
+  <span class="box-label">정의 · 확률표본 · 통계량 · 표본분포 <span class="label-en">random sample, statistic, sampling distribution</span> (호그 §5)</span>
+  <p><strong>확률표본</strong>: 같은 분포를 갖고 서로 <strong>독립</strong>인 확률변수
+  $X_1, \dots, X_n$ (iid). 그 공통 분포가 <strong>모집단</strong>이다.
+  <strong>통계량</strong> $T = T(X_1, \dots, X_n)$은 미지의 모수를 포함하지 않는
+  표본의 함수 — 확률변수들의 함수이므로 <strong>그 자체가 확률변수</strong>이고, 그
+  분포를 통계량의 <strong>표본분포</strong>라 한다.</p>
+  <p><strong>표본평균과 표본분산:</strong></p>
+  $$\bar X = \frac1n\sum_{i=1}^n X_i, \qquad
+  S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar X)^2.$$
+  <p>모집단 평균 $\mu$, 분산 $\sigma^2$일 때, 독립성만으로:</p>
+  $$E(\bar X) = \mu, \qquad \operatorname{Var}(\bar X) = \frac{\sigma^2}{n}
+  \quad(\text{표준오차 } \sigma/\sqrt n),$$
+  <p>그리고 분모 $n-1$ 덕분에 $E(S^2) = \sigma^2$ (<strong>불편성</strong>).</p>
+  <p><strong>정규모집단에서의 특별한 사실</strong> (스튜던트 정리, 호그 §3.6) —
+  $X_i \overset{iid}{\sim} N(\mu, \sigma^2)$이면:</p>
+  <p>① $\bar X \sim N\!\left(\mu, \dfrac{\sigma^2}{n}\right)$ &nbsp;
+  ② $\bar X$와 $S^2$이 <strong>독립</strong> (정규분포만의 성질!) &nbsp;
+  ③ $\dfrac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 세 표본분포 — $\chi^2$, $t$, $F$ <span class="label-en">chi-square, t, F distributions</span> (호그 §3.6, §4)</span>
+  <p><strong>카이제곱분포</strong> $\chi^2_r$: 독립인 표준정규 $Z_1, \dots, Z_r$의 제곱합
+  $\sum Z_i^2$의 분포. 실은 감마분포 $\Gamma(r/2, 2)$이고 $E = r$, $\operatorname{Var} = 2r$.
+  (모분산을 미지의 $\bar X$로 센 대가로 자유도가 $n$이 아니라 $n-1$.)</p>
+  <p><strong>$t$-분포</strong> $t_r$: $Z \sim N(0,1)$과 $V \sim \chi^2_r$이 독립일 때</p>
+  $$T = \frac{Z}{\sqrt{V/r}} \sim t_r.$$
+  <p>정규모집단에서 <strong>미지의 $\sigma$를 $S$로 바꾸면</strong> 표준정규가 아니라 $t$가 된다:</p>
+  $$\frac{\bar X - \mu}{S/\sqrt n}
+  = \frac{(\bar X - \mu)/(\sigma/\sqrt n)}{\sqrt{\big[(n-1)S^2/\sigma^2\big]/(n-1)}}
+  = \frac{Z}{\sqrt{W/(n-1)}} \sim t_{n-1}.$$
+  <p>($Z \sim N(0,1)$, $W \sim \chi^2_{n-1}$, 위 ②의 독립성이 분자·분모 독립을 보증.
+  $t$는 정규보다 꼬리가 두껍고, $r \to \infty$이면 $N(0,1)$로 수렴. $t_1$은 코시분포.)</p>
+  <p><strong>$F$-분포</strong> $F_{r_1, r_2}$: 독립인 $U \sim \chi^2_{r_1}$, $V \sim \chi^2_{r_2}$에 대해</p>
+  $$F = \frac{U/r_1}{V/r_2} \sim F_{r_1, r_2}.$$
+  <p>두 정규모집단의 분산비 $S_1^2/S_2^2$ (등분산일 때)가 $F$를 따른다 — 분산 비교
+  검정(6·7장)의 엔진.</p>
+</div>
+
+<details class="proof">
+  <summary>왜 $n-1$인가 — $S^2$의 불편성 <span class="proof-strategy">— 항등식 $\sum(X_i-\bar X)^2 = \sum(X_i-\mu)^2 - n(\bar X-\mu)^2$에 기댓값 한 번.</span></summary>
+  <p>편차의 분해:
+  $\sum(X_i - \bar X)^2 = \sum\big[(X_i-\mu) - (\bar X-\mu)\big]^2
+  = \sum(X_i-\mu)^2 - n(\bar X-\mu)^2$
+  (교차항 $-2(\bar X-\mu)\sum(X_i-\mu) = -2n(\bar X-\mu)^2$이 소거를 만든다).</p>
+  <p>기댓값을 취하면 $E[(X_i-\mu)^2] = \sigma^2$이고
+  $E[(\bar X-\mu)^2] = \operatorname{Var}(\bar X) = \sigma^2/n$이므로</p>
+  $$E\Big[\sum(X_i-\bar X)^2\Big] = n\sigma^2 - n\cdot\frac{\sigma^2}{n} = (n-1)\sigma^2.$$
+  <p>양변을 $n-1$로 나누면 $E(S^2) = \sigma^2$. — $\bar X$를 쓰느라 자유도 하나를
+  잃었고, 그 손실이 정확히 분모의 $-1$이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 표본분포 읽기</span>
+  <p><strong>(a)</strong> $X_1, \dots, X_{25} \overset{iid}{\sim} N(100, 15^2)$ (IQ).
+  $\bar X \sim N(100,\ 15^2/25) = N(100, 9)$이므로 표준편차(표준오차)는 $3$.
+  개별 IQ의 퍼짐($15$)보다 평균의 퍼짐($3$)이 $\sqrt{25}=5$배 좁다 — 평균은
+  개인보다 안정적이다.</p>
+  <p><strong>(b)</strong> 같은 표본에서 $\dfrac{24\,S^2}{225} \sim \chi^2_{24}$,
+  그리고 $\sigma$를 모른 채 쓰면 $\dfrac{\bar X - 100}{S/5} \sim t_{24}$ —
+  자유도 $24$. 표본이 작을수록 $t$의 꼬리가 두꺼워 임계값이 커진다.</p>
+</div>
+
+<h2 id="sec-lln">2. 큰 수의 법칙 — 평균은 진리로 수렴한다</h2>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 두 가지 수렴 <span class="label-en">convergence in probability / in distribution</span> (호그 §5)</span>
+  <p><strong>확률수렴</strong> $X_n \xrightarrow{P} X$: 모든 $\varepsilon &gt; 0$에 대해
+  $P(|X_n - X| \ge \varepsilon) \to 0$. — “빗나갈 확률이 사라진다”, 값이 한 점으로
+  굳는 수렴.</p>
+  <p><strong>분포수렴</strong> $X_n \xrightarrow{d} X$: 분포함수
+  $F_{X_n}(x) \to F_X(x)$ ($F_X$의 모든 연속점에서). — 값이 아니라 <strong>퍼짐의
+  모양</strong>이 극한 분포에 맞춰지는 수렴.</p>
+  <p>관계: $\xrightarrow{P}$이면 $\xrightarrow{d}$ (강한 것이 약한 것을 함의). 역은
+  거짓이지만, <strong>극한이 상수</strong>일 때는 두 수렴이 동치다.</p>
+</div>
+
+<div class="box box-thm" id="def-law-large-numbers">
+  <span class="box-label">정리 · 큰 수의 (약한) 법칙 <span class="label-en">weak law of large numbers</span> (호그 §5)</span>
+  <p><strong>이 정리가 하는 일:</strong> “표본을 무한히 늘리면 표본평균은 참 평균으로
+  간다”는 통계학의 대전제를 증명한다 — 도수적 확률 해석의 근거.</p>
+  <p>$X_1, X_2, \dots$가 iid, 평균 $\mu$, 유한 분산 $\sigma^2$이면</p>
+  $$\bar X_n \xrightarrow{P} \mu \qquad (n \to \infty).$$
+  <p>즉 모든 $\varepsilon &gt; 0$에 대해 $P(|\bar X_n - \mu| \ge \varepsilon) \to 0$.
+  (더 강한 <strong>강한 큰 수의 법칙</strong>은 $\bar X_n \to \mu$가 거의 확실하게(a.s.)
+  성립하며, 유한 평균만으로 참이다 — 유한 분산조차 필요 없다.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명 — 체비쇼프 부등식 한 줄 <span class="proof-strategy">— $\operatorname{Var}(\bar X_n)=\sigma^2/n \to 0$을 체비쇼프에 대입.</span></summary>
+  <p>체비쇼프 부등식: 분산이 유한한 확률변수 $Y$와 $\varepsilon &gt; 0$에 대해
+  $P(|Y - E(Y)| \ge \varepsilon) \le \dfrac{\operatorname{Var}(Y)}{\varepsilon^2}$.</p>
+  <p>$Y = \bar X_n$에 적용하면 $E(\bar X_n) = \mu$,
+  $\operatorname{Var}(\bar X_n) = \sigma^2/n$이므로</p>
+  $$P(|\bar X_n - \mu| \ge \varepsilon) \le \frac{\sigma^2}{n\varepsilon^2}
+  \xrightarrow[n \to \infty]{} 0.$$
+  <p>$\varepsilon$이 임의였으므로 $\bar X_n \xrightarrow{P} \mu$. — 표본을 늘릴수록
+  평균의 분산이 $1/n$로 줄어 한 점 $\mu$로 압축된다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-clt">3. 중심극한정리 — 정규분포의 보편성</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">먼저 직관 — 큰 수의 법칙 그다음</span>
+  <p>큰 수의 법칙은 $\bar X_n \to \mu$, 즉 <strong>어디로</strong> 가는지만 말한다. 그런데
+  $\bar X_n - \mu$는 $0$으로 “어떻게” 다가가는가? 그 미세한 흔들림을
+  $\sqrt n$으로 확대해 보면 — 모집단이 주사위든, 동전이든, 삐뚤어진 분포든 상관없이
+  — 언제나 <strong>같은 종 모양(정규)</strong>이 나타난다. 이것이 정규분포가 자연 곳곳에
+  편재하는 이유다.</p>
+</div>
+
+<div class="box box-thm" id="def-central-limit-theorem">
+  <span class="box-label">정리 · 중심극한정리 <span class="label-en">central limit theorem</span> (호그 §5)</span>
+  <p><strong>이 정리가 하는 일:</strong> 이 과목에서 가장 놀라운 보편성 —
+  모분포가 무엇이든, 표준화한 표본평균의 분포는 정규로 수렴한다.</p>
+  <p>$X_1, X_2, \dots$가 iid, 평균 $\mu$, <strong>유한한</strong> 분산
+  $0 &lt; \sigma^2 &lt; \infty$이면</p>
+  $$Z_n = \frac{\bar X_n - \mu}{\sigma/\sqrt n}
+  = \frac{\sum_{i=1}^n X_i - n\mu}{\sigma\sqrt n}
+  \xrightarrow{\ d\ } N(0,1).$$
+  <p>동치로 $\sqrt n\,(\bar X_n - \mu) \xrightarrow{d} N(0, \sigma^2)$.
+  <strong>모분포의 모양은 전혀 관여하지 않는다</strong> — 평균과 분산만 있으면 된다.
+  이것이 정규분포를 <a class="term" data-term="normal-distribution">확률의 보편 언어</a>로
+  만든다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 개요 — <a class="term" data-term="mgf">적률생성함수</a>의 극한 <span class="proof-strategy">— 표준화 변수의 mgf를 $n$제곱하고 테일러 전개하면 $e^{t^2/2}$가 나온다.</span></summary>
+  <p><strong>표준화:</strong> $Y_i = \dfrac{X_i - \mu}{\sigma}$로 놓으면 $Y_i$는 iid,
+  $E(Y_i) = 0$, $\operatorname{Var}(Y_i) = 1$. 공통 mgf를
+  $m(t) = E(e^{tY_i})$라 하면 (원점 근방에서 존재한다고 가정)</p>
+  $$m(0) = 1, \quad m'(0) = E(Y) = 0, \quad m''(0) = E(Y^2) = 1.$$
+  <p><strong>합의 mgf:</strong> $Z_n = \dfrac{1}{\sqrt n}\sum Y_i$이고 독립이므로</p>
+  $$M_{Z_n}(t) = E\Big[e^{(t/\sqrt n)\sum Y_i}\Big]
+  = \Big[m\!\Big(\tfrac{t}{\sqrt n}\Big)\Big]^n.$$
+  <p><strong>테일러 전개:</strong> $m(s) = 1 + \tfrac12 s^2 + o(s^2)$에 $s = t/\sqrt n$:</p>
+  $$M_{Z_n}(t) = \Big[1 + \frac{t^2}{2n} + o\!\big(\tfrac1n\big)\Big]^n
+  \xrightarrow[n \to \infty]{} e^{t^2/2}.$$
+  <p>($\ln$을 취하면 $n\ln(1 + \tfrac{t^2}{2n} + \cdots) \to \tfrac{t^2}{2}$.)
+  그런데 $e^{t^2/2}$은 정확히 $N(0,1)$의 mgf다. <strong>연속성 정리</strong>(mgf가
+  수렴하면 분포가 수렴)에 의해 $Z_n \xrightarrow{d} N(0,1)$. — 엄밀한 버전은 항상
+  존재하는 특성함수로 같은 논증을 한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 이항의 정규근사 (드무아브르–라플라스)와 연속성 수정</span>
+  <p>$X \sim \text{Bin}(n, p)$는 베르누이 $n$개의 합이므로 CLT의 특수 사례 —</p>
+  $$\frac{X - np}{\sqrt{np(1-p)}} \xrightarrow{\ d\ } N(0,1).$$
+  <p><strong>수치 예:</strong> 공정한 동전 $100$번, $X = $ 앞면 수. $np = 50$,
+  $np(1-p) = 25$, 표준편차 $5$. $P(X \ge 60)$을 정규근사로:</p>
+  <p><strong>연속성 수정</strong> — 이산($X$)을 연속(정규)으로 바꿀 때 경계를 $\pm 0.5$
+  넓힌다. $P(X \ge 60) = P(X \ge 59.5)$로 보고</p>
+  $$P(X \ge 60) \approx P\!\Big(Z \ge \frac{59.5 - 50}{5}\Big)
+  = P(Z \ge 1.9) = 1 - \Phi(1.9) \approx 0.0287.$$
+  <p>수정을 빼면 $P(Z \ge 2.0) \approx 0.0228$ — 오차가 눈에 띄게 커진다. 이산분포를
+  정규로 근사할 때 $\pm 0.5$는 선택이 아니라 규칙이다.</p>
+</div>
+
+<h3 id="sec-slutsky">3.1 딸림 도구 — 슬러츠키 정리와 델타 방법</h3>
+
+<div class="box box-def">
+  <span class="box-label">정리 · 슬러츠키 · 델타 방법 <span class="label-en">Slutsky's theorem, delta method</span> (호그 §5)</span>
+  <p><strong>슬러츠키 정리:</strong> $X_n \xrightarrow{d} X$이고 $Y_n \xrightarrow{P} c$
+  (상수)이면
+  $X_n + Y_n \xrightarrow{d} X + c$, &nbsp; $X_n Y_n \xrightarrow{d} cX$, &nbsp;
+  $X_n / Y_n \xrightarrow{d} X/c$ ($c \neq 0$).</p>
+  <p><strong>활용:</strong> $\sigma$를 $S$로 바꿔도 CLT가 살아남는 이유.
+  $S \xrightarrow{P} \sigma$이므로 $\sigma/S \xrightarrow{P} 1$이고,</p>
+  $$\frac{\bar X - \mu}{S/\sqrt n} = \underbrace{\frac{\bar X - \mu}{\sigma/\sqrt n}}_{\xrightarrow{d} N(0,1)}
+  \cdot \underbrace{\frac{\sigma}{S}}_{\xrightarrow{P} 1} \xrightarrow{\ d\ } N(0,1).$$
+  <p>(정규모집단에서는 정확히 $t_{n-1}$이지만, <strong>비정규</strong> 모집단에서도
+  큰 $n$에서 근사적으로 $N(0,1)$ — 실전 $z$-검정의 정당화.)</p>
+  <p><strong>델타 방법:</strong> $\sqrt n(\bar X - \mu) \xrightarrow{d} N(0, \sigma^2)$이고
+  $g$가 $\mu$에서 미분가능($g'(\mu) \neq 0$)이면, 일차 테일러
+  $g(\bar X) \approx g(\mu) + g'(\mu)(\bar X - \mu)$로부터</p>
+  $$\sqrt n\big(g(\bar X) - g(\mu)\big) \xrightarrow{\ d\ } N\!\big(0,\ [g'(\mu)]^2\sigma^2\big).$$
+  <p>(변환된 통계량의 극한분포를 얻는 도구 — 예: $\bar X$가 아니라 $\ln \bar X$,
+  $1/\bar X$의 근사분포.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>CLT는 $\bar X$(또는 표준화한 합)의 분포에 관한 것이지, 개별 $X_i$의
+  분포가 정규로 변한다는 말이 아니다.</strong> 모집단은 여전히 원래 모양 그대로다 —
+  정규로 다가가는 것은 <em>표본평균의 표본분포</em>일 뿐.</p>
+  <p>② <strong>유한 분산이 필수다.</strong> 코시분포는 평균·분산이 없어 CLT가 적용
+  안 된다 — 코시표본의 평균 $\bar X$는 아무리 $n$을 키워도 다시 <em>같은</em>
+  코시분포일 뿐, 한 점으로 모이지도 정규가 되지도 않는다. 큰 수의 법칙조차
+  성립하지 않는 반례.</p>
+  <p>③ <strong>“$n \ge 30$이면 정규” 경험칙의 한계.</strong> 이는 정리가 아니라 어림이다.
+  대칭·가벼운꼬리 모집단은 $n$이 작아도 빠르게 수렴하지만, 심하게 치우쳤거나
+  꼬리가 두꺼운 모집단은 $n = 30$으로 턱없이 부족하다. 필요한 $n$은 모분포의
+  비대칭도·첨도에 달려 있다.</p>
+  <p>④ <strong>큰 수의 법칙 ≠ 중심극한정리.</strong> 전자는 $\bar X_n \to \mu$
+  (어디로 — 한 <em>점</em>), 후자는 $\sqrt n(\bar X_n - \mu)$의 <em>흔들림의
+  모양</em>(정규). LLN은 “수렴”, CLT는 그 수렴의 “속도와 형태 $O(1/\sqrt n)$”를
+  말한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">5장의 줄거리</span>
+  <p><a class="term" data-term="sampling-distribution">표본분포</a>: 통계량도
+  확률변수 — $\bar X$($E=\mu$, $\operatorname{Var}=\sigma^2/n$), $S^2$($n-1$로
+  나눠 불편). 정규모집단에서 $\bar X \perp S^2$, $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$,
+  $\sigma$를 $S$로 바꾸면 $t_{n-1}$, 분산비는 $F$
+  → <a class="term" data-term="law-large-numbers">큰 수의 법칙</a>: 체비쇼프로
+  $\bar X_n \xrightarrow{P} \mu$ (평균이 참값으로 굳는다)
+  → <a class="term" data-term="central-limit-theorem">중심극한정리</a>: 유한분산이면
+  모분포와 무관하게 $\frac{\bar X - \mu}{\sigma/\sqrt n} \xrightarrow{d} N(0,1)$
+  (mgf 극한 $\to e^{t^2/2}$), 이항의 정규근사와 연속성 수정, 슬러츠키·델타로 확장.</p>
+  <p><strong>다음 장으로:</strong> 이 극한정리들이 6장 점추정(최대가능도의 대표본
+  정규성)과 7장 구간추정·가설검정($t$·$\chi^2$·$F$ 표본분포로 임계값 산출)의
+  이론적 토대가 된다. <strong>“LLN은 어디로, CLT는 어떻게”</strong> — 이 한 줄이
+  추론통계 전체의 문법이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>iid 표본 $X_1, \dots, X_n$ (평균 $\mu$, 분산 $\sigma^2$)에 대해
+  (1) $E(\bar X) = \mu$, $\operatorname{Var}(\bar X) = \sigma^2/n$을 보이고,
+  (2) $S^2 = \frac{1}{n-1}\sum(X_i - \bar X)^2$이 $E(S^2) = \sigma^2$임을
+  ($n-1$이 왜 필요한지 포함해) 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 기댓값의 선형성과 <strong>독립</strong>일 때
+    $\operatorname{Var}(\sum X_i) = \sum \operatorname{Var}(X_i)$.
+    (2) 항등식 $\sum(X_i-\bar X)^2 = \sum(X_i-\mu)^2 - n(\bar X-\mu)^2$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $E(\bar X) = \frac1n\sum E(X_i) = \frac1n\cdot n\mu = \mu$. 독립이므로
+    $\operatorname{Var}(\bar X) = \frac{1}{n^2}\sum\operatorname{Var}(X_i)
+    = \frac{1}{n^2}\cdot n\sigma^2 = \frac{\sigma^2}{n}$.</p>
+    <p>(2) 위 항등식에 기댓값: $E[\sum(X_i-\mu)^2] = n\sigma^2$,
+    $E[n(\bar X-\mu)^2] = n\operatorname{Var}(\bar X) = \sigma^2$. 따라서
+    $E[\sum(X_i-\bar X)^2] = (n-1)\sigma^2$이고, $n-1$로 나눠야 $E(S^2)=\sigma^2$.
+    미지의 $\mu$ 대신 $\bar X$를 쓰면서 자유도 하나를 잃었기 때문 — $n$으로 나누면
+    분산을 <strong>과소추정</strong>하는 편향이 생긴다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$X_1, \dots, X_{10} \overset{iid}{\sim} N(\mu, \sigma^2)$일 때 다음 통계량의
+  표본분포(분포 이름과 모수)를 답하라.</p>
+  <p>(1) $\dfrac{\bar X - \mu}{\sigma/\sqrt{10}}$ &nbsp;&nbsp;
+  (2) $\dfrac{9S^2}{\sigma^2}$ &nbsp;&nbsp;
+  (3) $\dfrac{\bar X - \mu}{S/\sqrt{10}}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(3)은 (1)의 표준정규를 (2)의 카이제곱(자유도로 나눠 제곱근)으로 나눈 꼴 —
+    $t = Z/\sqrt{V/r}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\bar X \sim N(\mu, \sigma^2/10)$이므로 표준화하면 $N(0,1)$.</p>
+    <p>(2) $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$에서 $n=10$: $\chi^2_9$.</p>
+    <p>(3) $\dfrac{\bar X-\mu}{S/\sqrt{10}}
+    = \dfrac{(\bar X-\mu)/(\sigma/\sqrt{10})}{\sqrt{(9S^2/\sigma^2)/9}}
+    = \dfrac{Z}{\sqrt{V/9}} \sim t_9$. (정규모집단의 $\bar X \perp S^2$가 분자·분모
+    독립을 보증 — $t$-분포의 정의를 만족.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §5 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>공정한 주사위를 $180$번 던져 나온 눈의 합을 $S$라 하자. 중심극한정리로
+  $P(S \ge 700)$의 근사값을 구하라. (한 번 던질 때 $\mu = 3.5$,
+  $\sigma^2 = 35/12$.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$S = \sum X_i$, $E(S) = 180 \times 3.5$, $\operatorname{Var}(S) = 180 \times 35/12$.
+    연속성 수정 $S \ge 700 \Rightarrow S \ge 699.5$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$E(S) = 180 \times 3.5 = 630$,
+    $\operatorname{Var}(S) = 180 \times \frac{35}{12} = 525$,
+    표준편차 $\sqrt{525} \approx 22.91$.</p>
+    <p>연속성 수정으로 $P(S \ge 700) = P(S \ge 699.5)$:</p>
+    $$P(S \ge 699.5) \approx P\!\Big(Z \ge \frac{699.5 - 630}{22.91}\Big)
+    = P(Z \ge 3.03) = 1 - \Phi(3.03) \approx 0.0012.$$
+    <p>합이 기댓값보다 $70$ 이상 큰 사건 — 약 $0.12\%$로 매우 드물다. (CLT가
+    이산 균등분포의 합조차 정규로 근사함을 보여준다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §4 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>독립인 두 정규표본 $X_1, \dots, X_m \sim N(\mu_1, \sigma^2)$,
+  $Y_1, \dots, Y_n \sim N(\mu_2, \sigma^2)$ (등분산)에서 표본분산을 각각
+  $S_1^2, S_2^2$라 하자. 통계량 $S_1^2 / S_2^2$의 표본분포가
+  $F_{m-1,\,n-1}$임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\frac{(m-1)S_1^2}{\sigma^2} \sim \chi^2_{m-1}$,
+    $\frac{(n-1)S_2^2}{\sigma^2} \sim \chi^2_{n-1}$이고 두 표본이 독립.
+    $F = \frac{U/r_1}{V/r_2}$의 정의에 대입.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$U = \dfrac{(m-1)S_1^2}{\sigma^2} \sim \chi^2_{m-1}$,
+    $V = \dfrac{(n-1)S_2^2}{\sigma^2} \sim \chi^2_{n-1}$이고, 두 표본이 서로
+    독립이므로 $U \perp V$.</p>
+    <p>$F$-분포 정의 $\dfrac{U/(m-1)}{V/(n-1)} \sim F_{m-1, n-1}$에서 $\sigma^2$이
+    약분되어</p>
+    $$\frac{U/(m-1)}{V/(n-1)}
+    = \frac{S_1^2/\sigma^2}{S_2^2/\sigma^2} = \frac{S_1^2}{S_2^2} \sim F_{m-1,\,n-1}.
+    \qquad \blacksquare$$
+    <p>(등분산 가정이 $\sigma^2$ 약분을 가능케 한다. 두 분산이 다르면
+    $\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} \sim F_{m-1,n-1}$ — 등분산 검정의
+    기초.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>큰 수의 법칙 서술형</span>
+  </div>
+  <p>iid 표본의 평균 $\bar X_n$에 대해 약한 큰 수의 법칙
+  $\bar X_n \xrightarrow{P} \mu$를 체비쇼프 부등식으로 증명하라. 또한 표본이
+  <strong>코시분포</strong>일 때 이 결론이 왜 성립하지 않는지 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>증명은 $\operatorname{Var}(\bar X_n) = \sigma^2/n \to 0$. 코시는
+    $E(X)$·$\operatorname{Var}(X)$가 존재하지 않는다 — 체비쇼프의 전제부터 무너진다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>증명.</strong> 유한 분산 $\sigma^2$을 가정. 체비쇼프 부등식에
+    $Y = \bar X_n$ ($E(\bar X_n) = \mu$, $\operatorname{Var}(\bar X_n) = \sigma^2/n$):</p>
+    $$P(|\bar X_n - \mu| \ge \varepsilon) \le \frac{\sigma^2/n}{\varepsilon^2}
+    = \frac{\sigma^2}{n\varepsilon^2} \to 0 \quad (n \to \infty).$$
+    <p>임의의 $\varepsilon &gt; 0$에서 성립하므로 $\bar X_n \xrightarrow{P} \mu$.
+    $\blacksquare$</p>
+    <p><strong>코시분포 반례.</strong> 표준코시는 $\int \frac{|x|}{\pi(1+x^2)}dx = \infty$
+    라 평균이 정의되지 않고 분산도 없다. 따라서 “$\mu$로 수렴”이라는 명제 자체가
+    무의미하고, 체비쇼프의 전제(유한 분산)가 깨진다. 실제로 코시표본의 평균
+    $\bar X_n$은 재생성(안정분포) 성질로 <strong>다시 표준코시분포</strong>가 되어
+    ($n$과 무관!) 한 점으로 집중되지 않는다 — LLN도 CLT도 실패하는 표준 반례다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>중심극한정리 서술 + 계산</span>
+  </div>
+  <p>(1) 중심극한정리를 정확히 진술하라(가정 포함). (2) 어떤 부품의 수명이 평균
+  $\mu = 50$시간, 표준편차 $\sigma = 10$시간인 <strong>임의의</strong> 분포를 따른다.
+  이 부품 $100$개의 평균수명 $\bar X$가 $52$시간을 넘을 근사확률을 구하고, 모분포를
+  모르는데도 계산이 가능한 이유를 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\bar X$의 표준오차 $= \sigma/\sqrt n = 10/10 = 1$. CLT로
+    $\bar X \approx N(50, 1^2)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>진술.</strong> $X_1, X_2, \dots$가 iid이고 평균 $\mu$,
+    유한 분산 $0 &lt; \sigma^2 &lt; \infty$이면
+    $\dfrac{\bar X_n - \mu}{\sigma/\sqrt n} \xrightarrow{d} N(0,1)$
+    (모분포의 종류와 무관).</p>
+    <p>(2) $n = 100$이 충분히 크므로 CLT에 의해 $\bar X \approx N(50,\ 10^2/100)
+    = N(50, 1)$. 표준오차 $= 1$이므로</p>
+    $$P(\bar X &gt; 52) \approx P\!\Big(Z &gt; \frac{52 - 50}{1}\Big)
+    = P(Z &gt; 2) = 1 - \Phi(2) \approx 0.0228.$$
+    <p><strong>모분포를 모르는데도</strong> 계산이 되는 것은 CLT가 모집단의 모양이
+    아니라 <em>평균 $\mu$와 분산 $\sigma^2$만</em>으로 $\bar X$의 근사분포를
+    결정하기 때문이다 — 정확히 이 보편성이 통계적 추론을 실전에서 가능케 한다.
+    (단, 모분포가 심하게 치우쳐 있으면 $n=100$의 근사 오차가 커질 수 있음을
+    덧붙이면 완전한 답안.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

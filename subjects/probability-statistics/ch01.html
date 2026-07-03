@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1장 확률공간과 조건부확률 — 확률과 통계 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="probability-statistics" data-chapter="ch01.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">확률과 통계 · Hogg (§1)</p>
+  <h1><span class="ch-num">1</span> 확률공간과 조건부확률</h1>
+  <p class="ch-source">“확률은 넓이다” — 표본공간이라는 판 위에 넓이 1을 배분하는 규칙 세 줄에서
+  베이즈 정리까지, 이 과목의 모든 계산이 여기서 출발한다.</p>
+</div>
+
+<p>동전을 던지기 전에는 앞뒤를 모릅니다. 그러나 <strong>모름의 정도</strong>는 숫자로 잴 수
+있습니다. 확률론은 “일어날 수 있는 일 전체”라는 판($\Omega$)을 깔고, 그 위의 각 영역(사건)에
+<strong>넓이</strong>를 나눠 주는 규칙입니다. 넓이의 총합을 1로 못 박고 세 가지 공리만
+지키면, 나머지는 전부 계산으로 따라 나옵니다 — 여사건, 포함배제, 조건부확률, 그리고
+관측이 믿음을 갱신하는 <strong>베이즈 정리</strong>까지. 이 장은 그 판을 세우는 이야기입니다.</p>
+
+<h2 id="sec-space">1. 확률공간 — 넓이 1을 나눠 주는 규칙</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>과녁 하나를 생각하세요. 과녁 전체 넓이를 $1$로 두면, 어떤 영역에 맞을 “확률”은 곧
+  그 영역의 <strong>넓이 비율</strong>입니다. 확률의 세 공리는 “넓이”라면 당연히 가져야 할
+  최소한의 상식을 적어 둔 것뿐입니다 — <strong>넓이는 음수가 아니다</strong>,
+  <strong>전체 넓이는 1이다</strong>, <strong>겹치지 않는 조각들의 넓이는 더하면 된다</strong>.
+  콜모고로프는 1933년 이 세 줄로 확률론 전체를 떠받쳤습니다.</p>
+</div>
+
+<div class="box box-def" id="def-probability-space">
+  <span class="box-label">정의 · 확률공간과 콜모고로프 공리 <span class="label-en">probability space</span> (호그 §1)</span>
+  <p><strong>확률공간</strong>은 세 짝 $(\Omega, \mathcal{F}, P)$이다.</p>
+  <p>① <strong>표본공간</strong> $\Omega$: 일어날 수 있는 모든 결과(outcome)의 집합.
+  동전이면 $\{H, T\}$, 주사위면 $\{1,\dots,6\}$, 수명 측정이면 $[0,\infty)$.</p>
+  <p>② <strong>사건족</strong> $\mathcal{F}$: 확률을 부여할 부분집합(<strong>사건</strong>)들의 모임.
+  $\sigma$-<strong>대수</strong>여야 한다 — 즉 $\Omega \in \mathcal{F}$, 여집합에 닫힘
+  ($A \in \mathcal{F} \Rightarrow A^c \in \mathcal{F}$), <a class="term" data-term="countable">가산</a>
+  합집합에 닫힘 ($A_1, A_2, \dots \in \mathcal{F} \Rightarrow \bigcup_n A_n \in \mathcal{F}$).
+  $\Omega$가 유한·가산이면 보통 $\mathcal{F} = 2^\Omega$(멱집합)로 잡는다.</p>
+  <p>③ <strong>확률측도</strong> $P : \mathcal{F} \to \mathbb{R}$: 다음 <strong>콜모고로프 공리</strong>를
+  만족하는 함수.</p>
+  <p style="margin-left:1em">
+  <strong>(K1) 비음성</strong> &nbsp; $P(A) \ge 0$ &nbsp; (모든 $A \in \mathcal{F}$)<br>
+  <strong>(K2) 정규화</strong> &nbsp; $P(\Omega) = 1$<br>
+  <strong>(K3) 가산가법성</strong> &nbsp; $A_1, A_2, \dots$가 서로소($i \neq j \Rightarrow A_i \cap A_j = \varnothing$)이면
+  $$P\!\left(\bigcup_{n=1}^{\infty} A_n\right) = \sum_{n=1}^{\infty} P(A_n).$$</p>
+  <p>이 세 줄이 전부다. “확률”이라는 단어의 나머지 성질은 모두 여기서 <strong>증명된다</strong>.</p>
+</div>
+
+<div class="box box-thm" id="thm-basic-properties">
+  <span class="box-label">정리 · 확률의 기본 성질 <span class="label-en">elementary properties</span> (호그 §1)</span>
+  <p><strong>이 정리가 하는 일:</strong> 공리 세 줄에서 실전에 쓰는 도구를 전부 꺼낸다 —
+  여사건 뒤집기, 단조성, 그리고 겹침을 보정하는 <strong>포함배제</strong>.</p>
+  <p>임의의 사건 $A, B$에 대해</p>
+  <p style="margin-left:1em">
+  ① <strong>여사건</strong> &nbsp; $P(A^c) = 1 - P(A)$, &nbsp; 특히 $P(\varnothing) = 0$<br>
+  ② <strong>유계</strong> &nbsp; $0 \le P(A) \le 1$<br>
+  ③ <strong>단조성</strong> &nbsp; $A \subseteq B \Rightarrow P(A) \le P(B)$, &nbsp;
+     그리고 $P(B \setminus A) = P(B) - P(A)$<br>
+  ④ <strong>포함배제(합의 법칙)</strong>
+     $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+  ⑤ <strong>불 부등식(합집합 상계)</strong> &nbsp;
+     $\displaystyle P\!\left(\bigcup_n A_n\right) \le \sum_n P(A_n)$
+  </p>
+  <p>③의 단조성은 “큰 사건이 더 넓다”는 당연함을, ④는 “두 번 센 겹침을 한 번 빼라”는
+  넓이의 상식을 확률로 옮긴 것이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 모든 것을 “서로소 조각으로 쪼개 (K3)로 더하기”로 환원한다.</span></summary>
+  <p><strong>① 여사건:</strong> $\Omega = A \cup A^c$이고 두 조각은 서로소.
+  (K3)의 유한 버전으로 $1 = P(\Omega) = P(A) + P(A^c)$ — 이항하면 끝.
+  ($A = \Omega$로 놓으면 $P(\varnothing) = 0$.)</p>
+  <p><strong>③ 단조성:</strong> $A \subseteq B$이면 $B = A \cup (B \setminus A)$, 서로소.
+  $P(B) = P(A) + P(B \setminus A)$이고 (K1)로 $P(B\setminus A) \ge 0$이므로 $P(A) \le P(B)$.
+  ② 유계는 $\varnothing \subseteq A \subseteq \Omega$에 단조성.</p>
+  <p><strong>④ 포함배제:</strong> $A \cup B$와 $B$를 각각 서로소로 쪼갠다:
+  $$A \cup B = A \cup (B \cap A^c), \qquad B = (B \cap A) \cup (B \cap A^c).$$
+  각각에 가법성을 쓰면 $P(A\cup B) = P(A) + P(B\cap A^c)$이고
+  $P(B) = P(A\cap B) + P(B\cap A^c)$. 아래 식에서 $P(B\cap A^c) = P(B) - P(A\cap B)$를
+  얻어 위에 대입하면 원하는 식이 나온다.</p>
+  <p><strong>⑤ 불 부등식:</strong> 합집합을 서로소로 “깎아” 다시 쓰면
+  $\bigcup_n A_n = \bigcup_n \big(A_n \setminus \bigcup_{k<n} A_k\big)$이고, 각 조각은
+  $A_n$의 부분집합. (K3) 뒤에 단조성을 항별로 적용한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 등확률과 경우의 수</span>
+  <p><strong>(a) 고전적 확률.</strong> $\Omega$가 유한하고 모든 결과가 같은 정도로 그럴듯하면
+  (K3)에 의해 각 결과의 확률은 $1/|\Omega|$이고, 사건 $A$의 확률은
+  $$P(A) = \frac{|A|}{|\Omega|} = \frac{\text{유리한 경우의 수}}{\text{전체 경우의 수}}.$$
+  확률 계산이 <strong>순열·조합 세기</strong>로 귀착되는 이유다.</p>
+  <p><strong>(b) 주사위 두 개.</strong> $\Omega = \{1,\dots,6\}^2$, $|\Omega| = 36$.
+  “합이 7” 사건은 $(1,6),\dots,(6,1)$의 $6$가지라 확률 $6/36 = 1/6$. “합이 8”은 $5$가지라 $5/36$.</p>
+  <p><strong>(c) 포함배제의 실전.</strong> $52$장에서 한 장을 뽑아 “스페이드 또는 그림카드(J,Q,K)”일 확률.
+  $P(\text{스페이드}) = 13/52$, $P(\text{그림}) = 12/52$, 겹침(스페이드 그림카드)은 $3/52$.
+  $$P = \tfrac{13}{52} + \tfrac{12}{52} - \tfrac{3}{52} = \tfrac{22}{52} = \tfrac{11}{26}.$$
+  겹침을 빼지 않으면 스페이드 J·Q·K를 두 번 세게 된다.</p>
+</div>
+
+<h2 id="sec-conditional">2. 조건부확률과 베이즈 정리 — 정보가 들어오면 판이 좁아진다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>“$B$가 일어났다”는 정보를 얻으면, 세계는 더 이상 $\Omega$ 전체가 아니라 <strong>$B$ 안</strong>으로
+  좁혀집니다. 조건부확률 $P(A \mid B)$는 그 <strong>새 세계 $B$를 전체($=1$)로 다시 정규화</strong>한
+  뒤 $A$의 넓이를 재는 것 — 즉 $B$ 안에서 $A$가 차지하는 넓이 비율입니다. 그래서 분모가
+  $P(B)$입니다.</p>
+</div>
+
+<div class="box box-def" id="def-conditional-probability">
+  <span class="box-label">정의 · 조건부확률 <span class="label-en">conditional probability</span> (호그 §1)</span>
+  <p>$P(B) > 0$인 사건 $B$가 주어졌을 때, 사건 $A$의 <strong>조건부확률</strong>은
+  $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}.$$
+  이는 “$B$를 새 표본공간으로 삼은” 또 하나의 확률측도다 —
+  고정된 $B$에 대해 $A \mapsto P(A \mid B)$는 (K1)–(K3)을 모두 만족한다
+  (예: $P(B \mid B) = 1$).</p>
+  <p>정의를 옆으로 눕히면 <strong>곱셈법칙</strong>이 된다:
+  $$P(A \cap B) = P(A \mid B)\,P(B) = P(B \mid A)\,P(A).$$
+  일반적으로 사슬 형태로
+  $P(A_1 \cap \cdots \cap A_n) = P(A_1)\,P(A_2 \mid A_1)\,P(A_3 \mid A_1 \cap A_2)\cdots$
+  — “순차적으로 조건을 쌓아 가며” 곱한다 (비복원 추출 계산의 엔진).</p>
+</div>
+
+<div class="box box-thm" id="thm-bayes">
+  <span class="box-label">정리 · 전확률 공식과 베이즈 정리 <span class="label-en">total probability, Bayes' theorem</span> (호그 §1)</span>
+  <p><strong>이 정리가 하는 일:</strong> 원인들 $B_1, \dots, B_k$로 세계를 칸막이한 뒤,
+  전확률 공식으로 <strong>결과의 확률을 앞으로</strong> 합성하고, 베이즈 정리로
+  <strong>관측에서 원인을 거꾸로</strong> 추론한다 — 통계적 추론 전체의 문법.</p>
+  <p>$B_1, \dots, B_k$가 $\Omega$의 <strong>분할</strong>(서로소이고 합집합이 $\Omega$, 각 $P(B_i) > 0$)일 때:</p>
+  <p><strong>전확률 공식</strong>
+  $$P(A) = \sum_{i=1}^{k} P(A \mid B_i)\,P(B_i).$$</p>
+  <p><strong>베이즈 정리</strong> — 관측 $A$가 주어졌을 때 원인이 $B_j$였을 확률:
+  $$P(B_j \mid A) = \frac{P(A \mid B_j)\,P(B_j)}{\displaystyle\sum_{i=1}^{k} P(A \mid B_i)\,P(B_i)}.$$
+  분자는 “원인 $B_j$의 <strong>사전확률</strong> $P(B_j)$ × 그 원인이 $A$를 낳을 <strong>가능도</strong>
+  $P(A \mid B_j)$”, 분모는 전확률로 계산한 정규화 상수다. 결과가 곧 <strong>사후확률</strong>이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 분할로 $A$를 서로소 조각으로 쪼개면 두 공식이 한 번에 떨어진다.</span></summary>
+  <p><strong>전확률:</strong> $B_i$가 분할이므로 $A = A \cap \Omega = \bigcup_i (A \cap B_i)$이고,
+  이 조각들은 서로소($A\cap B_i$와 $A\cap B_j$는 $B_i \cap B_j = \varnothing$이라 겹치지 않음).
+  가법성 후 각 항에 곱셈법칙:
+  $$P(A) = \sum_i P(A \cap B_i) = \sum_i P(A \mid B_i)P(B_i).$$</p>
+  <p><strong>베이즈:</strong> 조건부확률 정의에서
+  $P(B_j \mid A) = \dfrac{P(A \cap B_j)}{P(A)}$. 분자에 곱셈법칙
+  $P(A\cap B_j) = P(A \mid B_j)P(B_j)$, 분모에 방금 얻은 전확률 공식을 대입하면 끝.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 의료검사와 거짓양성 — 왜 양성인데도 안심할 수 있나</span>
+  <p>인구의 $1\%$가 어떤 질병 $D$를 가진다. 검사의 <strong>민감도</strong>는 $99\%$
+  ($P(+\mid D) = 0.99$), <strong>거짓양성률</strong>은 $5\%$ ($P(+\mid D^c) = 0.05$).
+  당신이 <strong>양성</strong>이 나왔다. 실제로 병일 확률 $P(D \mid +)$는?</p>
+  <p>사전확률 $P(D) = 0.01$, $P(D^c) = 0.99$. 전확률로 분모(양성 확률):
+  $$P(+) = \underbrace{0.99 \times 0.01}_{\text{진양성}} + \underbrace{0.05 \times 0.99}_{\text{거짓양성}}
+  = 0.0099 + 0.0495 = 0.0594.$$
+  베이즈:
+  $$P(D \mid +) = \frac{0.99 \times 0.01}{0.0594} = \frac{0.0099}{0.0594} \approx 0.167.$$
+  <strong>양성이어도 실제 병일 확률은 약 $16.7\%$에 불과하다.</strong> 병이 워낙 드물어
+  (사전확률 $1\%$) 건강한 다수에서 나온 거짓양성이 진양성을 압도하기 때문 —
+  이것이 그 유명한 <strong>기저율 무시(base-rate fallacy)</strong>다. 사전확률을 무시하고
+  민감도 $99\%$만 보면 “$99\%$ 확률로 병”이라 착각한다.</p>
+</div>
+
+<h2 id="sec-independence">3. 독립 — 정보가 판을 좁히지 못할 때</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$B$를 알아도 $A$에 대한 믿음이 <strong>전혀 바뀌지 않으면</strong>($P(A \mid B) = P(A)$),
+  두 사건은 <strong>독립</strong>입니다. 이 조건을 분수 없이 대칭적으로 적은 것이 곱셈 형태
+  $P(A \cap B) = P(A)P(B)$ — 그래서 “곱하면 된다”가 독립의 정의가 됩니다.</p>
+</div>
+
+<div class="box box-def" id="def-independence-events">
+  <span class="box-label">정의 · 사건의 독립 <span class="label-en">independence of events</span> (호그 §1)</span>
+  <p>두 사건 $A, B$가 <strong>독립</strong>이라 함은
+  $$P(A \cap B) = P(A)\,P(B).$$
+  $P(B) > 0$이면 이는 $P(A \mid B) = P(A)$와 동치다 (“$B$의 발생이 $A$의 확률을 바꾸지 않음”).
+  독립이면 $A$와 $B^c$, $A^c$와 $B$, $A^c$와 $B^c$도 모두 독립이다.</p>
+  <p><strong>세 사건 이상 — 상호독립.</strong> $A, B, C$가 <strong>상호독립</strong>이려면
+  세 쌍이 모두 독립일 뿐 아니라 삼중곱까지 성립해야 한다:
+  $$P(A\cap B) = P(A)P(B),\quad P(A\cap C)=P(A)P(C),\quad P(B\cap C)=P(B)P(C),$$
+  $$P(A \cap B \cap C) = P(A)\,P(B)\,P(C).$$
+  일반적으로 $n$개 사건의 상호독립은 <strong>모든 부분모임</strong>에서 곱셈이 성립함을 요구한다.</p>
+  <p><strong>조건부독립.</strong> 사건 $C$가 주어졌을 때 $A, B$가 조건부독립이라 함은
+  $P(A \cap B \mid C) = P(A \mid C)\,P(B \mid C)$. 무조건 독립과는 별개의 개념이다
+  (한쪽이 다른 쪽을 함의하지 않는다).</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 쌍별독립이지만 상호독립은 아닌 사건 (반례)</span>
+  <p>공정한 동전을 <strong>두 번</strong> 던진다. $\Omega = \{HH, HT, TH, TT\}$, 각 결과 $1/4$.
+  세 사건을 정의하자:</p>
+  <p style="margin-left:1em">$A$ = 첫 번째가 앞면 $= \{HH, HT\}$<br>
+  $B$ = 두 번째가 앞면 $= \{HH, TH\}$<br>
+  $C$ = 두 결과가 같음 $= \{HH, TT\}$</p>
+  <p>각각 $P(A) = P(B) = P(C) = \tfrac12$. <strong>쌍별로는 독립:</strong>
+  $A \cap B = A \cap C = B \cap C = \{HH\}$이라 각 교집합 확률이 $\tfrac14 = \tfrac12 \cdot \tfrac12$.
+  세 쌍 모두 곱셈이 성립한다.</p>
+  <p>그러나 <strong>삼중곱은 깨진다:</strong> $A \cap B \cap C = \{HH\}$라
+  $$P(A\cap B\cap C) = \tfrac14 \neq \tfrac18 = P(A)P(B)P(C).$$
+  즉 <strong>쌍별독립이 상호독립을 함의하지 않는다.</strong> 직관적으로 $A$와 $B$를 둘 다 알면
+  ($HH$) $C$가 확정되므로($C$ 발생), 셋을 함께 보면 정보가 새어 나온다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>배반(서로소) ≠ 독립.</strong> 정반대에 가깝다. $A, B$가 서로소이고 둘 다
+  확률이 양수이면 $P(A\cap B) = P(\varnothing) = 0 \neq P(A)P(B) > 0$이라
+  <strong>절대 독립일 수 없다</strong> — $B$가 일어나면 $A$는 못 일어나니 강하게 <strong>의존</strong>한다.
+  “겹치지 않음(배반)”과 “서로 영향 없음(독립)”은 완전히 다른 말이다.</p>
+  <p>② <strong>$P(A\mid B) \neq P(B\mid A)$.</strong> 방향을 뒤집으면 값이 완전히 달라진다.
+  위 의료 예제에서 $P(+\mid D) = 0.99$이지만 $P(D\mid +) \approx 0.167$. 둘을 혼동하는 것이
+  이른바 <strong>검사의 오류(prosecutor's fallacy)</strong>다. 베이즈 정리는 바로 이 두 방향을
+  잇는 환율표이며, 사전확률 $P(B)$가 그 환율을 좌우한다.</p>
+  <p>③ <strong>쌍별독립 ≠ 상호독립.</strong> 위 반례처럼 두 개씩 봐서는 독립이어도 셋을 함께 보면
+  아닐 수 있다. $n$개의 상호독립은 <strong>모든 부분집합</strong>에서 곱셈을 요구하는 훨씬 강한
+  조건이다. 임용 답안에서 “독립”이라 쓸 때는 어느 수준의 독립인지 명시해야 한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">1장의 줄거리</span>
+  <p><a class="term" data-term="probability-space">확률공간</a> $(\Omega, \mathcal{F}, P)$ =
+  판 위에 넓이 1을 배분하는 규칙 (콜모고로프 공리 $P\ge 0$, $P(\Omega)=1$, 가산가법)
+  → 여사건·단조성·포함배제 $P(A\cup B) = P(A)+P(B)-P(A\cap B)$는 전부 공리의 <strong>따름정리</strong>
+  → <a class="term" data-term="conditional-probability">조건부확률</a> $P(A\mid B) = \frac{P(A\cap B)}{P(B)}$ =
+  세계를 $B$로 좁혀 다시 정규화, 곱셈법칙 → 분할로 앞으로 합치는 전확률,
+  거꾸로 추론하는 베이즈 (사전 × 가능도 ÷ 정규화 = 사후, 기저율이 핵심)
+  → <a class="term" data-term="independence-events">독립</a> $P(A\cap B) = P(A)P(B)$ =
+  정보가 판을 못 좁힘, 쌍별 vs 상호(반례: 동전 두 번).</p>
+  <p><strong>세 가지 함정을 기억하라:</strong> 배반 ≠ 독립, $P(A\mid B) \neq P(B\mid A)$,
+  쌍별독립 ≠ 상호독립. 다음 장에서는 이 판 위의 <strong>함수</strong>인 확률변수로 넘어가
+  결과를 숫자로 옮긴다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>$P(A) = 0.6$, $P(B) = 0.5$, $P(A \cap B) = 0.3$일 때 다음을 구하라.</p>
+  <p>(1) $P(A \cup B)$ &nbsp; (2) $P(A^c)$ &nbsp; (3) $P(A \cap B^c)$ &nbsp; (4) $A$와 $B$는 독립인가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 포함배제. (3) $P(A) = P(A\cap B) + P(A\cap B^c)$. (4) $P(A)P(B)$와 $P(A\cap B)$ 비교.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $P(A\cup B) = 0.6 + 0.5 - 0.3 = 0.8$.</p>
+    <p>(2) $P(A^c) = 1 - 0.6 = 0.4$.</p>
+    <p>(3) $P(A\cap B^c) = P(A) - P(A\cap B) = 0.6 - 0.3 = 0.3$.</p>
+    <p>(4) $P(A)P(B) = 0.6 \times 0.5 = 0.3 = P(A\cap B)$ — <strong>독립이다.</strong>
+    (우연히 이 수치에서 독립이 성립. 서로소였다면 $P(A\cap B)=0$이라 독립이 아니었을 것.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>표준 $52$장 카드 덱에서 <strong>비복원</strong>으로 두 장을 연달아 뽑는다.</p>
+  <p>(1) 두 장 모두 에이스일 확률을 곱셈법칙으로 구하라.<br>
+  (2) 첫 장이 에이스였다는 조건에서 둘째 장도 에이스일 확률은?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$P(A_1 \cap A_2) = P(A_1)\,P(A_2 \mid A_1)$. 뽑고 나면 남은 카드가 $51$장.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $A_i$ = $i$번째가 에이스. $P(A_1) = \tfrac{4}{52}$, 그 뒤 에이스 $3$장/카드 $51$장이라
+    $P(A_2 \mid A_1) = \tfrac{3}{51}$.
+    $$P(A_1 \cap A_2) = \tfrac{4}{52}\cdot\tfrac{3}{51} = \tfrac{12}{2652} = \tfrac{1}{221} \approx 0.0045.$$</p>
+    <p>(2) 그것이 바로 $P(A_2 \mid A_1) = \tfrac{3}{51} = \tfrac{1}{17} \approx 0.059$.
+    (비복원이라 첫 결과가 둘째 확률을 바꾼다 — 즉 $A_1, A_2$는 <strong>독립이 아니다</strong>.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §1 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>공장의 세 기계 $B_1, B_2, B_3$가 각각 전체 생산량의 $50\%, 30\%, 20\%$를 만들고,
+  불량률은 각각 $3\%, 4\%, 5\%$다. 무작위로 고른 제품이 불량($A$)일 때,
+  그것이 기계 $B_3$에서 나왔을 확률 $P(B_3 \mid A)$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>전확률로 $P(A)$를 먼저 구하고 베이즈. $B_i$는 분할.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>전확률:
+    $$P(A) = 0.03(0.5) + 0.04(0.3) + 0.05(0.2) = 0.015 + 0.012 + 0.010 = 0.037.$$
+    베이즈:
+    $$P(B_3 \mid A) = \frac{0.05 \times 0.20}{0.037} = \frac{0.010}{0.037} \approx 0.270.$$
+    불량품의 약 $27\%$가 $B_3$ 출신 — 생산 비중은 $20\%$뿐이지만 불량률이 가장 높아
+    사후확률이 사전확률보다 커졌다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §1 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>주사위 하나를 던진다. $A = \{2,4,6\}$(짝수), $B = \{1,2,3,4\}$,
+  $C = \{1,2,3,4,5\}$로 둔다.</p>
+  <p>(1) $A$와 $B$는 독립인가? &nbsp; (2) $A$와 $C$는 독립인가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>등확률이라 각 사건의 확률은 원소 수$/6$. $P(A\cap B)$와 $P(A)P(B)$를 비교.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$P(A) = \tfrac36 = \tfrac12$, $P(B) = \tfrac46 = \tfrac23$, $P(C) = \tfrac56$.</p>
+    <p>(1) $A\cap B = \{2,4\}$, $P(A\cap B) = \tfrac26 = \tfrac13$.
+    $P(A)P(B) = \tfrac12 \cdot \tfrac23 = \tfrac13$. 같으므로 <strong>독립.</strong></p>
+    <p>(2) $A\cap C = \{2,4\}$, $P(A\cap C) = \tfrac13$.
+    $P(A)P(C) = \tfrac12 \cdot \tfrac56 = \tfrac{5}{12} \neq \tfrac13$.
+    <strong>독립 아님</strong> ($\tfrac13 = \tfrac{4}{12}$). 홀짝 구성이 미묘하게 달라 생기는 차이다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>베이즈 서술형</span>
+  </div>
+  <p>어떤 희귀병의 유병률이 $0.5\%$다. 진단검사의 민감도는 $P(+\mid D) = 0.98$,
+  특이도는 $P(-\mid D^c) = 0.90$이다.</p>
+  <p>(1) 무작위로 검사받은 사람이 양성일 때 실제로 병일 확률 $P(D\mid +)$를 구하라.<br>
+  (2) 이 값이 민감도 $0.98$에 크게 못 미치는 이유를 “기저율”의 관점에서 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>거짓양성률 $= 1 - $ 특이도 $= 0.10$. 전확률로 $P(+)$부터.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $P(D) = 0.005$, $P(+\mid D) = 0.98$, $P(+\mid D^c) = 1 - 0.90 = 0.10$.
+    $$P(+) = 0.98(0.005) + 0.10(0.995) = 0.0049 + 0.0995 = 0.1044.$$
+    $$P(D\mid +) = \frac{0.0049}{0.1044} \approx 0.0469 \approx 4.7\%.$$</p>
+    <p>(2) 병이 워낙 드물어(사전확률 $0.5\%$) 검사받는 사람 대다수가 건강하다.
+    건강한 $99.5\%$에게서 나오는 거짓양성($10\%$)의 절대 수가 진짜 환자의 진양성보다 훨씬 많아,
+    양성 집단 안에서 진짜 환자의 비율($=$ 사후확률)이 낮게 유지된다. <strong>사후확률은 민감도만이
+    아니라 사전확률(기저율)과 거짓양성률의 균형으로 결정된다</strong> — 방향을 뒤집은
+    $P(D\mid +)$와 $P(+\mid D)$를 혼동해서는 안 된다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>독립성 증명</span>
+  </div>
+  <p>(1) $A$와 $B$가 독립이면 $A$와 $B^c$도 독립임을 증명하라.<br>
+  (2) $P(A) > 0$, $P(B) > 0$인 두 사건이 서로소이면 독립일 수 없음을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $P(A) = P(A\cap B) + P(A\cap B^c)$에서 시작. (2) 서로소면 $P(A\cap B) = 0$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $B \cup B^c = \Omega$, 서로소이므로
+    $P(A) = P(A\cap B) + P(A\cap B^c)$. 따라서
+    $$P(A\cap B^c) = P(A) - P(A\cap B) = P(A) - P(A)P(B) = P(A)\big(1 - P(B)\big) = P(A)P(B^c).$$
+    (둘째 등호에서 $A, B$의 독립을 사용.) 그러므로 $A$와 $B^c$는 독립. $\blacksquare$</p>
+    <p>(2) 서로소이면 $A\cap B = \varnothing$이라 $P(A\cap B) = 0$.
+    그런데 $P(A)P(B) > 0$ (둘 다 양수)이므로 $P(A\cap B) \neq P(A)P(B)$ —
+    독립의 정의를 위반한다. 즉 <strong>양의 확률을 갖는 서로소 사건은 반드시 종속</strong>이다.
+    ($B$가 일어나면 $A$는 불가능해지므로 $P(A\mid B) = 0 \neq P(A)$로 해석해도 된다.) $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

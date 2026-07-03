@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4장 주요 분포족 — 확률과 통계 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="probability-statistics" data-chapter="ch04.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">확률과 통계 · Hogg (§3)</p>
+  <h1><span class="ch-num">4</span> 주요 분포족</h1>
+  <p class="ch-source">“분포에도 이름이 있다” — 2·3장에서 확률변수와 분포를 추상적으로
+  세웠다면, 이 장은 현장에서 반복해 나타나는 <strong>명패 붙은 분포</strong>들을
+  만난다. 성공을 세면 이항, 희귀사건을 세면 포아송, 오차를 재면 정규.</p>
+</div>
+
+<p>동전을 $n$번 던져 앞면 수를 세는 일, 방사성 붕괴가 1초에 몇 번 일어나는지 세는 일,
+측정 오차가 얼마나 퍼지는지 재는 일 — 겉보기에 다른 이 상황들이 각각
+<strong>이항·포아송·정규</strong>라는 정해진 꼴의 분포를 낳는다. 각 분포족은
+몇 개의 <strong>모수</strong>(parameter)로 지정되고, 평균·분산·<strong>적률생성함수(mgf)</strong>가
+그 모수로 깔끔하게 표현된다. 이 장의 전략은 한결같다:
+<strong>mgf를 구하면 평균·분산이 미분 두 번으로 떨어지고, mgf가 같으면 분포가 같다</strong>는
+유일성 정리로 “정규의 합은 정규”, “$\chi^2$는 정규 제곱합” 같은 사실이 계산 없이 나온다.</p>
+
+<h2 id="sec-discrete">1. 이산분포 — 성공을 세는 세 가지 질문</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 무엇을 세느냐가 분포를 정한다</span>
+  <p>성공 확률 $p$인 시행(<strong>베르누이 시행</strong>)을 반복할 때, 무엇을 묻느냐에 따라
+  분포가 갈린다.</p>
+  <p>① “$n$번 중 성공은 몇 번?” → <strong>이항분포</strong> (고정된 시행 수, 성공 수가 변수)<br>
+  ② “첫 성공까지 몇 번 시행?” → <strong>기하분포</strong> (성공 수 고정=1, 시행 수가 변수)<br>
+  ③ “$r$번째 성공까지 몇 번 시행?” → <strong>음이항분포</strong> (기하의 일반화)<br>
+  ④ “정해진 시간·공간에서 희귀사건은 몇 번?” → <strong>포아송분포</strong>
+  (시행 수 $\to\infty$, 성공률 $\to 0$인 이항의 극한)</p>
+  <p>①③은 시행 수를 고정하고 성공 수를 세지만, ②③은 성공 수를 고정하고 시행 수를
+  센다 — “세는 대상을 맞바꾸면” 이항과 음이항이 서로의 거울상이 된다.</p>
+</div>
+
+<div class="box box-def" id="def-binomial-poisson">
+  <span class="box-label">정의 · 이항분포와 포아송분포 <span class="label-en">binomial &amp; Poisson distribution</span> (호그 §3)</span>
+  <p><strong>베르누이분포</strong> $\mathrm{Bernoulli}(p)$: $P(X=1)=p$, $P(X=0)=1-p$.
+  $E[X]=p$, $\operatorname{Var}(X)=p(1-p)$, mgf $M(t)=1-p+pe^t$.</p>
+  <p><strong>이항분포</strong> $b(n,p)$: 독립인 베르누이 시행 $n$번의 성공 수.
+  $k=0,1,\dots,n$에 대해</p>
+  $$P(X=k)=\binom{n}{k}p^k(1-p)^{n-k},\qquad E[X]=np,\quad \operatorname{Var}(X)=np(1-p).$$
+  <p>mgf는 베르누이 mgf의 $n$제곱: $M(t)=(1-p+pe^t)^n$ (독립합의 mgf는 곱).</p>
+  <p><strong>기하분포</strong> $\mathrm{Geom}(p)$: 첫 성공까지의 시행 수. $k=1,2,\dots$에 대해
+  $P(X=k)=(1-p)^{k-1}p$, $E[X]=\tfrac1p$, $\operatorname{Var}(X)=\tfrac{1-p}{p^2}$
+  — 이산 세계의 <strong>무기억성</strong>을 갖는 유일한 분포다.</p>
+  <p><strong>음이항분포</strong> $\mathrm{NB}(r,p)$: $r$번째 성공까지의 시행 수.
+  $k=r, r+1,\dots$에 대해 $P(X=k)=\binom{k-1}{r-1}p^r(1-p)^{k-r}$
+  — 독립인 기하분포 $r$개의 합이라 $E[X]=\tfrac rp$, $\operatorname{Var}(X)=\tfrac{r(1-p)}{p^2}$.</p>
+  <p><strong>포아송분포</strong> $\mathrm{Pois}(\lambda)$ ($\lambda\gt 0$): $k=0,1,2,\dots$에 대해</p>
+  $$P(X=k)=\frac{\lambda^k e^{-\lambda}}{k!},\qquad E[X]=\operatorname{Var}(X)=\lambda,\quad M(t)=e^{\lambda(e^t-1)}.$$
+  <p><strong>평균과 분산이 똑같이 $\lambda$</strong>인 것이 포아송의 지문(指紋)이다.
+  ($\sum_k \lambda^k/k!=e^\lambda$이므로 총합이 1인 것부터가 지수함수의 급수전개다.)</p>
+</div>
+
+<div class="box box-thm" id="thm-poisson-limit">
+  <span class="box-label">정리 · 이항의 포아송 극한 <span class="label-en">Poisson limit</span> (호그 §3)</span>
+  <p><strong>이 정리가 하는 일:</strong> 포아송분포에 “희귀사건의 분포”라는 정체를 부여한다 —
+  시행이 아주 많고($n$ 큼) 각 성공은 아주 드문데($p$ 작음) 기댓값 $np$만 적당하면,
+  이항은 사실상 포아송이다. 그래서 큰 $n$의 이항 계산을 포아송으로 갈아탈 수 있다.</p>
+  <p>$np=\lambda$를 고정한 채 $n\to\infty$ (따라서 $p=\lambda/n\to 0$)이면, 각 $k$에 대해</p>
+  $$\binom{n}{k}p^k(1-p)^{n-k}\ \longrightarrow\ \frac{\lambda^k e^{-\lambda}}{k!}.$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— mgf 유일성: 이항 mgf에 $p=\lambda/n$을 넣고 $n\to\infty$ 극한을 취하면 포아송 mgf가 그대로 나온다.</span></summary>
+  <p>$b(n,p)$의 mgf는 $M_n(t)=(1-p+pe^t)^n=\bigl(1+p(e^t-1)\bigr)^n$이다.
+  $p=\lambda/n$을 대입하면</p>
+  $$M_n(t)=\left(1+\frac{\lambda(e^t-1)}{n}\right)^{\!n}\ \xrightarrow{\,n\to\infty\,}\ e^{\lambda(e^t-1)},$$
+  <p>마지막 극한은 $(1+x/n)^n\to e^x$ (해석학의 기본 극한). 이것이 바로 $\mathrm{Pois}(\lambda)$의
+  mgf이고, <strong>mgf가 같으면 분포가 같다</strong>는 유일성 정리로 극한분포가 포아송임이 결정된다.
+  $\blacksquare$</p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · mgf 미분으로 평균·분산 뽑기</span>
+  <p><strong>(a) 포아송.</strong> $M(t)=e^{\lambda(e^t-1)}$에서
+  $M'(t)=\lambda e^t\,e^{\lambda(e^t-1)}$이므로 $E[X]=M'(0)=\lambda$.
+  $M''(t)=\lambda e^t(1+\lambda e^t)e^{\lambda(e^t-1)}$이므로
+  $E[X^2]=M''(0)=\lambda+\lambda^2$, 따라서
+  $\operatorname{Var}(X)=(\lambda+\lambda^2)-\lambda^2=\lambda$. 평균과 분산이 일치한다.</p>
+  <p><strong>(b) 이항 (덧셈으로).</strong> $X=Y_1+\dots+Y_n$ (독립 베르누이)이므로 기댓값·분산의
+  가법성으로 $E[X]=\sum E[Y_i]=np$, $\operatorname{Var}(X)=\sum\operatorname{Var}(Y_i)=np(1-p)$.
+  독립합에서는 분산도 더해진다 — 3장 공분산 0의 열매.</p>
+  <p><strong>(c) 근사.</strong> 어떤 부품의 불량률이 $p=0.002$, 한 상자에 $n=1000$개.
+  상자당 불량 수는 $b(1000,0.002)$지만, $\lambda=np=2$인 $\mathrm{Pois}(2)$로 근사한다.
+  불량이 없을 확률은 $\approx e^{-2}\approx 0.135$.</p>
+</div>
+
+<h2 id="sec-normal">2. 정규분포 — 모든 합이 흘러드는 바다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 왜 종 모양이 어디에나 나타나는가</span>
+  <p>키, 측정 오차, 시험 점수, 표본평균 — 서로 무관한 작은 요인이 <strong>더해져</strong>
+  만들어지는 양은 거의 예외 없이 종 모양을 그린다. 5장의 중심극한정리가 그 이유를
+  “독립인 것들의 합은 정규로 수렴한다”로 못박겠지만, 정규분포 자체는 그보다 먼저,
+  <strong>합에 대해 닫혀 있는(정규의 일차결합은 다시 정규) 유일하게 편리한 분포</strong>로서
+  중심 무대에 선다. 모수는 중심 $\mu$와 퍼짐 $\sigma$ 단둘뿐이다.</p>
+</div>
+
+<div class="box box-def" id="def-normal-distribution">
+  <span class="box-label">정의 · 정규분포 <span class="label-en">normal distribution</span> (호그 §3)</span>
+  <p>$X\sim N(\mu,\sigma^2)$ ($\sigma\gt 0$)의 확률밀도함수는 $-\infty\lt x\lt\infty$에서</p>
+  $$f(x)=\frac{1}{\sigma\sqrt{2\pi}}\,\exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right),
+  \qquad E[X]=\mu,\quad \operatorname{Var}(X)=\sigma^2,$$
+  <p>적률생성함수는 $M(t)=\exp\!\left(\mu t+\tfrac12\sigma^2 t^2\right)$.
+  ($\mu$는 대칭축, $\sigma$는 변곡점까지의 거리 — 곡선의 위치와 폭을 각각 잡는다.)</p>
+  <p><strong>표준화.</strong> $Z=\dfrac{X-\mu}{\sigma}\sim N(0,1)$ (표준정규).
+  모든 정규 계산은 표준정규 하나로 환원된다:
+  $P(a\lt X\lt b)=P\!\left(\dfrac{a-\mu}{\sigma}\lt Z\lt\dfrac{b-\mu}{\sigma}\right)$.</p>
+  <p><strong>일차결합의 폐쇄성.</strong> 독립인 $X_i\sim N(\mu_i,\sigma_i^2)$와 상수 $a_i$에 대해</p>
+  $$\sum_i a_i X_i\ \sim\ N\!\Bigl(\textstyle\sum_i a_i\mu_i,\ \sum_i a_i^2\sigma_i^2\Bigr).$$
+  <p><strong>68–95–99.7 법칙.</strong> 평균에서 $\pm1\sigma$ 안에 약 $68\%$, $\pm2\sigma$ 안에 약 $95\%$,
+  $\pm3\sigma$ 안에 약 $99.7\%$의 확률이 들어 있다 — 표준편차를 “자”로 쓰는 어림셈.</p>
+</div>
+
+<div class="box box-thm" id="thm-normal-mgf">
+  <span class="box-label">정리 · 정규의 일차결합은 정규 <span class="label-en">linearity of normals</span> (호그 §3)</span>
+  <p><strong>이 정리가 하는 일:</strong> 정규분포를 아무리 더하고 상수배해도 종 모양을 벗어나지
+  못하게 만든다 — 오직 $\mu$와 $\sigma^2$가 산술적으로 합쳐질 뿐. 표본평균이 정규가 되고,
+  두 정규 측정의 차가 다시 정규가 되는 근거이며, 5장 표본분포론의 주춧돌이다.</p>
+  <p>증명·성질 모두 mgf $M(t)=e^{\mu t+\sigma^2 t^2/2}$ 한 줄에서 나온다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— mgf 미분으로 평균·분산, mgf 곱으로 합의 정규성. 표준화는 $Z=(X-\mu)/\sigma$의 mgf가 $e^{t^2/2}$임을 확인.</span></summary>
+  <p><strong>평균·분산.</strong> $M(t)=e^{\mu t+\sigma^2 t^2/2}$에서
+  $M'(t)=(\mu+\sigma^2 t)M(t)$이므로 $E[X]=M'(0)=\mu$.
+  $M''(t)=\sigma^2 M(t)+(\mu+\sigma^2 t)^2 M(t)$이므로
+  $E[X^2]=M''(0)=\sigma^2+\mu^2$, 따라서 $\operatorname{Var}(X)=\sigma^2$.</p>
+  <p><strong>표준화.</strong> $Z=(X-\mu)/\sigma$의 mgf는
+  $E[e^{tZ}]=e^{-\mu t/\sigma}M(t/\sigma)=e^{-\mu t/\sigma}\,e^{\mu t/\sigma+\sigma^2 (t/\sigma)^2/2}=e^{t^2/2}$
+  — 이는 $N(0,1)$의 mgf. 유일성으로 $Z\sim N(0,1)$.</p>
+  <p><strong>일차결합.</strong> 독립인 $X_i\sim N(\mu_i,\sigma_i^2)$에 대해
+  $Y=\sum a_i X_i$의 mgf는 독립성으로 곱이 되어</p>
+  $$M_Y(t)=\prod_i e^{a_i\mu_i t+\frac12 a_i^2\sigma_i^2 t^2}
+  =\exp\!\Bigl(\bigl(\textstyle\sum a_i\mu_i\bigr)t+\tfrac12\bigl(\sum a_i^2\sigma_i^2\bigr)t^2\Bigr),$$
+  <p>이는 $N(\sum a_i\mu_i,\ \sum a_i^2\sigma_i^2)$의 mgf. 유일성으로 $Y$는 정규. $\blacksquare$</p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 표준화와 어림셈</span>
+  <p>$X\sim N(100,15^2)$ (예: IQ)에서 $P(85\lt X\lt 130)$을 구한다.
+  $85=\mu-1\sigma$, $130=\mu+2\sigma$이므로 $P(-1\lt Z\lt 2)$.
+  68–95–99.7로 어림하면 $P(-1\lt Z\lt 0)\approx 0.34$, $P(0\lt Z\lt 2)\approx 0.475$이라
+  합쳐 약 $0.815$. (정밀값 $\approx 0.8186$ — 표준정규표의 값과 일치.)</p>
+</div>
+
+<h2 id="sec-continuous">3. 연속분포 — 균등에서 감마·카이제곱까지</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 대기시간과 그 누적</span>
+  <p><strong>지수분포</strong>는 “다음 사건까지 기다리는 시간”의 분포다 — 포아송이 “횟수”를
+  세면, 지수는 그 사건들 “사이의 간격”을 잰다. 그 간격을 $\alpha$개 이어붙여 “$\alpha$번째
+  사건까지의 총 대기시간”을 보면 <strong>감마분포</strong>가 되고 (그래서 지수는 $\alpha=1$인 감마),
+  감마의 특수한 눈금($\alpha=r/2$, 척도 $2$)이 통계적 추론의 주역
+  <strong>카이제곱분포</strong>다. 구간 $(0,1)$ 위의 비율을 다루면 <strong>베타분포</strong>.</p>
+</div>
+
+<div class="box box-def" id="def-gamma-chisquare">
+  <span class="box-label">정의 · 감마분포와 카이제곱분포 <span class="label-en">gamma &amp; chi-square distribution</span> (호그 §3)</span>
+  <p><strong>균등분포</strong> $U(a,b)$: $a\lt x\lt b$에서 $f(x)=\dfrac1{b-a}$, 나머지 $0$.
+  $E[X]=\dfrac{a+b}2$, $\operatorname{Var}(X)=\dfrac{(b-a)^2}{12}$.</p>
+  <p><strong>지수분포</strong> $\mathrm{Exp}(\theta)$ (평균 $\theta\gt 0$): $x\gt 0$에서
+  $f(x)=\dfrac1\theta e^{-x/\theta}$, $E[X]=\theta$, $\operatorname{Var}(X)=\theta^2$,
+  생존함수 $P(X\gt x)=e^{-x/\theta}$. <strong>무기억성</strong>을 갖는 유일한 연속분포다.</p>
+  <p><strong>감마분포</strong> $\Gamma(\alpha,\theta)$ (형상 $\alpha\gt 0$, 척도 $\theta\gt 0$):
+  <a class="term" data-term="gamma-function">감마함수</a>
+  $\Gamma(\alpha)=\int_0^\infty t^{\alpha-1}e^{-t}\,dt$를 정규화 상수로 써서, $x\gt 0$에서</p>
+  $$f(x)=\frac{1}{\Gamma(\alpha)\,\theta^{\alpha}}\,x^{\alpha-1}e^{-x/\theta},
+  \qquad E[X]=\alpha\theta,\quad \operatorname{Var}(X)=\alpha\theta^2,\quad
+  M(t)=(1-\theta t)^{-\alpha}\ \ \bigl(t\lt\tfrac1\theta\bigr).$$
+  <p>$\alpha=1$이면 지수분포. 독립인 $\Gamma(\alpha_1,\theta)$와 $\Gamma(\alpha_2,\theta)$의
+  합은 $\Gamma(\alpha_1+\alpha_2,\theta)$ (형상은 더해진다 — mgf 곱).</p>
+  <p><strong>카이제곱분포</strong> $\chi^2_r$ (자유도 $r$): 감마의 특수경우
+  $\Gamma\!\left(\tfrac r2,\,2\right)$. 따라서</p>
+  $$f(x)=\frac{1}{\Gamma(r/2)\,2^{r/2}}\,x^{r/2-1}e^{-x/2}\ (x\gt 0),
+  \qquad E[X]=r,\quad \operatorname{Var}(X)=2r,\quad M(t)=(1-2t)^{-r/2}.$$
+  <p>핵심 성질: $Z\sim N(0,1)$이면 $Z^2\sim\chi^2_1$이고, 독립인 표준정규들의
+  제곱합 $\sum_{i=1}^r Z_i^2\sim\chi^2_r$ — <strong>자유도 $r$은 더해진 제곱의 개수</strong>다.</p>
+  <p><strong>베타분포</strong> $\mathrm{Beta}(\alpha,\beta)$: $0\lt x\lt 1$에서
+  $f(x)=\dfrac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\,x^{\alpha-1}(1-x)^{\beta-1}$,
+  $E[X]=\dfrac{\alpha}{\alpha+\beta}$ — 비율·확률 자체를 모델링할 때 쓴다.</p>
+  <p>($t$-분포와 $F$-분포는 정규·카이제곱의 비(比)로 정의되며 5장 표본분포론에서 다룬다.)</p>
+</div>
+
+<div class="box box-thm" id="thm-memoryless">
+  <span class="box-label">정리 · 지수분포의 무기억성 <span class="label-en">memorylessness</span> (호그 §3)</span>
+  <p><strong>이 정리가 하는 일:</strong> “이미 오래 기다렸으니 곧 오겠지”라는 도박사의 직관을
+  반증한다 — 지수분포로 대기하는 사건은 과거를 전혀 기억하지 못한다. 이미 $s$만큼
+  기다렸든 아니든, 앞으로 $t$를 더 기다릴 확률은 처음부터 $t$를 기다릴 확률과 같다.
+  연속분포 중 이 성질을 갖는 것은 지수분포뿐이다(그 이산 대응물은 기하분포).</p>
+  $$P(X\gt s+t\mid X\gt s)=P(X\gt t),\qquad s,t\ge 0.$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 생존함수 $P(X\gt x)=e^{-x/\theta}$의 지수법칙이 곧 무기억성. 역으로 이 함수방정식의 연속해는 지수함수뿐이라 유일성까지 나온다.</span></summary>
+  <p>$P(X\gt x)=e^{-x/\theta}$이므로 조건부확률의 정의에서</p>
+  $$P(X\gt s+t\mid X\gt s)=\frac{P(X\gt s+t)}{P(X\gt s)}
+  =\frac{e^{-(s+t)/\theta}}{e^{-s/\theta}}=e^{-t/\theta}=P(X\gt t).$$
+  <p><strong>역(유일성).</strong> 생존함수 $G(x)=P(X\gt x)$가 무기억성을 만족하면
+  $G(s+t)=G(s)G(t)$ — 코시의 지수 함수방정식. $G$가 우연속 단조이므로 해는
+  $G(x)=e^{-cx}$ 꼴뿐이고, 이는 지수분포를 뜻한다. $\blacksquare$</p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 정규 제곱은 카이제곱</span>
+  <p>$Z\sim N(0,1)$일 때 $Z^2$의 mgf를 직접 계산한다. $t\lt\tfrac12$에 대해</p>
+  $$E\!\left[e^{tZ^2}\right]=\int_{-\infty}^{\infty}\frac{1}{\sqrt{2\pi}}e^{tz^2}e^{-z^2/2}\,dz
+  =\int_{-\infty}^{\infty}\frac{1}{\sqrt{2\pi}}e^{-\frac12(1-2t)z^2}\,dz=(1-2t)^{-1/2}.$$
+  <p>마지막 등호는 분산 $1/(1-2t)$인 정규밀도의 적분이 1임을 이용한 것.
+  $(1-2t)^{-1/2}$는 바로 $\chi^2_1$의 mgf이므로 $Z^2\sim\chi^2_1$.
+  독립인 $Z_1,\dots,Z_r$이면 mgf가 곱해져 $\prod(1-2t)^{-1/2}=(1-2t)^{-r/2}$,
+  즉 $\sum Z_i^2\sim\chi^2_r$. (자유도 = 제곱한 정규의 개수.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>“포아송은 아무 이산분포”가 아니다.</strong> 포아송은 “$n$ 크고 $p$ 작은 이항의 극한”,
+  곧 <strong>희귀사건</strong>의 분포다. 그 지문은 $E=\operatorname{Var}=\lambda$ — 데이터에서 평균과
+  분산이 크게 다르면 포아송 가정을 의심해야 한다.</p>
+  <p>② <strong>무기억성은 아무 분포나 갖지 않는다.</strong> 연속에서는 <strong>지수분포만</strong>,
+  이산에서는 <strong>기하분포만</strong> 무기억이다. 감마($\alpha\ne1$)·정규·균등은 모두 과거를
+  기억한다. “이미 반 살았으니 곧 고장 난다”는 직관은 지수 수명 앞에서 틀린다.</p>
+  <p>③ <strong>$\chi^2_r=\sum_{i=1}^r Z_i^2$에서 $r$은 자유도이자 “더한 제곱의 개수”</strong>다.
+  $\chi^2_1$과 $\chi^2_2$를 혼동하거나, 표준정규가 아닌 $N(\mu,\sigma^2)$를 그대로 제곱해
+  카이제곱이라 부르면 오답 — 반드시 <strong>표준화 뒤</strong> 제곱해야 한다.</p>
+  <p>④ <strong>이항 모수 순서·기하의 두 정의</strong>에 주의. 기하분포는 “첫 성공까지의 시행 수”
+  (값 $1,2,\dots$)로도, “첫 성공 전의 실패 수”(값 $0,1,\dots$)로도 정의된다 — 평균이 각각
+  $\tfrac1p$, $\tfrac{1-p}p$로 달라지니 문제의 정의를 먼저 확인한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 분포 지도</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">4장의 줄거리</span>
+  <p><strong>이산.</strong> <a class="term" data-term="binomial-poisson">이항 $b(n,p)$</a>
+  ($E=np$, $\operatorname{Var}=np(1-p)$) — 독립 베르누이의 합.
+  희귀극한($np\to\lambda$)에서 <strong>포아송 $\mathrm{Pois}(\lambda)$</strong>
+  ($E=\operatorname{Var}=\lambda$). 세는 대상을 뒤집으면 기하·음이항.</p>
+  <p><strong>연속.</strong> 균등 → 지수(무기억) → <a class="term" data-term="gamma-chisquare">감마 $\Gamma(\alpha,\theta)$</a>
+  (지수의 $\alpha$개 합) → 카이제곱 $\chi^2_r=\Gamma(\tfrac r2,2)=\sum Z_i^2$ → 베타.</p>
+  <p><strong>중심에 정규.</strong> <a class="term" data-term="normal-distribution">$N(\mu,\sigma^2)$</a>는
+  mgf $e^{\mu t+\sigma^2 t^2/2}$로 요약되고, 표준화 $Z=(X-\mu)/\sigma$·일차결합의 폐쇄성·
+  68–95–99.7이 실전 도구. <strong>모든 계산의 엔진은 mgf</strong> — 미분하면 평균·분산,
+  같으면 같은 분포(극한·합·제곱을 계산 없이 판정).</p>
+  <p><strong>다음 장 예고:</strong> 이 분포들을 표본으로 묶으면(표본평균·표본분산)
+  카이제곱·$t$·$F$가 등장하고, 중심극한정리가 정규를 극한으로 불러온다(5장).</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>공정하지 않은 동전(앞면 확률 $p=\tfrac13$)을 $5$번 던진다. $X$를 앞면 수라 하자.</p>
+  <p>(1) $P(X=2)$를 구하라. &nbsp;(2) $E[X]$와 $\operatorname{Var}(X)$를 구하라.
+  &nbsp;(3) $P(X\ge 1)$을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$X\sim b(5,\tfrac13)$. (3)은 여사건 $P(X=0)$을 이용.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $P(X=2)=\binom{5}{2}\left(\tfrac13\right)^2\left(\tfrac23\right)^3
+    =10\cdot\tfrac19\cdot\tfrac{8}{27}=\tfrac{80}{243}\approx 0.329$.</p>
+    <p>(2) $E[X]=np=5\cdot\tfrac13=\tfrac53$,
+    $\operatorname{Var}(X)=np(1-p)=5\cdot\tfrac13\cdot\tfrac23=\tfrac{10}{9}$.</p>
+    <p>(3) $P(X\ge1)=1-P(X=0)=1-\left(\tfrac23\right)^5=1-\tfrac{32}{243}=\tfrac{211}{243}\approx 0.868$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>어떤 책의 한 페이지당 오타 수가 평균 $\lambda=2$인 포아송분포를 따른다.</p>
+  <p>(1) 한 페이지에 오타가 없을 확률. &nbsp;(2) 오타가 $2$개 이상일 확률.
+  &nbsp;(3) 오타 수의 표준편차.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$P(X=k)=\dfrac{2^k e^{-2}}{k!}$. 포아송은 $E=\operatorname{Var}=\lambda$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $P(X=0)=e^{-2}\approx 0.135$.</p>
+    <p>(2) $P(X\ge 2)=1-P(X=0)-P(X=1)=1-e^{-2}-2e^{-2}=1-3e^{-2}\approx 0.594$.</p>
+    <p>(3) $\operatorname{Var}(X)=\lambda=2$이므로 표준편차 $=\sqrt2\approx 1.414$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §3 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>전구의 수명 $X$(시간)가 평균 $\theta=1000$인 지수분포를 따른다.</p>
+  <p>(1) $P(X\gt 1500)$을 구하라. &nbsp;(2) 이미 $800$시간 사용한 전구가 추가로
+  $1500$시간 이상 더 작동할 확률을 구하고, (1)과 비교해 무기억성을 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$P(X\gt x)=e^{-x/1000}$. (2)는 조건부확률 $P(X\gt 2300\mid X\gt 800)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $P(X\gt 1500)=e^{-1500/1000}=e^{-1.5}\approx 0.223$.</p>
+    <p>(2) $P(X\gt 800+1500\mid X\gt 800)=\dfrac{e^{-2300/1000}}{e^{-800/1000}}
+    =e^{-1500/1000}=e^{-1.5}\approx 0.223$.</p>
+    <p>두 값이 <strong>정확히 같다</strong> — 이미 $800$시간을 버텼다는 사실이 남은 수명 분포를
+    전혀 바꾸지 않는다. 지수 수명은 “늙지 않는다”. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §3 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>다음 적률생성함수를 보고 각 확률변수의 분포(모수 포함)를 식별하고,
+  평균과 분산을 구하라.</p>
+  <p>(1) $M(t)=e^{3(e^t-1)}$ &nbsp;&nbsp;(2) $M(t)=(1-2t)^{-3}$ ($t\lt\tfrac12$)
+  &nbsp;&nbsp;(3) $M(t)=e^{2t+8t^2}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>정의의 mgf 표와 대조: 포아송 $e^{\lambda(e^t-1)}$, 감마 $(1-\theta t)^{-\alpha}$,
+    정규 $e^{\mu t+\sigma^2 t^2/2}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>$\mathrm{Pois}(3)$.</strong> $\lambda=3$이므로 $E=\operatorname{Var}=3$.</p>
+    <p>(2) <strong>감마 $\Gamma(\alpha=3,\theta=2)$.</strong> $E=\alpha\theta=6$,
+    $\operatorname{Var}=\alpha\theta^2=12$. 덤: $\alpha=r/2$, $\theta=2$로 보면
+    $r=6$인 <strong>$\chi^2_6$</strong>과 같다.</p>
+    <p>(3) <strong>정규 $N(2,16)$.</strong> $\mu t+\tfrac12\sigma^2 t^2=2t+8t^2$에서
+    $\mu=2$, $\tfrac12\sigma^2=8\Rightarrow\sigma^2=16$. $E=2$, $\operatorname{Var}=16$.</p>
+    <p>(mgf의 꼴만으로 분포가 결정되는 것이 유일성 정리의 위력이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>정규 일차결합</span>
+  </div>
+  <p>독립인 확률변수 $X\sim N(1,4)$, $Y\sim N(2,9)$에 대해 $W=2X-Y$라 하자.</p>
+  <p>(1) $W$의 분포를 모수까지 밝혀라. &nbsp;(2) $P(W\gt 5)$를 표준정규로 나타내고,
+  $P(Z\gt 1)\approx 0.159$를 이용해 값을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>독립 정규의 일차결합은 정규: 평균은 그대로, 분산은 <strong>계수의 제곱</strong>을 곱해
+    더한다 — $\operatorname{Var}(2X-Y)=4\operatorname{Var}(X)+\operatorname{Var}(Y)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $E[W]=2\cdot1-2=0$,
+    $\operatorname{Var}(W)=2^2\cdot4+(-1)^2\cdot9=16+9=25$.
+    일차결합의 폐쇄성으로 $W\sim N(0,25)$ (표준편차 $5$).</p>
+    <p>(2) 표준화 $Z=\dfrac{W-0}{5}$을 쓰면
+    $P(W\gt 5)=P\!\left(Z\gt\dfrac{5-0}{5}\right)=P(Z\gt 1)\approx 0.159$. $\blacksquare$</p>
+    <p>(핵심 감점 포인트: 분산에 계수의 <strong>제곱</strong>을 곱하는 것 —
+    $-1$의 제곱은 $+1$이라 두 분산이 <strong>더해진다</strong>. 빼도 분산은 커진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>카이제곱 서술형</span>
+  </div>
+  <p>$Z_1,\dots,Z_r$이 독립인 표준정규확률변수일 때 $W=\sum_{i=1}^r Z_i^2$의 분포가
+  $\chi^2_r$임을 mgf로 증명하고, $E[W]$와 $\operatorname{Var}(W)$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>먼저 $Z^2\sim\chi^2_1$ ($M(t)=(1-2t)^{-1/2}$)을 보이고, 독립성으로 mgf를 곱하라.
+    $\chi^2_r=\Gamma(\tfrac r2,2)$의 평균·분산을 쓴다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>단계 1.</strong> $t\lt\tfrac12$에서
+    $E[e^{tZ^2}]=\displaystyle\int_{-\infty}^\infty\frac{1}{\sqrt{2\pi}}e^{-\frac12(1-2t)z^2}dz
+    =(1-2t)^{-1/2}$ (분산 $\tfrac1{1-2t}$ 정규밀도의 적분$=1$). 즉 $Z^2\sim\chi^2_1$.</p>
+    <p><strong>단계 2.</strong> 독립성으로 $M_W(t)=\prod_{i=1}^r (1-2t)^{-1/2}=(1-2t)^{-r/2}$.
+    이는 $\chi^2_r=\Gamma(\tfrac r2,2)$의 mgf이므로 유일성에 의해 $W\sim\chi^2_r$.</p>
+    <p><strong>단계 3.</strong> $\Gamma(\alpha,\theta)$의 $E=\alpha\theta$, $\operatorname{Var}=\alpha\theta^2$에
+    $\alpha=\tfrac r2$, $\theta=2$를 넣으면 $E[W]=r$, $\operatorname{Var}(W)=2r$. $\blacksquare$</p>
+    <p>(서술 뼈대: “$Z^2$의 mgf 계산 → 독립합의 mgf는 곱 → 유일성으로 분포 결정”
+    세 단계를 모두 적는 것이 만점 답안. $r$은 자유도이자 더한 제곱의 개수임을 명시하면 좋다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

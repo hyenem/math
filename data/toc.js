@@ -160,7 +160,15 @@ window.MATH_TOC = [
     en: "Probability & Statistics",
     book: "Hogg, McKean & Craig, Introduction to Mathematical Statistics (8th ed.)",
     desc: "불확실성의 수학 — 확률공간부터 추정과 검정까지.",
-    status: "planned",
-    chapters: []
+    status: "active",
+    chapters: [
+      { file: "ch01.html", num: 1, title: "확률공간과 조건부확률", ready: true },
+      { file: "ch02.html", num: 2, title: "확률변수와 분포", ready: true },
+      { file: "ch03.html", num: 3, title: "다변수 분포와 상관", ready: true },
+      { file: "ch04.html", num: 4, title: "주요 분포족", ready: true },
+      { file: "ch05.html", num: 5, title: "표본분포와 극한정리", ready: true },
+      { file: "ch06.html", num: 6, title: "점추정 — 충분통계량과 최대가능도", ready: true },
+      { file: "ch07.html", num: 7, title: "구간추정과 가설검정", ready: true }
+    ]
   }
 ];

@@ -1507,5 +1507,128 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "conformal mapping",
     "short": "해석적이고 $f'\\neq0$이면 각을 보존(등각). 뫼비우스 변환 $\\frac{az+b}{cz+d}$는 원-직선을 원-직선으로 보내며 군을 이룬다. 리만 사상정리: 평면 전체가 아닌 단순연결 영역은 단위원판과 등각동형. 디리클레 문제에 응용.",
     "href": "subjects/complex-analysis/ch08.html#def-conformal-mapping"
+  },
+
+  /* ---------- 확률과 통계 (Hogg) ---------- */
+
+  "probability-space": {
+    "ko": "확률공간과 공리",
+    "en": "probability space",
+    "short": "표본공간 $\\Omega$, 사건족($\\sigma$-대수) $\\mathcal{F}$, 확률측도 $P$의 세 짝 $(\\Omega,\\mathcal{F},P)$. 콜모고로프 공리($P\\ge 0$, $P(\\Omega)=1$, 서로소 사건의 가산가법성)에서 여사건·단조성·포함배제 $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$가 따라 나온다.",
+    "href": "subjects/probability-statistics/ch01.html#def-probability-space"
+  },
+  "conditional-probability": {
+    "ko": "조건부확률과 베이즈 정리",
+    "en": "conditional probability, Bayes",
+    "short": "$P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}$ — 세계를 $B$로 좁혀 다시 정규화한 확률. 전확률 공식 $P(A)=\\sum P(A\\mid B_i)P(B_i)$, 베이즈 정리 $P(B_j\\mid A)=\\frac{P(A\\mid B_j)P(B_j)}{\\sum P(A\\mid B_i)P(B_i)}$(사전×가능도÷정규화=사후). 기저율이 핵심.",
+    "href": "subjects/probability-statistics/ch01.html#def-conditional-probability"
+  },
+  "independence-events": {
+    "ko": "사건의 독립",
+    "en": "independence of events",
+    "short": "$P(A\\cap B)=P(A)P(B)$ — 정보가 판을 못 좁히는 것($P(A\\mid B)=P(A)$). 세 사건 이상은 쌍별 곱셈에 더해 삼중곱까지 요구하는 상호독립이 필요(반례: 동전 두 번). 배반(서로소)은 독립이 아니라 오히려 종속.",
+    "href": "subjects/probability-statistics/ch01.html#def-independence-events"
+  },
+  "random-variable": {
+    "ko": "확률변수와 분포함수",
+    "en": "random variable, CDF",
+    "short": "표본공간을 실수로 옮기는 함수 $X:\\Omega\\to\\mathbb{R}$. 누적분포함수 $F(x)=P(X\\le x)$ 하나가 분포를 완전히 결정(단조·우연속, 양끝 $0,1$). 이산은 pmf·계단함수, 연속은 pdf로 $P(a\\lt X\\lt b)=\\int_a^b f$.",
+    "href": "subjects/probability-statistics/ch02.html#def-random-variable"
+  },
+  "expectation-variance": {
+    "ko": "기댓값과 분산",
+    "en": "expectation and variance",
+    "short": "기댓값 $E[X]=\\sum xp(x)$ 또는 $\\int xf\\,dx$는 분포의 무게중심, 분산 $\\operatorname{Var}(X)=E[X^2]-\\mu^2$은 퍼짐. 선형성 $E[aX+b]=aE[X]+b$, $\\operatorname{Var}(aX+b)=a^2\\operatorname{Var}(X)$. 체비쇼프로 꼬리 확률을 제어.",
+    "href": "subjects/probability-statistics/ch02.html#def-expectation-variance"
+  },
+  "mgf": {
+    "ko": "적률생성함수",
+    "en": "moment generating function",
+    "short": "$M(t)=E[e^{tX}]$ ($0$의 근방에서 존재할 때). $M^{(k)}(0)=E[X^k]$로 적률을 뽑아내고, 분포를 유일하게 결정하며, 독립합의 MGF는 곱이 된다. 코시분포처럼 존재하지 않을 수도 있다.",
+    "href": "subjects/probability-statistics/ch02.html#def-mgf"
+  },
+  "joint-distribution": {
+    "ko": "결합·주변·조건부 분포",
+    "en": "joint distribution",
+    "short": "두 확률변수의 동거를 기술하는 결합 pmf/pdf $f(x,y)$. 한 변수로 합/적분하면 주변 $f_X(x)=\\int f(x,y)\\,dy$, 값으로 자르면 조건부 $f(y\\mid x)=f(x,y)/f_X(x)$. 곱으로 완전히 쪼개지면($f=f_Xf_Y$) 독립.",
+    "href": "subjects/probability-statistics/ch03.html#def-joint-distribution"
+  },
+  "covariance-correlation": {
+    "ko": "공분산과 상관계수",
+    "en": "covariance and correlation",
+    "short": "함께 움직이는 정도. $\\operatorname{Cov}(X,Y)=E[XY]-E[X]E[Y]$, 무단위 정규화가 $\\rho=\\operatorname{Cov}/(\\sigma_X\\sigma_Y)\\in[-1,1]$(코시-슈바르츠). $\\operatorname{Var}(X+Y)=\\operatorname{Var}X+\\operatorname{Var}Y+2\\operatorname{Cov}$. 독립⇒무상관이나 역은 거짓.",
+    "href": "subjects/probability-statistics/ch03.html#def-covariance-correlation"
+  },
+  "binomial-poisson": {
+    "ko": "이항분포와 포아송분포",
+    "en": "binomial and Poisson",
+    "short": "베르누이 시행 $n$번의 성공 수는 이항분포 $b(n,p)$ ($E=np$, $\\operatorname{Var}=np(1-p)$). $n$이 크고 $p$가 작아 $np\\to\\lambda$인 극한이 포아송분포 $\\frac{\\lambda^k e^{-\\lambda}}{k!}$ ($E=\\operatorname{Var}=\\lambda$) — 희귀사건의 분포.",
+    "href": "subjects/probability-statistics/ch04.html#def-binomial-poisson"
+  },
+  "normal-distribution": {
+    "ko": "정규분포",
+    "en": "normal distribution",
+    "short": "$N(\\mu,\\sigma^2)$, 밀도 $\\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-(x-\\mu)^2/2\\sigma^2}$. 표준화 $Z=(X-\\mu)/\\sigma\\sim N(0,1)$, mgf $e^{\\mu t+\\sigma^2 t^2/2}$. 독립 정규의 일차결합은 다시 정규이며 68–95–99.7 법칙이 성립.",
+    "href": "subjects/probability-statistics/ch04.html#def-normal-distribution"
+  },
+  "gamma-chisquare": {
+    "ko": "감마·카이제곱 분포",
+    "en": "gamma and chi-square",
+    "short": "감마분포 $\\Gamma(\\alpha,\\theta)$는 감마함수로 정규화한 $x^{\\alpha-1}e^{-x/\\theta}$ 꼴 ($E=\\alpha\\theta$)이고 지수분포는 $\\alpha=1$인 경우. 카이제곱 $\\chi^2_r=\\Gamma(r/2,2)$는 독립 표준정규 제곱합 $\\sum_{i=1}^r Z_i^2$이며 자유도가 $r$.",
+    "href": "subjects/probability-statistics/ch04.html#def-gamma-chisquare"
+  },
+  "sampling-distribution": {
+    "ko": "표본분포와 t·F 분포",
+    "en": "sampling distribution",
+    "short": "iid 표본 $X_1,\\dots,X_n$의 함수인 통계량도 확률변수 — 그 분포가 표본분포. $\\bar X$($E=\\mu$, $\\operatorname{Var}=\\sigma^2/n$), $S^2$($n-1$로 나눠 불편). 정규모집단에선 $(n-1)S^2/\\sigma^2\\sim\\chi^2_{n-1}$, $\\frac{\\bar X-\\mu}{S/\\sqrt n}\\sim t_{n-1}$, 분산비는 $F$.",
+    "href": "subjects/probability-statistics/ch05.html#def-sampling-distribution"
+  },
+  "law-large-numbers": {
+    "ko": "큰 수의 법칙",
+    "en": "law of large numbers",
+    "short": "iid 표본평균은 참 평균으로 확률수렴: $\\bar X_n\\xrightarrow{P}\\mu$. 유한 분산이면 체비쇼프로 즉시 증명($\\operatorname{Var}(\\bar X_n)=\\sigma^2/n\\to0$). 강한 법칙은 거의 확실한 수렴이며 유한 평균만으로 성립 — 도수적 확률 해석의 근거.",
+    "href": "subjects/probability-statistics/ch05.html#def-law-large-numbers"
+  },
+  "central-limit-theorem": {
+    "ko": "중심극한정리",
+    "en": "central limit theorem",
+    "short": "iid이고 유한 분산이면 모분포와 무관하게 $\\frac{\\bar X-\\mu}{\\sigma/\\sqrt n}\\xrightarrow{d}N(0,1)$. mgf가 $e^{t^2/2}$로 수렴함을 이용해 증명하며, 이항의 정규근사(드무아브르-라플라스)와 연속성 수정이 대표 응용. 코시분포(유한분산 없음)는 반례.",
+    "href": "subjects/probability-statistics/ch05.html#def-central-limit-theorem"
+  },
+  "maximum-likelihood": {
+    "ko": "최대가능도추정(MLE)",
+    "en": "maximum likelihood",
+    "short": "가능도 $L(\\theta)=\\prod f(x_i;\\theta)$를 최대로 만드는 $\\hat\\theta=\\arg\\max L$ (보통 로그가능도로). 불변성 $g(\\hat\\theta)$가 $g(\\theta)$의 MLE, 대표본에서 일치·점근정규·효율. 단 소표본 불편은 보장 안 됨 — 정규 $\\sigma^2$의 MLE는 편향.",
+    "href": "subjects/probability-statistics/ch06.html#def-maximum-likelihood"
+  },
+  "sufficient-statistic": {
+    "ko": "충분통계량과 인수분해 정리",
+    "en": "sufficient statistic",
+    "short": "모수 정보를 손실 없이 압축한 통계량. 인수분해 정리(피셔-네이만): $T$ 충분 $\\iff f=g(T(x);\\theta)h(x)$. 라오-블랙웰로 충분통계량에 조건 걸어 추정량 개선, 지수족은 $\\sum K(X_i)$가 자동 충분. 충분 $\\ne$ 최소충분.",
+    "href": "subjects/probability-statistics/ch06.html#def-sufficient-statistic"
+  },
+  "cramer-rao": {
+    "ko": "크래머-라오 하한",
+    "en": "Cramér–Rao bound",
+    "short": "불편추정량 분산의 하한 $\\operatorname{Var}(\\hat\\theta)\\ge\\frac{1}{nI(\\theta)}$, 피셔 정보 $I(\\theta)=E[(\\partial_\\theta\\log f)^2]=-E[\\partial_\\theta^2\\log f]$. 하한 달성 시 효율추정량(베르누이·포아송·정규의 $\\bar X$). 정칙성·불편성 전제.",
+    "href": "subjects/probability-statistics/ch06.html#def-cramer-rao"
+  },
+  "confidence-interval": {
+    "ko": "신뢰구간",
+    "en": "confidence interval",
+    "short": "피벗량으로 참값을 포위하는 구간. 정규 평균은 $\\bar X \\pm z_{\\alpha/2}\\sigma/\\sqrt n$ (또는 $t$), 분산은 $\\chi^2$, 비율은 대표본 $z$. 신뢰수준 $95\\%$는 특정 구간이 아니라 반복 표집 시 구간 제조법의 장기 성공률.",
+    "href": "subjects/probability-statistics/ch07.html#def-confidence-interval"
+  },
+  "hypothesis-testing": {
+    "ko": "가설검정",
+    "en": "hypothesis testing",
+    "short": "귀무가설 $H_0$를 가정하고 데이터의 이례성으로 판결. 제1종 오류 $\\alpha$(유의수준)·제2종 오류 $\\beta$·검정력 $1-\\beta$·$p$-값. $p$-값은 관측만큼 극단적일 조건부확률이지 '$H_0$가 참일 확률'이 아니다.",
+    "href": "subjects/probability-statistics/ch07.html#def-hypothesis-testing"
+  },
+  "neyman-pearson": {
+    "ko": "네이만-피어슨 보조정리",
+    "en": "Neyman–Pearson lemma",
+    "short": "단순 대 단순 가설에서 최강력검정 = 가능도비 기각역 $\\frac{L(\\theta_0)}{L(\\theta_1)}\\le k$. 확장: 균일최강력검정(UMP)과 가능도비검정 $\\Lambda=\\frac{\\sup_{\\Theta_0}L}{\\sup_\\Theta L}$ (대표본 $-2\\ln\\Lambda\\sim\\chi^2$).",
+    "href": "subjects/probability-statistics/ch07.html#def-neyman-pearson"
   }
 });

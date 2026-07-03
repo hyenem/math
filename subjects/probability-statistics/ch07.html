@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7장 구간추정과 가설검정 — 확률과 통계 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="probability-statistics" data-chapter="ch07.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">확률과 통계 · Hogg (§4.6, §8)</p>
+  <h1><span class="ch-num">7</span> 구간추정과 가설검정</h1>
+  <p class="ch-source">“표본은 진실의 그림자다” — 그 그림자로 참값이 사는 구간을
+  포위하고(추정), 참값에 관한 주장을 확률의 법정에 세우는(검정),
+  이 책의 종착역.</p>
+</div>
+
+<p>6장까지 우리는 데이터에서 모수 $\theta$에 대한 <strong>하나의 숫자</strong>를
+뽑았다 — 점추정 $\hat\theta$ (최대가능도, 충분통계량). 그러나 $\hat\theta = 3.7$은
+결코 참값이 아니다. 표본이 바뀌면 $\hat\theta$도 흔들린다. 두 가지 정직한
+질문이 남는다. <strong>“참값은 어느 범위에 있는가?”</strong>(구간추정) 그리고
+<strong>“참값이 특정 값이라는 주장을 데이터가 지지하는가?”</strong>(가설검정).
+이 장은 그 둘의 문법을 세우고, 마지막으로 “가장 좋은 검정은 무엇인가”라는
+질문에 <a class="term" data-term="neyman-pearson">네이만-피어슨</a>이 준
+완결적 답 — <strong>가능도비</strong> — 으로 이 과목 전체를 매듭짓는다.</p>
+
+<h2 id="sec-ci">1. 구간추정 — 참값을 구간으로 포위하기</h2>
+
+<p><a class="term" data-term="sampling-distribution">표본분포</a>가 열쇠다. 추정량
+$\bar X$는 참값 $\mu$ 주위로 <strong>알려진 폭</strong>(표준오차 $\sigma/\sqrt n$)만큼
+흔들린다. 그 흔들림의 분포를 알면, 거꾸로 “$\mu$가 이 정도 범위 안에 있어야
+지금 본 $\bar X$가 자연스럽다”는 구간을 역산할 수 있다. 이 역산의 엔진이
+<strong>피벗량</strong>이다.</p>
+
+<div class="box box-def" id="def-confidence-interval">
+  <span class="box-label">정의 · 신뢰구간과 피벗량 <span class="label-en">confidence interval, pivotal quantity</span> (호그 §4.6)</span>
+  <p><strong>피벗량</strong> $Q(\text{데이터}, \theta)$는 데이터와 모수 둘 다에
+  의존하지만, 그 <strong>분포는 $\theta$에 의존하지 않는</strong> 양이다.
+  정규모집단의 원형: $Q = \dfrac{\bar X - \mu}{\sigma/\sqrt n} \sim N(0,1)$
+  — $\mu$가 무엇이든 표준정규다.</p>
+  <p>신뢰수준 $1-\alpha$의 <strong>신뢰구간</strong>은, 피벗량이 중앙 확률
+  $1-\alpha$에 드는 사건 $P(-z_{\alpha/2} \le Q \le z_{\alpha/2}) = 1-\alpha$를
+  $\theta$에 대해 풀어 얻은 확률변수 구간 $[\,L(\text{데이터}),\ U(\text{데이터})\,]$이며</p>
+  $$P\big(L \le \theta \le U\big) = 1-\alpha$$
+  <p>를 만족한다. 여기서 <strong>확률의 주체는 $L, U$</strong>(랜덤)이지 $\theta$(상수)가
+  아니라는 점이 이 장 전체의 핵심 문법이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 네 가지 표준 신뢰구간</span>
+  <p><strong>(a) 정규 평균, $\sigma$ 기지 ($z$-구간):</strong> 위 피벗량을 $\mu$에 대해
+  풀면</p>
+  $$\bar X \pm z_{\alpha/2}\,\frac{\sigma}{\sqrt n}.$$
+  <p>$n=25$, $\sigma=4$, $\bar x = 50$, $1-\alpha=0.95$ ($z_{0.025}=1.96$)이면
+  $50 \pm 1.96\cdot\frac{4}{5} = 50 \pm 1.568 = (48.43,\ 51.57)$.</p>
+  <p><strong>(b) 정규 평균, $\sigma$ 미지 ($t$-구간):</strong> $\sigma$를 표본표준편차
+  $S$로 갈면 피벗량이 자유도 $n-1$의 $t$-분포가 된다 —
+  $\dfrac{\bar X - \mu}{S/\sqrt n} \sim t_{n-1}$:</p>
+  $$\bar X \pm t_{\alpha/2,\,n-1}\,\frac{S}{\sqrt n}.$$
+  <p>$t$가 정규보다 꼬리가 두꺼워($z$보다 큰 임계값) 구간이 넓어지는 것은,
+  $\sigma$를 모른다는 <strong>추가 불확실성의 대가</strong>다.</p>
+  <p><strong>(c) 정규 분산 ($\chi^2$-구간):</strong> $\dfrac{(n-1)S^2}{\sigma^2}\sim\chi^2_{n-1}$가
+  피벗량. $\chi^2$가 비대칭이라 구간도 비대칭이다:</p>
+  $$\left(\frac{(n-1)S^2}{\chi^2_{\alpha/2,\,n-1}},\ \ \frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\,n-1}}\right).$$
+  <p><strong>(d) 모비율, 대표본 ($z$-구간):</strong>
+  <a class="term" data-term="central-limit-theorem">중심극한정리</a>로
+  $\hat p \approx N\!\big(p,\ p(1-p)/n\big)$이므로</p>
+  $$\hat p \pm z_{\alpha/2}\sqrt{\frac{\hat p(1-\hat p)}{n}}.$$
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">신뢰수준의 올바른 해석 — 이 장 최대의 함정</span>
+  <p>“95% 신뢰구간 $(48.43,\ 51.57)$”을 만든 뒤, <strong>“$\mu$가 이 구간에 있을
+  확률이 95%”라고 말하면 틀린다.</strong> 계산이 끝나 두 끝점이 숫자로 굳는
+  순간 $\mu$는 그 안에 있거나 없거나 둘 중 하나 — 확률은 $0$ 아니면 $1$이다
+  (다만 우리가 어느 쪽인지 모를 뿐).</p>
+  <p>95%가 가리키는 것은 <strong>구간을 만드는 절차의 장기 성공률</strong>이다:
+  같은 실험을 무수히 반복해 매번 구간을 만들면, 그중 약 95%가 참값 $\mu$를
+  덮는다. 신뢰는 손에 쥔 <em>특정 구간</em>의 성적이 아니라 <em>구간 제조법</em>의
+  성적표다.</p>
+</div>
+
+<h2 id="sec-test">2. 가설검정 — 주장을 확률의 법정에 세우기</h2>
+
+<p>신뢰구간이 “참값의 범위”를 묻는다면, 검정은 <strong>이분법적 판결</strong>을
+내린다: “$\mu = 50$이다”라는 주장을 데이터가 뒤집을 만큼 강한 증거를 주는가?
+법정의 무죄추정처럼, 우리는 먼저 <strong>귀무가설을 참이라 가정</strong>하고,
+그 가정 아래 지금 데이터가 얼마나 이례적인지를 측정한다.</p>
+
+<div class="box box-def" id="def-hypothesis-testing">
+  <span class="box-label">정의 · 가설검정의 해부학 <span class="label-en">hypothesis testing</span> (호그 §8)</span>
+  <p><strong>귀무가설 $H_0$</strong>(“차이 없음”, 기본 상태)와 <strong>대립가설
+  $H_1$</strong>(입증하려는 주장). 검정은 검정통계량이 <strong>기각역 $C$</strong>에
+  떨어지면 $H_0$를 기각한다. 두 종류의 오류가 대칭이 아니다:</p>
+  <ul>
+    <li><strong>제1종 오류</strong> — 참인 $H_0$를 기각(무고한 자를 유죄판결).
+    확률 $\alpha = P(\text{기각} \mid H_0) $ = <strong>유의수준</strong>. 우리가
+    미리 통제하는 값(보통 $0.05$).</li>
+    <li><strong>제2종 오류</strong> — 거짓인 $H_0$를 채택 실패로 놓침. 확률
+    $\beta = P(\text{기각 안 함} \mid H_1)$.</li>
+    <li><strong>검정력</strong> $1-\beta = P(\text{기각} \mid H_1)$ — 거짓을
+    거짓이라 잡아내는 능력. 좋은 검정 = $\alpha$를 묶어 둔 채 검정력이 최대인 검정.</li>
+  </ul>
+  <p><strong>$p$-값</strong> = $H_0$가 참일 때, 관측된 것만큼 또는 그보다 극단적인
+  통계량이 나올 확률. $p \le \alpha \iff$ 기각. 데이터가 $H_0$에 얼마나
+  <em>비협조적</em>인지의 연속적 척도다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 표준 검정 네 가지와 한 번의 계산</span>
+  <p><strong>정규 평균 $z$-검정</strong> ($\sigma$ 기지): $Z=\dfrac{\bar X-\mu_0}{\sigma/\sqrt n}$,
+  양측이면 $|Z|>z_{\alpha/2}$일 때 기각.
+  <strong>$t$-검정</strong> ($\sigma$ 미지): $T=\dfrac{\bar X-\mu_0}{S/\sqrt n}\sim t_{n-1}$.
+  <strong>모비율 검정</strong>: $Z=\dfrac{\hat p-p_0}{\sqrt{p_0(1-p_0)/n}}$.
+  <strong>분산 검정</strong>: $\dfrac{(n-1)S^2}{\sigma_0^2}\sim\chi^2_{n-1}$.</p>
+  <p><strong>계산:</strong> §1(a)의 자료를 $H_0:\mu=50$ vs $H_1:\mu\neq50$로 검정하되,
+  이번엔 $\bar x = 52$를 관측했다고 하자. $Z=\dfrac{52-50}{4/5}=2.5$.
+  $|2.5|>1.96$이므로 $\alpha=0.05$에서 <strong>기각</strong>.
+  $p$-값 $=2\,P(Z>2.5)\approx 2(0.0062)=0.0124<0.05$ — 같은 결론.</p>
+  <p><strong>구간과 검정의 쌍대성:</strong> 양측 $z$-검정에서 “$H_0:\mu=\mu_0$을
+  기각하지 않음” $\iff$ “$\mu_0$이 대응하는 신뢰구간 안에 있음”. 신뢰구간은
+  <em>기각되지 않는 모든 $\mu_0$의 모음</em>이다 — 두 개념은 한 동전의 양면.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>$p$-값은 “$H_0$가 참일 확률”이 아니다.</strong> $p$-값은 $H_0$를
+  <em>가정한 채</em> 계산한 데이터의 조건부확률 $P(\text{데이터} \mid H_0)$이지,
+  데이터를 조건으로 한 가설의 확률 $P(H_0 \mid \text{데이터})$가 아니다 —
+  둘을 맞바꾸는 것은 베이즈의 조건 뒤집기 오류다.
+  ② <strong>기각 실패 $\neq$ $H_0$ 채택.</strong> “증거가 부족”한 것이지 “$H_0$가
+  참임을 입증”한 것이 아니다. 무죄판결이 결백의 증명이 아니듯 — 검정력이
+  낮으면 거짓 $H_0$도 살아남는다.
+  ③ <strong>통계적 유의성 $\neq$ 효과크기.</strong> $n$이 아주 크면 $\mu-\mu_0$이
+  실용적으로 무의미하게 작아도 $p<0.05$가 나온다 ($Z$에 $\sqrt n$이 곱해지므로).
+  “유의하다”와 “중요하다”는 다른 말이다 — 신뢰구간이 효과의 <em>크기</em>까지
+  함께 보여주는 이유.</p>
+</div>
+
+<h2 id="sec-np">3. 네이만-피어슨 — 가장 강력한 검정의 정체</h2>
+
+<p>$\alpha$를 고정하면 검정은 무수히 많다. 그중 <strong>검정력이 최대</strong>인
+것은? 단순가설 대 단순가설이라는 가장 깨끗한 무대에서, 네이만과 피어슨은
+답이 유일하고 놀랍도록 단순함을 증명했다 — <strong>두 가설의 가능도를 재어
+그 비를 문턱으로 쓰라.</strong> 6장의 가능도 $L(\theta)$가 추정을 넘어 검정까지
+지배하는 순간이다.</p>
+
+<div class="box box-thm" id="def-neyman-pearson">
+  <span class="box-label">정리 · 네이만-피어슨 보조정리 <span class="label-en">Neyman–Pearson lemma</span> (호그 §8)</span>
+  <p><strong>이 정리가 하는 일:</strong> “가장 강력한 검정을 찾아라”라는 최적화
+  문제를, “가능도비를 문턱과 비교하라”라는 한 줄의 판정으로 환원한다.</p>
+  <p>단순가설 $H_0:\theta=\theta_0$ 대 단순가설 $H_1:\theta=\theta_1$에서,
+  유의수준 $\alpha$인 모든 검정 가운데 <strong>최강력검정(MP)</strong>은
+  다음 <strong>가능도비 기각역</strong>을 쓰는 검정이다:</p>
+  $$\text{기각} \iff \frac{L(\theta_0)}{L(\theta_1)} \le k
+  \quad(\text{문턱 } k \text{는 } P_{\theta_0}(\text{기각})=\alpha \text{로 결정}).$$
+  <p>$H_1$의 가능도가 $H_0$의 가능도보다 (배율 이상으로) 클 때 $H_0$를 버린다 —
+  “데이터가 어느 쪽 세계에서 더 그럴듯한가”를 그대로 판결로 옮긴 것.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 부호가 정해진 피적분함수 한 개. 기각역의 정의가 $(L_1-cL_0)$의 부호와 완벽히 정렬되기 때문에 검정력 차가 항상 $\ge 0$.</span></summary>
+  <p>가능도비 검정의 기각역을 $C=\{\,L_1 \ge c\,L_0\,\}$로 쓰자 (위 정의에서
+  $c=1/k$; $L_i = L(\theta_i)$). 그 지시함수를 $\varphi^*=\mathbf 1_C$라 하고,
+  유의수준이 $\alpha$ 이하인 임의의 다른 검정 $\varphi$($0\le\varphi\le1$)를 잡는다.</p>
+  <p><strong>부호 정렬:</strong> $C$ 위에서는 $\varphi^*-\varphi = 1-\varphi \ge 0$이고
+  $L_1-cL_0\ge 0$; $C$ 밖에서는 $\varphi^*-\varphi = -\varphi \le 0$이고
+  $L_1-cL_0<0$. 두 인수의 곱은 <strong>어디서나</strong>
+  $(\varphi^*-\varphi)(L_1-cL_0)\ge 0$. 적분해도 $\ge 0$:</p>
+  $$\int(\varphi^*-\varphi)L_1 \ \ge\ c\int(\varphi^*-\varphi)L_0.$$
+  <p><strong>결론:</strong> 좌변 $=$ 검정력 차 $\text{pow}(\varphi^*)-\text{pow}(\varphi)$,
+  우변 $= c\big[\alpha - P_{\theta_0}(\varphi)\big]\ge 0$ (왜냐면
+  $P_{\theta_0}(\varphi)\le\alpha=P_{\theta_0}(\varphi^*)$). 따라서
+  $\text{pow}(\varphi^*)\ge\text{pow}(\varphi)$ — 가능도비 검정의 검정력이
+  최대다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-def">
+  <span class="box-label">정의 + 정리 · UMP와 가능도비검정 <span class="label-en">UMP test, likelihood-ratio test</span> (호그 §8)</span>
+  <p><strong>균일최강력검정(UMP):</strong> 대립가설이 복합
+  ($H_1:\theta>\theta_0$ 등)일 때, 네이만-피어슨 기각역이 <strong>특정 $\theta_1$에
+  의존하지 않고 모든 $\theta_1$에 대해 동일</strong>하면, 그 검정은 모든 $\theta_1$에서
+  동시에 최강력이다 — 이를 UMP라 한다. 단조가능도비를 갖는 지수족(정규 평균,
+  이항 비율 등)에서 한쪽꼬리 검정이 UMP가 되는 것이 표준 사례.</p>
+  <p><strong>가능도비검정(LRT):</strong> 가설이 둘 다 복합인 일반적 상황에는
+  일반화된 가능도비를 쓴다:</p>
+  $$\Lambda=\frac{\sup_{\theta\in\Theta_0}L(\theta)}{\sup_{\theta\in\Theta}L(\theta)}\in[0,1],
+  \qquad \text{기각} \iff \Lambda\le c.$$
+  <p>분자는 “$H_0$ 안에서 최선의 설명”, 분모는 “제약 없는 최선의 설명”. $H_0$가
+  데이터를 거의 못 따라가면 $\Lambda$가 작아져 기각된다. 분모의 $\sup$는 6장의
+  <strong>최대가능도추정</strong> 바로 그것이다.</p>
+  <p><strong>대표본 분포(윌크스):</strong> 규칙성 조건 아래
+  $-2\ln\Lambda \xrightarrow{\ d\ } \chi^2_{r}$이며, 자유도 $r$ = 두 모수공간의
+  차원 차이. 임계값 표가 없어도 $\chi^2$로 근사 검정이 가능해지는, LRT의
+  실전 무기다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 정규 평균의 MP 검정이 $z$-검정이 되는 이유</span>
+  <p>$X_1,\dots,X_n\sim N(\mu,\sigma^2)$ ($\sigma$ 기지), $H_0:\mu=\mu_0$ 대
+  $H_1:\mu=\mu_1$ ($\mu_1>\mu_0$). 가능도비는</p>
+  $$\frac{L(\mu_0)}{L(\mu_1)}=\exp\!\left(-\frac{1}{2\sigma^2}\Big[\textstyle\sum(x_i-\mu_0)^2-\sum(x_i-\mu_1)^2\Big]\right)
+  =\exp\!\Big(\tfrac{n(\mu_0-\mu_1)}{\sigma^2}\bar x + \text{상수}\Big).$$
+  <p>$\mu_1>\mu_0$이라 지수의 $\bar x$ 계수가 음수 — 가능도비가 $k$ 이하 $\iff$
+  $\bar x$가 어떤 값 이상. 즉 기각역은 <strong>$\bar X > c$</strong> 꼴이고,
+  이는 정확히 한쪽꼬리 <strong>$z$-검정</strong>이다. 게다가 이 기각역은
+  $\mu_1$의 구체적 값을 전혀 쓰지 않았다 — $\mu_1>\mu_0$이기만 하면 동일. 따라서
+  이 $z$-검정은 $H_1:\mu>\mu_0$에 대한 <strong>UMP</strong>다. §2에서 “그냥 쓰던”
+  $z$-검정이 사실은 <em>증명 가능한 최적</em>이었던 셈이다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 확률과 통계의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">7장의 줄거리</span>
+  <p><a class="term" data-term="confidence-interval">신뢰구간</a>: 피벗량으로
+  참값을 <strong>구간으로 포위</strong> — 정규 평균은 $z$·$t$, 분산은 $\chi^2$,
+  비율은 대표본 $z$. “95%”는 특정 구간이 아니라 <strong>제조법의 장기 성공률</strong>
+  → <a class="term" data-term="hypothesis-testing">가설검정</a>: $H_0$를 가정하고
+  데이터의 이례성을 측정 — 제1종 오류 $\alpha$(통제)와 제2종 오류 $\beta$,
+  검정력 $1-\beta$, 그리고 $p$-값 (단, “$H_0$가 참일 확률”이 <em>아니다</em>)
+  → <a class="term" data-term="neyman-pearson">네이만-피어슨</a>: 최강력검정
+  $=$ 가능도비 기각역 $\frac{L(\theta_0)}{L(\theta_1)}\le k$. 그 확장이 UMP,
+  일반화가 LRT ($\Lambda=\frac{\sup_{\Theta_0}L}{\sup_\Theta L}$, 대표본
+  $-2\ln\Lambda\sim\chi^2$).</p>
+  <p><strong>과목 전체 되돌아보기:</strong> 1장 <strong>확률공간·조건부확률·베이즈</strong>로
+  불확실성에 측도를 얹고 → 2–3장 <strong>확률변수·분포·결합분포</strong>로 그것을
+  숫자와 기댓값·분산으로 옮기고 → 4장 <strong>주요 분포족</strong>(이항·포아송·정규·감마)을
+  손에 넣고 → 5장 <a class="term" data-term="sampling-distribution">표본분포</a>와
+  <a class="term" data-term="central-limit-theorem">중심극한정리</a>로 “표본이 커지면
+  정규가 온다”는 다리를 놓았다. 여기까지가 <strong>확률(모형 → 데이터)</strong>.
+  6장 <strong>점추정</strong>(충분통계량·최대가능도)에서 화살표가 뒤집혀
+  <strong>통계(데이터 → 모형)</strong>가 시작되고, 이 7장의 구간추정과 검정이
+  그 역추론을 완성한다. 임용 최중요 축은 <strong>분포 세우고 확률·기댓값 계산 ·
+  중심극한정리 근사 · 최대가능도추정 · 신뢰구간과 검정의 쌍대성</strong>이다.
+  확률의 공리 하나에서 시작해, 데이터로 세상을 추론하는 문법까지 — 여기서 끝난다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>어떤 정규모집단($\sigma=6$ 기지)에서 크기 $n=36$의 표본을 뽑아
+  $\bar x = 24$를 얻었다. (1) $\mu$의 $95\%$ 신뢰구간을 구하라.
+  (2) “이 구간이 $\mu$를 포함할 확률이 $95\%$이다”라는 진술을 비판하라.
+  (3) 표본 크기를 $4$배($n=144$)로 늘리면 구간 폭은 어떻게 되는가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$z$-구간 $\bar x\pm z_{0.025}\,\sigma/\sqrt n$, $z_{0.025}=1.96$.
+    폭은 $\sigma/\sqrt n$에 비례.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $24\pm 1.96\cdot\frac{6}{\sqrt{36}} = 24\pm 1.96\cdot 1 = (22.04,\ 25.96)$.</p>
+    <p>(2) 계산이 끝나 끝점이 숫자로 굳으면 $\mu$(상수)는 이 구간에 있거나 없거나
+    둘 중 하나 — 확률은 $0$ 또는 $1$이다. $95\%$는 <strong>이 구간</strong>이 아니라
+    <strong>구간을 만드는 절차</strong>의 장기 성공률(반복 표집 시 약 $95\%$가
+    $\mu$를 덮음)을 뜻한다.</p>
+    <p>(3) 폭 $\propto \sigma/\sqrt n$. $n$을 $4$배로 하면 $\sqrt n$이 $2$배 →
+    폭은 <strong>절반</strong>. 정밀도를 두 배로 올리려면 표본을 네 배로 늘려야 한다
+    (수확체감).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>위와 같은 모집단($\sigma=6$, $n=36$)에서 $H_0:\mu=22$ 대 $H_1:\mu\neq22$를
+  유의수준 $\alpha=0.05$로 검정한다. (1) 관측 $\bar x=24$에 대해 $z$-검정통계량과
+  $p$-값을 구하고 결론을 내려라. (2) 제1종·제2종 오류를 이 맥락에서 서술하라.
+  (3) 문제 1의 신뢰구간과의 관계를 말하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$Z=(\bar x-\mu_0)/(\sigma/\sqrt n)$. 양측 $p$-값 $=2P(Z>|z_{\text{obs}}|)$.
+    $P(Z>2)\approx0.0228$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $Z=\dfrac{24-22}{6/6}=\dfrac{2}{1}=2.0$. $|2.0|>1.96$이므로 기각.
+    $p$-값 $=2P(Z>2.0)\approx 2(0.0228)=0.0456<0.05$ — <strong>$H_0$ 기각</strong>.</p>
+    <p>(2) 제1종 오류: 실제로 $\mu=22$인데 “$\mu\neq22$”라 판정(확률 $\alpha=0.05$로
+    통제). 제2종 오류: 실제로 $\mu\neq22$인데 기각하지 못함(확률 $\beta$, 참값이
+    $22$에서 멀수록 작아짐).</p>
+    <p>(3) 쌍대성: $22$는 문제 1의 신뢰구간 $(22.04,\ 25.96)$의 <strong>바깥</strong>에
+    (아슬아슬하게) 있다 — 그래서 $\mu_0=22$가 기각된다. 신뢰구간은 “기각되지 않는
+    $\mu_0$의 모음”이라는 사실과 정확히 맞아떨어진다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §4.6 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>정규모집단에서 크기 $n=10$의 표본으로 $s^2=4.2$를 얻었다.
+  모분산 $\sigma^2$의 $90\%$ 신뢰구간을 구하라. (자유도 $9$의
+  $\chi^2$ 임계값: $\chi^2_{0.05,9}=16.92$, $\chi^2_{0.95,9}=3.33$.)
+  구간이 왜 $s^2$을 중심으로 대칭이 아닌지 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>피벗량 $\frac{(n-1)S^2}{\sigma^2}\sim\chi^2_{n-1}$을 $\sigma^2$에 대해 풀어라.
+    큰 임계값이 <strong>하한</strong>의 분모.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$(n-1)s^2 = 9\cdot4.2 = 37.8$. 구간은</p>
+    $$\left(\frac{37.8}{16.92},\ \frac{37.8}{3.33}\right)=(2.23,\ 11.35).$$
+    <p><strong>비대칭 이유:</strong> $\chi^2$ 분포 자체가 오른쪽으로 긴 꼬리를 가진
+    비대칭 분포다. 그래서 중앙 $90\%$를 자르는 두 임계값 $3.33$과 $16.92$가 $1$을
+    중심으로 대칭이 아니고, 이를 $\sigma^2$로 역산한 구간도 $s^2=4.2$를 중심으로
+    대칭이 아니다 (분산은 음수가 될 수 없다는 점도 비대칭을 강제한다).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Hogg §8 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$X_1,\dots,X_n$이 평균 $\theta$의 지수분포
+  $f(x;\theta)=\frac1\theta e^{-x/\theta}$ ($x>0$)를 따른다.
+  $H_0:\theta=\theta_0$ 대 $H_1:\theta=\theta_1$ ($\theta_1>\theta_0$)의
+  최강력검정을 네이만-피어슨으로 유도하고, 그 기각역이 $\sum X_i$에만 의존함을
+  보여라. 이 검정이 $H_1:\theta>\theta_0$에 대해 UMP인 이유도 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>가능도비 $L(\theta_0)/L(\theta_1)$에 로그를 취하면 $\sum x_i$의 일차식.
+    부등식을 $\sum x_i$에 대해 정리할 때 계수 부호에 주의.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>가능도 $L(\theta)=\theta^{-n}\exp(-\sum x_i/\theta)$이므로</p>
+    $$\frac{L(\theta_0)}{L(\theta_1)}=\left(\frac{\theta_1}{\theta_0}\right)^{n}
+    \exp\!\left[-\Big(\tfrac1{\theta_0}-\tfrac1{\theta_1}\Big)\sum x_i\right]\le k.$$
+    <p>$\theta_1>\theta_0$이라 $\frac1{\theta_0}-\frac1{\theta_1}>0$. 양변에 로그를
+    취해 정리하면 이 부등식은 <strong>$\sum x_i \ge c$</strong> 꼴이 된다 (지수의
+    계수가 음수라 부등호 방향이 뒤집힘). 즉 MP 검정은 “$\sum X_i$가 크면 기각” —
+    표본합(동치로 $\bar X$)에만 의존한다.</p>
+    <p><strong>UMP:</strong> 이 기각역 $\{\sum X_i \ge c\}$는 $\theta_1$의 구체적
+    값을 전혀 사용하지 않았다 — $\theta_1>\theta_0$이기만 하면 모든 $\theta_1$에서
+    동일하다. 따라서 각 $\theta_1$에서 동시에 최강력, 곧 $H_1:\theta>\theta_0$에
+    대한 UMP다 (지수족의 단조가능도비가 배후의 원리).
+    문턱 $c$는 $\sum X_i\sim\theta_0\cdot\frac12\chi^2_{2n}$ (즉 $\text{Gamma}(n,\theta_0)$)로
+    $P_{\theta_0}(\sum X_i\ge c)=\alpha$에서 정한다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>$p$-값 개념 서술형</span>
+  </div>
+  <p>한 연구가 $p$-값 $=0.03$을 얻고 다음과 같이 결론지었다. 각 진술의 옳고
+  그름을 판정하고 근거를 서술하라.</p>
+  <p>(1) “귀무가설이 참일 확률이 $3\%$이다.”
+  (2) “$p<0.05$이므로 대립가설이 참이다.”
+  (3) “$p$-값이 작을수록 효과의 크기가 크다.”</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$p$-값의 정의: $P(\text{이만큼 극단적 데이터}\mid H_0)$. 조건의 방향,
+    그리고 유의성과 효과크기의 구분을 상기.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>틀림.</strong> $p$-값은 $H_0$를 <em>가정한</em> 조건부확률
+    $P(\text{데이터}\mid H_0)$이지 데이터를 조건으로 한 $P(H_0\mid\text{데이터})$가
+    아니다. 두 방향을 맞바꾼 조건 뒤집기 오류 — 후자를 얻으려면 사전확률과
+    베이즈 정리가 필요하다.</p>
+    <p>(2) <strong>틀림(과장).</strong> 기각은 “$H_0$에 대한 증거가 유의수준을 넘음”을
+    뜻할 뿐, 대립가설을 확정적으로 “참”이라 선언하는 것이 아니다. 제1종 오류의
+    가능성($\alpha$)이 늘 남는다.</p>
+    <p>(3) <strong>틀림.</strong> $p$-값은 효과크기와 표본크기 <em>둘 다</em>에
+    좌우된다. $n$이 크면 미미한 효과도 아주 작은 $p$-값을 낸다. 효과의 크기는
+    $p$-값이 아니라 추정치와 신뢰구간의 폭으로 읽어야 한다 (유의성 $\neq$ 중요성).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>가능도비검정 유도</span>
+  </div>
+  <p>$X_1,\dots,X_n\sim N(\mu,\sigma^2)$ ($\sigma$ 기지). $H_0:\mu=\mu_0$ 대
+  $H_1:\mu\neq\mu_0$의 일반화 가능도비 $\Lambda$를 유도하고, 기각규칙
+  “$\Lambda\le c$”가 양측 $z$-검정 “$|\,\bar X-\mu_0\,|$가 크면 기각”과 동치임을
+  보여라. 나아가 $-2\ln\Lambda$가 무슨 분포를 따르는지 밝혀라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>분모의 $\sup$는 $\hat\mu=\bar X$(MLE)에서 달성. 로그를 취하면
+    $\ln\Lambda = -\frac{n}{2\sigma^2}(\bar X-\mu_0)^2$ 꼴.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>분모: $\Theta$ 전체에서 가능도를 최대화하면 $\hat\mu=\bar x$. 분자:
+    $\Theta_0=\{\mu_0\}$이라 값이 고정. 정규 가능도의 지수부만 비교하면</p>
+    $$\ln\Lambda = -\frac{1}{2\sigma^2}\Big[\textstyle\sum(x_i-\mu_0)^2-\sum(x_i-\bar x)^2\Big]
+    = -\frac{n}{2\sigma^2}(\bar x-\mu_0)^2.$$
+    <p>따라서 $-2\ln\Lambda = \dfrac{n(\bar x-\mu_0)^2}{\sigma^2}
+    = \left(\dfrac{\bar x-\mu_0}{\sigma/\sqrt n}\right)^2 = Z^2$.</p>
+    <p><strong>동치:</strong> $\Lambda\le c \iff -2\ln\Lambda \ge -2\ln c \iff
+    Z^2 \ge (\text{상수}) \iff |Z|\ge z_{\alpha/2}$ — 정확히 양측 $z$-검정이다.
+    가능도비검정이 우리가 쓰던 검정을 <em>재발견</em>한다.</p>
+    <p><strong>분포:</strong> $H_0$ 아래 $Z\sim N(0,1)$이므로
+    $-2\ln\Lambda = Z^2\sim\chi^2_1$ — <strong>정확히</strong> 자유도 $1$의
+    카이제곱이다 (모수공간 차원 차 $r=1-0=1$). 윌크스의 대표본 결과
+    $-2\ln\Lambda\to\chi^2_r$이 이 경우엔 근사 없이 등식으로 성립한다.
+    $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
