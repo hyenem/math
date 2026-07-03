@@ -42,8 +42,16 @@ window.MATH_TOC = [
     en: "Calculus",
     book: "Spivak, Calculus (4th ed.)",
     desc: "증명으로 배우는 미적분 — 해석학으로 가는 가장 좋은 다리.",
-    status: "planned",
-    chapters: []
+    status: "active",
+    chapters: [
+      { file: "ch01.html", num: 1, title: "수의 기본 성질과 함수", ready: true },
+      { file: "ch02.html", num: 2, title: "극한과 연속 — 세 가지 어려운 정리", ready: true },
+      { file: "ch03.html", num: 3, title: "도함수와 미분법", ready: true },
+      { file: "ch04.html", num: 4, title: "도함수의 응용", ready: true },
+      { file: "ch05.html", num: 5, title: "적분과 미적분의 기본정리", ready: true },
+      { file: "ch06.html", num: 6, title: "초등초월함수 — 로그·지수·삼각", ready: true },
+      { file: "ch07.html", num: 7, title: "무한급수와 테일러 정리", ready: true }
+    ]
   },
   {
     slug: "linear-algebra",

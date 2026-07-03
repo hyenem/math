@@ -1630,5 +1630,74 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "Neyman–Pearson lemma",
     "short": "단순 대 단순 가설에서 최강력검정 = 가능도비 기각역 $\\frac{L(\\theta_0)}{L(\\theta_1)}\\le k$. 확장: 균일최강력검정(UMP)과 가능도비검정 $\\Lambda=\\frac{\\sup_{\\Theta_0}L}{\\sup_\\Theta L}$ (대표본 $-2\\ln\\Lambda\\sim\\chi^2$).",
     "href": "subjects/probability-statistics/ch07.html#def-neyman-pearson"
+  },
+
+  /* ---------- 미적분학 (Spivak) ---------- */
+
+  "field-order-axioms": {
+    "ko": "수의 기본 성질(체·순서 공리)",
+    "en": "field and order axioms",
+    "short": "실수를 지배하는 12개 성질: 체 공리 P1–P9(덧셈·곱셈의 결합·교환·항등·역원·분배)와 순서 공리 P10–P12(삼분법, 양수 폐포). 부호 규칙 $(-a)(-b)=ab$·$1\\gt0$·부등식 조작이 전부 여기서 증명된다. $\\mathbb{Q}$도 만족 — $\\mathbb{R}$은 완비성까지 필요.",
+    "href": "subjects/calculus/ch01.html#def-field-order-axioms"
+  },
+  "mathematical-induction": {
+    "ko": "수학적 귀납법",
+    "en": "mathematical induction",
+    "short": "무한히 많은 명제 $P(n)$을 두 걸음으로 증명: 기저 $P(1)$과 귀납단계 $P(k)\\Rightarrow P(k+1)$. 정렬성(공집합 아닌 자연수 집합은 최소원소를 가짐)과 동치이며, 강귀납도 같은 힘. 기저·귀납단계 둘 다 필수.",
+    "href": "subjects/calculus/ch01.html#def-mathematical-induction"
+  },
+  "epsilon-delta-limit": {
+    "ko": "극한의 ε-δ 정의",
+    "en": "epsilon-delta limit",
+    "short": "$\\lim_{x\\to a}f(x)=L \\iff \\forall\\varepsilon \\gt 0\\,\\exists\\delta \\gt 0:\\ 0 \\lt |x-a| \\lt \\delta \\Rightarrow |f(x)-L| \\lt \\varepsilon$. '$\\varepsilon$이 먼저, $\\delta$가 그에 맞춰'; $x=a$는 제외하고 $\\delta$는 $\\varepsilon$과 $a$에 의존.",
+    "href": "subjects/calculus/ch02.html#def-epsilon-delta-limit"
+  },
+  "continuity-hard-theorems": {
+    "ko": "연속함수의 세 정리",
+    "en": "three hard theorems",
+    "short": "유계 폐구간 $[a,b]$ 위 연속함수의 세 성질 — 유계정리, 최대·최소(극값) 정리, 중간값 정리. 셋 다 완비성(최소상계 성질)이 열쇠이며 $\\mathbb{Q}$에서는 거짓이다.",
+    "href": "subjects/calculus/ch02.html#def-continuity-hard-theorems"
+  },
+  "chain-rule": {
+    "ko": "연쇄법칙",
+    "en": "chain rule",
+    "short": "합성함수의 도함수 법칙: $(f\\circ g)'(x)=f'(g(x))\\,g'(x)$ — 바깥 도함수(안쪽 값 대입) 곱하기 안쪽 도함수. 증분 함수로 0 나눗셈 구멍을 메워 엄밀히 증명하며, 역함수 미분법 $\\frac{d}{dx}f^{-1}=1/f'(f^{-1})$이 그 즉각적 따름.",
+    "href": "subjects/calculus/ch03.html#def-chain-rule"
+  },
+  "convexity": {
+    "ko": "볼록성과 오목성",
+    "en": "convexity",
+    "short": "구간에서 임의의 현(두 점을 잇는 직선)이 그래프보다 위에 있는 성질. 미분가능하면 $f''\\ge0 \\iff$ 볼록 $\\iff f'$ 증가. 변곡점은 $f''$이 부호를 바꾸는 점이고, 2계 판정($f'(a)=0,\\ f''(a)\\gt0 \\Rightarrow$ 극소)의 근거. 젠센 부등식의 어머니.",
+    "href": "subjects/calculus/ch04.html#def-convexity"
+  },
+  "lhopital-rule": {
+    "ko": "로피탈 정리",
+    "en": "L'Hôpital's rule",
+    "short": "$\\frac00$ 또는 $\\frac\\infty\\infty$ 부정형에서 $\\lim\\frac fg=\\lim\\frac{f'}{g'}$ (도함수 비의 극한이 존재할 때). 코시 평균값 정리로 증명한다. 부정형 확인이 필수이며, 순환 논법과 존재하지 않는 도함수 비에 주의.",
+    "href": "subjects/calculus/ch04.html#def-lhopital-rule"
+  },
+  "integration-technique": {
+    "ko": "적분법과 이상적분",
+    "en": "integration techniques",
+    "short": "미분 법칙을 거꾸로 읽어 원시함수를 찾는 기법: 치환(연쇄법칙의 역), 부분적분(곱 미분의 역), 부분분수, 삼각치환. 이상적분은 무한구간·특이점의 적분을 극한으로 다시 정의하고, $p$-적분과 비교판정으로 수렴을 가른다.",
+    "href": "subjects/calculus/ch05.html#def-integration-technique"
+  },
+  "log-integral-definition": {
+    "ko": "로그의 적분 정의",
+    "en": "logarithm as an integral",
+    "short": "$\\log x=\\int_1^x\\frac{dt}{t}$ ($x\\gt0$)로 로그를 곡선 $1/t$ 아래의 넓이로 정의하는 스피박의 방식. 미적분의 기본정리가 $\\log'x=1/x$을, 미분 논법이 $\\log(xy)=\\log x+\\log y$를 순환 없이 증명해 준다.",
+    "href": "subjects/calculus/ch06.html#def-log-integral-definition"
+  },
+  "series-convergence-tests": {
+    "ko": "급수의 수렴 판정법",
+    "en": "convergence tests",
+    "short": "비교·극한비교·비율·근·적분·교대급수(라이프니츠) 판정으로 합을 몰라도 $\\sum a_n$의 수렴을 가린다. 절대수렴($\\sum|a_n|$ 수렴)이면 수렴하고 재배열이 자유롭지만, 조건수렴은 재배열로 합이 바뀐다(리만).",
+    "href": "subjects/calculus/ch07.html#def-series-convergence-tests"
+  },
+  "taylor-remainder": {
+    "ko": "테일러 정리와 나머지항",
+    "en": "Taylor's theorem with remainder",
+    "short": "$f(x)=\\sum_{k=0}^n \\frac{f^{(k)}(a)}{k!}(x-a)^k + R_n$, 라그랑주 나머지 $R_n=\\frac{f^{(n+1)}(\\xi)}{(n+1)!}(x-a)^{n+1}$. $R_n\\to 0$이면 테일러 급수가 $f$로 수렴하지만, $e^{-1/x^2}$처럼 수렴해도 $f$와 다를 수 있다($C^\\infty\\neq$해석적).",
+    "href": "subjects/calculus/ch07.html#def-taylor-remainder"
   }
 });

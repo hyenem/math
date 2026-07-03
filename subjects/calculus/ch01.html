@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1장 수의 기본 성질과 함수 — 미적분학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="calculus" data-chapter="ch01.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미적분학 · Spivak (1–5장)</p>
+  <h1><span class="ch-num">1</span> 수의 기본 성질과 함수</h1>
+  <p class="ch-source">“계산할 줄 아는 것”과 “왜 그렇게 해도 되는가”는 다른 질문이다 —
+  스피박은 미적분을 <strong>12개의 약속</strong>에서 다시 짓기 시작한다.</p>
+</div>
+
+<p>우리는 초등학교부터 $(-1)\times(-1)=1$이라고 배웠지만, <strong>왜</strong> 그런지는
+배우지 않았습니다. 스피박의 출발점은 도발적입니다: 수에 대해 우리가 <em>증명 없이
+받아들이는 것</em>은 딱 12개뿐이고, 부호 규칙·부등식 조작·절댓값·귀납법까지
+나머지 전부는 그 12개에서 <strong>논리적으로 따라 나온다</strong>. 이 장은 그 12개를
+정확히 적고(수의 기본 성질), 거기서 자라나는 세 가지 도구 — <strong>절댓값·수학적
+귀납법·함수</strong> — 를 손에 익힙니다. 여기서 다진 뼈대가 그대로
+<a class="term" data-term="ordered-field">해석학</a>의 첫 장으로 이어집니다.</p>
+
+<h2 id="sec-axioms">1. 수의 기본 성질 — 12개의 약속</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>실수를 다루는 규칙을 “게임의 룰”처럼 딱 12개로 못 박는 겁니다. 9개는
+  <strong>덧셈·곱셈을 어떻게 하는가</strong>(체 공리), 3개는 <strong>대소를 어떻게
+  비교하는가</strong>(순서 공리). 이 룰에 없는 것은 그 어떤 것도 “당연하다”는 이유로
+  쓸 수 없습니다 — 대신 룰에서 <em>증명해</em> 꺼내 씁니다. $(-a)(-b)=ab$조차도요.</p>
+</div>
+
+<div class="box box-def" id="def-field-order-axioms">
+  <span class="box-label">정의 · 수의 기본 성질 (체·순서 공리) <span class="label-en">field and order axioms</span> (스피박 1장)</span>
+  <p>실수 전체 $\mathbb{R}$은 다음 12개 성질을 만족한다. 임의의 $a, b, c \in \mathbb{R}$에
+  대해:</p>
+  <p><strong>체 공리 (덧셈·곱셈의 규칙, P1–P9)</strong></p>
+  <p>P1 결합: $(a+b)+c = a+(b+c)$ &nbsp;·&nbsp;
+     P2 항등원: $a+0 = a$ &nbsp;·&nbsp;
+     P3 역원: $a+(-a) = 0$ &nbsp;·&nbsp;
+     P4 교환: $a+b = b+a$</p>
+  <p>P5 결합: $a\cdot(b\cdot c) = (a\cdot b)\cdot c$ &nbsp;·&nbsp;
+     P6 항등원: $a\cdot 1 = a$ ($1 \neq 0$) &nbsp;·&nbsp;
+     P7 역원: $a \neq 0$이면 $a\cdot a^{-1} = 1$ &nbsp;·&nbsp;
+     P8 교환: $a\cdot b = b\cdot a$</p>
+  <p>P9 분배: $a\cdot(b+c) = a\cdot b + a\cdot c$</p>
+  <p><strong>순서 공리 (대소의 규칙, P10–P12)</strong> — 양수 전체를 $P$라 하면:</p>
+  <p>P10 <strong>삼분법</strong>: 임의의 $a$에 대해 $a=0$, $a \in P$, $-a \in P$ 중
+     <em>정확히 하나</em>가 성립.</p>
+  <p>P11 <strong>덧셈에 대한 폐포</strong>: $a, b \in P \Rightarrow a+b \in P$.</p>
+  <p>P12 <strong>곱셈에 대한 폐포</strong>: $a, b \in P \Rightarrow a\cdot b \in P$.</p>
+  <p>부등호는 이 $P$로 <em>정의</em>한다: $a \gt b \iff a - b \in P$. P1–P12를 모두
+  만족하는 구조를 <a class="term" data-term="ordered-field">순서체</a>라 하며,
+  $\mathbb{R}$은 그 대표적인 예다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 12개에서 자라나는 것들 <span class="label-en">consequences of the axioms</span> (스피박 1장)</span>
+  <p><strong>이 정리가 하는 일:</strong> “당연해 보이던” 계산 규칙들이 실은 P1–P12의
+  <em>따름정리</em>임을 보여, 무엇을 증명 없이 써도 되는지 선을 긋는다.</p>
+  <p>① $a\cdot 0 = 0$ &nbsp;② $(-a)b = -(ab)$, 특히 $(-a)(-b) = ab$ &nbsp;
+  ③ 소거법칙: $a+b=a+c \Rightarrow b=c$ &nbsp;
+  ④ $a^2 \ge 0$, 따라서 $1 = 1^2 \gt 0$ &nbsp;
+  ⑤ $a \gt 0 \iff -a \lt 0$, 그리고 $a \lt b,\ c \lt 0 \Rightarrow ac \gt bc$
+  (음수를 곱하면 부등호가 뒤집힌다).</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 대표로 $a\cdot 0 = 0$과 $(-a)(-b)=ab$, 그리고 $1\gt 0$. 전부 “정의로 되돌아가기”.</span></summary>
+  <p><strong>$a\cdot 0 = 0$:</strong> $a\cdot 0 = a\cdot(0+0) = a\cdot 0 + a\cdot 0$
+  (P2, P9). 양변에 $-(a\cdot 0)$을 더하면(P3) $0 = a\cdot 0$. — 곱셈이 $0$을
+  삼키는 것도 룰이 아니라 <em>결과</em>다.</p>
+  <p><strong>$(-a)b = -(ab)$:</strong> $ab + (-a)b = (a + (-a))b = 0\cdot b = 0$
+  (P9, P3, 위 결과). 즉 $(-a)b$는 $ab$의 덧셈 역원이므로 $-(ab)$와 같다(역원의
+  유일성). 이를 두 번 쓰면 $(-a)(-b) = -\big(a(-b)\big) = -\big(-(ab)\big) = ab$.
+  — 초등학교의 그 규칙이 여기서 <em>증명</em>된다.</p>
+  <p><strong>$1 \gt 0$:</strong> $1 \neq 0$(P6)이므로 삼분법(P10)에 의해 $1 \in P$
+  또는 $-1 \in P$. 만약 $-1 \in P$이면 P12로 $(-1)(-1) \in P$, 즉 $1 \in P$ —
+  삼분법 위반(“정확히 하나”). 그러므로 $1 \in P$, 곧 $1 \gt 0$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>순서 공리 없이는 부등식 논증을 시작할 수 없다.</strong> P1–P9만으로는
+  “$a \lt b$”라는 말 자체가 의미를 갖지 못한다. 실제로
+  <a class="term" data-term="field">체</a> $\mathbb{C}$는 P1–P9를 만족하지만 P10–P12를
+  만족하는 순서를 <em>줄 수 없다</em>($i^2 = -1 \lt 0$이 ④와 충돌). “복소수는
+  대소가 없다”는 말의 정확한 뜻이 이것이다.</p>
+  <p>② <strong>12개가 $\mathbb{R}$을 결정하지는 않는다.</strong> 유리수 $\mathbb{Q}$도
+  P1–P12를 <em>모두</em> 만족한다. $\mathbb{R}$과 $\mathbb{Q}$를 가르는 13번째 성질이
+  바로 완비성(<a class="term" data-term="lub-property">최소상계성질</a>)이며, 중간값
+  정리·최대최소 정리는 전부 그 13번째에서 나온다 — 이 과목의 뒷장, 그리고 해석학의
+  주제다.</p>
+</div>
+
+<h2 id="sec-absval">2. 절댓값과 삼각부등식</h2>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 절댓값 <span class="label-en">absolute value</span> (스피박 1장)</span>
+  <p>$$|a| = \begin{cases} a, & a \ge 0 \\ -a, & a \lt 0 \end{cases}$$</p>
+  <p>기하적으로 $|a|$는 수직선에서 $a$와 $0$ 사이의 거리, $|a-b|$는 $a$와 $b$ 사이의
+  거리다. 기본 성질: $|a| \ge 0$, $|a| = 0 \iff a = 0$, $|{-a}| = |a|$,
+  $|ab| = |a|\,|b|$, 그리고 매우 자주 쓰는 동치</p>
+  <p>$$|a| \le c \iff -c \le a \le c \qquad (c \ge 0).$$</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 삼각부등식 <span class="label-en">triangle inequality</span> (스피박 1장)</span>
+  <p><strong>이 정리가 하는 일:</strong> 절댓값(=거리)에 관한 거의 모든 추정의
+  출발점. “돌아가는 길은 직행보다 짧지 않다”를 수로 옮긴 것으로,
+  <a class="term" data-term="triangle-inequality">해석학의 거리공간</a>에서 그대로
+  공리로 승격된다.</p>
+  <p>모든 $a, b \in \mathbb{R}$에 대해</p>
+  $$|a+b| \le |a| + |b|, \qquad \big||a| - |b|\big| \le |a-b|.$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 첫 부등식은 “제곱해서 비교”, 둘째는 첫째를 영리하게 두 번 적용.</span></summary>
+  <p><strong>$|a+b| \le |a|+|b|$:</strong> 항상 $-|a| \le a \le |a|$이고
+  $-|b| \le b \le |b|$이다. 두 부등식을 더하면
+  $-\big(|a|+|b|\big) \le a+b \le |a|+|b|$. 이는 위 동치($|x| \le c \iff -c \le x \le c$)에서
+  바로 $|a+b| \le |a|+|b|$를 뜻한다.</p>
+  <p>(별해: 양변이 음이 아니므로 제곱해 비교해도 된다.
+  $|a+b|^2 = (a+b)^2 = a^2 + 2ab + b^2 \le |a|^2 + 2|a||b| + |b|^2 = (|a|+|b|)^2$.
+  여기서 $ab \le |ab| = |a||b|$를 썼다.)</p>
+  <p><strong>$\big||a|-|b|\big| \le |a-b|$:</strong> 삼각부등식에서
+  $|a| = |(a-b) + b| \le |a-b| + |b|$이므로 $|a|-|b| \le |a-b|$. $a$와 $b$의 역할을
+  바꾸면 $|b|-|a| \le |b-a| = |a-b|$, 곧 $-(|a|-|b|) \le |a-b|$. 두 부등식을 합치면
+  $\big||a|-|b|\big| \le |a-b|$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 절댓값을 다루는 법</span>
+  <p><strong>(a) 부등식 풀기.</strong> $|x - 3| \lt 2 \iff -2 \lt x-3 \lt 2 \iff
+  1 \lt x \lt 5$. “$3$에서 거리 $2$ 미만인 점”이라 읽으면 계산 없이도 답이 보인다.</p>
+  <p><strong>(b) 등호는 언제?</strong> $|a+b| = |a|+|b|$는 $a, b$가 <em>같은 부호</em>일
+  때(정확히는 $ab \ge 0$일 때)만 성립한다. 증명의 유일한 부등식 $ab \le |ab|$가
+  등호가 되는 조건이 바로 그것이다.</p>
+  <p><strong>(c) 일반화.</strong> 귀납법(다음 절!)으로
+  $|a_1 + \cdots + a_n| \le |a_1| + \cdots + |a_n|$이 따라 나온다 — 삼각부등식이
+  $n$개 항으로 번지는 순간.</p>
+</div>
+
+<h2 id="sec-induction">3. 수학적 귀납법</h2>
+
+<div class="box box-thm" id="def-mathematical-induction">
+  <span class="box-label">정리 · 수학적 귀납법 <span class="label-en">mathematical induction</span> (스피박 2장)</span>
+  <p><strong>이 정리가 하는 일:</strong> <em>무한히 많은</em> 명제
+  $P(1), P(2), P(3), \dots$를 단 <strong>두 걸음</strong>으로 모두 증명하게 해 준다 —
+  도미노를 전부 세지 않고 “첫 장이 넘어지고, 어느 장이든 넘어지면 다음 장도 넘어진다”만
+  보이는 방법.</p>
+  <p>자연수 $n$에 관한 명제 $P(n)$이 다음 두 조건을 만족하면, <strong>모든</strong>
+  자연수 $n$에 대해 $P(n)$이 참이다.</p>
+  <p><strong>(기저)</strong> $P(1)$이 참이다.<br>
+  <strong>(귀납단계)</strong> 임의의 $k$에 대해 $P(k) \Rightarrow P(k+1)$.</p>
+  <p><strong>정렬성(well-ordering)과의 동치:</strong> “공집합이 아닌 자연수 집합은
+  반드시 최소원소를 갖는다”는 정렬 원리는 귀납 원리와 <em>동치</em>다 (아래 증명).
+  <strong>강귀납(strong induction):</strong> 귀납단계에서 $P(k)$ 하나 대신
+  $P(1), \dots, P(k)$ <em>전부</em>를 가정해도 된다 — 이 역시 위와 동치이며,
+  “이전 여러 단계”가 필요한 점화식 증명에 쓴다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 정렬성 ⇒ 귀납 원리. “반례가 있다면 최소 반례가 있는데, 그게 모순”이라는 최소 반례 논법.</span></summary>
+  <p>정렬 원리를 참으로 놓고 귀납 원리를 유도한다. $P(1)$이 참이고
+  $P(k) \Rightarrow P(k+1)$이라 하자. 결론에 반해 어떤 자연수에서 $P$가 거짓이라
+  가정하면, 집합 $S = \{\, n : P(n)\text{이 거짓}\,\}$은 공집합이 아니다. 정렬성에
+  의해 $S$는 <strong>최소원소 $m$</strong>을 갖는다.</p>
+  <p>$P(1)$은 참이므로 $m \neq 1$, 곧 $m \ge 2$이고 $m-1$도 자연수다. $m$이 $S$의
+  <em>최소</em>이므로 $m-1 \notin S$, 즉 $P(m-1)$은 참. 그런데 귀납단계에 의해
+  $P(m-1) \Rightarrow P(m)$이므로 $P(m)$이 참 — 이는 $m \in S$($P(m)$ 거짓)에
+  모순이다. 따라서 $S = \varnothing$, 곧 모든 $n$에 대해 $P(n)$이 참.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 귀납법의 세 얼굴</span>
+  <p><strong>(a) 합 공식.</strong> $\displaystyle \sum_{i=1}^{n} i = \frac{n(n+1)}{2}$.
+  <em>기저</em> $n=1$: 좌변 $1$, 우변 $\frac{1\cdot 2}{2} = 1$ ✓.
+  <em>귀납단계</em>: $\sum_{i=1}^{k} i = \frac{k(k+1)}{2}$를 가정하면
+  $$\sum_{i=1}^{k+1} i = \frac{k(k+1)}{2} + (k+1) = (k+1)\!\left(\frac{k}{2}+1\right)
+  = \frac{(k+1)(k+2)}{2},$$
+  이는 $n = k+1$일 때의 공식 그 자체다. ∎</p>
+  <p><strong>(b) 이항정리.</strong> 이항계수를
+  $\binom{n}{k} = \dfrac{n!}{k!\,(n-k)!}$로 두면
+  $$(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}.$$
+  귀납의 핵심 재료는 <strong>파스칼 규칙</strong>
+  $\binom{n}{k} + \binom{n}{k-1} = \binom{n+1}{k}$이다: $(a+b)^{k+1} = (a+b)(a+b)^k$를
+  전개하면 두 합의 같은 차수 항끼리 이 규칙으로 합쳐져 $n=k+1$ 공식이 나온다.</p>
+  <p><strong>(c) 강귀납이 필요한 예.</strong> “$2$ 이상의 모든 자연수는 소수들의 곱”은
+  $n$을 $n = ab$ ($1 \lt a, b \lt n$)로 쪼갤 때 $a, b$ <em>둘 다</em>에 대한 가정이
+  필요하다 — $P(k)$ 하나로는 부족하고 $P(2), \dots, P(k)$ 전부를 쓰는 강귀납이 제격.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p><strong>기저와 귀납단계는 둘 다 필요하다 — 하나만으로는 아무것도 증명하지
+  못한다.</strong> 귀납단계 “$P(k) \Rightarrow P(k+1)$”만 성립하고 기저가 거짓인
+  가짜 명제는 얼마든지 만들 수 있다: 예컨대 “$P(n):\ n = n+1$”은
+  $P(k) \Rightarrow P(k+1)$($k = k+1$의 양변에 $1$을 더하면 $k+1 = k+2$)을 만족하지만
+  $P(1)$이 거짓이라 도미노가 <em>시작</em>되지 않아 전부 거짓이다. 반대로 기저만 있고
+  귀납단계의 연결고리가 어느 한 곳에서 끊기면(예: $k=1$에서만 성립) 그 뒤로 넘어가지
+  못한다. 귀납은 “첫 장 + 끊김 없는 연쇄”가 <strong>동시에</strong> 있어야 작동한다.</p>
+</div>
+
+<h2 id="sec-functions">4. 함수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>“함수는 $x$에 $y$를 대응시키는 것”은 맞지만 <em>규칙(공식)</em>이 함수는 아닙니다.
+  스피박은 함수를 아예 <strong>순서쌍의 집합</strong>으로 정의합니다 — “입력마다 출력이
+  꼭 하나”라는 조건을 만족하는 $(x, y)$들의 모음. 이렇게 보면 “같은 그래프면 같은
+  함수”가 정의상 당연해지고, 공식이 없거나 조각조각인 대응도 똑같이 함수가 됩니다.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 함수 <span class="label-en">function</span> (스피박 3장)</span>
+  <p><strong>함수</strong> $f$는 순서쌍들의 집합으로서, $(a, b) \in f$이고
+  $(a, c) \in f$이면 항상 $b = c$를 만족한다(“입력마다 출력은 유일”). 이때
+  $(a, b) \in f$인 유일한 $b$를 $f(a)$로 쓴다.</p>
+  <p><strong>정의역</strong> $\operatorname{dom} f = \{\, a : \exists b,\ (a,b) \in f\,\}$
+  — 입력으로 허용되는 값 전체.
+  <strong>치역</strong> $\operatorname{ran} f = \{\, f(a) : a \in \operatorname{dom} f\,\}$
+  — 실제로 나오는 출력 전체. 함수를 $f : A \to B$로 쓰면 $A = \operatorname{dom} f$이고
+  $B$는 치역을 포함하는 <em>공역</em>이다.</p>
+  <p><strong>그래프</strong>는 평면 위의 점 $\{(a, f(a))\}$ 전체인데, 위 정의에서는
+  그래프가 곧 함수 <em>그 자체</em>다 — 그래서 “세로선 판정법”(수직선이 그래프와 많아야
+  한 점에서 만난다)이 정확히 “입력마다 출력 유일” 조건이 된다.
+  <strong>합성</strong>은 $(g \circ f)(x) = g\big(f(x)\big)$로, $f(x)$가 $g$의
+  정의역에 들어가는 $x$에서만 정의된다.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 단사·전사·역함수 <span class="label-en">injective, surjective, inverse</span> (스피박 3장)</span>
+  <p>$f : A \to B$에 대해:</p>
+  <p><strong>단사(일대일)</strong>: 서로 다른 입력은 서로 다른 출력 —
+  $f(a_1) = f(a_2) \Rightarrow a_1 = a_2$.<br>
+  <strong>전사(위로)</strong>: 공역이 남김없이 채워짐 — 모든 $b \in B$에 대해
+  $f(a) = b$인 $a$가 존재, 곧 $\operatorname{ran} f = B$.<br>
+  <strong>전단사</strong>: 단사이면서 전사.</p>
+  <p><strong>역함수</strong> $f^{-1}$는 $f$가 <em>전단사일 때, 그리고 그때만</em>
+  존재하며 $f^{-1}(b) = a \iff f(a) = b$로 정의된다. 순서쌍의 눈으로는
+  $f^{-1} = \{(b, a) : (a, b) \in f\}$ — 모든 쌍을 뒤집은 것이고, 이 뒤집힌 집합이
+  다시 “함수”이려면 $f$가 단사여야(그리고 정의역이 $B$ 전체이려면 전사여야) 한다.
+  그래프에서는 $y = x$에 대한 대칭이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 같은 규칙, 다른 함수</span>
+  <p><strong>(a)</strong> $f(x) = x^2$은 정의역을 어디로 잡느냐에 따라 성질이 바뀐다.
+  $\mathbb{R} \to \mathbb{R}$로 보면 단사도 전사도 <em>아니다</em>($f(1)=f(-1)$,
+  음수는 출력에 없음). 그러나 $[0,\infty) \to [0,\infty)$로 제한하면
+  <strong>전단사</strong>가 되고 역함수 $f^{-1}(y) = \sqrt{y}$를 갖는다 — 규칙은
+  같아도 정의역·공역이 다르면 다른 함수다.</p>
+  <p><strong>(b)</strong> 공식이 없어도 함수다. “$x$가 유리수면 $1$, 무리수면 $0$”
+  (디리클레 함수)은 어떤 한 줄 공식으로도 안 써지지만 “입력마다 출력 유일”을 만족하므로
+  엄연한 함수 — 순서쌍 정의의 위력이다(해석학에서 연속성의 대표 반례로 재등장한다).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>함수는 “규칙”이나 “공식”이 아니라 “대응(순서쌍의 집합)”이다.</strong>
+  겉보기에 다른 두 공식 $\frac{x^2-1}{x-1}$과 $x+1$은, 정의역이 다르므로($x=1$ 포함
+  여부) 서로 <em>다른 함수</em>다 — “식이 같다/다르다”가 아니라 “대응이 같다/다르다”가
+  기준이다.
+  ② <strong>전사 여부는 공역을 정해야 말할 수 있다.</strong> “$f$가 전사인가?”는
+  공역 없이는 미완성 질문이다($x^2$은 공역이 $[0,\infty)$면 전사, $\mathbb{R}$이면
+  아니다).
+  ③ <strong>역함수 존재는 전단사가 필수.</strong> 단사만으로는 “치역 위로의” 역만 얻고,
+  주어진 공역 전체에서의 역함수는 전사까지 있어야 한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">1장의 줄거리</span>
+  <p><a class="term" data-term="field-order-axioms">12개의 약속</a> — 체 공리(P1–P9:
+  덧셈·곱셈)와 순서 공리(P10–P12: 삼분법·폐포) — 에서 부호 규칙($(-a)(-b)=ab$),
+  $1 \gt 0$, 부등식 조작이 <em>전부 증명되어</em> 나온다
+  → <strong>절댓값</strong>과 삼각부등식 $|a+b| \le |a|+|b|$, $\big||a|-|b|\big| \le |a-b|$
+  (거리 추정의 만능 재료, <a class="term" data-term="triangle-inequality">해석학</a>으로 승계)
+  → <a class="term" data-term="mathematical-induction">수학적 귀납법</a>(정렬성과
+  동치, 강귀납·이항정리·합 공식)으로 무한 명제를 두 걸음에 증명
+  → <strong>함수</strong>는 규칙이 아니라 순서쌍의 집합이고, 정의역·치역·합성·단사·전사·역함수가
+  그 위에서 정의된다.</p>
+  <p><strong>다음 이야기:</strong> 이 12개는 $\mathbb{R}$과 $\mathbb{Q}$를 구별하지
+  못한다. 둘을 가르는 13번째 성질 —
+  <a class="term" data-term="lub-property">완비성(최소상계성질)</a> — 이 극한·연속·중간값
+  정리의 진짜 엔진이며, 이 과목의 뒷장과 해석학의 주제로 이어진다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>P1–P12만을 근거로 다음을 증명하라(“당연하다”는 이유는 금지).</p>
+  <p>(1) $-(-a) = a$ &nbsp;&nbsp; (2) $a \lt b$이고 $c \gt 0$이면 $ac \lt bc$
+  &nbsp;&nbsp; (3) $a \neq 0$이면 $a^2 \gt 0$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $-a$의 덧셈 역원이 무엇인지 두 각도에서 보고 역원의 유일성.
+    (2) 부등호의 정의 $x \gt y \iff x-y \in P$로 환원한 뒤 P12.
+    (3) 삼분법으로 $a \in P$인 경우와 $-a \in P$인 경우로 나눠 P12.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $a + (-a) = 0$(P3)은 “$a$가 $-a$의 덧셈 역원”이라는 뜻이기도 하다. 그런데
+    $-(-a)$도 $-a$의 역원이다. 덧셈 역원은 유일하므로 $-(-a) = a$.</p>
+    <p>(2) $ac \lt bc \iff bc - ac \in P$. 그런데 $bc - ac = (b-a)c$(P9). 가정에서
+    $b - a \in P$이고 $c \in P$이므로 P12에 의해 $(b-a)c \in P$. 따라서 $ac \lt bc$.</p>
+    <p>(3) $a \neq 0$이면 삼분법(P10)으로 $a \in P$ 또는 $-a \in P$.
+    $a \in P$이면 P12로 $a\cdot a = a^2 \in P$. $-a \in P$이면
+    $(-a)(-a) = a^2 \in P$(따름정리 ②). 어느 경우든 $a^2 \in P$, 곧 $a^2 \gt 0$. ∎</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 절댓값 관계식을 풀거나 판정하라.</p>
+  <p>(1) $|2x - 1| \le 3$을 만족하는 $x$의 범위 &nbsp;&nbsp;
+  (2) $|x| - |y| \le |x - y|$가 항상 성립하는가? &nbsp;&nbsp;
+  (3) $|a+b| = |a| + |b|$가 성립할 필요충분조건</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $|u| \le c \iff -c \le u \le c$. (2) 삼각부등식의 따름정리
+    $\big||a|-|b|\big| \le |a-b|$. (3) 증명에서 등호가 성립하는 유일한 지점은
+    $ab \le |ab|$였다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $-3 \le 2x - 1 \le 3 \iff -2 \le 2x \le 4 \iff -1 \le x \le 2$.</p>
+    <p>(2) 성립한다. $\big||x|-|y|\big| \le |x-y|$이고 $|x|-|y| \le \big||x|-|y|\big|$이므로
+    사슬로 $|x|-|y| \le |x-y|$.</p>
+    <p>(3) $ab \ge 0$($a, b$가 같은 부호이거나 하나가 $0$). 실제
+    $|a+b|^2 = a^2 + 2ab + b^2$이고 $(|a|+|b|)^2 = a^2 + 2|ab| + b^2$이므로 두 값이
+    같을 조건은 $ab = |ab|$, 곧 $ab \ge 0$. ∎</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>수학적 귀납법으로 다음을 증명하라.</p>
+  <p>(1) $\displaystyle \sum_{i=1}^{n} i^3 = \left(\frac{n(n+1)}{2}\right)^2$
+  &nbsp;&nbsp; (2) 모든 자연수 $n$에 대해 $3 \mid (n^3 - n)$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 예제 (a)의 $\sum i = \frac{n(n+1)}{2}$을 활용하면 귀납단계가 인수분해로
+    깔끔해진다. (2) $(k+1)^3 - (k+1) - (k^3 - k)$를 전개하면 $3(k^2+k)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <em>기저</em> $n=1$: 좌변 $1$, 우변 $\left(\frac{1\cdot2}{2}\right)^2 = 1$ ✓.
+    <em>귀납단계</em>: 가정 $\sum_{i=1}^{k} i^3 = \left(\frac{k(k+1)}{2}\right)^2$에서
+    $$\sum_{i=1}^{k+1} i^3 = \left(\frac{k(k+1)}{2}\right)^2 + (k+1)^3
+    = (k+1)^2\!\left(\frac{k^2}{4} + (k+1)\right) = (k+1)^2 \cdot \frac{(k+2)^2}{4}
+    = \left(\frac{(k+1)(k+2)}{2}\right)^2.$$
+    이는 $n=k+1$ 공식이다. (덤: 우변이 $\big(\sum i\big)^2$과 같다 — “세제곱의 합은
+    합의 제곱”.)</p>
+    <p>(2) <em>기저</em> $n=1$: $1^3 - 1 = 0 = 3\cdot 0$ ✓.
+    <em>귀납단계</em>: $3 \mid (k^3 - k)$를 가정.
+    $(k+1)^3 - (k+1) = (k^3 - k) + 3k^2 + 3k = (k^3-k) + 3(k^2 + k)$.
+    첫 항은 가정으로, 둘째 항은 $3$의 배수이므로 합도 $3$의 배수. ∎</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f(x) = \dfrac{x}{1 + |x|}$ ($\operatorname{dom} f = \mathbb{R}$)에 대하여
+  다음을 보여라.</p>
+  <p>(1) $f$는 단사이다. &nbsp;&nbsp; (2) 치역은 $(-1, 1)$이다. &nbsp;&nbsp;
+  (3) $f : \mathbb{R} \to (-1,1)$의 역함수를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$x \ge 0$과 $x \lt 0$에서 절댓값을 벗겨 $f$를 조각별로 다시 쓴다.
+    $f(x)$와 $x$의 부호가 같다는 점을 이용하면 역함수 계산에서 $|x|$를 $|y|$로 바꿀 수
+    있다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>부호 관찰:</strong> $1 + |x| \gt 0$이므로 $f(x)$의 부호는 $x$의 부호와
+    같고, $|f(x)| = \frac{|x|}{1+|x|} \lt 1$.</p>
+    <p>(1) $y = f(x)$로 두면 $|y| = \frac{|x|}{1+|x|}$에서 $|x|(1 - |y|) = |y|$, 곧
+    $|x| = \frac{|y|}{1 - |y|}$ — $|x|$가 $y$로 결정된다. 부호도 같으므로 $x$가
+    $y$로 유일하게 정해진다. 따라서 $f(a)=f(b) \Rightarrow a=b$, 단사.</p>
+    <p>(2) $|f(x)| \lt 1$이니 치역 $\subseteq (-1,1)$. 역으로 $y \in (-1,1)$에 대해
+    $x = \frac{y}{1 - |y|}$로 놓으면 이 $x$의 부호는 $y$와 같고 계산하면 $f(x) = y$
+    (아래 (3)). 따라서 치역 $= (-1,1)$.</p>
+    <p>(3) (1)의 관계와 부호 일치에서 $x = \dfrac{y}{1 - |y|}$, 곧
+    $$f^{-1}(y) = \frac{y}{1 - |y|}, \quad y \in (-1, 1). \qquad \blacksquare$$
+    ($f$는 $\mathbb{R}$ 전체를 유계 구간 $(-1,1)$로 <em>전단사</em>하게 “압축”하는
+    함수 — 위상수학에서 $\mathbb{R} \approx (-1,1)$의 실물 다리다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>공리로부터의 서술 증명</span>
+  </div>
+  <p>순서체의 공리 P1–P12만을 사용하여, 임의의 $a, b \in \mathbb{R}$에 대해
+  다음 <strong>산술-기하 평균 부등식</strong>을 증명하라.</p>
+  <p>$$a, b \ge 0 \implies \frac{a+b}{2} \ge \sqrt{ab},$$</p>
+  <p>즉 $a, b \ge 0$이면 $a + b \ge 2\sqrt{ab}$이고, 등호는 $a = b$일 때만
+  성립함을 서술하라. (제곱근의 존재는 사용해도 좋다.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>모든 제곱은 음이 아니다(개념 확인 1-(3)의 관점): $(\sqrt a - \sqrt b)^2 \ge 0$에서
+    출발. 등호는 $x^2 = 0 \iff x = 0$(P10 삼분법의 따름정리)에서 나온다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$a, b \ge 0$이면 $\sqrt a, \sqrt b$가 존재한다. 임의의 실수의 제곱은
+    음이 아니므로(따름정리 ④)
+    $$(\sqrt a - \sqrt b)^2 \ge 0.$$
+    좌변을 전개(P5–P9)하면 $a - 2\sqrt{ab} + b \ge 0$, 곧
+    $a + b \ge 2\sqrt{ab}$. 양변을 양수 $2$로 나누면($c = \tfrac12 \gt 0$이므로 부등호
+    보존) $\frac{a+b}{2} \ge \sqrt{ab}$.</p>
+    <p><strong>등호:</strong> 등호가 성립 $\iff (\sqrt a - \sqrt b)^2 = 0
+    \iff \sqrt a - \sqrt b = 0$(삼분법: $x \neq 0$이면 $x^2 \gt 0$)
+    $\iff \sqrt a = \sqrt b \iff a = b$. $\blacksquare$</p>
+    <p>(서술 뼈대: “제곱 $\ge 0$” 인용 → 전개로 목표 부등식 → 나눗셈으로 마무리 →
+    등호 조건을 삼분법으로 분리. 각 단계에서 어느 공리를 쓰는지 밝히는 것이 만점
+    답안이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>합성과 단사·전사</span>
+  </div>
+  <p>$f : A \to B$, $g : B \to C$이고 합성 $g \circ f : A \to C$를 생각한다.</p>
+  <p>(1) $g \circ f$가 단사이면 $f$가 단사임을 보여라.<br>
+  (2) $g \circ f$가 전사이면 $g$가 전사임을 보여라.<br>
+  (3) $g \circ f$는 단사·전사인데 $f$가 전사가 아니고 $g$가 단사가 아닌
+  <strong>구체적 예</strong>를 하나 제시하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1),(2)는 정의로 직접. (3)은 $A, B, C$의 크기를 다르게 잡아 본다 — 예:
+    $A = C = \{1\}$, $B = \{1, 2\}$ 같은 유한집합.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $f(a_1) = f(a_2)$이면 $g(f(a_1)) = g(f(a_2))$, 곧
+    $(g\circ f)(a_1) = (g\circ f)(a_2)$. $g\circ f$가 단사이므로 $a_1 = a_2$. 따라서
+    $f$ 단사.</p>
+    <p>(2) 임의의 $c \in C$에 대해 $g\circ f$가 전사이므로 $(g\circ f)(a) = c$인
+    $a \in A$가 있다. 그러면 $b = f(a) \in B$가 $g(b) = c$를 만족한다. 따라서 $g$ 전사.</p>
+    <p>(3) $A = C = \{1\}$, $B = \{1, 2\}$. $f : A \to B$를 $f(1) = 1$,
+    $g : B \to C$를 $g(1) = g(2) = 1$로 정의하면
+    $(g \circ f)(1) = 1$이라 $g\circ f = \mathrm{id}_{\{1\}}$은 전단사(단사·전사)다.
+    그러나 $f$는 $2 \in B$를 놓쳐 <em>전사가 아니고</em>, $g$는
+    $g(1)=g(2)$라 <em>단사가 아니다</em>. $\blacksquare$</p>
+    <p>(교훈: 합성의 단사·전사는 각각 “앞쪽 $f$의 단사”, “뒤쪽 $g$의 전사”까지만
+    강제한다 — 나머지 절반은 보장되지 않는다는 것이 (3)의 반례.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

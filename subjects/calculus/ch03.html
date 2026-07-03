@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3장 도함수와 미분법 — 미적분학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="calculus" data-chapter="ch03.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미적분학 · Spivak (9–12장)</p>
+  <h1><span class="ch-num">3</span> 도함수와 미분법</h1>
+  <p class="ch-source">“곡선을 확대하고 또 확대하면 직선이 된다” —
+  그 직선의 기울기가 도함수다. 이 장은 그 극한을 정의로 못 박고,
+  복잡한 함수의 기울기를 <strong>손으로 계산하는 법칙</strong>을 하나씩 증명한다.</p>
+</div>
+
+<p>2장에서 극한을 $\varepsilon$-$\delta$로 엄밀히 세웠습니다. 이제 그 극한 하나로
+<strong>순간변화율</strong>이라는 애매한 물리적 직관을 수학적 대상으로 굳힙니다.
+도함수는 두 얼굴을 가집니다 — 접선의 기울기(기하)이자 최선의 일차 근사(해석).
+이 장의 전반부는 “도함수란 무엇인가”를 정의와 반례로 확정하고, 후반부는
+<strong>미분가능한 함수들을 조립·합성·역전할 때 도함수가 어떻게 따라 움직이는가</strong>를
+법칙으로 만듭니다. 그 정점이 <a class="term" data-term="chain-rule">연쇄법칙</a>입니다.</p>
+
+<h2 id="sec-derivative">1. 도함수 — 할선 기울기의 극한</h2>
+
+<div class="box box-def">
+  <span class="box-label">정의 · <a class="term" data-term="derivative">도함수</a> <span class="label-en">derivative</span> (스피박 9장)</span>
+  <p>함수 $f$가 $a$의 근방에서 정의될 때, 극한</p>
+  $$f'(a) = \lim_{h \to 0} \frac{f(a+h) - f(a)}{h} = \lim_{x \to a} \frac{f(x) - f(a)}{x - a}$$
+  <p>이 존재하면 $f$는 <strong>$a$에서 미분가능</strong>하다 하고, 그 값을 $a$에서의
+  <strong>미분계수</strong>라 한다. 각 점의 미분계수를 모으면 <strong>도함수</strong> $f'$이다.</p>
+  <p><strong>두 가지 읽기.</strong> 분수 $\frac{f(a+h)-f(a)}{h}$는 두 점 $(a, f(a))$,
+  $(a+h, f(a+h))$를 잇는 <strong>할선(secant)의 기울기</strong>다. $h \to 0$이면 뒷점이
+  앞점으로 미끄러져 들어오며 할선이 <strong>접선</strong>으로 굳는다. 접선의 방정식은
+  $y = f(a) + f'(a)(x - a)$ — 이것이 “$f$를 $a$ 근처에서 가장 잘 흉내 내는 일차함수”,
+  즉 <strong>최선의 일차 근사</strong>라는 두 번째 얼굴이다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 미분가능이면 연속 <span class="label-en">differentiable ⇒ continuous</span> (스피박 9장)</span>
+  <p>$f$가 $a$에서 미분가능하면 $f$는 $a$에서 <a class="term" data-term="continuous-function">연속</a>이다.</p>
+  <p><strong>역은 거짓이다.</strong> 연속이라고 해서 미분가능한 것은 아니다 — 아래 절댓값 함수가
+  결정적 반례.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 극한의 곱으로 분해: 차이를 $\frac{\text{차이}}{h}\cdot h$로 쓰면 하나는 도함수, 하나는 $0$.</span></summary>
+  <p>$a$에서 연속임은 $\lim_{h\to 0}\big(f(a+h) - f(a)\big) = 0$과 같다. $h \neq 0$에서</p>
+  $$f(a+h) - f(a) = \frac{f(a+h) - f(a)}{h} \cdot h.$$
+  <p>$h \to 0$일 때 첫 인수는 $f'(a)$ (존재 가정), 둘째 인수는 $0$으로 간다.
+  극한의 곱 법칙으로 우변은 $f'(a) \cdot 0 = 0$. 따라서
+  $\lim_{h\to 0} f(a+h) = f(a)$ — 연속이다. $\blacksquare$</p>
+  <p>직관: “접선 기울기가 유한하다”는 것은 그래프가 그 점에서 <strong>찢어지지 않았다</strong>는
+  뜻을 이미 담고 있다. 끊긴 곳에서는 할선 기울기가 $\pm\infty$로 폭발한다.</p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 + 반례 · 도함수 계산과 $|x|$의 뾰족점</span>
+  <p><strong>(a) 거듭제곱.</strong> $f(x) = x^2$이면
+  $\frac{(a+h)^2 - a^2}{h} = \frac{2ah + h^2}{h} = 2a + h \to 2a$. 그러므로 $f'(a) = 2a$.</p>
+  <p><strong>(b) 상수는 평평하다.</strong> $f(x) = c$이면 분자가 항상 $0$이라 $f'(a) = 0$.</p>
+  <p><strong>(c) 반례 — 연속이지만 미분 불가능.</strong> $f(x) = |x|$는 어디서나 연속이다.
+  그러나 $a = 0$에서</p>
+  $$\frac{|0+h| - |0|}{h} = \frac{|h|}{h} = \begin{cases} +1 & (h > 0) \\ -1 & (h < 0) \end{cases}$$
+  <p>이므로 우극한 $+1$과 좌극한 $-1$이 다르다 — 극한이 존재하지 않아 $f'(0)$은 없다.
+  기하적으로는 원점의 <strong>뾰족점(kink)</strong>: 왼쪽에서 온 접선(기울기 $-1$)과
+  오른쪽에서 온 접선(기울기 $+1$)이 하나로 합쳐지지 않는다. “연속”은 그래프가 끊기지
+  않음을, “미분가능”은 그 위에 <strong>매끄러움(뾰족하지 않음)</strong>까지 요구하는 더 센
+  조건이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — “연속이면 대충 미분되겠지”</span>
+  <p>절댓값 함수는 단 한 점에서만 실패한다. 하지만 <strong>모든 점에서 연속이면서도
+  어느 점에서도 미분 불가능한</strong> 함수가 실제로 존재한다 —
+  <strong>바이어슈트라스 함수</strong>
+  $W(x) = \sum_{n=0}^{\infty} a^n \cos(b^n \pi x)$ ($0 < a < 1$, $ab > 1$)이 그것이다.
+  “연속함수는 유한 개의 뾰족점만 빼면 매끄럽다”는 그림은 <strong>완전히 틀린 직관</strong>이다.
+  연속은 미분가능성에 대해 거의 아무것도 보장하지 않는다. (이 반례는 해석학에서
+  <a class="term" data-term="uniform-convergence">균등수렴</a>으로 엄밀히 다룬다.)</p>
+</div>
+
+<h2 id="sec-rules">2. 미분법 — 도함수의 사칙연산</h2>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 미분 법칙 <span class="label-en">differentiation rules</span> (스피박 10장)</span>
+  <p>$f, g$가 $a$에서 미분가능하면 다음이 성립한다.</p>
+  <p>① <strong>상수배·합</strong>: $(cf)'(a) = c\,f'(a)$, $\;(f + g)'(a) = f'(a) + g'(a)$
+  &nbsp;(미분은 <strong>선형</strong>이다).</p>
+  <p>② <strong>거듭제곱</strong>: $\dfrac{d}{dx}x^n = n x^{n-1}$ ($n$은 정수).</p>
+  <p>③ <strong>곱의 법칙 (라이프니츠)</strong>:
+  $\;(fg)'(a) = f'(a)g(a) + f(a)g'(a)$.</p>
+  <p>④ <strong>몫의 법칙</strong>: $g(a) \neq 0$이면
+  $\;\left(\dfrac{f}{g}\right)'(a) = \dfrac{f'(a)g(a) - f(a)g'(a)}{g(a)^2}$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 곱의 법칙은 “$\pm$ 같은 항 끼워넣기”가 핵심 트릭. 나머지는 그 따름이다.</span></summary>
+  <p><strong>합·상수배.</strong> 차분몫이 그대로 갈라진다:
+  $\frac{(f+g)(a+h) - (f+g)(a)}{h} = \frac{f(a+h)-f(a)}{h} + \frac{g(a+h)-g(a)}{h}
+  \to f'(a) + g'(a)$. 극한의 합 법칙 그 자체.</p>
+  <p><strong>곱의 법칙.</strong> 분자에 $-f(a+h)g(a) + f(a+h)g(a)$를 더해서(0을 더한 것)
+  두 덩어리로 쪼갠다:</p>
+  $$\frac{f(a+h)g(a+h) - f(a)g(a)}{h}
+  = f(a+h)\,\frac{g(a+h)-g(a)}{h} + g(a)\,\frac{f(a+h)-f(a)}{h}.$$
+  <p>$h \to 0$: $f(a+h) \to f(a)$ ($f$가 미분가능 → 연속이므로!),
+  둘째 분수 $\to g'(a)$, 셋째 분수 $\to f'(a)$. 따라서 극한은
+  $f(a)g'(a) + g(a)f'(a)$. — <strong>연속성이 증명의 숨은 부품</strong>이라는 점이 포인트.</p>
+  <p><strong>거듭제곱.</strong> $n \ge 1$은 곱의 법칙 + 수학적 귀납법:
+  $\frac{d}{dx}x^{n} = \frac{d}{dx}(x \cdot x^{n-1}) = 1\cdot x^{n-1} + x\cdot(n-1)x^{n-2}
+  = n x^{n-1}$. 음의 정수는 몫의 법칙으로 $x^{-m} = 1/x^m$을 미분하면 나온다.</p>
+  <p><strong>몫의 법칙.</strong> 먼저 $\left(\frac1g\right)' = -\frac{g'}{g^2}$을 정의로 보인다:</p>
+  $$\frac{1}{h}\!\left(\frac{1}{g(a+h)} - \frac{1}{g(a)}\right)
+  = -\,\frac{1}{g(a+h)g(a)}\cdot\frac{g(a+h)-g(a)}{h}
+  \to -\frac{g'(a)}{g(a)^2}$$
+  <p>($g$ 연속이라 분모 $\to g(a)^2$). 이제 $\frac{f}{g} = f \cdot \frac1g$에 곱의 법칙:
+  $f'\cdot\frac1g + f\cdot\left(-\frac{g'}{g^2}\right) = \frac{f'g - fg'}{g^2}$. $\blacksquare$</p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 법칙 조립</span>
+  <p><strong>(a)</strong> $\dfrac{d}{dx}(3x^4 - 5x + 7) = 12x^3 - 5$ (선형성 + 거듭제곱).</p>
+  <p><strong>(b)</strong> $\dfrac{d}{dx}\big(x^2(x^3+1)\big)$: 곱의 법칙으로
+  $2x(x^3+1) + x^2\cdot 3x^2 = 5x^4 + 2x$. (전개해서 $x^5 + x^2$을 미분해도 같은 답 —
+  법칙의 정합성 확인.)</p>
+  <p><strong>(c)</strong> $\dfrac{d}{dx}\dfrac{x}{x^2+1}$: 몫의 법칙으로
+  $\dfrac{1\cdot(x^2+1) - x\cdot 2x}{(x^2+1)^2} = \dfrac{1 - x^2}{(x^2+1)^2}$.</p>
+</div>
+
+<h2 id="sec-chain">3. 연쇄법칙 — 합성함수의 심장</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 두 개의 톱니바퀴</span>
+  <p>$y$가 $u$에 매여 있고 $u$가 $x$에 매여 있다고 하자. $x$를 조금 밀면 $u$가
+  $g'(x)$배로 움직이고, 그 $u$의 움직임이 다시 $y$를 $f'(u)$배로 움직인다.
+  <strong>변화율은 곱해진다</strong> — 큰 톱니와 작은 톱니를 물리면 회전비가 곱해지듯이.
+  이것이 연쇄법칙의 심장이다: $\dfrac{dy}{dx} = \dfrac{dy}{du}\cdot\dfrac{du}{dx}$.</p>
+</div>
+
+<div class="box box-thm" id="def-chain-rule">
+  <span class="box-label">정리 · 연쇄법칙 <span class="label-en">chain rule</span> (스피박 10장)</span>
+  <p>$g$가 $a$에서 미분가능하고 $f$가 $g(a)$에서 미분가능하면, 합성 $f \circ g$는
+  $a$에서 미분가능하고</p>
+  $$(f \circ g)'(a) = f'\big(g(a)\big)\, g'(a).$$
+  <p><strong>바깥 도함수(안쪽 값 그대로 대입) 곱하기 안쪽 도함수</strong> — 순서와
+  대입 위치가 전부다. 라이프니츠 표기로는 $y = f(u)$, $u = g(x)$일 때
+  $\dfrac{dy}{dx} = \dfrac{dy}{du}\dfrac{du}{dx}$이며, $\dfrac{dy}{du}$는 반드시
+  $u = g(a)$에서 평가한다.</p>
+</div>
+
+<details class="proof">
+  <summary>엄밀한 증명 <span class="proof-strategy">— 순진한 증명($g(a+h)=g(a)$일 때 0으로 나눔)의 구멍을 “증분 함수”로 메운다.</span></summary>
+  <p><strong>왜 순진한 증명이 틀리는가.</strong> $\dfrac{f(g(a+h)) - f(g(a))}{h}$를
+  $\dfrac{f(g(a+h)) - f(g(a))}{g(a+h) - g(a)} \cdot \dfrac{g(a+h) - g(a)}{h}$로 쪼개고 싶지만,
+  $g(a+h) = g(a)$가 되는 $h$가 $0$ 근처에 무수히 많을 수 있어 <strong>분모가 $0$</strong>이
+  된다 (예: $g$가 상수인 구간). 이 구멍을 다음 <strong>증분 함수</strong>로 메운다.</p>
+  <p><strong>증분 함수 정의.</strong> $b = g(a)$라 하고, $f$가 정의된 $y$에 대해</p>
+  $$\varphi(y) = \begin{cases} \dfrac{f(y) - f(b)}{y - b} & (y \neq b) \\[4pt]
+  f'(b) & (y = b) \end{cases}$$
+  <p>$f$가 $b$에서 미분가능하므로 $\lim_{y \to b}\varphi(y) = f'(b) = \varphi(b)$ —
+  즉 <strong>$\varphi$는 $b$에서 연속</strong>이다. 그리고 정의를 뒤집으면
+  <strong>모든 $y$</strong>에 대해 (심지어 $y = b$일 때도 양변 $0$)</p>
+  $$f(y) - f(b) = \varphi(y)\,(y - b) \qquad (\ast)$$
+  <p>가 성립한다 — 나눗셈이 사라져 분모 $0$ 문제가 원천 봉쇄된다.</p>
+  <p><strong>대입과 극한.</strong> $(\ast)$에 $y = g(a+h)$를 넣으면</p>
+  $$f(g(a+h)) - f(g(a)) = \varphi\big(g(a+h)\big)\,\big(g(a+h) - g(a)\big).$$
+  <p>양변을 $h \neq 0$으로 나눈다:</p>
+  $$\frac{f(g(a+h)) - f(g(a))}{h}
+  = \varphi\big(g(a+h)\big)\cdot\frac{g(a+h) - g(a)}{h}.$$
+  <p>$h \to 0$일 때: ① $g$가 $a$에서 미분가능 → 연속이므로 $g(a+h) \to g(a) = b$이고,
+  $\varphi$가 $b$에서 연속이므로 $\varphi(g(a+h)) \to \varphi(b) = f'(b) = f'(g(a))$.
+  ② 둘째 인수 $\to g'(a)$. 극한의 곱으로</p>
+  $$(f\circ g)'(a) = f'(g(a))\,g'(a). \qquad \blacksquare$$
+  <p>핵심은 “나눗셈 대신 곱셈 항등식 $(\ast)$로 바꾸고, $\varphi$의 연속성으로 안쪽 극한을
+  옮긴 것”이다.</p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 연쇄법칙 적용과 안/바깥 구분</span>
+  <p><strong>(a)</strong> $\dfrac{d}{dx}(x^2 + 1)^{10}$: 바깥 $u^{10}$의 도함수 $10u^9$에
+  $u = x^2+1$을 대입하고, 안쪽 $g'(x) = 2x$를 곱한다 →
+  $10(x^2+1)^9 \cdot 2x = 20x(x^2+1)^9$.</p>
+  <p><strong>(b) 3중 합성</strong> $\dfrac{d}{dx}\sqrt{\,x^3 + \sin x\,}$: 껍질을 바깥부터
+  벗긴다. $\frac{1}{2\sqrt{\,x^3+\sin x\,}}\cdot(3x^2 + \cos x)$.</p>
+  <p><strong>(c) 흔한 실수</strong>: $\dfrac{d}{dx}\sin(x^2)$을 $\cos(x^2)$로만 쓰면
+  <strong>틀린다</strong> — 안쪽 도함수 $2x$를 빠뜨렸다. 정답은 $2x\cos(x^2)$.
+  “바깥만 미분하고 안쪽 곱셈을 잊는 것”이 이 장 최다 실수.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 역함수의 미분법 <span class="label-en">derivative of the inverse</span> (스피박 12장)</span>
+  <p>$f$가 구간에서 연속·순단조(전단사)이고 $a = f^{-1}(b)$에서 미분가능하며
+  $f'(a) \neq 0$이면, 역함수 $f^{-1}$은 $b$에서 미분가능하고</p>
+  $$\big(f^{-1}\big)'(b) = \frac{1}{f'\big(f^{-1}(b)\big)}.$$
+  <p><strong>연쇄법칙의 즉각적 따름.</strong> 항등식 $f\big(f^{-1}(x)\big) = x$의 양변을
+  $x$로 미분하면, 왼쪽에 연쇄법칙이 걸려
+  $f'\big(f^{-1}(x)\big)\cdot\big(f^{-1}\big)'(x) = 1$. 여기서 $\big(f^{-1}\big)'(x)$을
+  풀면 위 공식이다. (조건 $f'(a)\neq 0$은 이 나눗셈이 정당함을 보장 — 기하적으로는
+  원함수의 접선이 수평이면 역함수의 접선이 수직이 되어 미분 불가능.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 역함수 미분</span>
+  <p>$f(x) = x^3$의 역함수 $f^{-1}(x) = x^{1/3}$을 $x = 8$에서 미분하자.
+  $f'(x) = 3x^2$이고 $f^{-1}(8) = 2$이므로
+  $\big(f^{-1}\big)'(8) = \dfrac{1}{f'(2)} = \dfrac{1}{3\cdot 4} = \dfrac{1}{12}$.
+  (직접 $\frac{d}{dx}x^{1/3} = \frac13 x^{-2/3}$을 $x=8$에 넣어도
+  $\frac13\cdot 8^{-2/3} = \frac13\cdot\frac14 = \frac{1}{12}$ — 일치.)</p>
+</div>
+
+<h2 id="sec-higher">4. 고계도함수와 음함수 미분</h2>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 고계도함수 <span class="label-en">higher derivatives</span> (스피박 10–11장)</span>
+  <p>$f'$을 다시 미분하면 <strong>2계도함수</strong> $f'' = (f')'$, 또 미분하면 $f'''$,
+  일반적으로 $n$번 미분한 $f^{(n)}$을 얻는다. 라이프니츠 표기로는</p>
+  $$f''(x) = \frac{d^2 y}{dx^2}, \qquad f^{(n)}(x) = \frac{d^n y}{dx^n}.$$
+  <p>물리적으로 $f'$이 속도라면 $f''$은 <strong>가속도</strong>이고, 기하적으로 $f''$의 부호는
+  그래프의 <strong>볼록/오목</strong>(휘는 방향)을 정한다 — 이는 4장에서 다룬다.
+  예: $f(x) = x^4$이면 $f' = 4x^3$, $f'' = 12x^2$, $f''' = 24x$, $f^{(4)} = 24$,
+  $f^{(5)} = 0$.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">방법 · 음함수 미분법 <span class="label-en">implicit differentiation</span> (스피박 12장)</span>
+  <p>$y$를 $x$의 함수로 <strong>명시적으로 풀 수 없어도</strong>, $x$와 $y$가 얽힌
+  방정식 $F(x, y) = 0$의 양변을 $x$로 미분할 수 있다. 이때 $y$는 $x$의 함수로 보고
+  $y$가 든 항마다 <strong>연쇄법칙</strong>을 적용한 뒤 $\dfrac{dy}{dx}$에 대해 푼다.</p>
+  <p><strong>예: 원</strong> $x^2 + y^2 = 25$. 양변을 $x$로 미분하면
+  $2x + 2y\,\dfrac{dy}{dx} = 0$ — $y^2$ 항에서 안쪽 $y$의 도함수 $\frac{dy}{dx}$가
+  연쇄법칙으로 딸려 나온 것. 풀면</p>
+  $$\frac{dy}{dx} = -\frac{x}{y}.$$
+  <p>점 $(3, 4)$에서 기울기는 $-\frac34$ — 반지름 $\overline{O(3,4)}$의 기울기 $\frac43$과
+  곱하면 $-1$, 즉 접선이 반지름에 수직이라는 원의 성질이 자동으로 나온다.</p>
+  <p><strong>핵심:</strong> 음함수 미분은 새로운 법칙이 아니라 <strong>연쇄법칙의 응용</strong>일
+  뿐이다. “$y$는 $x$의 함수”라는 관점만 놓치지 않으면 된다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 모음</span>
+  <p>① <strong>연속 ≠ 미분가능.</strong> $|x|$는 원점에서, 바이어슈트라스 함수는
+  <em>모든</em> 점에서 반례. “연속이니 미분되겠지”는 금물.</p>
+  <p>② <strong>연쇄법칙의 안/바깥.</strong> $\frac{d}{dx}f(g(x)) = f'(g(x))g'(x)$에서
+  바깥 도함수 $f'$은 <strong>안쪽 값 $g(x)$에서 평가</strong>하고, 여기에 안쪽 도함수
+  $g'(x)$를 <strong>곱한다</strong>. 안쪽 도함수를 빠뜨리는 것($\frac{d}{dx}\sin(x^2)$을
+  $\cos(x^2)$로 쓰는 것)이 대표 실수.</p>
+  <p>③ <strong>$\dfrac{dy}{dx}$는 분수가 아니다.</strong> 이것은 “$dy$ 나누기 $dx$”가
+  아니라 <strong>미분 연산자 하나의 기호</strong>다. 연쇄법칙 $\frac{dy}{dx} =
+  \frac{dy}{du}\frac{du}{dx}$가 마치 약분처럼 보이는 것은 <em>정리의 결과일 뿐</em>,
+  기호를 분수로 조작해도 된다는 허가가 아니다. 특히 $\frac{d^2y}{dx^2}$는
+  $(dx)^2$으로 나눈 것이 결코 아니다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">3장의 줄거리</span>
+  <p><a class="term" data-term="derivative">도함수</a> $f'(a) = \lim_{h\to0}\frac{f(a+h)-f(a)}{h}$
+  = 할선 기울기의 극한 = 접선 = 최선의 일차 근사
+  → <strong>미분가능 ⇒ <a class="term" data-term="continuous-function">연속</a></strong>
+  (역은 거짓: $|x|$의 뾰족점, 바이어슈트라스 함수)
+  → <strong>미분 법칙</strong>(선형·거듭제곱·곱=라이프니츠·몫) — 곱의 법칙은 “0 끼워넣기”,
+  증명마다 연속성이 숨은 부품
+  → <a class="term" data-term="chain-rule">연쇄법칙</a> $(f\circ g)' = f'(g)\cdot g'$
+  (증분 함수로 나눗셈 구멍을 메운 엄밀 증명; 톱니바퀴 비율의 곱)
+  → 그 따름으로 <strong>역함수 미분</strong> $\frac{1}{f'(f^{-1})}$
+  → <strong>고계도함수</strong>($f''$=가속도·볼록성)와 <strong>음함수 미분</strong>(연쇄법칙의 응용).</p>
+  <p><strong>다음 장 예고:</strong> 4장에서는 이 도구로 <a class="term" data-term="mean-value-theorem">평균값 정리</a>를
+  세우고, $f'$의 부호로 증가·감소, $f''$의 부호로 볼록성을 읽어 함수의 개형을 완성한다.
+  임용 최중요 축은 <strong>연쇄법칙 엄밀 증명 · 미분가능⇒연속(과 그 역의 반례) ·
+  역함수 미분법</strong>이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>정의($f'(a) = \lim_{h\to0}\frac{f(a+h)-f(a)}{h}$)만 사용하여 다음 미분계수를 구하라
+  (법칙 사용 금지).</p>
+  <p>(1) $f(x) = x^3$, $a$에서 &nbsp;&nbsp; (2) $f(x) = \dfrac{1}{x}$, $a \neq 0$에서
+  &nbsp;&nbsp; (3) $f(x) = \sqrt{x}$, $a > 0$에서</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $(a+h)^3$ 전개. (2) 통분. (3) 유리화 — 분자에 $\sqrt{a+h}+\sqrt{a}$를 곱하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\frac{(a+h)^3 - a^3}{h} = \frac{3a^2 h + 3ah^2 + h^3}{h} = 3a^2 + 3ah + h^2
+    \to 3a^2$. 즉 $f'(a) = 3a^2$.</p>
+    <p>(2) $\frac{1}{h}\!\left(\frac{1}{a+h} - \frac1a\right)
+    = \frac{1}{h}\cdot\frac{a - (a+h)}{a(a+h)} = \frac{-1}{a(a+h)} \to -\frac{1}{a^2}$.</p>
+    <p>(3) $\frac{\sqrt{a+h}-\sqrt a}{h} = \frac{(a+h) - a}{h(\sqrt{a+h}+\sqrt a)}
+    = \frac{1}{\sqrt{a+h}+\sqrt a} \to \frac{1}{2\sqrt a}$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음을 미분하라.</p>
+  <p>(1) $\dfrac{2x-1}{x^2+3}$ &nbsp;&nbsp; (2) $(3x^2 - 4x + 1)^7$ &nbsp;&nbsp;
+  (3) $\sqrt{1 + \cos^2 x}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 몫의 법칙. (2) 연쇄법칙 1회. (3) $\cos^2 x = (\cos x)^2$까지 포함해
+    연쇄법칙 <strong>3중</strong>.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\dfrac{2(x^2+3) - (2x-1)(2x)}{(x^2+3)^2}
+    = \dfrac{-2x^2 + 2x + 6}{(x^2+3)^2}$.</p>
+    <p>(2) $7(3x^2-4x+1)^6\cdot(6x-4)$.</p>
+    <p>(3) 바깥 $\sqrt{\;\cdot\;}$ → $\frac{1}{2\sqrt{1+\cos^2 x}}$,
+    안쪽 $\frac{d}{dx}(1+\cos^2 x) = 2\cos x\cdot(-\sin x) = -2\sin x\cos x$.
+    곱하면 $\dfrac{-2\sin x\cos x}{2\sqrt{1+\cos^2 x}} = \dfrac{-\sin x\cos x}{\sqrt{1+\cos^2 x}}$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 3</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>곡선 $x^3 + y^3 = 6xy$ (데카르트의 잎) 위의 점 $(3, 3)$에서 접선의 기울기를
+  음함수 미분법으로 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>양변을 $x$로 미분. $y^3$은 $3y^2\frac{dy}{dx}$, $6xy$는 곱의 법칙 $+$ 연쇄법칙.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>양변 미분: $3x^2 + 3y^2\dfrac{dy}{dx} = 6y + 6x\dfrac{dy}{dx}$.
+    $\frac{dy}{dx}$ 항을 모으면 $(3y^2 - 6x)\dfrac{dy}{dx} = 6y - 3x^2$, 즉</p>
+    $$\frac{dy}{dx} = \frac{6y - 3x^2}{3y^2 - 6x} = \frac{2y - x^2}{y^2 - 2x}.$$
+    <p>$(3,3)$ 대입: $\dfrac{6 - 9}{9 - 6} = \dfrac{-3}{3} = -1$. 기울기 $-1$.
+    (잎 모양의 대칭축 $y = x$에 접선이 수직 — 대칭성과 맞아떨어진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>함수
+  $$f(x) = \begin{cases} x^2 \sin\dfrac{1}{x} & (x \neq 0) \\ 0 & (x = 0) \end{cases}$$
+  에 대해 (1) $f$가 $0$에서 미분가능함을 정의로 보이고 $f'(0)$을 구하라.
+  (2) $x \neq 0$에서 $f'(x)$을 구하라. (3) $f'$이 $0$에서 <strong>불연속</strong>임을 보여라.
+  (즉 “미분가능해도 $f'$이 연속일 필요는 없다”.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 압착정리 — $\left|\frac{f(h)-f(0)}{h}\right| = |h\sin\frac1h| \le |h|$.
+    (3) $f'(x)$에 $\cos\frac1x$ 항이 남아 $x\to0$에서 진동한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\dfrac{f(h) - f(0)}{h} = \dfrac{h^2\sin(1/h)}{h} = h\sin\dfrac1h$.
+    $|h\sin\frac1h| \le |h| \to 0$이므로 압착정리로 극한은 $0$. 따라서
+    $f'(0) = 0$ (존재).</p>
+    <p>(2) $x \neq 0$에서 곱·연쇄법칙:
+    $f'(x) = 2x\sin\dfrac1x + x^2\cos\dfrac1x\cdot\left(-\dfrac{1}{x^2}\right)
+    = 2x\sin\dfrac1x - \cos\dfrac1x$.</p>
+    <p>(3) $x \to 0$일 때 첫 항 $2x\sin\frac1x \to 0$이지만 둘째 항 $-\cos\frac1x$는
+    $[-1,1]$ 사이를 <strong>무한히 진동</strong>하여 극한이 없다. 따라서
+    $\lim_{x\to0}f'(x)$이 존재하지 않아 $f'(0)=0$과 같을 수 없다 — $f'$은 $0$에서
+    불연속. <strong>결론:</strong> $f$는 온 정의역에서 미분가능하지만 $f'$은 연속이 아니다
+    ($f \notin C^1$). “미분가능 ⇒ 연속”은 참이지만 “미분가능 ⇒ 도함수가 연속”은
+    거짓이라는, 반드시 알아야 할 반례. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>미분가능성 판정</span>
+  </div>
+  <p>$$f(x) = \begin{cases} x^2 & (x \le 1) \\ ax + b & (x > 1) \end{cases}$$
+  가 $x = 1$에서 미분가능하도록 상수 $a, b$를 정하고, 그 근거를 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>미분가능 ⇒ 연속(값 일치) <strong>이고</strong> 좌·우 미분계수 일치, 두 조건 모두 필요.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>① 연속 조건</strong> (미분가능의 필요조건): $x=1$에서 좌극한 $=$ 우극한 $=$ 함숫값.
+    $1^2 = a\cdot1 + b$, 즉 $a + b = 1$.</p>
+    <p><strong>② 미분계수 일치 조건</strong>: 왼쪽 도함수 $\frac{d}{dx}x^2\big|_{1} = 2$,
+    오른쪽 도함수 $\frac{d}{dx}(ax+b) = a$. 매끄럽게 이어지려면 $a = 2$.</p>
+    <p>①에 대입하면 $b = 1 - a = -1$. 따라서 $\boxed{a = 2,\; b = -1}$.</p>
+    <p>(서술 뼈대: “미분가능하려면 우선 연속이어야 하고(값 일치), 나아가 좌·우 미분계수가
+    같아야 한다” — <strong>두 조건을 모두</strong> 명시하는 것이 만점 답안. 연속 조건만
+    쓰면 감점. 검산: $a+b = 2-1 = 1$ ✓.) $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>연쇄법칙 서술형</span>
+  </div>
+  <p>연쇄법칙 $(f\circ g)'(a) = f'(g(a))g'(a)$을 <strong>증분 함수</strong>를 도입하여
+  엄밀히 증명하라. 특히 “$g(a+h) = g(a)$가 되는 $h$가 있을 때 순진한 증명이 실패하는
+  이유”와 “그 구멍을 어떻게 메우는지”를 반드시 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\varphi(y) = \frac{f(y)-f(b)}{y-b}$ ($y\neq b$), $\varphi(b)=f'(b)$로 정의하고
+    $b=g(a)$. $\varphi$의 연속성과 항등식 $f(y)-f(b)=\varphi(y)(y-b)$가 핵심.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>순진한 증명의 함정.</strong> 차분몫을
+    $\frac{f(g(a+h))-f(g(a))}{g(a+h)-g(a)}\cdot\frac{g(a+h)-g(a)}{h}$로 쪼개려면
+    분모 $g(a+h)-g(a) \neq 0$이 필요한데, $g$가 국소적으로 상수이거나 진동하면
+    $g(a+h)=g(a)$인 $h$가 $0$에 무한히 가까이 존재해 <strong>0으로 나누게 된다</strong>.</p>
+    <p><strong>증분 함수.</strong> $b = g(a)$에 대해
+    $\varphi(y) = \dfrac{f(y)-f(b)}{y-b}$ ($y \neq b$), $\varphi(b) = f'(b)$로 두면,
+    $f$가 $b$에서 미분가능하므로 $\lim_{y\to b}\varphi(y) = f'(b) = \varphi(b)$ —
+    <strong>$\varphi$는 $b$에서 연속</strong>. 정의를 정리하면 모든 $y$에서
+    $f(y) - f(b) = \varphi(y)(y-b)$ (분모가 사라져 $0$ 나눗셈 없음).</p>
+    <p><strong>대입·극한.</strong> $y = g(a+h)$를 넣고 $h\neq0$으로 나누면</p>
+    $$\frac{f(g(a+h))-f(g(a))}{h} = \varphi(g(a+h))\cdot\frac{g(a+h)-g(a)}{h}.$$
+    <p>$g$ 미분가능 ⇒ 연속이므로 $g(a+h)\to b$, 그리고 $\varphi$가 $b$에서 연속이므로
+    $\varphi(g(a+h)) \to \varphi(b) = f'(g(a))$. 둘째 인수 $\to g'(a)$. 극한의 곱으로
+    $(f\circ g)'(a) = f'(g(a))\,g'(a)$. $\blacksquare$</p>
+    <p>(채점 포인트: ① 순진한 증명의 실패 이유 명시, ② $\varphi$의 정의와 <strong>$b$에서의
+    연속성</strong>, ③ 항등식 $f(y)-f(b)=\varphi(y)(y-b)$가 <em>모든</em> $y$에서 성립함,
+    ④ $g$의 연속성으로 안쪽 극한 이동 — 네 요소가 모두 있어야 완결.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

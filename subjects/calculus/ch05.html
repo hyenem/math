@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5장 적분과 미적분의 기본정리 — 미적분학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="calculus" data-chapter="ch05.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미적분학 · Spivak (13–14장)</p>
+  <h1><span class="ch-num">5</span> 적분과 미적분의 기본정리</h1>
+  <p class="ch-source">“곡선 아래의 넓이를 어떻게 정의하는가?” — 잘게 썰어 위로 덮고
+  아래로 받쳐 그 틈이 닫히는 순간을 넓이라 부른다. 그리고 이 넓이를 재는 일이
+  접선의 기울기를 재는 일의 정확한 역연산임을 밝히는 것 — 이 장의 절정.</p>
+</div>
+
+<p>넓이·거리·일(work)은 전부 “잘게 나눠 더한 뒤 극한을 취한” 양입니다. 적분은 이
+합산 절차를 엄밀히 정의하고, <strong>미적분의 기본정리</strong>는 그 지루한 극한을
+전혀 계산하지 않고 <strong>원시함수 하나만 찾으면 끝난다</strong>는 놀라운 지름길을
+줍니다. 넓이(적분)와 기울기(<a class="term" data-term="derivative">미분</a>)라는
+전혀 달라 보이는 두 연산이 서로의 역이라는 것 — 스피박 13–14장의 이야기이자,
+고등학교에서 “당연히” 쓰던 $\int$ 기호에 처음으로 증명을 붙이는 장입니다.</p>
+
+<h2 id="sec-riemann">1. 리만적분 — 넓이를 위·아래로 가두기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 왜 상합과 하합인가</span>
+  <p>곡선 아래 넓이의 “정답”은 아직 없다 — 우리가 <strong>정의</strong>해야 한다.
+  전략: 구간을 잘게 쪼개, 각 조각에서 함수의 <strong>최댓값으로 만든 직사각형</strong>
+  (넓이를 넘치게 잡음)과 <strong>최솟값으로 만든 직사각형</strong>(모자라게 잡음)으로
+  참값을 위아래에서 조인다. 쪼갤수록 위쪽 추정(상합)은 내려오고 아래쪽 추정(하합)은
+  올라온다. <strong>둘이 만나는 유일한 값</strong>이 있으면, 그 값을 넓이라 부를
+  자격이 있다 — 이것이 리만적분의 전부다.</p>
+</div>
+
+<div class="box box-def" id="def-riemann-integral-recall">
+  <span class="box-label">정의 · <a class="term" data-term="riemann-integral">리만적분</a>
+  <span class="label-en">Riemann integral</span> (스피박 13장)</span>
+  <p><a class="term" data-term="partition">분할</a> $P = \{a = x_0 \lt x_1 \lt \cdots
+  \lt x_n = b\}$에 대해, 각 소구간 $[x_{i-1}, x_i]$에서</p>
+  $$M_i = \sup_{[x_{i-1},x_i]} f, \qquad m_i = \inf_{[x_{i-1},x_i]} f, \qquad
+  \Delta x_i = x_i - x_{i-1}$$
+  <p>로 놓고 <strong>상합</strong>과 <strong>하합</strong>을 정의한다:</p>
+  $$U(f,P) = \sum_{i=1}^{n} M_i\,\Delta x_i, \qquad
+  L(f,P) = \sum_{i=1}^{n} m_i\,\Delta x_i.$$
+  <p>모든 분할에 대한 <strong>상적분</strong> $\overline{\int_a^b} f = \inf_P U(f,P)$과
+  <strong>하적분</strong> $\underline{\int_a^b} f = \sup_P L(f,P)$가 <strong>일치</strong>할 때
+  $f$는 $[a,b]$에서 <strong>적분가능</strong>하며, 그 공통값을 $\int_a^b f$로 쓴다.</p>
+  <p><strong>리만 판정법(실전용):</strong> $f$가 적분가능 $\iff$ 임의의 $\varepsilon \gt 0$에
+  대해 $U(f,P) - L(f,P) \lt \varepsilon$인 분할 $P$가 존재한다. — “상합과 하합의 틈을
+  원하는 만큼 좁힐 수 있으면 적분가능.” 항상 $L(f,P) \le \underline{\int} \le
+  \overline{\int} \le U(f,P)$이므로, 틈이 $0$으로 가면 두 적분이 끼임정리로 붙는다.</p>
+</div>
+
+<div class="box box-thm" id="thm-integrable-classes">
+  <span class="box-label">정리 · 적분가능한 두 집안 <span class="label-en">continuous / monotone are integrable</span> (스피박 13장)</span>
+  <p><strong>①</strong> $[a,b]$에서 <a class="term" data-term="continuous-function">연속</a>인
+  함수는 적분가능하다. <strong>②</strong> $[a,b]$에서 단조인 함수는 (불연속이 있어도)
+  적분가능하다.</p>
+  <p>임용·기말의 90%가 이 두 집안 안에서 다뤄진다 — 우선 “연속인가 단조인가”부터
+  확인하는 것이 정석이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 연속: 균등연속으로 소구간 진폭을 일괄 통제. 단조: 진폭들이 망원합으로 붕괴.</span></summary>
+  <p><strong>① 연속:</strong> 컴팩트 구간 위의 연속함수는 <strong>균등연속</strong>이다
+  (4장). 따라서 임의의 $\varepsilon$에 대해, 소구간 길이를 $\delta$보다 작게 쪼개면
+  모든 소구간에서 $M_i - m_i \lt \frac{\varepsilon}{b-a}$가 동시에 성립한다. 그러면</p>
+  $$U(f,P) - L(f,P) = \sum (M_i - m_i)\,\Delta x_i \lt \frac{\varepsilon}{b-a}\sum \Delta x_i
+  = \varepsilon.$$
+  <p><strong>② 단조:</strong> $f$가 증가라 하자. 소구간에서 $M_i = f(x_i)$,
+  $m_i = f(x_{i-1})$. 균등분할($\Delta x_i = \frac{b-a}{n}$)을 쓰면 진폭의 합이
+  <strong>망원(telescoping)</strong>으로 붕괴한다:</p>
+  $$U - L = \frac{b-a}{n}\sum_{i=1}^n \big(f(x_i) - f(x_{i-1})\big)
+  = \frac{b-a}{n}\,\big(f(b) - f(a)\big) \xrightarrow[n\to\infty]{} 0.$$
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">반례 · 디리클레 함수 — 적분이 불가능한 함수</span>
+  <p>$$D(x) = \begin{cases} 1, & x \in \mathbb{Q} \\ 0, & x \notin \mathbb{Q}\end{cases}$$</p>
+  <p>모든 소구간에는 유리수도 무리수도 <strong>빽빽이</strong> 들어 있다(조밀성). 따라서
+  어떤 분할을 잡아도 각 소구간에서 $M_i = 1$, $m_i = 0$이 되어</p>
+  $$U(D,P) = \sum 1\cdot\Delta x_i = b - a, \qquad L(D,P) = \sum 0\cdot\Delta x_i = 0.$$
+  <p>상적분 $= b - a$, 하적분 $= 0$ — 아무리 잘게 쪼개도 틈이 $b-a$로 고정되어
+  절대 만나지 않는다. <strong>$D$는 $[0,1]$에서 적분가능하지 않다.</strong>
+  “불연속점이 너무 많으면(여기선 모든 점) 적분이 깨진다”의 표준 반례.
+  (참고: 불연속점이 <em>측도 $0$</em>만큼만 있으면 적분가능하다는 것이 르베그의
+  판정법 — 해석학에서 만난다.)</p>
+</div>
+
+<h2 id="sec-properties">2. 적분의 성질 — 계산의 문법</h2>
+
+<div class="box box-thm" id="thm-integral-properties">
+  <span class="box-label">정리 · 적분의 기본 성질 <span class="label-en">basic properties of the integral</span> (스피박 13장)</span>
+  <p>$f, g$가 $[a,b]$에서 적분가능하면:</p>
+  <p><strong>① 선형성:</strong> $\displaystyle\int_a^b (\alpha f + \beta g)
+  = \alpha\int_a^b f + \beta\int_a^b g.$</p>
+  <p><strong>② 구간가법성:</strong> $a \lt c \lt b$이면
+  $\displaystyle\int_a^b f = \int_a^c f + \int_c^b f.$ (규약
+  $\int_a^a f = 0$, $\int_b^a f = -\int_a^b f$를 두면 $a, b, c$의 순서와 무관하게 성립.)</p>
+  <p><strong>③ 단조성:</strong> $[a,b]$에서 $f \le g$이면
+  $\displaystyle\int_a^b f \le \int_a^b g.$ 특히
+  $\left|\int_a^b f\right| \le \int_a^b |f|$ (적분의 삼각부등식).</p>
+</div>
+
+<div class="box box-thm" id="thm-integral-mvt">
+  <span class="box-label">정리 · 적분의 평균값 정리 <span class="label-en">mean value theorem for integrals</span> (스피박 13·14장)</span>
+  <p>$f$가 $[a,b]$에서 연속이면, 어떤 $c \in [a,b]$가 존재하여</p>
+  $$\int_a^b f = f(c)\,(b - a).$$
+  <p>“곡선 아래 넓이는, 함수의 어떤 실제 값 $f(c)$를 높이로 하는 직사각형의 넓이와
+  같다.” 좌변을 $(b-a)$로 나눈 $\frac{1}{b-a}\int_a^b f$가 곧 $f$의
+  <strong>평균값</strong>이며, 연속함수는 그 평균을 실제로 한 번은 달성한다.
+  이것이 다음 절 기본정리 증명의 <strong>핵심 부품</strong>이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 단조성으로 넓이를 최소·최대 직사각형 사이에 가두고, 중간값 정리로 딱 맞는 높이를 집는다.</span></summary>
+  <p>연속함수는 컴팩트 구간에서 최솟값 $m$과 최댓값 $M$을 가진다(최대최소 정리).
+  $m \le f \le M$에 단조성을 적용하면</p>
+  $$m(b-a) \le \int_a^b f \le M(b-a) \quad\Longrightarrow\quad
+  m \le \frac{1}{b-a}\int_a^b f \le M.$$
+  <p>가운데 값은 $m$과 $M$ 사이의 수다. $f$는 연속이므로
+  <a class="term" data-term="mean-value-theorem">중간값 정리</a>에 의해 이 값을
+  실제로 취하는 $c$가 존재한다: $f(c) = \frac{1}{b-a}\int_a^b f$. 양변에 $(b-a)$를
+  곱하면 끝.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-ftc">3. 미적분의 기본정리 — 미분과 적분은 역연산이다</h2>
+
+<p>여기까지 적분은 “잘게 쪼개 극한”이라는 고된 정의였다. 이제 그 고생을 통째로
+없애는 정리가 온다. 두 형태로 나뉘지만, 한 문장으로 요약하면:
+<strong>넓이를 재는 함수를 미분하면 원래 함수가 나오고, 원시함수의 양끝 값 차이가
+넓이가 된다.</strong></p>
+
+<div class="box box-thm" id="thm-ftc">
+  <span class="box-label">정리 · <a class="term" data-term="fundamental-theorem-calculus">미적분의 기본정리</a>
+  <span class="label-en">fundamental theorem of calculus</span> (스피박 14장)</span>
+  <p><strong>제1형 (미분 → 적분의 역):</strong> $f$가 $[a,b]$에서 연속이고
+  $F(x) = \displaystyle\int_a^x f(t)\,dt$로 정의하면, $F$는 미분가능하고</p>
+  $$F'(x) = \frac{d}{dx}\int_a^x f(t)\,dt = f(x).$$
+  <p>— 넓이누적함수 $F$의 순간변화율이 바로 그 순간의 높이 $f(x)$. 연속함수는 언제나
+  원시함수를 가진다는 뜻이기도 하다($F$가 그 하나).</p>
+  <p><strong>제2형 (적분 → 미분의 역, 계산용):</strong> $f$가 $[a,b]$에서 적분가능하고
+  $F$가 그 <strong>원시함수</strong>($F' = f$)이면</p>
+  $$\int_a^b f = F(b) - F(a).$$
+  <p>— 지긋지긋한 상합·하합 극한 대신, 원시함수 하나 찾아 양끝 대입 후 빼기. 이것이
+  실전 적분 계산의 전부다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 제1형: 차분몫을 적분 평균값 정리로 $f(\xi_h)$로 바꾸고 연속성. 제2형: 소구간마다 미분의 MVT + 망원합.</span></summary>
+  <p><strong>제1형.</strong> 차분몫을 구간가법성으로 정리하면</p>
+  $$\frac{F(x+h) - F(x)}{h} = \frac{1}{h}\int_x^{x+h} f(t)\,dt.$$
+  <p>적분의 평균값 정리로 우변 $= f(\xi_h)$인 $\xi_h \in [x, x+h]$가 있다. $h \to 0$이면
+  $\xi_h \to x$이고, $f$가 연속이므로 $f(\xi_h) \to f(x)$. 따라서
+  $F'(x) = f(x)$.</p>
+  <p><strong>제2형.</strong> 임의의 분할 $P = \{x_0, \dots, x_n\}$을 잡자. $F$는 각
+  소구간에서 미분의 <strong>평균값 정리</strong>를 만족하므로, 어떤
+  $t_i \in [x_{i-1}, x_i]$에 대해</p>
+  $$F(x_i) - F(x_{i-1}) = F'(t_i)\,\Delta x_i = f(t_i)\,\Delta x_i.$$
+  <p>$i$에 대해 더하면 좌변은 <strong>망원합</strong>으로 붕괴한다:</p>
+  $$F(b) - F(a) = \sum_{i=1}^n f(t_i)\,\Delta x_i.$$
+  <p>우변은 하나의 리만합이므로 $L(f,P) \le F(b) - F(a) \le U(f,P)$. 이 부등식이
+  <strong>모든</strong> $P$에서 성립하는데, $f$가 적분가능이라 상·하적분이 $\int_a^b f$
+  하나로 붙는다. 끼임정리로 $F(b) - F(a) = \int_a^b f$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-intuition">
+  <span class="box-label">두 형태가 말하는 한 가지 — 역연산</span>
+  <p>제1형은 $\dfrac{d}{dx}\displaystyle\int_a^x f = f$ — 적분한 뒤 미분하면 제자리.
+  제2형은 $\displaystyle\int_a^b F' = F(b) - F(a)$ — 미분한 뒤 적분하면 (상수 차이 빼고)
+  제자리. <strong>미분 연산자와 적분 연산자는 서로 역함수</strong>다. 이 한 쌍의
+  등식이 “계산하는 미적분” 전체를 떠받친다.</p>
+</div>
+
+<h2 id="sec-techniques">4. 적분법과 이상적분 — 원시함수를 찾는 기술</h2>
+
+<p>기본정리가 “원시함수만 찾으면 된다”고 했으니, 남은 문제는 <strong>원시함수 찾기</strong>다.
+미분의 법칙들을 거꾸로 읽으면 적분의 기법이 된다.</p>
+
+<div class="box box-def" id="def-integration-technique">
+  <span class="box-label">정의·기법 · 적분법과 이상적분 <span class="label-en">integration techniques, improper integrals</span> (스피박 18장)</span>
+  <p><strong>① 치환적분 (연쇄법칙의 역):</strong> $(F\circ g)' = F'(g)\,g'$을 거꾸로 읽으면</p>
+  $$\int f\big(g(x)\big)\,g'(x)\,dx = \int f(u)\,du \ \ (u = g(x)); \qquad
+  \int_a^b f(g(x))g'(x)\,dx = \int_{g(a)}^{g(b)} f(u)\,du.$$
+  <p><strong>② 부분적분 (곱 미분의 역):</strong> $(uv)' = u'v + uv'$를 적분·이항하면</p>
+  $$\int u\,dv = uv - \int v\,du.$$
+  <p><strong>③ 부분분수:</strong> 유리함수 $\frac{p(x)}{q(x)}$를 $q$의 인수에 따라
+  $\frac{A}{x-r}$, $\frac{Bx+C}{x^2+bx+c}$ 꼴의 합으로 쪼개 각 항을 적분(로그·아크탄젠트).</p>
+  <p><strong>④ 삼각치환:</strong> $\sqrt{a^2 - x^2}\Rightarrow x = a\sin\theta$,
+  $\sqrt{a^2 + x^2}\Rightarrow x = a\tan\theta$, $\sqrt{x^2 - a^2}\Rightarrow x = a\sec\theta$
+  — 근호를 $\sin^2+\cos^2=1$로 없앤다.</p>
+  <hr>
+  <p><strong>이상적분(improper integral):</strong> 리만적분의 두 전제(유한구간·유계함수)가
+  깨질 때, 적분을 <strong>극한</strong>으로 다시 정의한다.</p>
+  <p>· 무한구간: $\displaystyle\int_a^{\infty} f = \lim_{b\to\infty}\int_a^b f.$</p>
+  <p>· 특이점($x = b$에서 $f$가 발산): $\displaystyle\int_a^b f = \lim_{c\to b^-}\int_a^c f.$</p>
+  <p>극한이 유한하면 <strong>수렴</strong>, 아니면 <strong>발산</strong>이라 한다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 기법 한 번씩</span>
+  <p><strong>(a) 치환:</strong> $\displaystyle\int_0^1 2x\,e^{x^2}\,dx$에서 $u = x^2$,
+  $du = 2x\,dx$ — $\int_0^1 e^u\,du = e - 1$.</p>
+  <p><strong>(b) 부분적분:</strong> $\displaystyle\int_0^1 x\,e^{x}\,dx$에서 $u = x$,
+  $dv = e^x dx$ — $[xe^x]_0^1 - \int_0^1 e^x\,dx = e - (e - 1) = 1$.</p>
+  <p><strong>(c) 부분분수:</strong> $\displaystyle\frac{1}{x^2 - 1}
+  = \tfrac12\!\left(\frac{1}{x-1} - \frac{1}{x+1}\right)$이므로 원시함수는
+  $\tfrac12\ln\left|\frac{x-1}{x+1}\right|$.</p>
+  <p><strong>(d) 삼각치환:</strong> $\displaystyle\int_0^1 \sqrt{1 - x^2}\,dx$에서
+  $x = \sin\theta$ — $\int_0^{\pi/2}\cos^2\theta\,d\theta = \frac{\pi}{4}$
+  (사분원의 넓이와 일치!).</p>
+</div>
+
+<div class="box box-thm" id="thm-improper-tests">
+  <span class="box-label">정리 · 이상적분의 수렴 판정 <span class="label-en">convergence tests for improper integrals</span> (스피박 18장)</span>
+  <p><strong>기준 적분($p$-적분):</strong></p>
+  $$\int_1^{\infty}\frac{dx}{x^p} \ \text{수렴} \iff p \gt 1, \qquad
+  \int_0^1 \frac{dx}{x^p} \ \text{수렴} \iff p \lt 1.$$
+  <p>($\infty$ 쪽은 빨리 줄어야, $0$ 쪽은 천천히 터져야 살아남는다 — 부호가 반대임에
+  주의.)</p>
+  <p><strong>비교판정:</strong> $0 \le f \le g$이고 $\int g$가 수렴하면 $\int f$도 수렴,
+  $\int f$가 발산하면 $\int g$도 발산. <strong>극한비교:</strong>
+  $\lim \frac{f}{g} = L \in (0,\infty)$이면 두 적분은 생사를 함께한다.
+  피적분함수를 “가장 지배적인 거듭제곱”과 비교해 $p$-적분으로 환원하는 것이 정석.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p><strong>① “적분가능 = 원시함수 존재”가 아니다.</strong> 이 둘은 논리적으로 독립이다.
+  <em>적분가능하지만 원시함수 없음:</em> 계단 함수(도약 불연속)는 적분가능하지만,
+  도함수는 <strong>다르부의 중간값 성질</strong>을 반드시 만족해야 하므로 도약이 있는
+  함수는 어떤 함수의 도함수도 될 수 없다 → 원시함수 없음.
+  <em>원시함수 있지만 적분 불가능:</em> 도함수가 유계이면서도 리만적분 불가능한
+  볼테라(Volterra) 함수. — <strong>다만 $f$가 연속이면 기본정리 제1형이 원시함수
+  $F(x)=\int_a^x f$를 직접 제조하므로 둘 다 성립한다.</strong> “연속”이 두 개념을
+  묶는 다리다.</p>
+  <p><strong>② 기본정리는 연속 가정을 먹는다.</strong> 제1형 $F' = f$는 $f$의
+  <strong>연속점</strong>에서만 보장된다. 불연속점에서 $F$는 미분 안 될 수 있다.
+  제2형도 $f$의 적분가능성이 전제 — 가정을 빼먹고 “원시함수 대입”만 외우면 함정에
+  걸린다.</p>
+  <p><strong>③ 이상적분은 “계산 전에 수렴부터”.</strong> $\int_{-1}^{1}\frac{dx}{x}$를
+  원시함수 $\ln|x|$에 무심코 대입하면 $0$이 나오지만, 실제로는 $x=0$에서 양쪽 모두
+  발산 → <strong>발산</strong>이다. 특이점을 무시한 대입은 틀린 답을 준다.</p>
+  <p><strong>④ 부정적분에는 항상 $+C$.</strong> $F' = f$인 $F$는 상수 차이만큼 무수히
+  많다($F+C$도 원시함수). 정적분에서는 상수가 소거되지만, 부정적분·미분방정식에서
+  상수를 빠뜨리면 해의 한 조각만 얻는다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">5장의 줄거리</span>
+  <p><a class="term" data-term="riemann-integral">리만적분</a> = 상합·하합으로 넓이를
+  위아래에서 가두어 틈이 닫힐 때의 공통값 (적분가능 $\iff \inf U = \sup L$;
+  연속·단조는 OK, 디리클레는 탈락)
+  → 성질(선형·구간가법·단조)과 적분 평균값 정리 = 연속이면 평균을 실제로 달성
+  → <a class="term" data-term="fundamental-theorem-calculus">미적분의 기본정리</a>:
+  제1형 $\frac{d}{dx}\int_a^x f = f$, 제2형 $\int_a^b f = F(b) - F(a)$ —
+  <a class="term" data-term="derivative">미분</a>과 적분은 서로의 역연산
+  → 적분법(치환=연쇄법칙 역, 부분적분=곱미분 역, 부분분수, 삼각치환)으로 원시함수를
+  찾고, 이상적분은 극한으로 정의해 $p$-적분·비교판정으로 수렴을 가른다.</p>
+  <p><strong>임용 최중요 축:</strong> 정의(상합·하합)로 적분가능성 판정 · 기본정리
+  두 형태의 정확한 가정과 증명 서술 · 이상적분 수렴 판정. “가정을 빠뜨리지 않는”
+  서술이 만점의 조건이다. 이 모든 정리는 해석학 6장에서 리만–스틸체스로 일반화된다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>정의(상합·하합)만을 사용하여 $\displaystyle\int_0^b x\,dx = \frac{b^2}{2}$
+  ($b \gt 0$)임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>균등분할 $x_i = \frac{ib}{n}$을 쓰면 $f(x)=x$가 증가함수라
+    $M_i = x_i$, $m_i = x_{i-1}$. 합 공식 $\sum_{i=1}^n i = \frac{n(n+1)}{2}$을
+    이용해 $U$와 $L$을 계산하고 $n\to\infty$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>균등분할 $\Delta x_i = \frac{b}{n}$, $x_i = \frac{ib}{n}$. 증가함수이므로</p>
+    $$U = \sum_{i=1}^n x_i\,\Delta x_i = \frac{b^2}{n^2}\sum_{i=1}^n i
+    = \frac{b^2}{n^2}\cdot\frac{n(n+1)}{2} = \frac{b^2}{2}\Big(1 + \frac1n\Big),$$
+    $$L = \sum_{i=1}^n x_{i-1}\,\Delta x_i = \frac{b^2}{n^2}\sum_{i=0}^{n-1} i
+    = \frac{b^2}{2}\Big(1 - \frac1n\Big).$$
+    <p>$U - L = \frac{b^2}{n} \to 0$이므로 리만 판정법에 의해 적분가능하고,
+    끼임정리로 상적분 $=$ 하적분 $= \frac{b^2}{2}$. 따라서
+    $\int_0^b x\,dx = \frac{b^2}{2}$. $\blacksquare$</p>
+    <p>(삼각형 넓이 $\frac12\cdot b\cdot b$와 일치 — 정의가 기하와 맞아떨어진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 도함수를 구하라 (기본정리 제1형 + 연쇄법칙).</p>
+  <p>(1) $\displaystyle G(x) = \int_0^{x^2} \sin(t^2)\,dt$ &nbsp;&nbsp;
+  (2) $\displaystyle H(x) = \int_{x}^{x^3} e^{-t^2}\,dt$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>위끝이 $u(x)$이면 $\frac{d}{dx}\int_a^{u(x)} f = f(u(x))\,u'(x)$.
+    (2)는 $\int_x^{x^3} = \int_0^{x^3} - \int_0^{x}$로 쪼갠다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $u = x^2$, $u' = 2x$: $\ G'(x) = \sin\!\big((x^2)^2\big)\cdot 2x
+    = 2x\,\sin(x^4).$</p>
+    <p>(2) 구간가법성으로 $H(x) = \int_0^{x^3} e^{-t^2}dt - \int_0^{x} e^{-t^2}dt$.
+    각각 미분:</p>
+    $$H'(x) = e^{-(x^3)^2}\cdot 3x^2 - e^{-x^2}
+    = 3x^2 e^{-x^6} - e^{-x^2}.$$
+    <p>($e^{-t^2}$은 초등함수 원시함수가 없지만, 기본정리 제1형은 원시함수를 몰라도
+    미분값을 준다 — 이것이 제1형의 힘이다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$I_n = \displaystyle\int_0^{\pi/2} \sin^n x\,dx$ ($n \ge 2$)에 대해 부분적분으로
+  점화식 $\displaystyle I_n = \frac{n-1}{n}\,I_{n-2}$을 유도하고, $I_5$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\sin^n x = \sin^{n-1}x\cdot\sin x$로 보고 $u = \sin^{n-1}x$,
+    $dv = \sin x\,dx$. 도중에 $\cos^2 = 1 - \sin^2$을 써서 $I_n$과 $I_{n-2}$로 정리.
+    $I_1 = \int_0^{\pi/2}\sin x\,dx = 1$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$u = \sin^{n-1}x$, $dv = \sin x\,dx$이면 $du = (n-1)\sin^{n-2}x\cos x\,dx$,
+    $v = -\cos x$. 부분적분:</p>
+    $$I_n = \Big[-\sin^{n-1}x\,\cos x\Big]_0^{\pi/2}
+    + (n-1)\int_0^{\pi/2}\sin^{n-2}x\,\cos^2 x\,dx.$$
+    <p>경계항은 $0$ (양 끝에서 $\sin$ 또는 $\cos$이 $0$). $\cos^2 = 1 - \sin^2$이므로</p>
+    $$I_n = (n-1)\int_0^{\pi/2}\!\big(\sin^{n-2}x - \sin^n x\big)dx
+    = (n-1)\,I_{n-2} - (n-1)\,I_n.$$
+    <p>$I_n$에 대해 풀면 $n\,I_n = (n-1)I_{n-2}$, 즉 $I_n = \frac{n-1}{n}I_{n-2}$.</p>
+    <p>$I_1 = 1$에서 시작해 $I_5 = \frac{4}{5}I_3 = \frac{4}{5}\cdot\frac{2}{3}I_1
+    = \frac{8}{15}$. $\blacksquare$</p>
+    <p>(월리스 점화식 — 짝수 $n$이면 $I_1$ 대신 $I_0 = \frac{\pi}{2}$에서 시작하며,
+    이 사슬이 월리스의 $\pi$ 곱셈 공식으로 이어진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>이상적분 수렴 판정</span>
+  </div>
+  <p>다음 이상적분의 수렴·발산을 판정하라.</p>
+  <p>(1) $\displaystyle\int_1^{\infty}\frac{dx}{x^2 + 1}$ &nbsp;&nbsp;
+  (2) $\displaystyle\int_0^{1}\frac{dx}{\sqrt{x}}$ &nbsp;&nbsp;
+  (3) $\displaystyle\int_1^{\infty}\frac{x}{\sqrt{x^4 + 1}}\,dx$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 직접 계산 가능(아크탄젠트). (2) $p$-적분 $p = \frac12$. (3) 큰 $x$에서
+    피적분함수가 $\frac{x}{x^2} = \frac1x$처럼 행동 — 극한비교.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>수렴.</strong> $\int_1^b \frac{dx}{x^2+1} = \arctan b - \arctan 1
+    \to \frac{\pi}{2} - \frac{\pi}{4} = \frac{\pi}{4}$.</p>
+    <p>(2) <strong>수렴.</strong> $p$-적분 $\int_0^1 x^{-1/2}dx$, $p = \frac12 \lt 1$ →
+    수렴. 값은 $[2\sqrt{x}]_0^1 = 2$.</p>
+    <p>(3) <strong>발산.</strong> $\frac{x}{\sqrt{x^4+1}}$을 $g(x) = \frac1x$과
+    극한비교: $\lim_{x\to\infty}\frac{x/\sqrt{x^4+1}}{1/x}
+    = \lim \frac{x^2}{\sqrt{x^4+1}} = 1 \in (0,\infty)$. $\int_1^\infty \frac{dx}{x}$가
+    발산($p=1$)하므로 주어진 적분도 발산. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>개념 서술형</span>
+  </div>
+  <p>“함수가 적분가능하면 원시함수를 가진다”는 명제는 <strong>거짓</strong>임을
+  구체적 예로 보이고, 반대로 이 명제가 성립하기 위한 충분조건을 하나 제시하여
+  그 근거를 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>도약 불연속을 가진 계단 함수를 생각하라. 원시함수(=어떤 함수의 도함수)가
+    반드시 만족해야 하는 “중간값 성질”(다르부 정리)이 열쇠. 충분조건은 기본정리
+    제1형이 무엇을 보장하는지 떠올린다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>반례.</strong> $f(x) = 0\ (x \lt 0)$, $f(x) = 1\ (x \ge 0)$을
+    $[-1, 1]$에서 생각하자. $f$는 불연속점이 $x = 0$ 하나뿐이라 <strong>적분가능</strong>하다
+    (단조·유계이며 불연속이 유한 개).</p>
+    <p>그러나 $f$는 원시함수를 갖지 못한다. 만약 $F' = f$인 $F$가 있다면, 도함수는
+    <strong>다르부의 중간값 성질</strong>을 반드시 만족해야 한다 — 즉 $F'$은 두 값
+    사이의 모든 값을 취해야 한다. 그런데 $f$는 $0$과 $1$ 사이의 값(예: $\frac12$)을
+    전혀 취하지 않으므로 어떤 함수의 도함수도 될 수 없다. 모순. 따라서 원시함수는
+    존재하지 않는다.</p>
+    <p><strong>충분조건: $f$가 $[a,b]$에서 연속.</strong> 이때 기본정리 제1형에 의해
+    $F(x) = \int_a^x f(t)\,dt$가 $F' = f$를 만족하므로, $F$ 자체가 원시함수다.
+    (게다가 제2형까지 성립해 적분값도 $F(b) - F(a)$로 계산된다.) $\blacksquare$</p>
+    <p>(교훈: “적분가능”과 “원시함수 존재”는 일반적으로 독립이며, 이 둘을 한꺼번에
+    보증하는 것이 <strong>연속</strong> 가정이다. 답안에서 다르부 정리를 근거로 든 것이
+    핵심 득점 포인트.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

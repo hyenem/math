@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4장 도함수의 응용 — 미적분학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="calculus" data-chapter="ch04.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미적분학 · Spivak (11장)</p>
+  <h1><span class="ch-num">4</span> 도함수의 응용</h1>
+  <p class="ch-source">“$f'$은 그래프의 소문(所聞)이다” —
+  기울기 하나(<a class="term" data-term="derivative">도함수</a>)에서 봉우리와 골짜기,
+  구부러짐과 점근선, 그리고 함수 전체의 개형을 복원해 내는 장.</p>
+</div>
+
+<p>도함수는 3장에서 “최선의 일차 근사”로 정의됐습니다. 이 장은 그 국소 정보를
+<strong>전역 정보로 번역</strong>합니다. $f'(a)=0$이라는 한 점의 사실이 “여기가
+봉우리일 수 있다”를 말하고, $f'>0$이라는 구간의 사실이 “여기서 함수는 오른다”를
+말하며, $f''\ge0$이 “여기서 그래프는 아래로 볼록”임을 말합니다. 이 번역을
+가능케 하는 단 하나의 엔진이 <a class="term" data-term="mean-value-theorem">평균값 정리</a>이고,
+그 부산물로 로피탈 정리와 완전한 그래프 개형이 따라옵니다.</p>
+
+<h2 id="sec-extrema">1. 극값과 임계점 — 봉우리에선 접선이 눕는다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관</span>
+  <p>매끄러운 산길을 걷다 정상에 서면, 그 순간 발밑은 <strong>수평</strong>이다.
+  오르막($f'>0$)에서 내리막($f'<0$)으로 부호가 바뀌는 길목이 봉우리이고,
+  그 전환점에서 기울기는 $0$을 지난다. 이것이 “극값을 찾으려면 $f'=0$을 풀어라”의
+  전부 — 단, <strong>정상이 아니어도 발밑이 수평일 수 있다</strong>(안장·계단참)는
+  단서를 이 장 내내 조심해야 한다.</p>
+</div>
+
+<div class="box box-def" id="extremum-critical">
+  <span class="box-label">정의 · 극값과 임계점 <span class="label-en">local extremum, critical point</span></span>
+  <p>$f$가 점 $a$의 어떤 근방 안에서 $f(x)\le f(a)$이면 $a$에서 <strong>극댓값</strong>(국소 최댓값),
+  $f(x)\ge f(a)$이면 <strong>극솟값</strong>을 갖는다 한다 — 어디까지나 <em>주변에서만</em>
+  가장 높거나 낮다는 국소적 이야기다.</p>
+  <p>$f'(a)=0$이거나 $f'(a)$가 존재하지 않는 점 $a$를 $f$의 <strong>임계점</strong>이라 한다.
+  또, 폐구간에서 최댓값·최솟값처럼 <em>전 구간</em>에서 가장 크거나 작은 값을
+  <strong>최댓값·최솟값</strong>(전역 극값)이라 부른다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 페르마의 정리 <span class="label-en">Fermat's theorem</span> (스피박 11장)</span>
+  <p><strong>이 정리가 하는 일:</strong> 무한히 많은 점 중 극값 후보를 유한한
+  <em>임계점</em>으로 좁혀 준다 — “미분해서 $0$으로 놓아라”의 정당화.</p>
+  <p>$f$가 <strong>내부 점</strong> $a$에서 극값을 갖고 그 점에서 미분가능하면</p>
+  $$f'(a)=0.$$
+  <p>대우로 읽으면: 미분가능한 함수의 내부 극값은 반드시 임계점에서 일어난다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 좌·우 차분몫의 부호가 반대. 극값이면 둘 다 성립해야 하니 극한은 0.</span></summary>
+  <p>$a$가 극댓값이라 하자(극솟값은 $-f$로 환원). 근방에서 $f(x)\le f(a)$이므로
+  분자는 항상 $\le0$이다.</p>
+  <p><strong>오른쪽</strong>($x>a$): 분모 $x-a>0$이라 $\dfrac{f(x)-f(a)}{x-a}\le0$,
+  극한 $f'(a)\le0$.</p>
+  <p><strong>왼쪽</strong>($x<a$): 분모 $x-a<0$이라 $\dfrac{f(x)-f(a)}{x-a}\ge0$,
+  극한 $f'(a)\ge0$.</p>
+  <p>미분가능하므로 두 한쪽 극한이 같은 값 $f'(a)$다. $f'(a)\le0$이면서 $f'(a)\ge0$
+  이니 $f'(a)=0$. <strong>내부 점</strong>이라는 가정이 양쪽에서 다가갈 자유를 준
+  것이 핵심이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 폐구간에서 최대·최소 찾기</span>
+  <p>$f(x)=x^3-3x$를 $[-2,\,3]$에서 다룬다.
+  <a class="term" data-term="continuous-function">연속</a>함수를 폐구간에서 다루므로
+  최대·최소는 <strong>반드시 존재</strong>하고(최대최소 정리), 후보는 딱 두 종류뿐:
+  <strong>내부 임계점</strong>과 <strong>양 끝점</strong>.</p>
+  <p>$f'(x)=3x^2-3=3(x-1)(x+1)=0 \Rightarrow x=\pm1$ (둘 다 내부).
+  네 후보의 값을 비교한다:</p>
+  $$f(-2)=-2,\quad f(-1)=2,\quad f(1)=-2,\quad f(3)=18.$$
+  <p>최댓값 $18$(끝점 $x=3$), 최솟값 $-2$($x=-2$와 $x=1$에서 동시에). 내부 임계점
+  $x=-1$은 <em>극대</em>이지만 전역 최대는 아니다 — 끝점이 이겼다. “임계점만 보고
+  끝점을 잊는” 실수가 폐구간 문제의 단골 감점이다.</p>
+</div>
+
+<h2 id="sec-mvt">2. 평균값 정리 — 이 장의 심장</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관</span>
+  <p>$A$에서 $B$까지 평균 시속 $80\text{km}$로 달렸다면, 여정 어딘가에서
+  <strong>계기판이 정확히 $80$을 가리킨 순간</strong>이 반드시 있었다. 평균 변화율
+  $\frac{f(b)-f(a)}{b-a}$(현의 기울기)는, 도중 어느 한 점의 순간 변화율 $f'(c)$
+  (접선의 기울기)로 실제로 <em>실현된다</em>. 롤 정리는 이것의 “양 끝 높이가 같은”
+  특수판이고, 평균값 정리는 그래프를 기울여 얻은 일반판이다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 롤의 정리 <span class="label-en">Rolle's theorem</span> (스피박 11장)</span>
+  <p><strong>이 정리가 하는 일:</strong> 페르마의 정리를 “양 끝 높이가 같다”는 상황에
+  적용해, 내부에 수평 접선이 있음을 보장한다 — 평균값 정리의 발판.</p>
+  <p>$f$가 $[a,b]$에서 연속, $(a,b)$에서 미분가능하고 $f(a)=f(b)$이면</p>
+  $$f'(c)=0\ \text{인 } c\in(a,b)\ \text{가 존재한다.}$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 컴팩트 → 최대·최소 존재 → 내부 극값 → 페르마.</span></summary>
+  <p>$f$가 상수면 아무 $c$나 $f'(c)=0$. 상수가 아니라면, 폐구간 위 연속함수는
+  최댓값과 최솟값을 가지므로(최대최소 정리) 그중 하나는 끝값 $f(a)=f(b)$과 다르다 —
+  그 극값은 <strong>내부 점</strong> $c$에서 일어난다. 그 점에서 미분가능하므로
+  페르마의 정리로 $f'(c)=0$. <em>연속(폐구간)과 미분가능(개구간)이 정확히 어디서
+  쓰였는지</em>를 눈여겨보라.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · <a class="term" data-term="mean-value-theorem">평균값 정리</a> <span class="label-en">mean value theorem</span> (스피박 11장)</span>
+  <p><strong>이 정리가 하는 일:</strong> 국소량 $f'$과 전역량 $\frac{\Delta f}{\Delta x}$를
+  등호로 잇는다. 이 장의 거의 모든 정리(단조성 판정·볼록성·로피탈·테일러)가
+  이 한 줄의 따름정리다.</p>
+  <p>$f$가 $[a,b]$에서 연속, $(a,b)$에서 미분가능하면</p>
+  $$f(b)-f(a)=f'(c)\,(b-a)\ \text{인 } c\in(a,b)\ \text{가 존재한다.}$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 현을 빼서 “양 끝 높이 같음”을 인공적으로 만든 뒤 롤.</span></summary>
+  <p>현(직선) $L(x)=f(a)+\dfrac{f(b)-f(a)}{b-a}(x-a)$을 빼서
+  $h(x)=f(x)-L(x)$를 만들면, $h(a)=h(b)=0$이고 $h$는 가정을 그대로 물려받는다.
+  롤의 정리로 $h'(c)=0$인 $c$가 있고,
+  $h'(x)=f'(x)-\dfrac{f(b)-f(a)}{b-a}$이므로
+  $f'(c)=\dfrac{f(b)-f(a)}{b-a}$. 양변에 $(b-a)$를 곱하면 끝.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm">
+  <span class="box-label">따름정리 · 도함수 부호가 함수를 지배한다 (스피박 11장)</span>
+  <p>구간 $I$에서 $f$가 미분가능할 때, 임의의 $a&lt;b$에 평균값 정리
+  $f(b)-f(a)=f'(c)(b-a)$를 적용하면 곧바로:</p>
+  <p>① <strong>$f'\equiv0$ on $I$ $\Rightarrow$ $f$는 상수.</strong>
+  (모든 $a,b$에서 $f(b)=f(a)$.) — 원시함수가 상수 차이까지만 유일하다는,
+  <a class="term" data-term="taylor-theorem">적분</a>의 기초.<br>
+  ② <strong>$f'>0$ on $I$ $\Rightarrow$ $f$는 순증가</strong> ($f'<0$이면 순감소).
+  ($b>a$면 $f(b)-f(a)=f'(c)(b-a)>0$.)</p>
+  <p><strong>주의:</strong> ①은 <em>$I$가 구간(연결)일 때만</em> 참이다. 정의역이
+  끊겨 있으면 조각마다 다른 상수가 될 수 있다(아래 오해 상자).</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 코시의 평균값 정리 <span class="label-en">Cauchy mean value theorem</span> (스피박 11장)</span>
+  <p><strong>이 정리가 하는 일:</strong> 두 함수의 변화를 <em>동시에</em> 한 점 $c$에서
+  비교한다. 매개변수 곡선의 평균값 정리이자, 로피탈 정리를 낳는 산모.</p>
+  <p>$f,g$가 $[a,b]$에서 연속, $(a,b)$에서 미분가능하면</p>
+  $$\bigl(f(b)-f(a)\bigr)g'(c)=\bigl(g(b)-g(a)\bigr)f'(c)\ \text{인 } c\in(a,b).$$
+  <p>$g(x)=x$면 보통의 평균값 정리로 되돌아온다. $g'\neq0$이고 $g(a)\neq g(b)$이면
+  $\dfrac{f(b)-f(a)}{g(b)-g(a)}=\dfrac{f'(c)}{g'(c)}$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 두 함수를 섞어 롤이 먹는 보조함수로.</span></summary>
+  <p>$h(x)=\bigl(f(b)-f(a)\bigr)g(x)-\bigl(g(b)-g(a)\bigr)f(x)$로 두면
+  직접 대입해 $h(a)=h(b)=f(b)g(a)-g(b)f(a)$ (양쪽이 같다). 롤의 정리로
+  $h'(c)=0$인 $c$가 있고, 이를 풀면 주장식이 나온다. — 평균값 정리 증명에서
+  “현 빼기”가 여기선 “두 함수 섞기”로 일반화됐을 뿐이다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-convexity">3. 볼록성 — 그래프가 구부러지는 방향</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관</span>
+  <p>그릇 $\bigcup$ 모양처럼 <strong>현(두 점을 잇는 직선)이 그래프보다 위</strong>에
+  있으면 아래로 볼록(convex). 접선을 그으면 그래프가 접선 위로 뜬다. 볼록성은
+  “구부러지는 <em>방향</em>”이라, 기울기 자체가 아니라 <strong>기울기가 어떻게 변하는가</strong>
+  — 즉 $f'$이 증가하는지($f''\ge0$) — 로 판정된다. 봉우리·골짜기가 $f'$의 사건이라면,
+  볼록성은 $f''$의 사건이다.</p>
+</div>
+
+<div class="box box-def" id="def-convexity">
+  <span class="box-label">정의 · 볼록성과 오목성 <span class="label-en">convexity</span> (스피박 11장)</span>
+  <p>구간 $I$에서 임의의 $x&lt;y$와 $t\in(0,1)$에 대해</p>
+  $$f\bigl(tx+(1-t)y\bigr)\ \le\ t\,f(x)+(1-t)\,f(y)$$
+  <p>가 성립하면 $f$는 $I$에서 <strong>(아래로) 볼록</strong>이라 한다 — 좌변은 그래프
+  위의 점, 우변은 <strong>현 위의 점</strong>: “현이 그래프 위”의 부등식화. 부등호를
+  뒤집으면 <strong>오목</strong>(위로 볼록). 두 번 미분가능할 때의 실전 판정과
+  변곡점은 다음과 같다.</p>
+  <p>① <strong>$f$ 볼록 on $I$ $\iff$ $f'$ 증가 on $I$ $\iff$ $f''\ge0$ on $I$</strong>
+  (마지막 동치는 $f''$이 존재할 때). 오목은 부호를 전부 뒤집는다.<br>
+  ② <strong>변곡점</strong>(inflection point): 볼록에서 오목으로(또는 그 반대로)
+  <em>바뀌는</em> 점. 그 점에서 $f''$이 존재하면 $f''=0$이다.<br>
+  ③ <strong>이계도함수 판정법</strong>: $f'(a)=0$이고
+  $f''(a)>0$이면 $a$는 극소, $f''(a)<0$이면 극대. (볼록한 바닥이면 골짜기, 오목한
+  천장이면 봉우리.) $f''(a)=0$이면 <em>판정 불능</em> — 1계 판정이나 고계 도함수로
+  넘어가야 한다.</p>
+</div>
+
+<details class="proof">
+  <summary>왜 $f''\ge0 \iff$ 볼록인가 <span class="proof-strategy">— 평균값 정리로 “현의 기울기는 두 접선 기울기 사이”.</span></summary>
+  <p>$x&lt;z&lt;y$를 잡자. 평균값 정리를 $[x,z]$와 $[z,y]$에 각각 적용하면
+  $\dfrac{f(z)-f(x)}{z-x}=f'(c_1)$, $\dfrac{f(y)-f(z)}{y-z}=f'(c_2)$인
+  $c_1\in(x,z)$, $c_2\in(z,y)$가 있다.</p>
+  <p>$f''\ge0$이면 $f'$이 증가하므로 $c_1&lt;c_2$에서 $f'(c_1)\le f'(c_2)$ —
+  즉 왼쪽 현의 기울기 $\le$ 오른쪽 현의 기울기. 이 “기울기가 꺾이지 않고 는다”가
+  대수적으로 정리되면 정확히 현 위 부등식
+  $f(tx+(1-t)y)\le tf(x)+(1-t)f(y)$가 된다. 역방향은 이 부등식에서 차분몫의
+  단조성을 읽어 $f'$의 증가를, 다시 평균값 정리로 $f''\ge0$을 얻는다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 볼록성이 부등식을 낳는다 (젠센 부등식)</span>
+  <p>볼록 정의의 부등식을 $n$개 점으로 확장하면 <strong>젠센 부등식</strong>:
+  $f$가 볼록이고 $\sum t_i=1$ ($t_i\ge0$)이면</p>
+  $$f\!\left(\sum t_i x_i\right)\ \le\ \sum t_i\,f(x_i).$$
+  <p><strong>산술-기하 평균 부등식이 공짜로 나온다:</strong> $-\ln x$는 $(0,\infty)$에서
+  볼록($f''=\tfrac1{x^2}>0$). $t_i=\tfrac1n$로 젠센을 쓰면
+  $-\ln\!\big(\tfrac1n\sum x_i\big)\le -\tfrac1n\sum\ln x_i$, 정리하면</p>
+  $$\frac{x_1+\cdots+x_n}{n}\ \ge\ \sqrt[n]{x_1\cdots x_n}.$$
+  <p>“볼록성 하나가 고전 부등식의 어머니”라는 스피박식 교훈의 대표 예다.</p>
+</div>
+
+<h2 id="sec-lhopital">4. 로피탈 정리와 그래프 개형</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관</span>
+  <p>$\frac{f(x)}{g(x)}$가 $x\to a$에서 $\frac00$이 된다는 건, 두 함수가 같은 지점에서
+  동시에 $0$으로 <em>가라앉는다</em>는 뜻. 그렇다면 승부는 <strong>가라앉는 속도의 비</strong>,
+  즉 기울기의 비 $\frac{f'}{g'}$로 결정된다. 코시의 평균값 정리가 바로 이 “비의
+  비교”를 한 점에서 실현해 주기에, 로피탈 정리는 그 직접적 따름정리가 된다.</p>
+</div>
+
+<div class="box box-thm" id="def-lhopital-rule">
+  <span class="box-label">정리 · 로피탈 정리 <span class="label-en">L'Hôpital's rule</span> (스피박 11장)</span>
+  <p><strong>이 정리가 하는 일:</strong> 극한이 계산되지 않는 부정형
+  $\frac00,\frac{\infty}{\infty}$를 <em>도함수의 극한</em>이라는 더 쉬운 문제로 바꾼다.</p>
+  <p>$x\to a$에서 $f(x)\to0,\ g(x)\to0$ (또는 둘 다 $\pm\infty$)이고, $a$ 근방에서
+  $g'\neq0$이며 $\displaystyle\lim_{x\to a}\frac{f'(x)}{g'(x)}=L$ (유한 또는 $\pm\infty$)이
+  존재하면</p>
+  $$\lim_{x\to a}\frac{f(x)}{g(x)}=\lim_{x\to a}\frac{f'(x)}{g'(x)}=L.$$
+  <p>$a$가 $\pm\infty$거나 한쪽 극한이어도 성립한다. $0\cdot\infty,\ \infty-\infty,\
+  1^\infty,\ 0^0,\ \infty^0$ 같은 다른 부정형은 <strong>대수 변형·로그</strong>로
+  $\frac00$ 또는 $\frac\infty\infty$로 바꾼 뒤 적용한다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 ($\tfrac00$, 유한 $a$) <span class="proof-strategy">— 코시 평균값 정리 한 방.</span></summary>
+  <p>$f(a)=g(a)=0$으로 (필요하면 재정의해) 두면 $f,g$는 $a$에서 연속.
+  $x>a$가 $a$에 충분히 가까우면 코시의 평균값 정리를 $[a,x]$에 적용:</p>
+  $$\frac{f(x)}{g(x)}=\frac{f(x)-f(a)}{g(x)-g(a)}=\frac{f'(c_x)}{g'(c_x)},
+  \quad c_x\in(a,x).$$
+  <p>(분모 $g(x)\neq0$은 $g'\neq0$과 롤의 정리로 보장된다.) $x\to a^+$이면
+  $a&lt;c_x&lt;x$라 $c_x\to a$이고, 가정에 의해 $\dfrac{f'(c_x)}{g'(c_x)}\to L$.
+  왼쪽 극한도 같은 논법. 따라서 $\dfrac{f(x)}{g(x)}\to L$. $\frac\infty\infty$와
+  $a=\infty$ 경우는 변형이 더 들지만 골격은 같다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 로피탈 가동 (그리고 오용 경계)</span>
+  <p><strong>(a)</strong> $\displaystyle\lim_{x\to0}\frac{1-\cos x}{x^2}
+  \overset{\frac00}{=}\lim_{x\to0}\frac{\sin x}{2x}
+  \overset{\frac00}{=}\lim_{x\to0}\frac{\cos x}{2}=\frac12.$ (두 번 적용.)</p>
+  <p><strong>(b)</strong> $0\cdot\infty$를 분수로: $\displaystyle\lim_{x\to0^+}x\ln x
+  =\lim_{x\to0^+}\frac{\ln x}{1/x}\overset{\frac{-\infty}{\infty}}{=}
+  \lim_{x\to0^+}\frac{1/x}{-1/x^2}=\lim_{x\to0^+}(-x)=0.$</p>
+  <p><strong>(c) 오용 경계:</strong>
+  $\displaystyle\lim_{x\to0}\frac{x+\cos x}{x+1}$는 $\frac{0+1}{0+1}=1$ —
+  <em>부정형이 아니다</em>. 여기서 무심코 미분하면
+  $\frac{1-\sin x}{1}\to1$로 우연히 답은 맞지만, 일반적으로 그렇지 않다(예:
+  $\frac{x+2}{x+1}\to2$인데 도함수 비는 $1$). <strong>“$\frac00$/$\frac\infty\infty$
+  확인”이 첫 단계</strong>임을 잊지 말 것.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 그래프 개형 총정리 &mdash; $f(x)=x\,e^{-x}$</span>
+  <p>$f'$(증감·극값), $f''$(볼록·변곡), 극한(점근선)을 한자리에 모은다.</p>
+  <p><strong>1계:</strong> $f'(x)=(1-x)e^{-x}$. $e^{-x}>0$이라 부호는 $1-x$가 결정 —
+  $x&lt;1$ 증가, $x>1$ 감소. 임계점 $x=1$은 <strong>극대</strong>, 극댓값 $f(1)=1/e$.</p>
+  <p><strong>2계:</strong> $f''(x)=(x-2)e^{-x}$. $x&lt;2$ 오목, $x>2$ 볼록.
+  $x=2$는 <strong>변곡점</strong>, $f(2)=2/e^2$. (이계도함수 판정도 일치:
+  $f''(1)=-e^{-1}&lt;0$이라 $x=1$은 극대.)</p>
+  <p><strong>점근선(로피탈):</strong>
+  $\displaystyle\lim_{x\to\infty}\frac{x}{e^{x}}\overset{\frac\infty\infty}{=}
+  \lim_{x\to\infty}\frac{1}{e^{x}}=0$이라 오른쪽에서 $y=0$이 <strong>수평 점근선</strong>.
+  반대로 $x\to-\infty$면 $e^{-x}\to\infty$이고 $x\to-\infty$라 $f\to-\infty$.</p>
+  <p><strong>종합 개형:</strong> 왼쪽 아래 $-\infty$에서 올라와 $x=1$에서 봉우리
+  $1/e$를 찍고, $x=2$에서 구부러짐이 바뀌며(오목→볼록) 완만히 내려가 $x$축
+  ($y=0$)에 위에서 달라붙는다. — $f',f'',\lim$ 세 정보의 합성이 손그림 하나를
+  완성한다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>임계점 $\neq$ 극값.</strong> $f(x)=x^3$은 $f'(0)=0$이지만 $x=0$은
+  극값이 아니다(계속 증가, 안장 같은 계단참). 페르마는 “극값 $\Rightarrow$ 임계점”
+  <em>일방통행</em>이다. 극값 확정엔 1계 부호변화 또는 2계 판정이 더 필요하다.<br>
+  ② <strong>평균값 정리의 가설을 통째로.</strong> “폐구간 연속 + 개구간 미분”
+  둘 다 필요하다. $f(x)=|x|$는 $[-1,1]$ 연속이나 $0$에서 미분 불가라 결론
+  ($f'(c)=0$)이 깨진다. 또 따름정리 “$f'\equiv0\Rightarrow$ 상수”는
+  <em>정의역이 구간</em>일 때만 — $\tan^{-1}x+\tan^{-1}\tfrac1x$는 도함수가 $0$이지만
+  $x>0$에서 $\tfrac\pi2$, $x&lt;0$에서 $-\tfrac\pi2$로 <strong>두 값</strong>을 갖는다
+  (정의역이 끊겨서).<br>
+  ③ <strong>로피탈 오남용.</strong> (ⅰ) 부정형이 아닐 때 적용 금지(위 예제 c).
+  (ⅱ) <em>순환 논법</em> 주의 — $\lim_{x\to0}\frac{\sin x}{x}$에 로피탈을 쓰면
+  $\frac{\cos x}{1}\to1$이지만, 이 “$\sin$의 미분이 $\cos$”이라는 사실 자체가 종종
+  이 극한으로 증명되므로 순환이다. (ⅲ) $\lim\frac{f'}{g'}$이 <em>존재해야</em>
+  결론이 나온다 — 도함수 비가 진동하면(예 $\frac{x+\sin x}{x}$) 로피탈은 무력하고
+  원래 극한은 다른 방법으로 $1$임을 봐야 한다.<br>
+  ④ <strong>$f''(a)=0$이 변곡점을 보장하지 않는다.</strong> $f(x)=x^4$은
+  $f''(0)=0$이지만 $x=0$ 양쪽 모두 볼록($f''=12x^2\ge0$) — 변곡점이 아니다.
+  변곡점은 $f''$이 실제로 <em>부호를 바꿔야</em> 한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">4장의 줄거리</span>
+  <p><strong>페르마</strong>(내부 극값 $\Rightarrow f'=0$)로 극값 후보를 임계점으로
+  좁히고 &mdash; <strong>롤 $\to$ <a class="term" data-term="mean-value-theorem">평균값 정리</a></strong>가
+  국소 $f'$과 전역 $\frac{\Delta f}{\Delta x}$를 등호로 이어
+  <em>부호 판정</em>($f'>0\Rightarrow$증가, $f'\equiv0\Rightarrow$상수)을 낳는다
+  &mdash; 한 단계 위 <strong><a class="term" data-term="convexity">볼록성</a></strong>은
+  $f''$의 부호($f''\ge0\iff$볼록), 변곡점($f''$ 부호 전환), 2계 극값 판정을 준다
+  &mdash; <strong>코시 평균값 정리</strong>가 <a class="term" data-term="lhopital-rule">로피탈 정리</a>
+  ($\frac00,\frac\infty\infty$를 $\frac{f'}{g'}$로)를 낳고, 마지막에
+  $f'$·$f''$·점근선을 합쳐 <strong>그래프 개형</strong>이 완성된다.</p>
+  <p><strong>해석학과의 다리:</strong> 여기서 이름으로 익힌 평균값 정리는 루딘 5장에서
+  그대로 재등장하고, 그 확장인 <a class="term" data-term="taylor-theorem">테일러 정리</a>가
+  “고계 도함수로 함수를 다항식 근사”하는 다음 이야기의 출발점이 된다. 임용에서
+  최빈출 축은 <strong>평균값 정리 서술형 증명 · 부등식 증명 · 그래프 개형</strong>이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<p>개념 확인(●●○)부터 서술형(●●●)까지. <strong>Spivak 연습 유형</strong>은 교재
+문제의 결을, <strong>임용 스타일</strong>은 기출 서술형의 결을 따른 자체 제작
+문제입니다.</p>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$f(x)=x^3-3x^2+1$의 극값을 1계·2계 판정으로 모두 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$f'=3x(x-2)$로 임계점을 찾고, $f''=6x-6$의 부호로 극대·극소를 가려라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f'(x)=3x^2-6x=3x(x-2)=0 \Rightarrow x=0,\,2$ (임계점).</p>
+    <p>$f''(x)=6x-6$. <strong>2계 판정:</strong> $f''(0)=-6&lt;0$이라 $x=0$은
+    <strong>극대</strong>, 극댓값 $f(0)=1$. $f''(2)=6>0$이라 $x=2$는
+    <strong>극소</strong>, 극솟값 $f(2)=8-12+1=-3$.</p>
+    <p>(1계 판정으로도 확인: $f'$의 부호가 $x=0$에서 $+\!\to\!-$, $x=2$에서
+    $-\!\to\!+$. 전역 극값은 아니다 — $x\to\pm\infty$에서 $f\to\pm\infty$.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$f(x)=x^4-6x^2$의 볼록·오목 구간과 변곡점을 구하라. 이 문제에서
+  $f''=0$인 점이 정말 변곡점인지 확인하고, 왜 $x^4$의 경우와 다른지 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$f''=12x^2-12=12(x-1)(x+1)$. 변곡점의 조건은 $f''=0$이 아니라 $f''$의
+    <strong>부호 전환</strong>.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f''(x)=12x^2-12=12(x-1)(x+1)$.
+    부호: $x&lt;-1$ 양(볼록), $-1&lt;x&lt;1$ 음(오목), $x>1$ 양(볼록).</p>
+    <p>$x=\pm1$에서 $f''$이 <strong>부호를 바꾸므로</strong> 둘 다 변곡점,
+    $f(\pm1)=1-6=-5$. — 여기선 $f''=0$이 변곡점을 주었다.</p>
+    <p><strong>$x^4$와의 대조:</strong> $x^4$은 $f''=12x^2$이 $x=0$에서 $0$이지만
+    양쪽 모두 $\ge0$ — 부호가 안 바뀌어 변곡점이 아니다. 즉 “$f''=0$”은 변곡점의
+    <em>필요조건일 뿐</em>, 부호 전환이 실제 판정 기준이다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$0&lt;a&lt;b$일 때 평균값 정리로</p>
+  $$\frac{b-a}{b}\ &lt;\ \ln\frac{b}{a}\ &lt;\ \frac{b-a}{a}$$
+  <p>를 증명하고, 이로부터 $\dfrac{1}{n+1}&lt;\ln\!\Big(1+\dfrac1n\Big)&lt;\dfrac1n$을
+  이끌어내라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$f(x)=\ln x$에 $[a,b]$에서 평균값 정리. $f'=1/x$이 감소함수라
+    $a&lt;c&lt;b \Rightarrow \frac1b&lt;\frac1c&lt;\frac1a$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f(x)=\ln x$는 $[a,b]$에서 연속·미분가능. 평균값 정리로
+    $\ln b-\ln a=\dfrac{1}{c}(b-a)$인 $c\in(a,b)$가 존재.
+    좌변 $=\ln\frac{b}{a}$이고, $a&lt;c&lt;b$에서 $\dfrac1b&lt;\dfrac1c&lt;\dfrac1a$.
+    $(b-a)>0$을 곱하면</p>
+    $$\frac{b-a}{b}&lt;\frac{b-a}{c}=\ln\frac{b}{a}&lt;\frac{b-a}{a}.\qquad\blacksquare$$
+    <p><strong>따름:</strong> $a=n,\ b=n+1$을 대입하면 $b-a=1$이고 $\frac{b}{a}=1+\frac1n$,
+    바로 $\dfrac1{n+1}&lt;\ln\!\big(1+\tfrac1n\big)&lt;\dfrac1n$.
+    (이 부등식을 $n$에 대해 합하면 조화급수와 $\ln n$의 차가 유계임 — 오일러
+    상수의 존재 — 로 이어진다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 극한을 구하라(부정형 확인부터).</p>
+  <p>(1) $\displaystyle\lim_{x\to0}\frac{\sin x-x}{x^3}$ &nbsp;
+  (2) $\displaystyle\lim_{x\to\infty}\frac{x}{e^{x}}$ &nbsp;
+  (3) $\displaystyle\lim_{x\to0^+}x^{x}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $\frac00$을 반복. (3) $x^x=e^{x\ln x}$로 바꾸고 지수의 극한(예제 b)을 활용.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\frac00$ 세 번:
+    $\dfrac{\sin x-x}{x^3}\to\dfrac{\cos x-1}{3x^2}\to\dfrac{-\sin x}{6x}
+    \to\dfrac{-\cos x}{6}=-\dfrac16.$</p>
+    <p>(2) $\frac\infty\infty$: $\dfrac{x}{e^x}\to\dfrac{1}{e^x}\to0.$
+    (다항식은 지수함수에 진다.)</p>
+    <p>(3) $x^x=e^{x\ln x}$. 예제 (b)에서 $x\ln x\to0$ ($x\to0^+$), 지수함수의
+    연속성으로 $x^x\to e^0=1.$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>따름정리 서술 증명</span>
+  </div>
+  <p>구간 $I$에서 미분가능한 $f$에 대해 다음을 평균값 정리로 증명하라.
+  (1) $I$에서 $f'\equiv0$이면 $f$는 상수. (2) $I$에서 $f'>0$이면 $f$는 순증가.
+  또 (1)에서 <strong>“$I$가 구간”이라는 조건이 왜 필요한지</strong> 반례로 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>임의의 $a&lt;b$ ($a,b\in I$)에 평균값 정리를 적용. 반례는 정의역이
+    <em>끊긴</em> 함수에서 찾아라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1)</strong> 임의의 $a&lt;b$ ($a,b\in I$). $I$가 구간이라 $[a,b]\subseteq I$이고
+    가정으로 $f$는 여기서 연속·미분가능. 평균값 정리:
+    $f(b)-f(a)=f'(c)(b-a)=0\cdot(b-a)=0$, 즉 $f(b)=f(a)$. $a,b$가 임의이므로
+    $f$는 $I$에서 상수. $\blacksquare$</p>
+    <p><strong>(2)</strong> $a&lt;b$이면 같은 방식으로
+    $f(b)-f(a)=f'(c)(b-a)$, 여기서 $f'(c)>0$, $b-a>0$이라 $f(b)-f(a)>0$,
+    즉 $f(b)>f(a)$: 순증가. $\blacksquare$</p>
+    <p><strong>구간 조건의 필요성:</strong> 정의역 $D=(0,1)\cup(2,3)$ 위에서
+    $f=1$ (첫 조각), $f=2$ (둘째 조각)로 두면 $f'\equiv0$이지만 $f$는 상수가 아니다.
+    증명이 깨지는 지점은 “두 조각에 걸친 $a,b$에 대해 $[a,b]\subseteq D$”가
+    성립하지 않는 것 — 평균값 정리를 적용할 폐구간이 정의역 안에 없다.
+    ($\arctan x+\arctan\frac1x$도 같은 현상의 매끄러운 예다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>정리 증명 서술</span>
+  </div>
+  <p>코시의 평균값 정리를 서술하고, 이를 이용해 로피탈 정리($\tfrac00$형, 유한
+  $a$)를 증명하라. 증명에서 <strong>각 가설이 어디서 쓰이는지</strong> 명시하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$f(a)=g(a)=0$으로 두고 $[a,x]$에 코시 평균값 정리. 분모 $g(x)\neq0$은
+    롤의 정리로 확보.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>코시의 평균값 정리:</strong> $f,g$가 $[a,b]$ 연속, $(a,b)$ 미분가능하면
+    $\big(f(b)-f(a)\big)g'(c)=\big(g(b)-g(a)\big)f'(c)$인 $c\in(a,b)$가 존재한다.</p>
+    <p><strong>로피탈($\tfrac00$) 증명:</strong> $x\to a$에서 $f,g\to0$이고
+    $a$ 근방에서 $g'\neq0$, $\lim_{x\to a}\frac{f'}{g'}=L$이라 하자. $f,g$를
+    $a$에서 값 $0$으로 (재)정의하면 $a$에서 연속이 되어 $f(a)=g(a)=0$.</p>
+    <p>$a$에 가까운 $x>a$를 잡아 $[a,x]$에 코시 평균값 정리를 쓰면 어떤
+    $c_x\in(a,x)$에 대해</p>
+    $$\frac{f(x)}{g(x)}=\frac{f(x)-f(a)}{g(x)-g(a)}=\frac{f'(c_x)}{g'(c_x)}.$$
+    <p>여기서 <em>연속(폐구간)·미분가능(개구간)</em> 가설이 코시 정리 적용에,
+    <em>$g'\neq0$</em>이 (롤의 정리로) $g(x)\neq g(a)=0$ 즉 분모가 $0$이 아님을
+    보장하는 데 쓰였다. $x\to a^+$이면 $a&lt;c_x&lt;x$라 $c_x\to a$이고, 가정
+    <em>$\lim\frac{f'}{g'}=L$의 존재</em>로 $\frac{f'(c_x)}{g'(c_x)}\to L$.
+    왼쪽 극한도 대칭적으로 같으므로 $\displaystyle\lim_{x\to a}\frac{f(x)}{g(x)}=L$.
+    $\blacksquare$</p>
+    <p>(보태기: $\lim\frac{f'}{g'}$이 존재하지 않으면 결론이 무효 — 로피탈은
+    <em>충분조건</em>이지 동치가 아니다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ “Spivak 연습 유형”·“임용 스타일” 배지는 교재·기출의 결을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

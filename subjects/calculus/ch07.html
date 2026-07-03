@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7장 무한급수와 테일러 정리 — 미적분학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="calculus" data-chapter="ch07.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미적분학 · Spivak (22–24장)</p>
+  <h1><span class="ch-num">7</span> 무한급수와 테일러 정리</h1>
+  <p class="ch-source">“무한히 더한다”가 무슨 뜻인지 정의하고, 그 도구로
+  $e^x$·$\sin x$·$\ln(1+x)$를 다항식의 극한으로 다시 짓는 —
+  스피박 미적분의 피날레.</p>
+</div>
+
+<p>$1 + \tfrac12 + \tfrac14 + \tfrac18 + \cdots = 2$. 이 등식은 “무한히 더했더니
+정확히 $2$가 되더라”가 아니라 <strong>“부분합 $1, \tfrac32, \tfrac74, \dots$가 $2$로
+수렴한다”의 줄임말</strong>입니다. 무한합은 그 자체로 새로운 연산이 아니라,
+지금까지 배운 <em>극한</em>을 한 번 더 쓰는 것 — 이 장의 첫 단추이자 마지막
+정신입니다. 극한을 이해하면 급수의 수렴 판정이 따라오고, 급수를 손에 넣으면
+함수 자체를 “무한 차 다항식”으로 표현하는 <strong>테일러 급수</strong>에 도달합니다.
+미적분이 접선(1차 근사)에서 시작해 곡선 전체를 다항식으로 붙잡는 데서 끝나는,
+그 마지막 도약입니다.</p>
+
+<h2 id="sec-series">1. 수열과 급수 — 무한합은 부분합의 극한이다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 무한합의 정의</span>
+  <p>수열 $\{a_n\}$의 <strong>급수</strong>
+  <a class="term" data-term="series">$\sum a_n$</a>은
+  <strong>부분합</strong> $s_N = a_1 + a_2 + \cdots + a_N$이 만드는 새 수열
+  $\{s_N\}$을 말한다. 이 부분합 수열이 어떤 값 $s$로
+  <a class="term" data-term="convergent-sequence">수렴</a>하면
+  $\sum a_n = s$ ($s$에 수렴)라 하고, 발산하면 급수가 발산한다고 한다.</p>
+  <p>즉 “무한개를 더한다”는 물리적 작업이 아니라, <strong>유한합의 극한</strong>이라는
+  이미 정의된 개념일 뿐이다 — 새 규칙은 없다.</p>
+</div>
+
+<div class="box box-thm" id="thm-geometric">
+  <span class="box-label">정리 · 기하급수와 발산 필요조건 <span class="label-en">geometric series, $n$-th term test</span> (스피박 23장)</span>
+  <p><strong>기하급수:</strong> $|r| \lt 1$이면
+  $$\sum_{n=0}^{\infty} r^n = \frac{1}{1-r},$$
+  이는 부분합 공식 $s_N = \dfrac{1-r^{N+1}}{1-r}$에서 $r^{N+1} \to 0$으로 얻는다.
+  $|r| \ge 1$이면 발산. — 모든 판정법이 결국 되돌아가는 “원점 급수”다.</p>
+  <p><strong>필요조건:</strong> $\sum a_n$이 수렴하면 반드시 $a_n \to 0$
+  ($a_n = s_n - s_{n-1} \to s - s = 0$). <strong>역은 거짓</strong>: 조화급수
+  $$\sum \frac{1}{n} = 1 + \tfrac12 + \tfrac13 + \cdots$$
+  은 $a_n = \tfrac1n \to 0$이지만 <strong>발산</strong>한다
+  ($2^k$개씩 묶으면 각 묶음이 $\ge \tfrac12$ — 오렘의 고전 논증).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">첫 번째 함정 — $a_n \to 0$은 “필요”일 뿐</span>
+  <p>실전 실수 1위: “$a_n \to 0$이니까 수렴”. 조화급수가 영원한 반례다.
+  $a_n \not\to 0$이면 <strong>즉시 발산</strong>이라 결론할 수 있지만
+  (대우), $a_n \to 0$은 아무것도 보장하지 않는다 — 여기서부터 진짜 판정법이
+  필요해진다.</p>
+</div>
+
+<h2 id="sec-tests">2. 수렴 판정법 — 극한값을 몰라도 판정한다</h2>
+
+<p>대부분의 급수는 정확한 합을 모른다. 목표는 바뀐다: <em>합이 얼마인가</em>가 아니라
+<em>합이 존재하는가</em>. 아래 도구들은 그 존재 여부만 판정한다.</p>
+
+<div class="box box-thm" id="def-series-convergence-tests">
+  <span class="box-label">정리 · 급수의 수렴 판정법 <span class="label-en">convergence tests</span> (스피박 23장)</span>
+  <p><strong>① 비교판정법.</strong> $0 \le a_n \le b_n$일 때:
+  $\sum b_n$ 수렴 $\Rightarrow \sum a_n$ 수렴; $\sum a_n$ 발산 $\Rightarrow \sum b_n$ 발산.
+  (모든 판정의 어머니 — 모르는 급수를 아는 급수에 가둔다.)</p>
+  <p><strong>② 극한비교판정법.</strong> $a_n, b_n \gt 0$이고
+  $\displaystyle\lim_{n\to\infty}\frac{a_n}{b_n} = L \in (0, \infty)$이면
+  $\sum a_n$과 $\sum b_n$은 <strong>운명을 공유</strong>한다 (동시 수렴/발산).
+  차수만 비교하면 되므로 실전에서 가장 빠르다:
+  $\sum \frac{2n+1}{n^3+5}$은 $\sum \frac1{n^2}$과 같은 운명 → 수렴.</p>
+  <p><strong>③ 비율판정법.</strong> $\displaystyle L = \lim \left|\frac{a_{n+1}}{a_n}\right|$일 때
+  $L \lt 1$ 절대수렴, $L \gt 1$ 발산, $L = 1$ <strong>판정 불가</strong>.
+  팩토리얼·거듭제곱이 섞이면 1순위 도구.</p>
+  <p><strong>④ 근판정법.</strong> $\displaystyle L = \limsup \sqrt[n]{|a_n|}$일 때 위와 동일한
+  결론. 비율판정보다 이론상 더 강하지만($L=1$의 회색지대가 더 좁다) 계산은 대개 더 무겁다.</p>
+  <p><strong>⑤ 적분판정법.</strong> $f$가 양수·감소·연속이고 $a_n = f(n)$이면
+  $$\sum_{n=1}^{\infty} a_n \ \text{수렴} \iff \int_1^{\infty} f(x)\,dx \ \text{수렴}.$$
+  이것이 <strong>$p$-급수</strong>를 단칼에 정리한다: $\sum \frac1{n^p}$은 $p \gt 1$에서만 수렴
+  (조화급수 $p=1$의 발산이 그 경계).</p>
+  <p><strong>⑥ 교대급수 판정법 (라이프니츠).</strong> $b_n \gt 0$이 <strong>단조감소</strong>하고
+  $b_n \to 0$이면 $\sum (-1)^{n+1} b_n$은 수렴하고, 오차는 첫 버린 항으로 눌린다:
+  $|s - s_N| \le b_{N+1}$. 대표: 교대조화급수 $1 - \tfrac12 + \tfrac13 - \cdots = \ln 2$.</p>
+  <p style="border-top:1px solid var(--rule,#ccc); padding-top:.5em;">
+  <strong>절대수렴 ⇒ 수렴.</strong>
+  <a class="term" data-term="absolute-convergence">$\sum|a_n|$</a>이 수렴하면 $\sum a_n$도 수렴한다
+  ($\pm$부호가 상쇄를 도울 뿐 방해하지 않는다; 증명은 비교판정법 한 줄).
+  수렴하지만 절대수렴은 아닌 급수를 <strong>조건수렴</strong>이라 한다 —
+  교대조화급수가 대표. 이 구분이 다음 함정의 씨앗이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 판정법 고르기</span>
+  <p><strong>(a)</strong> $\displaystyle\sum \frac{n!}{n^n}$ — 비율판정:
+  $\dfrac{a_{n+1}}{a_n} = \dfrac{(n+1)!}{(n+1)^{n+1}}\cdot\dfrac{n^n}{n!}
+  = \left(\dfrac{n}{n+1}\right)^n \to \dfrac1e \lt 1$ → <strong>수렴</strong>.</p>
+  <p><strong>(b)</strong> $\displaystyle\sum \frac{1}{n\ln n}$ — 비교·비율 모두 침묵($L=1$).
+  적분판정: $\int_2^\infty \frac{dx}{x\ln x} = [\ln\ln x]_2^\infty = \infty$ → <strong>발산</strong>
+  (조화급수보다 “아슬아슬하게” 발산).</p>
+  <p><strong>(c)</strong> $\displaystyle\sum \frac{(-1)^{n+1}}{\sqrt n}$ — $b_n = \tfrac1{\sqrt n}\downarrow 0$
+  이므로 라이프니츠로 <strong>수렴</strong>. 그러나 $\sum \tfrac1{\sqrt n}$($p=\tfrac12$)은
+  발산 → <strong>조건수렴</strong>.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">두 번째 함정 — 조건수렴은 순서에 목숨을 건다 (리만 재배열)</span>
+  <p>절대수렴 급수는 항의 순서를 아무리 바꿔도 합이 불변이다(유한합처럼 얌전하다).
+  그러나 <strong>조건수렴 급수는 재배열하면 합이 바뀐다</strong> —
+  <strong>리만 재배열 정리</strong>: 조건수렴 급수는 항의 순서를 적절히 바꿔
+  <em>임의의 실수</em>로, 심지어 $\pm\infty$로도 수렴시킬 수 있다.
+  교대조화급수($=\ln 2$)를 재배열해 합을 $\tfrac12\ln 2$로 만드는 고전 예가 있다.
+  “무한합에는 결합·교환법칙이 공짜가 아니다” — 절대수렴만이 그 자유를 준다.</p>
+</div>
+
+<h2 id="sec-powerseries">3. 멱급수 — 함수를 만드는 급수</h2>
+
+<div class="box box-thm" id="thm-power-series">
+  <span class="box-label">정리 · 멱급수와 수렴반지름 <span class="label-en">power series, radius of convergence</span> (스피박 24장)</span>
+  <p><a class="term" data-term="power-series">멱급수</a>
+  $$f(x) = \sum_{n=0}^{\infty} c_n (x-a)^n$$
+  은 $x$가 변수인 급수다 — 각 $x$마다 수렴/발산이 갈린다. 그 경계는 언제나
+  <strong>대칭 구간</strong>이다: <strong>수렴반지름</strong>
+  $$R = \frac{1}{\displaystyle\limsup_{n\to\infty}\sqrt[n]{|c_n|}}
+  \qquad\Bigl(\text{또는 } R = \lim\Bigl|\tfrac{c_n}{c_{n+1}}\Bigr|\ \text{존재 시}\Bigr)$$
+  이 있어 $|x-a| \lt R$이면 <strong>절대수렴</strong>, $|x-a| \gt R$이면 발산,
+  경계 $|x-a| = R$에서는 <strong>개별 판정</strong>(판정법이 침묵).</p>
+  <p><strong>항별 미분·적분:</strong> 수렴반지름 안에서 멱급수는 몇 번이든 미분·적분할 수 있고,
+  그것을 <strong>항별로</strong> 해도 된다 — 그리고 수렴반지름은 변하지 않는다:
+  $$f'(x) = \sum_{n=1}^{\infty} n\,c_n (x-a)^{n-1},\qquad
+  \int f = C + \sum_{n=0}^{\infty} \frac{c_n}{n+1}(x-a)^{n+1}.$$
+  (“무한합과 미분/적분의 교환” — 유한합에선 당연하지만 무한합에선 특권이며,
+  멱급수가 그 특권을 누린다. 해석학에서 <em>균등수렴</em>이 그 정당화의 열쇠임을 배운다.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 반지름과 경계</span>
+  <p><strong>(a)</strong> $\displaystyle\sum \frac{x^n}{n}$: $\lim\bigl|\tfrac{c_n}{c_{n+1}}\bigr| = \lim\tfrac{n+1}{n} = 1$
+  → $R = 1$. 경계 확인 — $x = 1$: 조화급수 <strong>발산</strong>; $x = -1$: 교대조화급수
+  <strong>수렴</strong>. 같은 반지름의 두 끝이 정반대로 갈린다.</p>
+  <p><strong>(b)</strong> $\displaystyle\sum \frac{x^n}{n!}$: $\bigl|\tfrac{c_n}{c_{n+1}}\bigr| = n+1 \to \infty$
+  → $R = \infty$. 모든 실수에서 수렴 (이것이 $e^x$).</p>
+  <p><strong>(c)</strong> $\displaystyle\sum n!\,x^n$: $\bigl|\tfrac{c_n}{c_{n+1}}\bigr| = \tfrac1{n+1} \to 0$
+  → $R = 0$. $x = 0$ 외에는 전부 발산 — 멱급수가 함수를 못 만드는 경우.</p>
+</div>
+
+<h2 id="sec-taylor">4. 테일러 정리 — 함수를 다항식의 극한으로</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 1차 근사에서 $n$차 근사로</span>
+  <p>접선 $f(a) + f'(a)(x-a)$는 $f$의 <strong>최선의 1차 근사</strong>였다(3장).
+  테일러의 아이디어: <strong>$n$차 도함수까지 맞춰 최선의 $n$차 근사</strong>를 만들자.
+  그 다항식이 <strong>테일러 다항식</strong>
+  $$P_n(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k$$
+  이고, $P_n$은 $x = a$에서 $f$와 값·1계·…·$n$계 도함수가 모두 일치한다.
+  남는 질문은 하나 — <strong>얼마나 정확한가?</strong> 그 오차를 정량화하는 것이
+  테일러 정리다.</p>
+</div>
+
+<div class="box box-thm" id="def-taylor-remainder">
+  <span class="box-label">정리 · 테일러 정리와 나머지항 <span class="label-en">Taylor's theorem with remainder</span> (스피박 20·24장)</span>
+  <p>$f$가 $a$를 포함하는 구간에서 $n+1$번 미분가능하면, 각 $x$에 대해
+  $$f(x) = \underbrace{\sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k}_{P_n(x)} \;+\; R_n(x),$$
+  이고 <strong>라그랑주 나머지</strong>는 $a$와 $x$ 사이의 어떤 $\xi$에 대해
+  $$R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}\,(x-a)^{n+1}.$$
+  ($n = 0$이면 평균값 정리 그 자체 — 테일러 정리는 <strong>MVT의 고차 일반화</strong>다.)</p>
+  <p><strong>테일러 급수로 가는 다리:</strong> 만약 어떤 $x$에서
+  $R_n(x) \to 0$ ($n \to \infty$)이면, 그 점에서
+  <a class="term" data-term="taylor-theorem">테일러 급수</a>
+  $$\sum_{k=0}^{\infty} \frac{f^{(k)}(a)}{k!}(x-a)^k$$
+  가 <strong>$f(x)$로 수렴</strong>한다. 나머지를 $0$으로 몰아넣는 일 —
+  그것이 “함수를 급수로 표현한다”의 실제 내용이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 롤 정리의 고차 연쇄: 상수 $M$을 오차가 딱 $0$이 되게 잡고, 보조함수에 롤을 $n{+}1$번.</span></summary>
+  <p>$x$를 고정하고 $M$을 $f(x) = P_n(x) + M(x-a)^{n+1}$이 되도록 정의한다.
+  보조함수 $g(t) = f(t) - P_n(t;\,\text{중심 }a) - M(t-a)^{n+1}$를 보면
+  $g(a) = g'(a) = \cdots = g^{(n)}(a) = 0$이고 $g(x) = 0$이다.</p>
+  <p>$g(a) = g(x) = 0$에 롤 정리 → $g'(\xi_1) = 0$인 $\xi_1$. 다시 $g'(a) = g'(\xi_1) = 0$에
+  롤 → $g''(\xi_2) = 0$. 이를 반복하면 $g^{(n+1)}(\xi) = 0$인 $\xi$가 $a$와 $x$ 사이에 있다.
+  그런데 $P_n$은 $n$차라 $(n+1)$계 도함수가 $0$이고, $(t-a)^{n+1}$의 $(n+1)$계는 $(n+1)!$이므로
+  $$0 = g^{(n+1)}(\xi) = f^{(n+1)}(\xi) - M\,(n+1)! \ \Rightarrow\ M = \frac{f^{(n+1)}(\xi)}{(n+1)!}.$$
+  이 $M$을 도로 넣으면 라그랑주 나머지 공식이다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 네 개의 고전 전개</span>
+  <p>중심 $a = 0$ (매클로린)에서, 나머지 $R_n \to 0$을 확인해 얻는 표준 급수:</p>
+  <p><strong>① 지수함수</strong> (모든 $x$, $R = \infty$):
+  $\displaystyle e^x = \sum_{n=0}^{\infty}\frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} + \cdots$
+  &nbsp;— $f^{(n+1)} = e^\xi$이 유계라 $R_n = \frac{e^\xi}{(n+1)!}x^{n+1} \to 0$.</p>
+  <p><strong>② 사인</strong> (모든 $x$):
+  $\displaystyle \sin x = \sum_{n=0}^{\infty}\frac{(-1)^n x^{2n+1}}{(2n+1)!}
+  = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots$
+  &nbsp;($|f^{(n+1)}| \le 1$이 나머지를 눌러 줌).</p>
+  <p><strong>③ 로그</strong> ($-1 \lt x \le 1$, $R = 1$):
+  $\displaystyle \ln(1+x) = \sum_{n=1}^{\infty}\frac{(-1)^{n+1}x^n}{n}
+  = x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots$
+  &nbsp;— $x = 1$에서 $\ln 2$ (교대조화급수의 정체가 여기서 밝혀진다).</p>
+  <p><strong>④ 이항급수</strong> ($|x| \lt 1$, 실수 지수 $\alpha$):
+  $\displaystyle (1+x)^\alpha = \sum_{n=0}^{\infty}\binom{\alpha}{n}x^n,\quad
+  \binom{\alpha}{n} = \frac{\alpha(\alpha-1)\cdots(\alpha-n+1)}{n!}.$
+  &nbsp;$\alpha$가 음의 정수/분수여도 성립 — 뉴턴의 일반 이항정리. $\alpha$가 자연수면
+  유한합(보통 이항정리)으로 절단된다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">세 번째 함정 — 테일러 급수가 수렴해도 $f$가 아닐 수 있다</span>
+  <p>무한번 미분가능($C^\infty$)하다고 그 함수가 자기 테일러 급수와 같다는 보장은 없다.
+  결정적 반례:
+  $$f(x) = \begin{cases} e^{-1/x^2}, & x \neq 0,\\[2pt] 0, & x = 0.\end{cases}$$
+  이 함수는 $x = 0$에서 <strong>모든 계</strong>의 도함수가 $0$이다
+  ($f^{(k)}(0) = 0$, 모든 $k$ — 지수의 감쇠가 모든 다항식을 이긴다).
+  따라서 $0$에서의 테일러 급수는 <strong>항등적으로 $0$</strong>: 모든 $x$에서 수렴하지만,
+  그 합($\equiv 0$)은 $x \neq 0$에서 $f(x) \neq 0$과 <strong>일치하지 않는다</strong>.</p>
+  <p>교훈: “테일러 급수가 존재하고 수렴한다”와 “테일러 급수가 $f$로 수렴한다”는
+  <strong>다른 명제</strong>다. 후자가 성립하는 함수를 <strong>해석적(analytic)</strong>이라 하며,
+  $C^\infty \supsetneq$ 해석적이다. 이 격차는 <strong>나머지 $R_n \to 0$의 확인</strong>으로만
+  메워진다 — 급수를 써 놓는 것으로 끝이 아니라, 나머지를 반드시 통제해야 한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 미적분의 끝, 해석학의 시작</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">7장의 줄거리</span>
+  <p><a class="term" data-term="series">급수</a> = 부분합의 극한 (무한합은 새 연산이 아니다)
+  → 기하급수·$p$-급수가 “아는 급수”, $a_n\to 0$은 필요조건일 뿐(조화급수)
+  → <a class="term" data-term="series-convergence-tests">수렴 판정법</a>(비교·극한비교·비율·근·적분·라이프니츠)로
+  <em>합을 몰라도</em> 수렴을 판정,
+  <a class="term" data-term="absolute-convergence">절대수렴</a>은 재배열의 자유를 주고
+  조건수렴은 순서에 목숨을 건다(리만)
+  → <a class="term" data-term="power-series">멱급수</a>는 수렴반지름 안에서 함수를 만들고
+  항별 미분·적분을 허락
+  → <a class="term" data-term="taylor-remainder">테일러 정리</a>: $f = P_n + R_n$,
+  라그랑주 나머지가 $\to 0$이면 <a class="term" data-term="taylor-theorem">테일러 급수</a>가 $f$
+  ($e^x, \sin x, \ln(1{+}x), (1{+}x)^\alpha$) — 단, $e^{-1/x^2}$처럼
+  “수렴하되 $f$가 아닌” 반례가 $C^\infty$와 해석적 사이의 골을 드러낸다.</p>
+  <p><strong>미적분 전권 되돌아보기:</strong> 수의 성질과 함수(1장) → 극한·연속의
+  세 가지 어려운 정리(2장) → 도함수와 접선=1차 근사(3–4장) →
+  적분과 미적분의 기본정리(5장) → 로그·지수·삼각의 엄밀한 건설(6장) →
+  급수·테일러(7장). 미분이 <em>1차 근사</em>에서 출발했다면, 이 장은 그것을
+  <em>$\infty$차 근사</em>로 완성한다 — 곡선을 다항식으로 붙잡는 여정의 끝.</p>
+  <p><strong>해석학으로 가는 다리:</strong> 스피박이 “$R_n \to 0$이면 항별 미분 가능”이라며
+  넘어간 자리마다 사실은 <strong>균등수렴</strong>이라는 개념이 숨어 있었다.
+  루딘 해석학은 바로 그것을 정면으로 다룬다 —
+  <a class="term" data-term="uniform-convergence">균등수렴</a>(해석 7장)이
+  극한과 미분·적분의 교환을 정당화하고,
+  <a class="term" data-term="power-series">멱급수</a>·<a class="term" data-term="exp-function">지수함수</a>가
+  거리공간과 완비성 위에서 다시 세워진다(해석 8장). 여기서 “손에 익힌” 뼈대가
+  거기서 “증명으로 확정”된다. 미적분의 마지막 장이 해석학의 첫 관문으로 이어진다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 급수의 수렴·발산을 판정하고, 사용한 판정법을 밝혀라.</p>
+  <p>(1) $\displaystyle\sum_{n=1}^\infty \frac{n}{2^n}$ &nbsp;&nbsp;
+  (2) $\displaystyle\sum_{n=1}^\infty \frac{1}{\sqrt{n^2+1}}$ &nbsp;&nbsp;
+  (3) $\displaystyle\sum_{n=2}^\infty \frac{1}{n(\ln n)^2}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 비율판정. (2) 극한비교 — $\tfrac1n$과 비교. (3) 적분판정 — 치환 $u = \ln n$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>수렴.</strong> 비율 $\dfrac{a_{n+1}}{a_n} = \dfrac{n+1}{2n} \to \tfrac12 \lt 1$.</p>
+    <p>(2) <strong>발산.</strong> $\dfrac{1/\sqrt{n^2+1}}{1/n} = \dfrac{n}{\sqrt{n^2+1}} \to 1 \in (0,\infty)$이고
+    $\sum\tfrac1n$이 발산하므로 극한비교로 발산.</p>
+    <p>(3) <strong>수렴.</strong> $\int_2^\infty \dfrac{dx}{x(\ln x)^2} = \Bigl[-\dfrac1{\ln x}\Bigr]_2^\infty = \dfrac1{\ln 2} \lt \infty$.
+    (2)와 (3)의 대비가 핵심 — $\tfrac1{n\ln n}$은 발산, $\tfrac1{n(\ln n)^2}$은 수렴, 로그의 지수가 경계를 가른다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\displaystyle\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n}$과
+  $\displaystyle\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n^2}$의 수렴 유형(절대/조건/발산)을
+  각각 판정하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>절댓값 급수를 먼저 본다: $p$-급수 $p=1$ vs $p=2$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>첫 급수: 조건수렴.</strong> 라이프니츠($b_n = \tfrac1n \downarrow 0$)로 수렴하지만,
+    $\sum\tfrac1n$이 발산하므로 절대수렴은 아니다 ($=\ln 2$).</p>
+    <p><strong>둘째 급수: 절대수렴.</strong> $\sum\tfrac1{n^2}$($p=2 \gt 1$)이 수렴하므로 절댓값 급수가 수렴 —
+    절대수렴이면 재배열해도 합이 불변이다 ($=\tfrac{\pi^2}{12}$).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>멱급수 $\displaystyle\sum_{n=1}^\infty \frac{(x-2)^n}{n\,3^n}$의 수렴반지름과
+  <strong>수렴구간(경계 포함 여부까지)</strong>을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$R$을 구한 뒤 두 끝점을 각각 대입해 수치급수로 개별 판정하라 — 경계는 판정법이 침묵한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>반지름:</strong> $c_n = \dfrac1{n\,3^n}$, $\Bigl|\dfrac{c_n}{c_{n+1}}\Bigr| = \dfrac{(n+1)3^{n+1}}{n\,3^n} = 3\cdot\dfrac{n+1}{n} \to 3$
+    → $R = 3$. 중심 $2$에서 열린구간 $(2-3,\,2+3) = (-1, 5)$ 절대수렴.</p>
+    <p><strong>경계 $x = 5$:</strong> $(x-2)^n = 3^n$이라 $\sum\dfrac1n$ — 조화급수, <strong>발산</strong>.</p>
+    <p><strong>경계 $x = -1$:</strong> $(x-2)^n = (-3)^n$이라 $\sum\dfrac{(-1)^n}{n}$ — 교대조화급수, <strong>수렴</strong>.</p>
+    <p>따라서 수렴구간은 $[-1, 5)$. (같은 반지름의 두 끝이 정반대로 갈리는 표준 상황 —
+    경계 판정을 생략하면 감점.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Spivak 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>라그랑주 나머지를 이용하여, $|x| \le 1$일 때 $\sin x$를 $P_5(x) = x - \dfrac{x^3}{6} + \dfrac{x^5}{120}$로
+  근사할 때의 오차가 $\dfrac1{5040}$ 이하임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\sin$의 모든 도함수는 절댓값이 $1$ 이하다. $n=5$의 나머지에서 $(n+1)! = 6! = 720$? 차수를
+    다시 확인 — $P_5$의 다음 유효항은 7차이므로 $n=6$으로 잡는 것이 깔끔하다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\sin x$의 매클로린 전개에서 $x^6$ 항의 계수는 $0$이므로 $P_5 = P_6$. $n = 6$의 라그랑주 나머지:
+    $$|R_6(x)| = \left|\frac{f^{(7)}(\xi)}{7!}x^7\right| \le \frac{|x|^7}{7!} \le \frac{1}{7!} = \frac{1}{5040},$$
+    왜냐하면 $|f^{(7)}| = |\cos| \le 1$이고 $|x| \le 1$이기 때문이다. $\blacksquare$</p>
+    <p>(핵심 습관: 테일러 근사의 오차 주장은 항상 <strong>나머지항을 통해</strong> 정당화한다.
+    도함수의 유계성 → 나머지 상한, 이 두 줄이 만점 서술의 뼈대다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>$C^\infty$ vs 해석적</span>
+  </div>
+  <p>$f(x) = e^{-1/x^2}$ ($x \neq 0$), $f(0) = 0$에 대하여 다음을 보여라.</p>
+  <p>(1) $f'(0) = 0$임을 정의로 보여라.
+  (2) 임의의 $n$에 대해 $f^{(n)}(0) = 0$임을 서술하라(귀납의 뼈대).
+  (3) $f$의 $0$에서의 테일러 급수가 $f$와 같지 않은 이유를 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$t = 1/x \to \pm\infty$로 두면 $\dfrac{e^{-1/x^2}}{x} = t\,e^{-t^2} \to 0$. 지수의 감쇠가 임의의
+    다항식·거듭제곱을 이긴다는 사실이 전부다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $f'(0) = \displaystyle\lim_{x\to 0}\frac{f(x)-f(0)}{x} = \lim_{x\to 0}\frac{e^{-1/x^2}}{x}$.
+    $t = 1/x$로 치환하면 $\lim_{t\to\pm\infty} t\,e^{-t^2} = 0$ (지수가 다항식을 압도) → $f'(0) = 0$.</p>
+    <p>(2) $x \neq 0$에서 $f^{(n)}(x) = P_n(1/x)\,e^{-1/x^2}$ 꼴($P_n$은 다항식)임을 귀납으로 보이면,
+    $x \to 0$에서 항상 $\dfrac{P_n(1/x)e^{-1/x^2}}{x}$ 형태의 극한이 되어 (1)과 같은 이유로 $0$.
+    따라서 모든 $n$에 대해 $f^{(n)}(0) = 0$.</p>
+    <p>(3) 모든 계수가 $\dfrac{f^{(n)}(0)}{n!} = 0$이므로 $0$에서의 테일러 급수는 $\sum 0\cdot x^n \equiv 0$.
+    이 급수는 모든 $x$에서 (자명하게) 수렴하지만 그 합은 $0$이고, $x \neq 0$에서 $f(x) = e^{-1/x^2} \neq 0$.
+    즉 <strong>테일러 급수가 수렴해도 $f$로 수렴하지는 않는다</strong>. $f$는 $C^\infty$이지만 $0$에서 해석적이 아니다. $\blacksquare$</p>
+    <p>(“$C^\infty \neq$ 해석적”의 표준 반례 — 무한번 미분가능성과 급수 표현 가능성은 별개임을
+    보이는 것이 이 문제의 요지다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>테일러 정리로 부등식 증명</span>
+  </div>
+  <p>테일러 정리(라그랑주 나머지)를 이용하여, 모든 $x \gt 0$에 대해
+  $$e^x \gt 1 + x + \frac{x^2}{2}$$
+  가 성립함을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$n = 2$의 테일러 전개를 $a = 0$에서 쓰고, 나머지항의 <strong>부호</strong>를 따져라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f(x) = e^x$에 대해 $n = 2$, $a = 0$의 테일러 정리:
+    $0$과 $x$ 사이의 어떤 $\xi$에 대해
+    $$e^x = 1 + x + \frac{x^2}{2} + \frac{f^{(3)}(\xi)}{3!}x^3 = 1 + x + \frac{x^2}{2} + \frac{e^\xi}{6}x^3.$$
+    $x \gt 0$이면 $\xi \gt 0$이라 $e^\xi \gt 0$이고 $x^3 \gt 0$이므로 나머지항 $\dfrac{e^\xi}{6}x^3 \gt 0$.
+    따라서 $e^x \gt 1 + x + \dfrac{x^2}{2}$. $\blacksquare$</p>
+    <p>(부등식 증명에서 테일러 정리의 위력: 무한급수 없이 <strong>유한 전개 + 나머지의 부호</strong>만으로
+    깔끔하게 끝난다. 나머지가 “정확한 오차”라는 점이 핵심 — 급수의 수렴은 필요 없다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
