@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6장 측지선과 가우스-보네 정리 — 미분기하학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="differential-geometry" data-chapter="ch06.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미분기하학 · do Carmo (§4.4–4.5)</p>
+  <h1><span class="ch-num">6</span> 측지선과 가우스-보네 정리</h1>
+  <p class="ch-source">“곡면 위에 사는 개미가 그을 수 있는 가장 곧은 선, 그리고 그 개미가
+  자기 세계의 모양(구인지 도넛인지)을 곡률의 총합만으로 알아내는 정리” —
+  내재 기하학의 완성이자 미분기하 전 과정의 피날레.</p>
+</div>
+
+<p>곡면 위에서 “직선”이란 무엇일까요? 평면이라면 자를 대고 그으면 되지만, 휘어진
+곡면에는 곧은 자가 없습니다. 두 카르모의 4장은 <strong>곡면 안에 사는 존재의 관점</strong>
+— 바깥 $\mathbb{R}^3$를 보지 않고, 오직 <a class="term" data-term="first-fundamental-form">제1기본형식</a>(길이와 각도)만
+아는 개미의 관점 — 에서 기하를 다시 씁니다. 그 개미에게 “직선”은 <strong>측지선</strong>이고,
+개미가 자기 세계 전체의 위상을 알아내는 통로가 <strong>가우스-보네 정리</strong>입니다.
+5장에서 본 <a class="term" data-term="theorema-egregium">빼어난 정리</a>(가우스 곡률은 내재적)가
+씨앗이었다면, 이 장은 그 씨앗이 “곡률의 총합 = 오일러 지표”라는 거대한 나무로 자라는
+과정입니다.</p>
+
+<h2 id="sec-geodesic">1. 측지선 — 곡면 위의 직선</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · “가속하지 않는 곡선”</span>
+  <p>평면 위에서 등속으로 직선을 달리는 입자는 <strong>가속도가 0</strong>입니다. 곡면
+  위에서는 사정이 다릅니다 — 구 위의 대원을 등속으로 돌면, 바깥 $\mathbb{R}^3$에서 보면
+  구심가속도가 있어요. 하지만 그 가속도는 <strong>전부 곡면에 수직</strong>(법선 방향)이라,
+  곡면에 붙어 사는 개미는 “나는 왼쪽으로도 오른쪽으로도 꺾지 않았다”고 느낍니다.</p>
+  <p>가속도 $\gamma''$을 접평면 성분과 법선 성분으로 나눌 때,
+  <strong>접평면 성분이 0</strong>인 곡선 — 개미가 느끼는 “옆으로 꺾음”이 없는 곡선 —
+  이 곡면 위의 직선, 즉 측지선입니다. 접평면 성분의 크기가 바로 측지곡률 $k_g$예요.</p>
+</div>
+
+<div class="box box-def" id="def-geodesic">
+  <span class="box-label">정의 · 측지선 <span class="label-en">geodesic</span> (두 카르모 §4.4)</span>
+  <p>호길이로 매개화된 정칙곡선 $\gamma(s)$가 곡면 $S$ 위에 있을 때, 각 점에서
+  가속도 $\gamma''(s)$가 곡면의 <strong>법선 방향</strong>일 것 — 즉 접평면 성분이
+  사라질 것 — 을 요구한다. 이 접평면 성분의 부호 있는 크기가 <strong>측지곡률</strong>
+  $k_g$이며,</p>
+  $$k_g \equiv 0 \iff \gamma \text{ 는 측지선}$$
+  <p>동치로, 곡면의 내재적 미분(공변미분) $\dfrac{D\gamma'}{ds} = 0$: “속도벡터가
+  곡면 안에서 평행하게 이동한다”. 곡선의 공간 곡률 $k$는 법곡률 $k_n$과 측지곡률로
+  $k^2 = k_n^2 + k_g^2$처럼 갈라지는데, 측지선은 <strong>$k_g$ 몫을 0으로</strong> 두고
+  휘어짐을 전부 법곡률(곡면이 강제하는 최소한의 휨)에 떠넘긴 곡선이다.</p>
+  <p><strong>측지선 방정식.</strong> 매개화 $\mathbf{x}(u,v)$ 위에서 곡선 $(u(s),v(s))$가
+  측지선일 필요충분조건은 (크리스토펠 기호 $\Gamma^k_{ij}$를 써서)</p>
+  $$u'' + \Gamma^1_{11}(u')^2 + 2\Gamma^1_{12}\,u'v' + \Gamma^1_{22}(v')^2 = 0,$$
+  $$v'' + \Gamma^2_{11}(u')^2 + 2\Gamma^2_{12}\,u'v' + \Gamma^2_{22}(v')^2 = 0.$$
+  <p>핵심은 <strong>$\Gamma^k_{ij}$가 $E,F,G$와 그 도함수만으로 결정된다</strong>는 것 —
+  제2기본형식($e,f,g$)은 한 글자도 안 들어간다. 그러므로 측지선은 <strong>내재적 개념</strong>:
+  곡면을 (길이를 안 바꾸고) 구부려도 측지선은 측지선으로 남는다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 측지선 도감</span>
+  <p><strong>(a) 평면.</strong> $\Gamma^k_{ij}=0$이라 방정식은 $u''=v''=0$ —
+  해는 $u,v$의 1차식, 곧 <strong>직선</strong>. 옛 직선이 특수한 측지선으로 되살아난다.</p>
+  <p><strong>(b) 구면.</strong> 측지선은 <strong>대원</strong>(구의 중심을 지나는 평면과의
+  교선)뿐이다. 대원을 등속으로 돌면 가속도가 구 중심을 향해(=법선 방향) 순수 법곡률만
+  남고 $k_g=0$. 비행기가 인천–뉴욕을 북극 쪽으로 크게 도는 이유가 바로 이것 —
+  지구 위의 최단경로는 대원이다.</p>
+  <p><strong>(c) 원기둥.</strong> 원기둥은 평면을 말아 만든 것이라 <strong>국소적으로
+  평면과 등장(等長)</strong>. 평면의 직선(수평선·수직선·기울어진 직선)을 말면 각각
+  <strong>모선(직선)·원(단면)·나선(helix)</strong>이 되고, 이 셋이 원기둥의 측지선
+  전부다. 펼치면 직선으로 돌아온다는 것이 “측지선은 구부림에 불변”의 눈으로 보는 증거.</p>
+</div>
+
+<div class="box box-thm" id="def-shortest-path">
+  <span class="box-label">정리 · 측지선은 국소 최단경로 (지수사상) <span class="label-en">exponential map, local minimizer</span> (두 카르모 §4.5)</span>
+  <p>점 $p\in S$와 접벡터 $v\in T_pS$에 대해, $p$에서 출발해 속도 $v$로 떠나는 측지선은
+  (유일하게) 존재한다. 이 대응 $v\mapsto \gamma_v(1)$을 <strong>지수사상</strong>
+  $\exp_p : T_pS \to S$라 하며, $p$ 근방에서 미분동형이다. 지수사상으로 세운
+  <strong>측지 극좌표</strong> $(\rho,\theta)$에서는 제1기본형식이</p>
+  $$ds^2 = d\rho^2 + G(\rho,\theta)\,d\theta^2, \qquad G(0,\theta)=0,\ \ (\sqrt G)_\rho(0,\theta)=1$$
+  <p>로 단정하게 정리되고, 이때 가우스 곡률이 <strong>순수 내재적 공식</strong>
+  $K = -\dfrac{(\sqrt G)_{\rho\rho}}{\sqrt G}$로 나온다 —
+  <a class="term" data-term="theorema-egregium">빼어난 정리</a>의 계산적 심장이자,
+  아래 가우스-보네 증명의 부품이다.</p>
+  <p><strong>최단성:</strong> $p$의 충분히 작은 근방 안에서는, $p$와 $q$를 잇는
+  <strong>최단곡선은 반드시 측지선</strong>이고 그 측지선이 유일한 최단경로다. 곡면 위
+  두 점 사이의 “가장 곧은 길”이 곧 “가장 짧은 길”이 되는 것 — 단, <strong>국소적으로만</strong>
+  (아래 오해 참조).</p>
+</div>
+
+<details class="proof">
+  <summary>왜 최단경로가 측지선인가 <span class="proof-strategy">— 전략: 길이 범함수의 1차 변분을 계산하면, 정류점(길이의 임계곡선) 조건이 정확히 $k_g=0$으로 떨어진다.</span></summary>
+  <p>곡선족 $\gamma_t(s)$ ($\gamma_0=\gamma$, 변분벡터장 $V$)의 길이
+  $L(t)=\int |\gamma_t'|\,ds$를 $t$로 미분하면, 부분적분 후</p>
+  $$L'(0) = -\int \left\langle \tfrac{D\gamma'}{ds},\, V\right\rangle ds$$
+  <p>(끝점 고정이라 경계항 소멸). 모든 변분 $V$에 대해 $L'(0)=0$이려면
+  $\frac{D\gamma'}{ds}=0$, 즉 $k_g\equiv 0$이어야 한다 — 길이의 임계곡선이 곧 측지선.
+  최단곡선은 당연히 임계곡선이므로 측지선이다. (임계라고 다 최단은 아님 — 역은 국소에서만.)</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-kg">2. 측지곡률과 회전 — 무엇이 내재적인가</h2>
+
+<div class="box box-def" id="def-geodesic-curvature">
+  <span class="box-label">정의 + 관찰 · 측지곡률의 내재성 <span class="label-en">geodesic curvature is intrinsic</span> (두 카르모 §4.4)</span>
+  <p>측지곡률 $k_g$는 “곡선이 곡면 안에서 얼마나 옆으로 꺾이는가”를 잰다. 결정적 사실:</p>
+  $$k_g \text{ 는 } E,F,G \text{ (제1기본형식)만으로 결정된다.}$$
+  <p>즉 <strong>내재적</strong>이다. 대조적으로 법곡률 $k_n$은 곡면이 $\mathbb{R}^3$에
+  어떻게 놓였는지(제2기본형식)에 의존하는 <strong>외재적</strong> 양이다. 리우빌 공식은
+  이를 명시적으로 보여준다 — 측지 극좌표 틀에 대한 접벡터의 회전각 $\varphi$로</p>
+  $$k_g = \frac{d\varphi}{ds} + (\text{틀의 회전, } E,F,G\text{로 결정})$$
+  <p>“측지곡률 = 접벡터가 좌표틀에 대해 회전하는 비율 + 좌표틀 자체가 회전하는 비율”.
+  이 분해가 다음 절 가우스-보네 정리의 좌변을 만든다. 곡면을 구부려도(등장변형)
+  $E,F,G$가 안 변하므로 $k_g$도 불변 — 측지선($k_g=0$)이 구부림에 견디는 근거다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 위선(parallel)의 측지곡률</span>
+  <p>단위구에서 위도 $\phi_0$의 위선(작은 원)은 <strong>측지선이 아니다</strong>
+  (적도만 대원=측지선). 그 측지곡률은 상수 $k_g = \tan\phi_0$ — 극에 가까울수록
+  ($\phi_0\to\pi/2$) 옆으로 급하게 꺾여 $k_g\to\infty$, 적도에서는 $\phi_0=0$이라
+  $k_g=0$(측지선). 길이 $2\pi\cos\phi_0$를 곱한 전측지곡률
+  $\oint k_g\,ds = 2\pi\sin\phi_0$은 아래 문제에서 가우스-보네로 재확인된다.</p>
+</div>
+
+<h2 id="sec-gauss-bonnet">3. 가우스-보네 정리 — 기하와 위상을 잇는 다리</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 세 가지 회전의 장부</span>
+  <p>평면에서 단순 닫힌곡선을 한 바퀴 돌면 접벡터의 방향은 정확히 <strong>$2\pi$</strong>만큼
+  회전한다(회전지수 정리, Hopf Umlaufsatz). 곡면 위에서도 “한 바퀴 = $2\pi$”는 변함없는데,
+  이 $2\pi$가 <strong>세 장부</strong>로 나뉘어 기록된다:</p>
+  <p>① 매끄러운 변을 따라 옆으로 꺾인 양 $\displaystyle\oint k_g\,ds$
+  &nbsp;②&nbsp; 곡면 자체가 휘어 접평면 틀이 돌아간 양(홀로노미)
+  $\displaystyle\iint_R K\,dA$
+  &nbsp;③&nbsp; 꼭짓점에서 급히 꺾인 양 $\displaystyle\sum\theta_i$.</p>
+  <p>세 장부의 합이 언제나 $2\pi$ — 이것이 가우스-보네 정리다. 특히 <strong>곡면의 휘어짐
+  $\iint K\,dA$은 나머지 두 항을 $2\pi$에서 뺀 몫</strong>으로, 경계의 정보에 완전히
+  묶인다. 여기서 위상이 튀어나온다.</p>
+</div>
+
+<div class="box box-thm" id="def-gauss-bonnet">
+  <span class="box-label">정리 · 가우스-보네 정리 <span class="label-en">Gauss–Bonnet theorem</span> (두 카르모 §4.5)</span>
+  <p><strong>국소형(경계 있는 단순 영역).</strong> 곡면 $S$의 단순 영역 $R$(원판과
+  위상동형)의 경계 $\partial R$가 조각마다 매끄러운 곡선이고, 꼭짓점에서의 외각이
+  $\theta_1,\dots,\theta_n$일 때</p>
+  $$\oint_{\partial R} k_g\,ds \;+\; \iint_R K\,dA \;+\; \sum_{i=1}^n \theta_i \;=\; 2\pi.$$
+  <p><strong>대역형(경계 없는 컴팩트 곡면).</strong> $S$가 컴팩트한 유향 곡면이면</p>
+  $$\boxed{\;\iint_S K\,dA \;=\; 2\pi\,\chi(S)\;}$$
+  <p>여기서 $\chi(S) = V - E + F$는 <strong>오일러 지표</strong>(삼각분할의 꼭짓점−변+면),
+  구부리든 늘이든 변하지 않는 <strong>위상 불변량</strong>이다.
+  좌변은 순수 기하(곡률), 우변은 순수 위상 — <strong>“곡률의 총합이 곡면의 모양(위상)을
+  안다”</strong>는, 미분기하 전체를 관통하는 한 문장이 여기서 완성된다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 국소형: 측지 극좌표 + 그린 정리로 $\iint K\,dA$ 항을 회전 장부에서 분리. 대역형: 삼각분할하고 국소형을 모든 조각에 더해 오일러 지표를 조립.</span></summary>
+  <p><strong>국소형.</strong> 측지 극좌표에서 $K=-(\sqrt G)_{\rho\rho}/\sqrt G$이므로
+  $\iint_R K\,dA = -\iint (\sqrt G)_{\rho\rho}\,d\rho\,d\theta$. 리우빌 공식으로 얻은
+  “$k_g = d\varphi/ds + (\sqrt G)_\rho\,d\theta/ds$”를 경계를 따라 적분한 뒤
+  <strong>그린 정리</strong>로 이중적분으로 바꾸면 $\iint K\,dA$ 항이 정확히 튀어나온다.
+  남는 $\oint d\varphi + \sum\theta_i$는 “접벡터가 한 바퀴 도는 총회전 $=2\pi$”
+  (회전지수 정리). 세 조각을 모으면 국소형 등식.</p>
+  <p><strong>대역형.</strong> $S$를 삼각형 $T_1,\dots,T_F$로 삼각분할한다. 각 삼각형에
+  국소형을 적용하고 전부 더하면:
+  경계 측지곡률 $\oint k_g\,ds$는 인접한 두 삼각형이 공유 변을 반대 방향으로 훑어
+  <strong>전부 상쇄</strong>되고($S$에 경계가 없으므로), 곡률항은 $\iint_S K\,dA$로 모인다.
+  외각의 총합 $\sum\theta_i$는 “$\pi -$내각”들의 합인데, 삼각분할의 조합론
+  ($3F = 2E$, 각 꼭짓점 둘레 내각합 $=2\pi$)으로 정리하면
+  $\sum\theta_i = 2\pi(E-F) - \pi\cdot(\text{내각 재배열})$을 거쳐 $2\pi F - 2\pi E + 2\pi V$가
+  된다. 따라서</p>
+  $$\iint_S K\,dA + 0 = 2\pi F\cdot 1 = 2\pi(V - E + F) = 2\pi\chi(S). \qquad\blacksquare$$
+  <p>핵심 마법: 좌변의 곡률 적분은 매끈한 기하량인데, 우변은 <strong>삼각분할 방식에
+  전혀 의존하지 않는 정수</strong>($\times 2\pi$)로 떨어진다. 기하가 위상으로 응결되는 순간.</p>
+</details>
+
+<h2 id="sec-applications">4. 응용과 통일 — 곡률의 총합이 말하는 것</h2>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 가우스-보네의 네 얼굴</span>
+  <p><strong>(a) 측지삼각형의 내각합.</strong> 세 변이 측지선인 삼각형은 변에서 $k_g=0$이라
+  $\oint k_g\,ds=0$. 외각 $\theta_i = \pi-\alpha_i$($\alpha_i$=내각)를 국소형에 넣으면</p>
+  $$\iint_R K\,dA = \sum_{i=1}^3 \alpha_i - \pi \quad(\text{각 초과량}).$$
+  <p>평면($K=0$)은 내각합 $=\pi$(유클리드!), 구($K \gt 0$)는 $\gt\pi$, 안장/쌍곡면($K \lt 0$)은
+  $\lt\pi$. <strong>“삼각형 내각합이 $180^\circ$인가”가 곧 “세계가 휘었는가”의 리트머스</strong>.</p>
+  <p><strong>(b) 구면삼각형의 넓이.</strong> 단위구($K=1$)에서는 위 식이
+  $\text{넓이}(R) = \alpha_1+\alpha_2+\alpha_3 - \pi$ — 넓이가 각 초과량과 <strong>같다</strong>.
+  세 각이 모두 직각인 삼각형(구의 팔분면)은 넓이 $3\cdot\frac\pi2-\pi=\frac\pi2$, 실제
+  $4\pi/8=\pi/2$와 일치.</p>
+  <p><strong>(c) 구 $S^2$.</strong> 대역형으로
+  $\iint_{S^2} K\,dA = 4\pi = 2\pi\cdot 2$이므로 $\chi(S^2)=2$. 반대로 단위구는
+  $K\equiv 1$, 넓이 $4\pi$라 좌변이 곧장 $4\pi$ — 기하와 위상이 정확히 맞아떨어진다.
+  (지구본을 아무리 울퉁불퉁 찌그러뜨려도 $\iint K\,dA$는 늘 $4\pi$.)</p>
+  <p><strong>(d) 원환면(도넛) $T^2$.</strong> $\chi(T^2)=0$이므로 $\iint_{T^2}K\,dA=0$:
+  바깥쪽 볼록한 부분의 양의 곡률과 안쪽 오목한 부분의 음의 곡률이 <strong>정확히 상쇄</strong>된다.
+  일반적으로 종수 $g$인 곡면은 $\chi = 2-2g$라
+  $\iint K\,dA = 2\pi(2-2g) = 4\pi(1-g)$ — 구멍이 하나 늘 때마다 곡률 총합이 $4\pi$씩 감소.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>측지선 = 항상 최단경로?</strong> 아니다 — <strong>국소</strong>최단일 뿐이다.
+  구에서 두 점을 잇는 대원은 <strong>짧은 호와 긴 호</strong> 둘 다 측지선이지만 긴 호는
+  최단이 아니다. 측지선을 계속 연장하면 어느 지점(절단점, cut locus)부터 최단성을 잃는다.
+  “최단 $\Rightarrow$ 측지선”은 항상 참, “측지선 $\Rightarrow$ 최단”은 국소에서만 참.</p>
+  <p>② <strong>측지선은 $\mathbb{R}^3$에서 곧지 않다.</strong> 대원은 공간에서 보면 휘어
+  있다($\gamma''\neq 0$). 측지선이 죽이는 것은 <strong>접평면 성분</strong>($k_g$)이지 가속도
+  전체가 아니다. 곡면이 강제하는 최소한의 휨(법곡률)은 남는다.</p>
+  <p>③ <strong>$k_g$는 내재적, $k_n$은 외재적.</strong> 측지곡률·측지선·크리스토펠 기호는
+  $E,F,G$만으로 결정되어 구부림에 불변. 반면 법곡률·<a class="term" data-term="principal-curvatures">주곡률</a>은
+  곡면이 놓인 방식(제2기본형식)에 의존한다. 원기둥을 펴면 주곡률은 $0$으로 바뀌지만
+  측지선은 그대로 직선.</p>
+  <p>④ <strong>가우스-보네의 $\chi$는 기하와 무관.</strong> $\iint_S K\,dA$의 값은 곡면을
+  어떻게 구부리고 늘이든 $2\pi\chi(S)$로 고정 — <strong>위상에만</strong> 의존한다. 곡률을
+  한쪽에 몰았다 다른 쪽에 폈다 해도 총합은 위상이 정한 액수뿐. 그래서 “구 위에 곡률이
+  전혀 없는(평평한) 계량은 없다”($\iint K = 4\pi\neq 0$이므로) — 지도 제작의 근본적
+  왜곡이 여기서 나온다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 미분기하학의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">6장의 줄거리</span>
+  <p><a class="term" data-term="geodesic">측지선</a> = 곡면 위의 직선
+  ($k_g=0$, 가속도가 순수 법선 방향; 방정식은 크리스토펠 기호로, 그래서 내재적)
+  → 예: 평면의 직선·구의 대원·원기둥의 나선, 지수사상으로 세운 국소 최단경로
+  → <strong>측지곡률의 내재성</strong>($E,F,G$만으로 결정; 리우빌 분해 = 접벡터의 회전 장부)
+  → <a class="term" data-term="gauss-bonnet">가우스-보네</a> 국소형
+  $\oint k_g\,ds+\iint_R K\,dA+\sum\theta_i=2\pi$ (세 회전 장부의 합 $=2\pi$)
+  → 대역형 $\iint_S K\,dA=2\pi\chi(S)$ — <strong>곡률의 총합 = 오일러 지표</strong>
+  → 응용: 삼각형 내각합·구면 넓이·구($4\pi=2\pi\cdot2$)·도넛($0$)에서 기하와 위상이 만난다.</p>
+  <p><strong>과목 전체 되돌아보기.</strong> 미분기하는 “휘어짐을 미적분으로 재는” 여정이었다.
+  <strong>곡선론</strong>(곡률·열률과 프레네 틀: 틀을 세우고 그 도함수를 자기 자신으로 전개)
+  → <strong>곡면론</strong>(<a class="term" data-term="first-fundamental-form">제1기본형식</a>=곡면
+  위의 내적, 제2기본형식=휨의 이차형식, 형상연산자의 고유값이
+  <a class="term" data-term="principal-curvatures">주곡률</a> $k_1,k_2$, 그 곱이 가우스 곡률
+  $K=k_1k_2$ — 선형대수의 <a class="term" data-term="bilinear-quadratic-form">이차형식</a>과
+  <a class="term" data-term="spectral-theorem">스펙트럼 정리</a>가 기하로 살아난 자리)
+  → <strong>빼어난 정리</strong>(<a class="term" data-term="theorema-egregium">Theorema Egregium</a>:
+  외재적으로 정의된 $K$가 실은 내재적! 개미가 바깥을 안 보고도 $K$를 안다)
+  → <strong>이 장</strong>(내재 기하의 완성: 측지선이라는 직선을 얻고, 가우스-보네로
+  국소 곡률의 총합이 대역 위상을 결정함을 증명).</p>
+  <p>거대한 줄기 하나: <strong>외재적으로 재던 휘어짐이 실은 내재적이며(빼어난 정리),
+  그 내재적 휘어짐의 총량이 곡면의 위상 그 자체다(가우스-보네)</strong>. 해석학의
+  <a class="term" data-term="total-derivative">다변수 미분</a>과 선형대수의 이차형식이
+  곡면 위에서 기하가 되고, 마침내 위상수학의 오일러 지표와 손을 잡는다 —
+  이것이 두 카르모가 우리를 데려온 종착지다. 임용 최중요 축은
+  <strong>프레네 공식 · 제1·제2 기본형식과 주곡률 계산 · 측지선 방정식 · 가우스-보네
+  응용(삼각형 내각합·넓이·$\chi$)</strong>이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) 구 위의 대원이 측지선임을 “가속도가 법선 방향”이라는 정의로 보여라.
+  (2) 원기둥 $x^2+y^2=1$ 위의 측지선을 모두 기술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 단위구 대원을 $\gamma(s)=(\cos s,\sin s,0)$로 잡고 $\gamma''$을 구해 그 방향이
+    구의 법선(=위치벡터 방향)과 같은지 본다. (2) 원기둥은 평면을 만 것 — 평면의 직선을
+    말면 무엇이 되는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\gamma(s)=(\cos s,\sin s,0)$이면 $\gamma''(s)=(-\cos s,-\sin s,0)=-\gamma(s)$.
+    단위구의 점 $p$에서 법선은 위치벡터 $p$ 방향이므로 $\gamma''$은 정확히 법선 방향 —
+    접평면 성분이 $0$, 즉 $k_g=0$. 대원은 측지선이다. (일반 대원도 회전으로 같은 결론.)</p>
+    <p>(2) 원기둥은 평면과 국소 등장이라 측지선은 평면 직선의 상(像): <strong>모선(축에
+    평행한 직선), 단면 원, 그리고 나선(helix)</strong> 세 종류. 매개화
+    $\mathbf{x}(u,v)=(\cos u,\sin u,v)$에서 $E=1,F=0,G=1$이라 모든 $\Gamma^k_{ij}=0$,
+    측지선 방정식은 $u''=v''=0$ — 해 $u=as+b,\ v=cs+d$가 위 세 곡선을 전부 준다
+    ($c=0$: 원, $a=0$: 모선, 둘 다 $\neq0$: 나선).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>단위구 위에서 세 내각이 모두 직각인 측지삼각형(구의 팔분면)의 넓이를 가우스-보네
+  정리로 구하고, 구 전체 넓이와 대조하여 검산하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>변이 측지선이면 $\oint k_g\,ds=0$. 외각 $\theta_i=\pi-\alpha_i$, $K=1$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>국소 가우스-보네: $0 + \iint_R K\,dA + \sum(\pi-\alpha_i) = 2\pi$. $K=1$,
+    $\alpha_i=\pi/2$이므로 $\iint_R dA + 3\cdot\frac\pi2 = 2\pi$, 즉
+    <strong>넓이 $=2\pi-\frac{3\pi}{2}=\frac\pi2$</strong>.</p>
+    <p>검산: 세 좌표평면이 구를 8등분하고 그중 하나가 이 삼각형이므로 넓이는
+    $\frac18\cdot 4\pi=\frac\pi2$ ✓. 또한 각 초과량
+    $\sum\alpha_i-\pi=\frac{3\pi}2-\pi=\frac\pi2=$ 넓이 — 단위구에서 “넓이 = 각 초과량” 확인.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">do Carmo §4 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>회전면 위의 측지선은 <strong>클레로 관계식</strong> $r\sin\psi = \text{상수}$를 만족함을
+  보여라. 여기서 $r$은 축까지의 거리(위선의 반지름), $\psi$는 측지선이 자오선(meridian)과
+  이루는 각이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>회전면을 자오선 호길이 $u$와 회전각 $v$로 매개화하면 $E=1,\,F=0,\,G=r(u)^2$이고
+    $E,F,G$가 $v$에 무관하다($v$는 순환좌표). 두 번째 측지선 방정식이 보존량을 준다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$E=1,F=0,G=r^2$이고 이들이 $v$에 의존하지 않으므로, $v$에 대응하는 측지선 방정식은
+    $\frac{d}{ds}\!\big(G\,v'\big)=0$ 꼴로 정리되어 <strong>$r^2 v' = \text{상수}$</strong>
+    (각운동량 보존). 한편 단위속도 조건 $(u')^2 + r^2(v')^2 = 1$에서, 자오선 방향은
+    $\mathbf{x}_u$, 위선 방향 단위벡터는 $\mathbf{x}_v/r$이다. 속도벡터
+    $\gamma'=u'\mathbf{x}_u+v'\mathbf{x}_v$의 위선 성분이
+    $\langle\gamma',\mathbf{x}_v/r\rangle = v'\,r^2/r = r\,v'$이고, 이것이 $\sin\psi$
+    (자오선과의 각 $\psi$의 사인)와 같다. 따라서
+    $\sin\psi = r\,v'$, 즉 $r\sin\psi = r^2 v' = \text{상수}$. $\blacksquare$</p>
+    <p>(해석: 측지선이 가는 위선의 반지름이 줄면 자오선과의 각이 커진다 — 좁은 목을 지날
+    때 측지선이 더 “비스듬히” 감긴다. $r$이 상수 $r_{\min}$ 아래로는 못 내려가
+    측지선이 특정 위선에서 되돌아오는 이유다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">do Carmo §4 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>원환면(torus) $T^2$에 대해 $\iint_{T^2} K\,dA = 0$임을 (1) 대역 가우스-보네로,
+  (2) 직접 적분으로 각각 확인하라. 표준 매개화는
+  $\mathbf{x}(u,v)=\big((R+r\cos u)\cos v,\,(R+r\cos u)\sin v,\,r\sin u\big)$
+  ($0 \lt r \lt R$).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $\chi(T^2)=?$ (2) 이 매개화에서 $K=\dfrac{\cos u}{r(R+r\cos u)}$,
+    $dA=r(R+r\cos u)\,du\,dv$. 곱하면 놀랍도록 단순해진다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 원환면은 삼각분할하면 $\chi(T^2)=0$(예: $V-E+F=0$인 표준 격자, 종수 $g=1$이라
+    $\chi=2-2g=0$). 대역 가우스-보네: $\iint_{T^2}K\,dA=2\pi\chi(T^2)=0$.</p>
+    <p>(2) $K\,dA=\dfrac{\cos u}{r(R+r\cos u)}\cdot r(R+r\cos u)\,du\,dv=\cos u\,du\,dv$.
+    따라서
+    $$\iint_{T^2}K\,dA=\int_0^{2\pi}\!\!\int_0^{2\pi}\cos u\,du\,dv
+    = 2\pi\!\int_0^{2\pi}\cos u\,du = 2\pi\cdot 0 = 0.$$
+    바깥 반쪽($\cos u \gt 0$, $K \gt 0$)의 곡률이 안쪽 반쪽($\cos u \lt 0$, $K \lt 0$)의 곡률과 정확히
+    상쇄된다 — 위상이 시킨 “총합 $0$”을 곡률 분포가 충실히 이행. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>국소 가우스-보네 적용</span>
+  </div>
+  <p>단위구에서 위도 $\phi_0$($0 \lt \phi_0 \lt \pi/2$)의 위선으로 둘러싸인 북극관(polar cap)
+  영역 $R$을 생각하자. 위선은 측지선이 아니다. 국소 가우스-보네 정리를 이용해 위선의
+  전측지곡률 $\displaystyle\oint_{\partial R} k_g\,ds$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>경계는 매끄러운 한 곡선이라 꼭짓점이 없다 — $\sum\theta_i=0$. $K=1$이고 극관의
+    넓이는 $\iint_R dA$. 단위구에서 북극에서 위도 $\phi_0$까지의 극관 넓이는
+    $2\pi(1-\sin\phi_0)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>국소 가우스-보네: $\oint k_g\,ds + \iint_R K\,dA + 0 = 2\pi$. 극관 넓이는
+    (북극에서 재는 여위도 $\psi=\frac\pi2-\phi_0$에 대해) $2\pi(1-\cos\psi)=2\pi(1-\sin\phi_0)$.
+    $K=1$이므로 $\iint_R K\,dA = 2\pi(1-\sin\phi_0)$. 따라서</p>
+    $$\oint_{\partial R}k_g\,ds = 2\pi - 2\pi(1-\sin\phi_0) = 2\pi\sin\phi_0.$$
+    <p>검산: 위선 반지름 $\cos\phi_0$, 길이 $2\pi\cos\phi_0$, 측지곡률 $k_g=\tan\phi_0$
+    (상수)이므로 $\oint k_g\,ds=\tan\phi_0\cdot 2\pi\cos\phi_0=2\pi\sin\phi_0$ ✓.
+    $\phi_0\to 0$이면 위선이 적도(측지선)에 다가가 $\oint k_g\,ds\to 0$과도 일관.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>기하→위상 논증 서술형</span>
+  </div>
+  <p>컴팩트한 유향 곡면 $S$의 가우스 곡률이 모든 점에서 $K \gt 0$이면 $S$는 구와 위상동형임을
+  가우스-보네 정리로 논증하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$K \gt 0$이면 $\iint_S K\,dA$의 부호는? 컴팩트 유향 곡면의 오일러 지표는 종수 $g$로
+    $\chi=2-2g$ ($g=0,1,2,\dots$).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$K \gt 0$이 곡면 전체에서 성립하고 $S$가 컴팩트(넓이 유한, 양)이므로
+    $\iint_S K\,dA \gt 0$. 대역 가우스-보네로
+    $2\pi\chi(S)=\iint_S K\,dA \gt 0$, 즉 <strong>$\chi(S) \gt 0$</strong>.</p>
+    <p>컴팩트 유향 곡면은 종수 $g\ge 0$인 “구멍 $g$개짜리” 곡면으로 분류되고
+    $\chi(S)=2-2g$이므로 가능한 값은 $2,0,-2,\dots$. 이 중 양수는 $\chi=2$뿐이고 이는
+    $g=0$, 곧 <strong>구와 위상동형</strong>임을 뜻한다. $\blacksquare$</p>
+    <p>(서술 뼈대: ① $K \gt 0$+컴팩트 $\Rightarrow \iint K\,dA \gt 0$ ② 대역 가우스-보네로
+    $\chi \gt 0$ ③ $\chi=2-2g$의 이산성으로 $\chi=2$, $g=0$ ④ 결론 “구와
+    <a class="term" data-term="homeomorphism">위상동형</a>”. 곡률이라는 <em>기하</em>가 종수라는
+    <em>위상</em>을 강제하는 이 논법이 가우스-보네의 정수다. 예: 도넛($g=1$)에는 처처
+    양의 곡률 계량이 존재할 수 없다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

@@ -91,8 +91,15 @@ window.MATH_TOC = [
     en: "Differential Geometry",
     book: "do Carmo, Differential Geometry of Curves and Surfaces",
     desc: "곡선과 곡면을 미적분으로 — 휘어진 공간의 기하학.",
-    status: "planned",
-    chapters: []
+    status: "active",
+    chapters: [
+      { file: "ch01.html", num: 1, title: "정칙곡선과 프레네 공식", ready: true },
+      { file: "ch02.html", num: 2, title: "곡선의 대역 이론", ready: true },
+      { file: "ch03.html", num: 3, title: "정칙곡면과 제1기본형식", ready: true },
+      { file: "ch04.html", num: 4, title: "가우스 사상과 제2기본형식", ready: true },
+      { file: "ch05.html", num: 5, title: "내재기하와 빼어난 정리", ready: true },
+      { file: "ch06.html", num: 6, title: "측지선과 가우스-보네 정리", ready: true }
+    ]
   },
   {
     slug: "number-theory",

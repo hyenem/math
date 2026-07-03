@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3장 정칙곡면과 제1기본형식 — 미분기하학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="differential-geometry" data-chapter="ch03.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미분기하학 · do Carmo (§2)</p>
+  <h1><span class="ch-num">3</span> 정칙곡면과 제1기본형식</h1>
+  <p class="ch-source">“곡면 위에 자 하나만 놓으면 그 세계의 기하가 전부 결정된다” —
+  주변 공간을 보지 않고도 길이·각도·넓이를 재는 내적, 제1기본형식이 태어나는 장.</p>
+</div>
+
+<p>곡선은 실직선 하나를 공간으로 구부린 것이었습니다. 곡면은 <strong>평면 조각을
+공간으로 구부린 것</strong>이에요 — 매개변수가 하나 더 늘어 $\mathbf{x}(u, v)$가 됩니다.
+하지만 “구부린 종이”라고 아무렇게나 정의하면 뾰족점·자기교차가 끼어들어 미적분이
+망가지죠. 그래서 먼저 <strong>미적분이 통하는 곡면</strong>이 무엇인지 못 박고
+(정칙곡면), 그 위에 접평면을 세운 뒤, 곡면 위에서 길이와 각도를 재는 자
+— <strong>제1기본형식</strong> — 을 장착합니다. 이 자는 놀랍게도 <em>주변 공간을 보지
+않고</em> 곡면 안에서만 잽니다. 곡면 위에 사는 벌레의 기하학, 그 첫 장입니다.</p>
+
+<h2 id="sec-regular-surface">1. 정칙곡면 — 국소적으로 평면처럼 생긴 것</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — “미적분이 통하는 곡면”이란</span>
+  <p>지구는 둥글지만 우리는 발밑을 평평하다고 느낍니다. 정칙곡면의 핵심이 바로
+  이것 — <strong>각 점 근처를 확대하면 평평한 지도 한 장($\mathbb{R}^2$의 조각)처럼
+  보인다</strong>는 것. 그 “확대해서 펴 보이기”가 매개화 $\mathbf{x} : U \to S$이고,
+  이것이 (1) 매끄럽고 (2) 구겨지거나 겹치지 않으며 (3) 어디서도 찌부러지지 않아야
+  접평면과 미분을 정의할 수 있습니다.</p>
+</div>
+
+<div class="box box-def" id="def-regular-surface">
+  <span class="box-label">정의 · 정칙곡면 <span class="label-en">regular surface</span> (두 카르모 §2)</span>
+  <p>$S \subset \mathbb{R}^3$이 <strong>정칙곡면</strong>이라 함은, 각 점 $p \in S$마다
+  $\mathbb{R}^3$에서의 근방 $V$와 열린집합 $U \subset \mathbb{R}^2$에서 오는 매개화
+  $$\mathbf{x} : U \to V \cap S, \qquad (u, v) \mapsto \mathbf{x}(u, v)
+  = \big(x(u,v),\, y(u,v),\, z(u,v)\big)$$
+  이 존재하여 다음 세 조건을 만족하는 것이다.</p>
+  <p>① <strong>매끄러움</strong>: $\mathbf{x}$는 미분가능($C^\infty$).
+  ② <strong>위상동형</strong>: $\mathbf{x}$는 상 $V\cap S$ 위로의 전단사이고
+  $\mathbf{x}^{-1}$이 연속 — 겹치거나 찢어지지 않는다.
+  ③ <strong>정칙 조건</strong>: 각 $q \in U$에서 미분 $d\mathbf{x}_q : \mathbb{R}^2 \to \mathbb{R}^3$가
+  단사, 동치로
+  $$\mathbf{x}_u \times \mathbf{x}_v \neq \mathbf{0}
+  \quad\Big(\mathbf{x}_u = \tfrac{\partial \mathbf{x}}{\partial u},\
+  \mathbf{x}_v = \tfrac{\partial \mathbf{x}}{\partial v}\Big).$$</p>
+  <p>①+② 는 $\mathbf{x}$를 상 위로의 <strong>미분동형</strong>에 가깝게 만들고, ③ 은
+  두 접벡터 $\mathbf{x}_u, \mathbf{x}_v$가 <a class="term" data-term="vector-space">일차독립</a>이라
+  접평면이 진짜 <strong>2차원 평면</strong>이 되도록 보장한다 — ③ 이 깨지면 그 점은
+  곡면이 찌부러진 특이점이다(원뿔의 꼭짓점처럼).</p>
+</div>
+
+<div class="box box-thm" id="thm-regular-value">
+  <span class="box-label">정리 · 정칙값의 역상은 정칙곡면 <span class="label-en">regular value theorem</span> (두 카르모 §2)</span>
+  <p><strong>이 정리가 하는 일:</strong> 곡면을 “매개화로 짜맞추는” 대신 <strong>방정식
+  하나의 해집합으로 통째로 얻는</strong> 지름길. 실전 판정의 주력 도구다.</p>
+  <p>$f : W \to \mathbb{R}$ ($W \subset \mathbb{R}^3$ 열림)가 미분가능하고 $a \in f(W)$가
+  <strong>정칙값</strong>(즉 $f^{-1}(a)$의 모든 점에서 $\nabla f \neq \mathbf{0}$)이면,
+  그 역상
+  $$S = f^{-1}(a) = \{(x,y,z) : f(x,y,z) = a\}$$
+  는 정칙곡면이다.</p>
+  <p>증명의 심장은 <a class="term" data-term="implicit-function-theorem">음함수 정리</a>다
+  (<a href="../analysis/ch09.html#def-implicit-function-theorem">해석학 §9.28</a>):
+  $\partial f/\partial z \neq 0$인 점 근처에서 $f(x,y,z) = a$를 $z = h(x,y)$로 풀 수
+  있고, 그러면 그 조각은 그래프 $\mathbf{x}(u,v) = (u, v, h(u,v))$ — 곧 정칙곡면의
+  한 조각이 된다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 곡면 세 장</span>
+  <p><strong>(a) 구면 $S^2$.</strong> $f(x,y,z) = x^2 + y^2 + z^2$에서
+  $\nabla f = 2(x,y,z)$는 원점에서만 $\mathbf{0}$인데 원점은 $f = 1$ 위에 없으므로
+  $1$은 정칙값 — $S^2 = f^{-1}(1)$은 정칙곡면. (실은 임의의 $a > 0$이 정칙값.)
+  단, <strong>한 장의 매개화로는 구 전체를 덮을 수 없다</strong> — 위도·경도
+  $\mathbf{x}(u,v) = (\cos v \cos u, \cos v \sin u, \sin v)$는 극과 날짜변경선을
+  비켜야 위상동형이라 최소 두 장이 필요하다.</p>
+  <p><strong>(b) 원환면(torus).</strong> 반지름 $a > r > 0$일 때
+  $\mathbf{x}(u,v) = \big((a + r\cos v)\cos u,\ (a + r\cos v)\sin u,\ r\sin v\big)$.
+  도넛 표면 — 곡면 전체를 방정식 $(\sqrt{x^2+y^2} - a)^2 + z^2 = r^2$의 정칙값
+  역상으로도 얻는다.</p>
+  <p><strong>(c) 그래프 $z = h(x,y)$.</strong> 임의의 매끄러운 $h$에 대해
+  $\mathbf{x}(u,v) = (u, v, h(u,v))$는 $\mathbf{x}_u \times \mathbf{x}_v = (-h_u, -h_v, 1) \neq \mathbf{0}$
+  이라 <strong>항상</strong> 정칙곡면이다 — 가장 간단하고 언제나 통하는 매개화.</p>
+</div>
+
+<h2 id="sec-tangent-plane">2. 접평면과 미분 — 곡면 위의 선형대수</h2>
+
+<p>곡면을 근사하는 최선의 평면이 접평면입니다. 접평면은 $S$ 위를 지나는 곡선들의
+<strong>속도벡터가 모여 만드는 평면</strong>으로 정의하는 것이 개념적으로 가장 깨끗해요
+— <a class="term" data-term="total-derivative">전미분</a>이 “최선의 일차근사”였던
+정신(<a href="../analysis/ch09.html#def-total-derivative">해석학 §9.11</a>)이
+곡면 위에서 되살아납니다.</p>
+
+<div class="box box-def" id="def-tangent-plane">
+  <span class="box-label">정의 · 접평면과 사상의 미분 <span class="label-en">tangent plane, differential</span> (두 카르모 §2)</span>
+  <p>$p = \mathbf{x}(q)$에서의 <strong>접벡터</strong>란 $\alpha(0) = p$인 곡선
+  $\alpha : (-\varepsilon, \varepsilon) \to S$의 속도 $\alpha'(0)$을 말한다.
+  이 접벡터 전체가 이루는 집합이 <strong>접평면</strong>이고,
+  $$T_p S = d\mathbf{x}_q(\mathbb{R}^2) = \operatorname{span}\{\mathbf{x}_u,\ \mathbf{x}_v\}$$
+  — 정칙 조건 ③ 덕분에 이것은 $\mathbb{R}^3$ 안의 <strong>2차원 부분공간</strong>이다
+  (기저 $\{\mathbf{x}_u, \mathbf{x}_v\}$). 단위법선은
+  $\mathbf{N} = \dfrac{\mathbf{x}_u \times \mathbf{x}_v}{|\mathbf{x}_u \times \mathbf{x}_v|}$.</p>
+  <p><strong>사상의 미분.</strong> $\varphi : S \to S'$가 미분가능하면, 각 $p$에서
+  선형사상
+  $$d\varphi_p : T_p S \to T_{\varphi(p)} S', \qquad
+  d\varphi_p(w) = (\varphi \circ \alpha)'(0) \quad (\alpha'(0) = w)$$
+  이 잘 정의된다(대표 곡선 $\alpha$의 선택과 무관). “곡면 사이의 사상을 접평면
+  사이의 <strong>선형사상</strong>으로 근사한다” — 다변수 미분의 야코비 행렬이 곡면
+  버전으로 옮겨온 것이다.</p>
+</div>
+
+<h2 id="sec-first-form">3. 제1기본형식 — 곡면 위에서 재는 자</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 내적을 접평면에 “물려주기”</span>
+  <p>$\mathbb{R}^3$에는 이미 <a class="term" data-term="euclidean-space">내적</a>이
+  있습니다. 접평면 $T_pS$는 $\mathbb{R}^3$의 부분공간이니, 그 내적을 그냥
+  <strong>접평면으로 제한</strong>하면 곡면 위 벡터들의 길이와 각도를 잴 수 있어요.
+  이 제한된 내적을 좌표 $\mathbf{x}_u, \mathbf{x}_v$의 언어로 적은 것이 제1기본형식
+  — 곡면 위 <strong>모든 측정(길이·각도·넓이)의 원천</strong>이 되는 단 하나의 이차형식입니다.</p>
+</div>
+
+<div class="box box-def" id="def-first-fundamental-form">
+  <span class="box-label">정의 · 제1기본형식 <span class="label-en">first fundamental form</span> (두 카르모 §2)</span>
+  <p>$T_pS$ 위의 이차형식
+  $$I_p(w) = \langle w, w \rangle_p = |w|^2 \ge 0 \qquad (w \in T_pS)$$
+  를 $p$에서의 <strong>제1기본형식</strong>이라 한다. $w = a\,\mathbf{x}_u + b\,\mathbf{x}_v$로
+  쓰면
+  $$I_p(w) = E\,a^2 + 2F\,ab + G\,b^2,$$
+  $$E = \langle \mathbf{x}_u, \mathbf{x}_u \rangle, \quad
+  F = \langle \mathbf{x}_u, \mathbf{x}_v \rangle, \quad
+  G = \langle \mathbf{x}_v, \mathbf{x}_v \rangle$$
+  가 그 <strong>계수</strong>다 (선형대수의 이차형식 행렬
+  $\begin{pmatrix} E & F \\ F & G \end{pmatrix}$; 양의 정부호).</p>
+  <p>이 세 함수 $E, F, G$ 하나로 곡면 위의 기하가 결정된다.</p>
+  <p>① <strong>길이(호의 길이)</strong>: 곡선 $\alpha(t) = \mathbf{x}(u(t), v(t))$의 길이는
+  $$s = \int \sqrt{\,E\,u'^2 + 2F\,u'v' + G\,v'^2\,}\ dt.$$
+  ② <strong>각도</strong>: 두 접벡터가 이루는 각은 $\cos\theta = \dfrac{\langle w_1, w_2\rangle}{|w_1||w_2|}$.
+  특히 좌표곡선($u$-곡선과 $v$-곡선)이 이루는 각은 $\cos\theta = \dfrac{F}{\sqrt{EG}}$
+  — <strong>직교 $\iff F = 0$</strong>.
+  ③ <strong>넓이</strong>: 영역 $\mathbf{x}(Q)$의 넓이는 라그랑주 항등식
+  $|\mathbf{x}_u \times \mathbf{x}_v|^2 = EG - F^2$에 의해
+  $$A = \iint_Q |\mathbf{x}_u \times \mathbf{x}_v|\ du\,dv
+  = \iint_Q \sqrt{EG - F^2}\ du\,dv.$$</p>
+</div>
+
+<details class="proof">
+  <summary>왜 넓이 원소가 $\sqrt{EG-F^2}$인가 <span class="proof-strategy">— 라그랑주 항등식으로 외적 크기를 계수로 번역.</span></summary>
+  <p>넓이 원소는 미소 평행사변형 $\mathbf{x}_u\,du$와 $\mathbf{x}_v\,dv$가 만드는
+  넓이 $|\mathbf{x}_u \times \mathbf{x}_v|\,du\,dv$다. 라그랑주 항등식
+  $$|\mathbf{x}_u \times \mathbf{x}_v|^2
+  = |\mathbf{x}_u|^2 |\mathbf{x}_v|^2 - \langle \mathbf{x}_u, \mathbf{x}_v\rangle^2
+  = EG - F^2$$
+  을 쓰면 $|\mathbf{x}_u \times \mathbf{x}_v| = \sqrt{EG - F^2}$. 정칙성($\mathbf{x}_u \times \mathbf{x}_v \neq \mathbf{0}$)이
+  곧 $EG - F^2 > 0$을 뜻하므로 근호 안은 항상 양수 — 넓이는 언제나 잘 정의된다.
+  <strong>핵심은 이 식이 외적($\mathbb{R}^3$의 정보)을 계수 $E, F, G$(곡면 내부의
+  정보)로 바꿔 적었다는 것</strong> — 넓이조차 내재적으로 잰다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 계수 $E, F, G$ 계산 세 번</span>
+  <p><strong>(a) 평면.</strong> 정규직교 $\mathbf{a}, \mathbf{b}$로
+  $\mathbf{x}(u,v) = p_0 + u\,\mathbf{a} + v\,\mathbf{b}$이면
+  $\mathbf{x}_u = \mathbf{a}$, $\mathbf{x}_v = \mathbf{b}$ —
+  $E = 1$, $F = 0$, $G = 1$. 곧 $I = du^2 + dv^2$, 유클리드 평면 그대로.</p>
+  <p><strong>(b) 원기둥.</strong> $\mathbf{x}(u,v) = (\cos u, \sin u, v)$이면
+  $\mathbf{x}_u = (-\sin u, \cos u, 0)$, $\mathbf{x}_v = (0,0,1)$ —
+  $E = 1$, $F = 0$, $G = 1$. <strong>평면과 완전히 같은 $I$!</strong> 이것이
+  §4의 “종이 말기”의 씨앗이다.</p>
+  <p><strong>(c) 구면(위도·경도).</strong> $\mathbf{x}(u,v) = (\cos v\cos u, \cos v\sin u, \sin v)$이면
+  $E = \cos^2 v$, $F = 0$, $G = 1$ — 넓이 원소 $\sqrt{EG - F^2} = \cos v$.
+  그래서 $\displaystyle\iint \cos v\,du\,dv = 4\pi$ (단위구 겉넓이)가 나온다.</p>
+</div>
+
+<h2 id="sec-isometry">4. 등거리사상 — 제1기본형식을 보존한다는 것</h2>
+
+<div class="box box-def" id="def-isometry">
+  <span class="box-label">정의 · 등거리사상과 국소등거리 <span class="label-en">isometry, local isometry</span> (두 카르모 §2)</span>
+  <p>미분동형 $\varphi : S \to S'$이 모든 $p$와 모든 $w_1, w_2 \in T_pS$에 대해
+  $$\langle w_1, w_2 \rangle_p = \langle d\varphi_p(w_1),\, d\varphi_p(w_2) \rangle_{\varphi(p)}$$
+  을 만족하면 <strong>등거리사상</strong>이라 한다 — 곧 <strong>제1기본형식을 보존</strong>한다는 뜻이며
+  ($I_p = I_{\varphi(p)} \circ d\varphi_p$), 따라서 곡면 위의 <strong>길이·각도·넓이를 모두 보존</strong>한다.
+  각 점의 어떤 근방에서만 이것이 성립하면 <strong>국소등거리</strong>라 한다.</p>
+  <p>실전 판정: 같은 매개변수 영역에서 두 곡면의 계수가
+  $E = \tilde E,\ F = \tilde F,\ G = \tilde G$로 일치하면 그 대응은 (국소)등거리사상이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 평면과 원기둥 — 종이 말기</span>
+  <p>§3 예제 (a), (b)에서 평면과 원기둥은 <strong>둘 다 $E = G = 1$, $F = 0$</strong>이었다.
+  그러니 평면 조각 $(u, v) \mapsto$ 원기둥 $(\cos u, \sin u, v)$는 제1기본형식을 보존하는
+  <strong>국소등거리사상</strong> — 평평한 종이를 <em>늘리거나 찢지 않고</em> 원기둥으로 말 수
+  있다는 일상 경험의 수학적 정체다. 종이 위에 그린 도형의 길이·각도·넓이는 말아도 그대로다.</p>
+  <p>단, <strong>전역 등거리사상은 아니다</strong>: 원기둥은 “한 바퀴 돌면 제자리”라
+  평면과 위상적으로 다르다(원기둥에는 축을 감는, 줄어들지 않는 고리가 있다).
+  국소적으로 같은 기하라도 전역적으로는 다를 수 있다.</p>
+  <p><strong>깊은 예고(빼어난 정리).</strong> 평면과 구면은 국소등거리가 <em>될 수 없다</em>
+  — 그래서 어떤 세계지도도 대륙의 넓이·각도를 동시에 정확히 담지 못한다. 제1기본형식만으로
+  정의되는 양(가우스 곡률)이 평면은 $0$, 구면은 $1/R^2$로 <strong>다르기 때문</strong>이다.
+  이 “$E, F, G$만으로 곡률이 결정된다”가 가우스의 <em>빼어난 정리</em>이고, 뒤 장의 목적지다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>매개화는 국소적이다.</strong> “곡면 = 한 장의 매개화 $\mathbf{x}(u,v)$”가
+  아니다 — 구는 한 장으로 못 덮는다(극과 날짜변경선에서 위상동형이 깨진다).
+  정칙곡면은 <em>여러 조각의 매개화로 덮인</em> 대상이며, 정의도 “각 점마다 근방
+  매개화가 존재”라는 국소 진술이다.</p>
+  <p>② <strong>$EG - F^2 > 0$은 언제나 참이다.</strong> $EG - F^2 = |\mathbf{x}_u \times \mathbf{x}_v|^2$이고
+  정칙 조건이 이것을 양수로 못 박기 때문. 계산에서 $EG - F^2 \le 0$이 나왔다면
+  매개화가 그 점에서 특이(정칙 아님)하거나 계산이 틀린 것이다. 또 $F = 0$은 “좌표곡선이
+  직교”라는 특수 상황일 뿐 일반적으로 $F \neq 0$이다.</p>
+  <p>③ <strong>제1기본형식은 내재적(intrinsic)이다.</strong> 곡면 위 벌레가 주변 $\mathbb{R}^3$을
+  보지 않고 <em>곡면 안에서만</em> 잴 수 있는 양 — 길이·각도·넓이·가우스 곡률이 여기 속한다.
+  반대로 곡면이 공간에서 “어느 쪽으로 얼마나 휘는지”(제2기본형식·주곡률)는 내재적이 아니다.
+  그래서 <strong>$I$가 같아도 곡면 모양은 다를 수 있다</strong>: 평면과 원기둥은 $I$가 같지만
+  하나는 평평하고 하나는 말려 있다. $I$는 곡면의 <em>내재 기하</em>만 담고, 공간 속 자세는 담지 않는다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">3장의 줄거리</span>
+  <p><a class="term" data-term="regular-surface">정칙곡면</a> = 국소적으로 평면처럼 생긴 것
+  (매끄러움 + 위상동형 + 정칙 $\mathbf{x}_u \times \mathbf{x}_v \neq \mathbf{0}$;
+  <a class="term" data-term="implicit-function-theorem">음함수 정리</a>로 방정식 $f = a$의
+  정칙값 역상도 곡면)
+  → 접평면 $T_pS = \operatorname{span}\{\mathbf{x}_u, \mathbf{x}_v\}$와 사상의 미분
+  $d\varphi_p$ (곡면 사이 사상을 선형사상으로 근사)
+  → <a class="term" data-term="first-fundamental-form">제1기본형식</a>
+  $I = E\,du^2 + 2F\,du\,dv + G\,dv^2$ = 접평면에 물려준 내적 —
+  길이 $\int\!\sqrt{Eu'^2 + 2Fu'v' + Gv'^2}$, 각도 $\cos\theta = F/\sqrt{EG}$,
+  넓이 $\iint\!\sqrt{EG - F^2}$
+  → <strong>등거리사상</strong> = $I$ 보존 = 내재 거리 보존 (평면↔원기둥 국소등거리, 종이 말기).</p>
+  <p><strong>한 문장:</strong> 곡면 위 모든 측정은 세 함수 $E, F, G$에서 나오고,
+  이 측정은 <em>주변 공간을 보지 않는 내재적</em> 기하다 — 다음 장의 제2기본형식(공간 속
+  휘어짐)과 짝을 이루어, 마침내 “$E, F, G$만으로 곡률이 결정된다”는 빼어난 정리로 간다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>정칙값 정리로 다음을 판정하라.</p>
+  <p>(1) 단위구 $x^2 + y^2 + z^2 = 1$이 정칙곡면임을 보여라.
+  (2) 원뿔 $z^2 = x^2 + y^2$은 원점을 포함해도 정칙곡면인가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$f = a$ 꼴로 놓고 $\nabla f$가 해집합 위에서 $\mathbf{0}$이 되는지 본다.
+    (2)는 꼭짓점에서 접평면이 무엇이 되는지 상상해 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>정칙곡면이다.</strong> $f(x,y,z) = x^2 + y^2 + z^2$, $\nabla f = 2(x,y,z)$는
+    원점에서만 $\mathbf{0}$인데 원점은 $f = 1$을 만족하지 않는다. 따라서 $1$은 정칙값이고
+    $f^{-1}(1) = S^2$은 정칙곡면.</p>
+    <p>(2) <strong>원점을 포함하면 정칙곡면이 아니다.</strong> $g = x^2 + y^2 - z^2$로 놓으면
+    $\nabla g = 2(x, y, -z)$가 원점 $(0,0,0)$에서 $\mathbf{0}$ — 원점은 정칙값 조건이 깨지는
+    점이고, 실제로 꼭짓점에서는 접평면(2차원)이 존재하지 않는다(뾰족점). 원점을 뺀
+    $z^2 = x^2 + y^2,\ z \neq 0$은 정칙곡면.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>원기둥 $\mathbf{x}(u,v) = (\cos u, \sin u, v)$에 대해 (1) $E, F, G$를 구하고
+  (2) 넓이 원소 $\sqrt{EG - F^2}$를 구하라. (3) 이로부터 평면과 국소등거리임을 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\mathbf{x}_u = (-\sin u, \cos u, 0)$, $\mathbf{x}_v = (0, 0, 1)$을 내적하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\mathbf{x}_u = (-\sin u, \cos u, 0)$, $\mathbf{x}_v = (0,0,1)$이므로
+    $E = \langle \mathbf{x}_u, \mathbf{x}_u\rangle = \sin^2 u + \cos^2 u = 1$,
+    $F = \langle \mathbf{x}_u, \mathbf{x}_v\rangle = 0$,
+    $G = \langle \mathbf{x}_v, \mathbf{x}_v\rangle = 1$.</p>
+    <p>(2) $\sqrt{EG - F^2} = \sqrt{1\cdot 1 - 0} = 1$ — 넓이 원소가 $du\,dv$로 평면과 같다.</p>
+    <p>(3) 평면 $\tilde{\mathbf{x}}(u,v) = (u, v, 0)$도 $\tilde E = \tilde G = 1$, $\tilde F = 0$이라
+    세 계수가 원기둥과 <strong>완전히 일치</strong>한다. 같은 $(u,v)$를 대응시키는 사상은
+    제1기본형식을 보존하므로 국소등거리사상 — 종이를 말아 원기둥을 만드는 것이다.
+    (전역 등거리는 아니다: 위상이 다르다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">do Carmo §2 연습 유형</span>
+    <span class="difficulty">●●●</span>
+    <span>회전면의 제1기본형식</span>
+  </div>
+  <p>$xz$-평면의 곡선을 $z$-축으로 돌린 회전면
+  $$\mathbf{x}(u, v) = \big(f(v)\cos u,\ f(v)\sin u,\ g(v)\big) \quad (f(v) > 0)$$
+  의 제1기본형식 계수 $E, F, G$를 구하고, 좌표곡선이 직교함을 보여라.
+  이어 이를 단위구 매개화에 적용해 $E, F, G$를 확인하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\mathbf{x}_u$는 $u$(회전각)에 대한 편미분, $\mathbf{x}_v$는 모선(profile) 방향.
+    $\langle \mathbf{x}_u, \mathbf{x}_v\rangle$을 직접 전개하면 항들이 소거된다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\mathbf{x}_u = (-f\sin u,\ f\cos u,\ 0)$,
+    $\mathbf{x}_v = (f'\cos u,\ f'\sin u,\ g')$이므로
+    $$E = f^2\sin^2 u + f^2\cos^2 u = f(v)^2,$$
+    $$F = -ff'\sin u\cos u + ff'\cos u \sin u + 0 = 0,$$
+    $$G = f'^2\cos^2 u + f'^2\sin^2 u + g'^2 = f'(v)^2 + g'(v)^2.$$
+    $F = 0$이므로 <strong>평행선(위도원)과 경선(자오선)은 항상 직교</strong>한다 — 회전면의
+    보편 성질. 넓이 원소는 $\sqrt{EG - F^2} = f\sqrt{f'^2 + g'^2}$.</p>
+    <p><strong>단위구 적용.</strong> $f(v) = \cos v$, $g(v) = \sin v$ (모선이 단위원)이면
+    $E = \cos^2 v$, $F = 0$, $G = \sin^2 v + \cos^2 v = 1$ — §3 예제 (c)와 일치.
+    넓이 원소는 $\cos v$. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>제1기본형식으로 길이·각도 재기</span>
+  </div>
+  <p>어떤 곡면의 매개화에서 $E = 1$, $F = 0$, $G = \cosh^2 u$라 하자 (전형적 현수면 꼴).
+  (1) 좌표곡선 $u \mapsto \mathbf{x}(u, v_0)$의 $u \in [0, a]$ 부분의 길이를 구하라.
+  (2) 접벡터 $w_1 = \mathbf{x}_u$와 $w_2 = \mathbf{x}_u + \mathbf{x}_v$가 이루는 각의 코사인을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $v$ 고정이면 $v' = 0$이라 길이 적분이 $\int\sqrt{E}\,du$로 준다.
+    (2) $\langle w_1, w_2\rangle = E + F$, $|w_2|^2 = E + 2F + G$를 계수로 전개.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $v = v_0$ 고정이면 $v' = 0$, 길이
+    $\displaystyle s = \int_0^a \sqrt{E\,u'^2}\,du = \int_0^a \sqrt{1}\,du = a$.
+    ($E = 1$이라 $u$-곡선은 호의 길이 매개화되어 있다.)</p>
+    <p>(2) $\langle w_1, w_2\rangle = \langle \mathbf{x}_u, \mathbf{x}_u + \mathbf{x}_v\rangle
+    = E + F = 1$.
+    $|w_1| = \sqrt{E} = 1$,
+    $|w_2|^2 = \langle \mathbf{x}_u + \mathbf{x}_v, \mathbf{x}_u + \mathbf{x}_v\rangle
+    = E + 2F + G = 1 + \cosh^2 u$.
+    따라서
+    $$\cos\theta = \frac{E + F}{\sqrt{E}\,\sqrt{E + 2F + G}}
+    = \frac{1}{\sqrt{1 + \cosh^2 u}}. \qquad \blacksquare$$
+    (모든 계산이 $E, F, G$만으로 끝난다 — 곡면을 $\mathbb{R}^3$ 안에서 그려 볼 필요가 없다.
+    이것이 “내재적”의 실전 의미다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>그래프 곡면의 넓이</span>
+  </div>
+  <p>그래프 $z = h(x, y)$의 표준 매개화 $\mathbf{x}(u, v) = (u, v, h(u, v))$에 대해
+  (1) $E, F, G$를 구하고 (2) 넓이 공식이
+  $\displaystyle A = \iint_Q \sqrt{1 + h_u^2 + h_v^2}\ du\,dv$임을 보여라.
+  (3) 이를 이용해 포물면 조각 $z = \tfrac12(x^2 + y^2)$의 $x^2 + y^2 \le R^2$ 위 넓이를
+  적분식으로 나타내고 값을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\mathbf{x}_u = (1, 0, h_u)$, $\mathbf{x}_v = (0, 1, h_v)$. $EG - F^2$을 전개하면
+    $1 + h_u^2 + h_v^2$이 남는다. (3)은 극좌표로 $h_u^2 + h_v^2 = x^2 + y^2 = \rho^2$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\mathbf{x}_u = (1, 0, h_u)$, $\mathbf{x}_v = (0, 1, h_v)$이므로
+    $E = 1 + h_u^2$, $F = h_u h_v$, $G = 1 + h_v^2$.</p>
+    <p>(2) $EG - F^2 = (1 + h_u^2)(1 + h_v^2) - (h_u h_v)^2
+    = 1 + h_u^2 + h_v^2 + h_u^2 h_v^2 - h_u^2 h_v^2 = 1 + h_u^2 + h_v^2$.
+    따라서 $A = \iint_Q \sqrt{EG - F^2}\,du\,dv = \iint_Q \sqrt{1 + h_u^2 + h_v^2}\,du\,dv$.</p>
+    <p>(3) $h = \tfrac12(u^2 + v^2)$이면 $h_u = u$, $h_v = v$, 피적분은
+    $\sqrt{1 + u^2 + v^2}$. 극좌표 $u = \rho\cos\phi,\ v = \rho\sin\phi$로
+    $$A = \int_0^{2\pi}\!\!\int_0^R \sqrt{1 + \rho^2}\ \rho\,d\rho\,d\phi
+    = 2\pi \left[\tfrac13 (1 + \rho^2)^{3/2}\right]_0^R
+    = \frac{2\pi}{3}\Big((1 + R^2)^{3/2} - 1\Big). \qquad \blacksquare$$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

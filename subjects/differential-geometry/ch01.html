@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1장 정칙곡선과 프레네 공식 — 미분기하학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="differential-geometry" data-chapter="ch01.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미분기하학 · do Carmo (§1)</p>
+  <h1><span class="ch-num">1</span> 정칙곡선과 프레네 공식</h1>
+  <p class="ch-source">“곡선은 어떻게 휘어지는가”를 숫자 둘 — 곡률과 열률 — 로 완전히
+  받아쓰는 장. 곡선을 따라 움직이는 작은 좌표틀을 세우고, 그 틀의 도함수를 자기
+  자신으로 되풀어 적으면 곡선의 모든 기하가 손 안에 들어온다.</p>
+</div>
+
+<p>미적분에서 곡선은 “그래프”였습니다. 미분기하에서 곡선은 <strong>움직임</strong>입니다 —
+시각 $t$에 위치 $\alpha(t)$에 있는 한 점의 궤적. 이 관점의 힘은
+<a class="term" data-term="derivative">도함수</a>가 곧 속도벡터가 되어, 곡선이 어느
+방향으로 얼마나 빨리 나아가는지를 알려준다는 데 있습니다. 이 장의 목표는 단 하나 —
+<strong>곡선이 매 순간 얼마나 굽어 있고(곡률), 얼마나 평면에서 벗어나 비틀리는지
+(열률)를 도함수만으로 정의</strong>하고, 그 둘이 곡선을 (놓인 위치를 무시하면)
+완전히 결정함을 보이는 것입니다. 무대는 3차원 유클리드 공간 $\mathbb{R}^3$입니다.</p>
+
+<h2 id="sec-regular">1. 매개곡선과 정칙성 — 속도가 죽지 않는 곡선</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>곡선을 “도로”가 아니라 그 위를 달리는 “자동차의 주행 기록”으로 봅니다.
+  각 시각 $t$의 위치가 $\alpha(t)$, 속도가 $\alpha'(t)$입니다. 그런데 자동차가
+  잠깐 <strong>멈추면</strong>($\alpha'(t)=0$) 진행 방향을 물을 수 없습니다 —
+  방향 없이는 “곡선이 어디로 휘는지”도 말할 수 없죠. 그래서 우리는 절대 멈추지
+  않는 주행, 즉 <strong>정칙곡선</strong>만 다룹니다. 게다가 같은 도로라도 빠르게/느리게
+  달리면 기록이 달라지므로, 아예 <strong>“1초에 1미터”</strong>의 등속 주행으로
+  다시 매개하면(호장 매개변수) 기하가 속도에 오염되지 않고 깨끗하게 드러납니다.</p>
+</div>
+
+<div class="box box-def" id="def-regular-curve">
+  <span class="box-label">정의 · 정칙곡선과 호장 <span class="label-en">regular curve, arc length</span> (두 카르모 §1)</span>
+  <p>구간 $I \subseteq \mathbb{R}$에서 정의된 미분가능 사상
+  $\alpha : I \to \mathbb{R}^3$, $\alpha(t) = (x(t), y(t), z(t))$를
+  <strong>매개곡선</strong>이라 한다. $\alpha'(t) = (x'(t), y'(t), z'(t))$는
+  <strong>접벡터(속도벡터)</strong>, $|\alpha'(t)|$는 <strong>속력</strong>이다.
+  모든 $t$에서 $\alpha'(t) \neq 0$이면 $\alpha$를 <strong>정칙곡선</strong>이라 한다.</p>
+  <p><strong>호장(arc length):</strong> 기준점 $t_0$부터 잰 곡선의 길이는</p>
+  $$s(t) = \int_{t_0}^{t} |\alpha'(u)|\, du.$$
+  <p>정칙이면 $s'(t) = |\alpha'(t)| \gt 0$이라 $s$는 순증가 —
+  $t$를 $s$로 바꿔 끼울 수 있다. 이렇게 얻은 재매개변수화
+  $\beta(s) = \alpha(t(s))$는 연쇄법칙으로</p>
+  $$|\beta'(s)| = \left|\alpha'(t)\,\frac{dt}{ds}\right|
+  = |\alpha'(t)| \cdot \frac{1}{|\alpha'(t)|} = 1$$
+  <p>즉 <strong>단위속력(호장 매개)</strong>이 된다. 앞으로 특별한 말이 없으면 곡선은
+  단위속력이라 가정하고, 미분은 $\dfrac{d}{ds}$이며 접벡터는
+  $T(s) = \beta'(s)$ (단위벡터)로 쓴다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 원과 상칭나선을 호장으로</span>
+  <p><strong>(a) 원.</strong> $\alpha(t) = (r\cos t, r\sin t, 0)$이면
+  $\alpha'(t) = (-r\sin t, r\cos t, 0)$, 속력 $|\alpha'| = r$ (상수, 정칙).
+  호장은 $s = rt$이므로 $t = s/r$, 단위속력 매개는
+  $\beta(s) = \big(r\cos\tfrac{s}{r},\, r\sin\tfrac{s}{r},\, 0\big)$ — 반지름 $r$인
+  원을 “1초에 1미터”로 도는 기록.</p>
+  <p><strong>(b) 원기둥나선(helix).</strong> $\alpha(t) = (a\cos t, a\sin t, bt)$,
+  $a \gt 0$. 속력 $|\alpha'| = \sqrt{a^2 + b^2} =: c$ (상수). 호장 $s = ct$이므로</p>
+  $$\beta(s) = \Big(a\cos\tfrac{s}{c},\; a\sin\tfrac{s}{c},\; \tfrac{b}{c}\,s\Big),
+  \qquad c = \sqrt{a^2 + b^2}.$$
+  <p>확인: $\beta'(s) = \big(-\tfrac{a}{c}\sin\tfrac{s}{c},\, \tfrac{a}{c}\cos\tfrac{s}{c},\,
+  \tfrac{b}{c}\big)$, $|\beta'(s)| = \sqrt{\tfrac{a^2 + b^2}{c^2}} = 1$ ✓. 이 나선을
+  이 장 내내 곡률·열률의 표준 실험대로 쓴다.</p>
+</div>
+
+<h2 id="sec-curvature">2. 곡률과 열률 — 굽음과 비틀림의 두 숫자</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>단위속력 곡선에서 접벡터 $T$는 길이가 항상 $1$이라, $T$가 변한다면 그 변화는
+  오직 <strong>방향의 회전</strong>뿐입니다. 그 회전 속도가 곧 <strong>곡률</strong> $\kappa$ —
+  직선이면 $T$가 안 돌아 $\kappa = 0$, 급커브일수록 $\kappa$가 큽니다.
+  한편 곡선이 한 평면 안에만 있으면 “접촉평면”이 고정돼 있는데, 곡선이 그 평면을
+  벗어나 3차원으로 비틀려 나가는 정도가 <strong>열률(비틀림)</strong> $\tau$입니다.
+  나선 계단을 떠올리면 — 한 바퀴의 굽음이 $\kappa$, 위로 솟아오르는 꼬임이 $\tau$.</p>
+</div>
+
+<div class="box box-def" id="curvature-torsion">
+  <span class="box-label">정의 · 곡률과 열률 <span class="label-en">curvature, torsion</span> (두 카르모 §1)</span>
+  <p>단위속력 곡선 $\beta(s)$에 대해 $T(s) = \beta'(s)$는 단위접벡터다.</p>
+  <p><strong>곡률:</strong>
+  $$\kappa(s) = |T'(s)| = |\beta''(s)| \;\ge 0.$$
+  $|T| \equiv 1$을 미분하면 $T' \cdot T = 0$이므로 $T'$은 $T$에 수직이다.
+  $\kappa(s) \gt 0$인 점에서 <strong>주법선(principal normal)</strong>을
+  $$N(s) = \frac{T'(s)}{\kappa(s)} = \frac{\beta''(s)}{|\beta''(s)|}$$
+  로 정의하면 $N$은 단위벡터이고 $T \perp N$. 그러면
+  $\boxed{T' = \kappa N}$ — 곡률은 “접벡터가 $N$ 방향으로 얼마나 빨리 도는가”.</p>
+  <p><strong>종법선과 열률:</strong> $B(s) = T(s) \times N(s)$를
+  <strong>종법선(binormal)</strong>이라 한다. $\{T, N, B\}$는 각 점에서 오른손
+  정규직교틀이다. $B'$은 (뒤에서 보듯) $N$에 평행하며, 그 계수로 <strong>열률</strong>
+  $\tau(s)$를 정의한다:
+  $$B'(s) = -\tau(s)\, N(s).$$
+  기하적으로 $\kappa$는 곡선이 접선에서 벗어나 굽는 정도, $\tau$는 곡선이
+  $T$–$N$이 이루는 <strong>접촉평면(osculating plane)</strong>에서 벗어나 비틀리는
+  정도를 잰다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 나선의 곡률과 열률</span>
+  <p>$\beta(s) = \big(a\cos\tfrac{s}{c}, a\sin\tfrac{s}{c}, \tfrac{b}{c}s\big)$,
+  $c = \sqrt{a^2+b^2}$에서
+  $\beta''(s) = \big(-\tfrac{a}{c^2}\cos\tfrac{s}{c}, -\tfrac{a}{c^2}\sin\tfrac{s}{c}, 0\big)$이므로</p>
+  $$\kappa = |\beta''| = \frac{a}{c^2} = \frac{a}{a^2 + b^2} \;(\text{상수}), \qquad
+  \tau = \frac{b}{a^2 + b^2} \;(\text{상수, 뒤에서 계산}).$$
+  <p>둘 다 상수 — 나선은 “매 순간 똑같이 굽고 똑같이 비틀리는” 곡선이다.
+  극한을 보면 직관이 맞아떨어진다: $b \to 0$이면 $\kappa \to 1/a$, $\tau \to 0$
+  (반지름 $a$인 <strong>원</strong>); $a \to 0$이면 $\kappa \to 0$
+  (곧게 뻗는 <strong>직선</strong>).</p>
+</div>
+
+<h2 id="sec-frenet">3. 프레네 틀과 프레네 공식</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>곡선을 따라 달리는 작은 우주선에 세 축 $\{T, N, B\}$를 붙입니다 — 진행 방향
+  $T$, 굽는 쪽 $N$, 그와 수직인 $B$. 이 “움직이는 좌표계”가
+  <strong>프레네 틀</strong>입니다. 놀라운 사실: 이 세 축의 <em>변화율</em>
+  $T', N', B'$을 다시 이 세 축으로 표현하면, 계수로 나오는 것이 정확히
+  <strong>$\kappa$와 $\tau$ 둘뿐</strong>입니다. 즉 “틀이 어떻게 회전하는가”가
+  곧 곡선의 기하 전부이고, 그 회전을 받아쓴 것이 프레네 공식입니다.
+  비결은 하나 — 정규직교틀의 도함수 행렬은 항상 <strong>반대칭</strong>이라는 점.</p>
+</div>
+
+<div class="box box-thm" id="def-frenet-formulas">
+  <span class="box-label">정리 · 프레네 틀과 프레네 공식 <span class="label-en">Frenet formulas</span> (두 카르모 §1)</span>
+  <p><strong>이 정리가 하는 일:</strong> 움직이는 정규직교틀의 도함수를 그 틀 자신으로
+  전개해, 곡선의 국소 기하를 $\kappa, \tau$ 두 함수로 압축한다. 미분기하 계산의
+  “구구단”이다.</p>
+  <p>$\kappa \gt 0$인 단위속력 곡선의 프레네 틀 $\{T, N, B\}$
+  ($T = \beta'$, $N = T'/\kappa$, $B = T \times N$)에 대해</p>
+  $$\begin{aligned}
+  T' &= \phantom{-}\kappa\, N, \\
+  N' &= -\kappa\, T \phantom{{}+ \kappa N} + \tau\, B, \\
+  B' &= \phantom{-\kappa T} -\tau\, N.
+  \end{aligned}$$
+  <p>행렬로 쓰면 도함수 연산이 <strong>반대칭 행렬</strong>이 된다:</p>
+  $$\frac{d}{ds}\begin{pmatrix} T \\ N \\ B \end{pmatrix}
+  = \begin{pmatrix} 0 & \kappa & 0 \\ -\kappa & 0 & \tau \\ 0 & -\tau & 0 \end{pmatrix}
+  \begin{pmatrix} T \\ N \\ B \end{pmatrix}.$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 정규직교틀 도함수는 반대칭. 아는 성분($T'=\kappa N$)을 넣고 반대칭성으로 나머지를 강제한다.</span></summary>
+  <p><strong>1단계 — 반대칭성.</strong> $e_1 = T, e_2 = N, e_3 = B$로 두면
+  정규직교이므로 $e_i \cdot e_j = \delta_{ij}$. 양변을 $s$로 미분하면</p>
+  $$e_i' \cdot e_j + e_i \cdot e_j' = 0
+  \quad\Longrightarrow\quad a_{ij} + a_{ji} = 0, \qquad a_{ij} := e_i' \cdot e_j.$$
+  <p>따라서 계수행렬 $(a_{ij})$는 반대칭 — 대각성분 $a_{ii} = 0$이고
+  $a_{ji} = -a_{ij}$. 정규직교틀이라 $e_i' = \sum_j a_{ij} e_j$로 완전히 복원되므로,
+  독립 성분은 $a_{12}, a_{13}, a_{23}$ 셋뿐이다.</p>
+  <p><strong>2단계 — 성분 식별.</strong> 곡률의 정의에서 $T' = \kappa N$이므로
+  $a_{12} = T' \cdot N = \kappa$이고 $a_{13} = T' \cdot B = 0$
+  (이미 $T' \parallel N \perp B$). 남은 자유도 $a_{23} = N' \cdot B$를
+  <strong>열률 $\tau$로 정의</strong>한다: $\tau := N' \cdot B$.</p>
+  <p><strong>3단계 — 조립.</strong> 반대칭성으로 $a_{21} = -\kappa$, $a_{31} = 0$,
+  $a_{32} = -\tau$. 각 행을 펼치면</p>
+  $$T' = a_{12}N + a_{13}B = \kappa N,\quad
+  N' = a_{21}T + a_{23}B = -\kappa T + \tau B,\quad
+  B' = a_{31}T + a_{32}N = -\tau N.$$
+  <p>특히 $B' = -\tau N$은 $B'$이 $N$에 평행함을 <em>증명</em>하며, 이는
+  2절에서 열률을 $B' = -\tau N$으로 정의한 것과 정확히 일치한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 나선의 열률을 프레네로 마무리</span>
+  <p>2절의 나선에서 $T = \beta'$, $N = (-\cos\tfrac{s}{c}, -\sin\tfrac{s}{c}, 0)$이고
+  $B = T \times N = \big(\tfrac{b}{c}\sin\tfrac{s}{c}, -\tfrac{b}{c}\cos\tfrac{s}{c}, \tfrac{a}{c}\big)$.
+  이를 미분하면
+  $B'(s) = \big(\tfrac{b}{c^2}\cos\tfrac{s}{c}, \tfrac{b}{c^2}\sin\tfrac{s}{c}, 0\big)
+  = -\tfrac{b}{c^2}\,N$이므로 $B' = -\tau N$에서</p>
+  $$\tau = \frac{b}{c^2} = \frac{b}{a^2 + b^2}.$$
+  <p>부호가 중요하다: $b \gt 0$(오른나사)이면 $\tau \gt 0$, $b \lt 0$(왼나사)이면
+  $\tau \lt 0$ — 곡률과 달리 <strong>열률은 부호를 가진다</strong>. 감기는 방향까지
+  기억하는 것이 열률이다.</p>
+</div>
+
+<h2 id="sec-fundamental">4. 곡선론의 기본정리 — $\kappa, \tau$가 곡선을 결정한다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>지금까지는 “곡선 → $(\kappa, \tau)$”였습니다. 이제 방향을 뒤집습니다:
+  곡률과 열률 두 함수만 주면 그에 맞는 곡선이 <strong>존재하고</strong>, 공간에서
+  회전·평행이동(강체운동)으로 옮겨 겹치는 것을 같다고 보면 <strong>유일</strong>합니다.
+  다시 말해 $\kappa(s)$와 $\tau(s)$는 곡선의 “완전한 신분증” — 곡선이 놓인
+  자리는 잊고 굽음과 비틀림만으로 곡선의 모양이 전부 결정됩니다.</p>
+</div>
+
+<div class="box box-thm" id="thm-fundamental-curves">
+  <span class="box-label">정리 · 곡선론의 기본정리 <span class="label-en">fundamental theorem of the local theory of curves</span> (두 카르모 §1)</span>
+  <p><strong>이 정리가 하는 일:</strong> 국소 기하 데이터 $(\kappa, \tau)$와
+  공간곡선을 강체운동을 무시하고 <strong>일대일 대응</strong>시킨다 — 곡선론의
+  “존재·유일성” 정리.</p>
+  <p>구간 $I$ 위의 매끄러운 함수 $\kappa(s) \gt 0$, $\tau(s)$가 주어지면,
+  곡률이 $\kappa$, 열률이 $\tau$인 단위속력 곡선
+  $\beta : I \to \mathbb{R}^3$이 <strong>존재</strong>한다. 또한 두 곡선이 같은
+  $\kappa, \tau$를 가지면, 하나를 <strong>강체운동</strong>(회전 $A \in SO(3)$ 뒤
+  평행이동)으로 옮겨 다른 하나에 정확히 포갤 수 있다 — 즉 곡선은 강체운동을
+  무시하고 유일하다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 프레네 공식을 선형 ODE로 읽는다: 존재는 ODE 해의 존재, 유일은 초기틀을 맞추는 강체운동.</span></summary>
+  <p><strong>존재.</strong> 미지의 세 벡터함수 $T, N, B$에 대한 프레네 공식은
+  성분 9개짜리 <strong>선형 상미분방정식계</strong> $F'(s) = M(s)\,F(s)$이다
+  ($M$은 위의 반대칭 행렬, 성분이 매끄럽다). 초기값으로 $s_0$에서 표준 정규직교틀
+  $\{e_1, e_2, e_3\}$을 주면, 선형 ODE의 존재·유일성 정리로 해 $\{T, N, B\}$가
+  유일하게 존재한다. 반대칭성 덕분에 $\frac{d}{ds}(e_i \cdot e_j) = 0$이라 이
+  해는 <em>모든</em> $s$에서 정규직교로 유지된다. 마지막으로
+  $\beta(s) = \int_{s_0}^{s} T(u)\,du$로 두면 $\beta' = T$, $|\beta'| = 1$이고
+  프레네 관계로부터 곡률이 $\kappa$, 열률이 $\tau$임이 나온다.</p>
+  <p><strong>유일성.</strong> 같은 $\kappa, \tau$를 갖는 두 곡선 $\beta, \tilde\beta$을
+  잡자. 강체운동으로 $s_0$에서 두 곡선의 프레네 틀을 일치시킨다(회전으로 틀을 맞추고
+  평행이동으로 점을 맞춘다 — 둘 다 정규직교 오른손틀이라 가능). 그러면 두 틀이 같은
+  선형 ODE의 같은 초기값 해이므로 ODE 유일성에 의해 모든 $s$에서
+  $T \equiv \tilde T$. 적분하면 $\beta \equiv \tilde\beta$.
+  (틀의 내적 $\sum |e_i - \tilde e_i|^2$의 도함수가 $0$임을 보이는 계산이 표준
+  논법이다.)</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 상수 $\kappa, \tau$의 곡선 사전</span>
+  <p>기본정리로 “곡률·열률이 상수”인 곡선을 완전히 분류할 수 있다.</p>
+  <p><strong>(a) $\kappa = 0$:</strong> $T' = 0$이라 $T$가 상수 — 직선
+  $\beta(s) = \beta(0) + sT$. (곡률이 $0$이면 $N$이 정의되지 않아 열률은 애초에
+  묻지 않는다.)</p>
+  <p><strong>(b) $\kappa = $ 상수 $\gt 0$, $\tau = 0$:</strong> 반지름 $1/\kappa$인
+  <strong>원</strong> (평면곡선). $\tau \equiv 0$이 곧 “평면에 놓임”의 특징이다
+  (아래 오해 상자 참고).</p>
+  <p><strong>(c) $\kappa, \tau$ 둘 다 상수 ($\kappa \gt 0$):</strong>
+  <strong>원기둥나선</strong>. 앞의 예제를 거꾸로 풀면
+  $a = \dfrac{\kappa}{\kappa^2 + \tau^2}$, $b = \dfrac{\tau}{\kappa^2 + \tau^2}$인
+  나선이 유일한 답이다. “상수 곡률+상수 열률 $\iff$ 나선”은 임용 단골 명제.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>정칙성 없이는 $T$가 없다.</strong> $\alpha'(t_0) = 0$인 점에서는 단위
+  접벡터 $T = \alpha'/|\alpha'|$를 만들 수 없다 — 첨점(cusp)이 생길 수 있고 곡선론
+  전체가 무너진다. 예: $\alpha(t) = (t^2, t^3)$는 $t=0$에서 $\alpha'(0)=0$이라
+  뾰족점을 갖는다. “정칙”은 장식이 아니라 모든 정의의 전제다.</p>
+  <p>② <strong>$\kappa = 0$이면 $N$이 미정의.</strong> $N = T'/\kappa$는
+  $\kappa \gt 0$일 때만 뜻이 있다. 곡률이 $0$이 되는 점(변곡점)에서는 주법선·종법선·
+  열률이 모두 정의되지 않는다. 그래서 기본정리도 $\kappa \gt 0$을 가정한다.</p>
+  <p>③ <strong>일반 매개에서 곡률 공식.</strong> 곡선이 단위속력이 아닐 때
+  일일이 호장으로 다시 매개할 필요는 없다. 임의 정칙 매개 $\alpha(t)$에 대해</p>
+  $$\kappa = \frac{|\alpha' \times \alpha''|}{|\alpha'|^3}, \qquad
+  \tau = \frac{(\alpha' \times \alpha'') \cdot \alpha'''}{|\alpha' \times \alpha''|^2}.$$
+  <p>속력이 상수가 아니면 $|\alpha''| \neq \kappa$임에 주의 — $\alpha''$에는
+  “속도를 바꾸는 성분(접선 방향)”이 섞여 있어서 $|\alpha''|$을 곡률로 착각하면
+  틀린다. 위 공식은 그 접선 성분을 외적으로 걸러낸 것이다.</p>
+  <p>④ <strong>평면성의 판정.</strong> ($\kappa \gt 0$인 곡선이) 한 평면 위에 놓임
+  $\iff$ $\tau \equiv 0$. “$\tau = 0$이면 평면곡선”은 맞지만, 그 전제로 곡률이
+  어디서도 $0$이 아니어야 함을 빠뜨리면 반례 위험이 있다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">1장의 줄거리</span>
+  <p><a class="term" data-term="regular-curve">정칙곡선</a>
+  ($\alpha' \neq 0$, 그래야 진행 방향이 있다) → 호장 매개로 <strong>단위속력</strong>
+  ($|\beta'| = 1$)으로 정규화 → 접벡터 $T$의 회전 속도가
+  <strong>곡률</strong> $\kappa = |T'|$, 굽는 방향이 주법선 $N$, 종법선 $B = T\times N$
+  → 정규직교틀의 도함수는 반대칭이라는 한 줄에서
+  <a class="term" data-term="frenet-formulas">프레네 공식</a>
+  $T' = \kappa N$, $N' = -\kappa T + \tau B$, $B' = -\tau N$이 강제로 나오고,
+  여기서 <strong>열률</strong> $\tau$가 정의된다 (평면 이탈의 척도, 부호 있음)
+  → <strong>곡선론의 기본정리</strong>: $\kappa \gt 0$과 $\tau$가 곡선을 강체운동을
+  무시하고 유일하게 결정 — 직선($\kappa=0$)·원($\kappa$ 상수, $\tau=0$)·
+  나선(둘 다 상수)이 그 사전.</p>
+  <p><strong>다음 장으로:</strong> 곡선에서 세운 “움직이는 틀 → 그 도함수”라는
+  전략이 곡면에서는 제1·제2 기본형식과 형상 연산자로 확장된다 — 프레네 공식은
+  그 예고편이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>곡선 $\alpha(t) = (e^t\cos t,\, e^t\sin t)$ ($t \in \mathbb{R}$, 로그나선)에 대해
+  (1) 정칙임을 보이고, (2) $t=0$부터 잰 호장 $s(t)$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\alpha'(t)$를 성분별로 미분하고 $|\alpha'(t)|$를 계산. 지수함수는 $0$이
+    되지 않는다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\alpha'(t) = (e^t(\cos t - \sin t),\, e^t(\sin t + \cos t))$이므로
+    $|\alpha'(t)|^2 = e^{2t}\big[(\cos t - \sin t)^2 + (\sin t + \cos t)^2\big]
+    = e^{2t} \cdot 2$. 따라서 $|\alpha'(t)| = \sqrt2\, e^t \gt 0$ — 모든 $t$에서
+    정칙.</p>
+    <p>(2) $s(t) = \displaystyle\int_0^t \sqrt2\, e^u\, du = \sqrt2\,(e^t - 1)$.
+    (참고: $t \to -\infty$에서 $s \to -\sqrt2$로 유한 — 로그나선은 중심으로
+    무한히 감기지만 그 총길이는 유한하다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>나선 $\beta(s) = \big(a\cos\tfrac{s}{c}, a\sin\tfrac{s}{c}, \tfrac{b}{c}s\big)$
+  ($c = \sqrt{a^2+b^2}$, $a\gt 0$)의 프레네 틀 $T, N, B$를 구하고, 프레네 공식
+  $N' = -\kappa T + \tau B$를 직접 대입해 검증하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$T = \beta'$, $N = \beta''/\kappa$, $B = T\times N$. $\theta = s/c$로 두면
+    미분이 깔끔하다. $\kappa = a/c^2$, $\tau = b/c^2$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\theta = s/c$로 쓰면
+    $T = \big(-\tfrac{a}{c}\sin\theta, \tfrac{a}{c}\cos\theta, \tfrac{b}{c}\big)$,
+    $N = (-\cos\theta, -\sin\theta, 0)$,
+    $B = \big(\tfrac{b}{c}\sin\theta, -\tfrac{b}{c}\cos\theta, \tfrac{a}{c}\big)$.</p>
+    <p>$N' = \tfrac{d}{ds}N = \big(\tfrac1c\sin\theta, -\tfrac1c\cos\theta, 0\big)$.
+    한편 $-\kappa T + \tau B$에 $\kappa = \tfrac{a}{c^2}$, $\tau = \tfrac{b}{c^2}$를
+    넣으면 세 성분이 각각
+    $\tfrac{a^2 + b^2}{c^3}\sin\theta = \tfrac1c\sin\theta$,
+    $-\tfrac1c\cos\theta$, $-\tfrac{ab}{c^3} + \tfrac{ab}{c^3} = 0$ —
+    $N'$과 정확히 일치. ✓</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">do Carmo §1 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>일반 매개곡선의 곡률 공식 $\kappa = \dfrac{|\alpha' \times \alpha''|}{|\alpha'|^3}$을
+  이용해 평면곡선 $\alpha(t) = (t, f(t))$의 곡률이
+  $\kappa = \dfrac{|f''|}{(1 + f'^2)^{3/2}}$임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\alpha' = (1, f', 0)$, $\alpha'' = (0, f'', 0)$으로 3차원에 심고 외적을
+    계산하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\alpha'(t) = (1, f'(t), 0)$, $\alpha''(t) = (0, f''(t), 0)$.
+    외적은
+    $\alpha' \times \alpha'' = (1\cdot f'' - 0,\; 0 - 0,\; 1\cdot f'' - 0)$ —
+    성분을 정리하면 $(0, 0, f'')$이고 $|\alpha' \times \alpha''| = |f''|$.
+    또 $|\alpha'| = \sqrt{1 + f'^2}$이므로</p>
+    $$\kappa = \frac{|f''|}{(1 + f'^2)^{3/2}}. \qquad\blacksquare$$
+    <p>(미적분에서 외운 곡률 공식이 일반 공식의 특수한 경우임을 확인한 것.
+    직선 $f'' = 0 \Rightarrow \kappa = 0$과도 맞는다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>평면성 판정</span>
+  </div>
+  <p>$\kappa(s) \gt 0$인 단위속력 곡선 $\beta$에 대해, $\beta$가 한 평면 위에 놓일
+  <strong>필요충분조건</strong>이 $\tau(s) \equiv 0$임을 프레네 공식으로 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>($\Leftarrow$) $\tau = 0$이면 $B' = 0$이라 $B$가 상수벡터. 함수
+    $g(s) = (\beta(s) - \beta(s_0)) \cdot B$의 도함수를 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>($\Rightarrow$) $\beta$가 법벡터 $n$인 평면에 놓이면
+    $(\beta(s) - p) \cdot n = 0$. 두 번 미분하면 $T \cdot n = 0$, $T' \cdot n = 0$
+    즉 $\kappa N \cdot n = 0 \Rightarrow N \cdot n = 0$. 그러면 $n \perp T, N$이라
+    $n \parallel B$이고, $B$는 크기 $1$이라 $B = \pm n$ (상수).
+    따라서 $B' = 0$, 프레네에서 $B' = -\tau N$이고 $N \neq 0$이므로 $\tau \equiv 0$.</p>
+    <p>($\Leftarrow$) $\tau \equiv 0$이면 $B' = -\tau N = 0$이라 $B \equiv B_0$
+    (상수). 이제 $g(s) = (\beta(s) - \beta(s_0)) \cdot B_0$을 미분하면
+    $g'(s) = T \cdot B_0 = 0$ (틀이 정규직교라 $T \perp B$). 또 $g(s_0) = 0$이므로
+    $g \equiv 0$ — 즉 모든 $s$에서 $(\beta(s) - \beta(s_0)) \cdot B_0 = 0$.
+    이는 $\beta$가 점 $\beta(s_0)$를 지나고 법벡터가 $B_0$인 평면 위에 있음을
+    뜻한다. $\blacksquare$</p>
+    <p>(서술 뼈대: “법벡터 후보 = 상수 $B$”를 만들고 → 내적의 도함수 $=0$ →
+    평면 방정식 복원. 양방향을 모두 적어야 만점.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>구면 위의 곡선</span>
+  </div>
+  <p>단위속력 곡선 $\beta$의 모든 점이 원점 중심 반지름 $r$인 구면 위에 있다고 하자
+  ($|\beta(s)| = r$). $\kappa \gt 0$일 때 $\kappa \ge 1/r$임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\beta \cdot \beta = r^2$을 두 번 미분하라. 첫 미분에서 $\beta \cdot T = 0$,
+    두 번째에서 $\beta$의 $N$ 성분이 나온다. 코시-슈바르츠로 마무리.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\beta \cdot \beta = r^2$을 미분: $2\,\beta \cdot T = 0$, 즉 $\beta \perp T$.
+    다시 미분: $\beta' \cdot T + \beta \cdot T' = 0 \Rightarrow
+    |T|^2 + \beta \cdot (\kappa N) = 0 \Rightarrow \beta \cdot N = -\dfrac{1}{\kappa}$.</p>
+    <p>$\beta \perp T$이므로 $\beta$는 $N, B$가 펼치는 평면 안에 있고
+    $|\beta \cdot N| \le |\beta| = r$ (코시-슈바르츠, $|N|=1$). 따라서</p>
+    $$\frac{1}{\kappa} = |\beta \cdot N| \le r
+    \quad\Longrightarrow\quad \kappa \ge \frac{1}{r}. \qquad\blacksquare$$
+    <p>기하적 의미: 반지름 $r$ 구 위의 곡선은 “구보다 덜 굽을 수 없다” —
+    곡률이 구의 곡률 $1/r$ 이상이다. 등호는 대원(great circle)에서 성립한다.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

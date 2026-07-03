@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5장 내재기하와 빼어난 정리 — 미분기하학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="differential-geometry" data-chapter="ch05.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">미분기하학 · do Carmo (§4)</p>
+  <h1><span class="ch-num">5</span> 내재기하와 빼어난 정리</h1>
+  <p class="ch-source">“곡면 위의 개미는 바깥세상을 본 적이 없다” —
+  그런데도 자기 세계가 굽었음을 알아낼 수 있을까? 가우스의 대답이 이 장의 심장이다.</p>
+</div>
+
+<p>지금까지(§2–3) 곡면은 언제나 $\mathbb{R}^3$ 안에 <strong>담긴</strong> 대상이었습니다.
+법선 $N$을 세우고, 그것이 얼마나 기우는지로 제2기본형식과 주곡률을 쟀지요 — 전부
+<strong>바깥에서 내려다본</strong> 정보입니다. 이 장은 시점을 뒤집습니다. 곡면 위에
+사는 2차원 존재, 바깥 공간($\mathbb{R}^3$)을 결코 볼 수 없는 개미에게 무엇이
+<strong>보이는가?</strong> 놀랍게도 곡면이 얼마나 휘었는지를 재는 가장 근본적인 양
+— 가우스 곡률 $K$ — 이 개미에게 완전히 보인다는 것이 <strong>가우스의 빼어난
+정리</strong>이고, 이 한 정리에서 “완벽한 세계지도는 존재할 수 없다”가 따라 나옵니다.</p>
+
+<h2 id="sec-intrinsic">1. 내재 vs 외재 — 개미의 눈과 새의 눈</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 곡면 위에서만 아는 것 vs 바깥이 필요한 것</span>
+  <p>곡면 $S$ 위의 개미가 가진 유일한 측정 도구는 <strong>제1기본형식</strong>
+  $E\,du^2 + 2F\,du\,dv + G\,dv^2$입니다. 이것은 접평면의 내적일 뿐이지만, 그것으로
+  개미는 <strong>곡선의 길이·두 방향 사이의 각·영역의 넓이</strong>를 전부 잽니다
+  (§3에서 본 그대로: 호의 길이 $\int\sqrt{E u'^2 + 2F u'v' + G v'^2}\,dt$, 넓이
+  $\iint\sqrt{EG - F^2}\,du\,dv$).</p>
+  <p><strong>정의를 가르는 한 문장:</strong> 어떤 양이 $E, F, G$와 그 도함수만으로
+  계산되면 <strong>내재적(intrinsic)</strong> — 개미가 안다. 주변 공간
+  $\mathbb{R}^3$의 정보(법선 $N$, 제2기본형식 $e, f, g$)가 필요하면
+  <strong>외재적(extrinsic)</strong> — 새처럼 밖에서 내려다봐야 안다.</p>
+  <p><strong>등거리사상(isometry):</strong> 제1기본형식을 그대로 보존하는
+  미분동형 $\varphi : S \to \bar S$. 개미의 관점에서 두 곡면은 완전히 같은 세계입니다
+  — 모든 길이·각·넓이가 일치하니까요. <em>내재적 = 등거리사상으로 보존되는 것</em>이
+  같은 말입니다.</p>
+  <p>얼핏 주곡률 $k_1, k_2$는 명백히 외재적입니다 — “법선 방향으로 얼마나 휘는가”를
+  재니까요. 그 곱 $K = k_1 k_2$(가우스 곡률)도 당연히 외재적이어야 할 것 같습니다.
+  <strong>바로 이 “당연함”이 무너지는 것</strong>이 이 장의 반전입니다.</p>
+</div>
+
+<p>먼저 개미가 아는 것과 모르는 것을 예감으로 갈라 둡시다. 종이(평면)를 원기둥으로
+말아 보세요. 종이 위에 그린 삼각형의 <strong>변의 길이도, 내각도 전혀 변하지
+않습니다</strong> — 찢거나 늘이지 않았으니까요. 즉 평면과 원기둥은 <strong>국소
+등거리</strong>입니다. 그런데 $\mathbb{R}^3$에서 둘은 분명 다르게 생겼습니다(하나는
+납작, 하나는 말려 있음). 이 “다름”은 외재적이어서 개미에게는 보이지 않습니다.
+질문은 이겁니다 — <strong>개미에게도 보이는 휘어짐이 있는가?</strong></p>
+
+<h2 id="sec-christoffel">2. 크리스토펠 기호 — 틀의 도함수를 내재적으로 읽다</h2>
+
+<p>곡면을 재는 열쇠는 $\S 2$부터 한결같이 “<strong>틀을 세우고 그 도함수를 다시
+그 틀로 전개한다</strong>”였습니다(곡선의 프레네 공식이 그 원형입니다). 곡면의 자연스러운
+틀은 <a class="term" data-term="total-derivative">매개화</a> $\mathbf{x}(u,v)$가 주는
+$\{\mathbf{x}_u, \mathbf{x}_v, N\}$입니다. 이제 <strong>이계도함수</strong>를 이 틀로
+전개하면, 접성분의 계수가 바로 크리스토펠 기호입니다.</p>
+
+<div class="box box-def" id="def-christoffel-symbols">
+  <span class="box-label">정의 · 크리스토펠 기호 <span class="label-en">Christoffel symbols</span> (두 카르모 §4)</span>
+  <p>매개화 $\mathbf{x}(u,v)$의 이계도함수를 틀 $\{\mathbf{x}_u, \mathbf{x}_v, N\}$으로
+  전개한 <strong>접성분의 계수</strong> $\Gamma^k_{ij}$를 크리스토펠 기호라 한다:</p>
+  $$\begin{aligned}
+  \mathbf{x}_{uu} &= \Gamma^1_{11}\,\mathbf{x}_u + \Gamma^2_{11}\,\mathbf{x}_v + e\,N,\\
+  \mathbf{x}_{uv} &= \Gamma^1_{12}\,\mathbf{x}_u + \Gamma^2_{12}\,\mathbf{x}_v + f\,N,\\
+  \mathbf{x}_{vv} &= \Gamma^1_{22}\,\mathbf{x}_u + \Gamma^2_{22}\,\mathbf{x}_v + g\,N.
+  \end{aligned}$$
+  <p>법성분 $e, f, g$는 제2기본형식(외재적)이지만, <strong>접성분 $\Gamma^k_{ij}$는
+  제1기본형식만으로 결정된다</strong>: 위 식들에 $\mathbf{x}_u, \mathbf{x}_v$를 각각
+  내적하면($N \perp \mathbf{x}_u, \mathbf{x}_v$이라 $e, f, g$가 사라진다), 우변은
+  $E, F, G$와 그 도함수뿐인 값이 된다. 예컨대 첫 식에서</p>
+  $$\begin{cases}
+  E\,\Gamma^1_{11} + F\,\Gamma^2_{11} = \langle \mathbf{x}_{uu}, \mathbf{x}_u\rangle = \tfrac12 E_u,\\[2pt]
+  F\,\Gamma^1_{11} + G\,\Gamma^2_{11} = \langle \mathbf{x}_{uu}, \mathbf{x}_v\rangle = F_u - \tfrac12 E_v,
+  \end{cases}$$
+  <p>계수행렬 $\left(\begin{smallmatrix} E & F\\ F & G\end{smallmatrix}\right)$은
+  $EG - F^2 > 0$이라 가역이므로 $\Gamma^1_{11}, \Gamma^2_{11}$이 유일하게 풀린다.
+  나머지 넷도 같은 방식으로 얻어져, <strong>여섯 기호가 전부 $E, F, G$와 그 1계
+  도함수의 유리식</strong>이다 — 완전히 <strong>내재적</strong>이다. 이 $\Gamma$가
+  곡면 위에서 벡터를 “평행”하게 나르는 <strong>공변미분</strong>의 씨앗이며,
+  측지선(다음 장)의 방정식 $u''^k + \sum \Gamma^k_{ij} u'^i u'^j = 0$의 재료다.</p>
+</div>
+
+<details class="proof">
+  <summary>내적으로 얻는 여섯 값 <span class="proof-strategy">— $\langle\mathbf{x}_i,\mathbf{x}_j\rangle$를 미분하면 이계도함수와의 내적이 튀어나온다.</span></summary>
+  <p>$\langle \mathbf{x}_u, \mathbf{x}_u\rangle = E$를 $u, v$로 미분: $\langle \mathbf{x}_{uu}, \mathbf{x}_u\rangle = \tfrac12 E_u$, $\ \langle \mathbf{x}_{uv}, \mathbf{x}_u\rangle = \tfrac12 E_v$.</p>
+  <p>$\langle \mathbf{x}_v, \mathbf{x}_v\rangle = G$를 미분: $\langle \mathbf{x}_{vv}, \mathbf{x}_v\rangle = \tfrac12 G_v$, $\ \langle \mathbf{x}_{uv}, \mathbf{x}_v\rangle = \tfrac12 G_u$.</p>
+  <p>$\langle \mathbf{x}_u, \mathbf{x}_v\rangle = F$를 미분: $\langle \mathbf{x}_{uu}, \mathbf{x}_v\rangle + \langle \mathbf{x}_u, \mathbf{x}_{uv}\rangle = F_u \Rightarrow \langle \mathbf{x}_{uu}, \mathbf{x}_v\rangle = F_u - \tfrac12 E_v$. 마찬가지로 $\langle \mathbf{x}_{vv}, \mathbf{x}_u\rangle = F_v - \tfrac12 G_u$.</p>
+  <p>여섯 값 전부 $E, F, G$의 도함수뿐 — 오른변에 $e, f, g$가 없다. 각 이계도함수마다
+  두 내적을 세우면 위와 같은 $2\times2$ 선형계가 되어 $\Gamma$가 내재적으로 풀린다.
+  직교 좌표계($F = 0$)에서는 계가 분리되어 깔끔한 공식이 나온다:</p>
+  $$\Gamma^1_{11} = \frac{E_u}{2E},\quad \Gamma^2_{11} = -\frac{E_v}{2G},\quad
+  \Gamma^1_{12} = \frac{E_v}{2E},\quad \Gamma^2_{12} = \frac{G_u}{2G},\quad
+  \Gamma^1_{22} = -\frac{G_u}{2E},\quad \Gamma^2_{22} = \frac{G_v}{2G}.$$
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 두 좌표계에서 직접 계산</span>
+  <p><strong>(a) 평면, 데카르트 좌표</strong> $\mathbf{x}(u,v) = (u, v, 0)$:
+  $E = G = 1$, $F = 0$ (상수). 모든 도함수가 $0$이므로 $\Gamma^k_{ij} = 0$ 전부.
+  틀이 어디서나 평행 — 이것이 “평평함”의 내재적 증거다.</p>
+  <p><strong>(b) 평면, 극좌표</strong> $\mathbf{x}(r,\theta) = (r\cos\theta, r\sin\theta)$:
+  $E = 1$, $F = 0$, $G = r^2$이다 ($u = r$, $v = \theta$). 위 직교 공식으로
+  $$\Gamma^2_{12} = \frac{G_r}{2G} = \frac{2r}{2r^2} = \frac1r,\qquad
+  \Gamma^1_{22} = -\frac{G_r}{2E} = -\frac{2r}{2} = -r,$$
+  나머지는 $0$. 같은 평면인데 좌표를 바꾸니 $\Gamma \neq 0$! — <strong>크리스토펠
+  기호는 곡면의 성질이 아니라 좌표계의 성질</strong>이다. (그래서 $\Gamma$ 자체는
+  곡률이 될 수 없다. 곡률은 $\Gamma$의 특정 <em>조합</em>에서만 나온다 — 다음 절.)
+  이 $\Gamma$를 측지선 방정식에 넣으면 극좌표로 쓴 “직선”이 정확히 튀어나온다.</p>
+</div>
+
+<h2 id="sec-egregium">3. 빼어난 정리 — 가우스 곡률은 내재적이다</h2>
+
+<p>이제 결정적 관찰입니다. 이계도함수는 미분 순서를 바꿔도 같아야 합니다:
+$(\mathbf{x}_{uu})_v = (\mathbf{x}_{uv})_u$. 양변을 위 전개식으로 펼쳐 $\mathbf{x}_v$
+성분을 비교하면, $e, f, g$가 얽힌 항이 $EG - F^2$로 정리되면서 놀라운 등식이
+튀어나옵니다 — <strong>가우스 방정식</strong>입니다.</p>
+
+<div class="box box-thm" id="def-theorema-egregium">
+  <span class="box-label">정리 · 빼어난 정리 <span class="label-en">Theorema Egregium</span> (두 카르모 §4)</span>
+  <p><strong>가우스 곡률 $K$는 내재적이다.</strong> 외재적으로는
+  $K = k_1 k_2 = \dfrac{eg - f^2}{EG - F^2}$ (제2기본형식이 등장)로 정의되지만, 이 값은
+  실은 <strong>제1기본형식 $E, F, G$와 그 도함수만의 함수</strong>다. 구체적으로,
+  미분 순서 교환 $(\mathbf{x}_{uu})_v = (\mathbf{x}_{uv})_u$의 $\mathbf{x}_v$ 성분에서
+  <strong>가우스 방정식</strong>이 나온다:</p>
+  $$E K \;=\; (\Gamma^2_{11})_v - (\Gamma^2_{12})_u
+    + \Gamma^1_{11}\Gamma^2_{12} + \Gamma^2_{11}\Gamma^2_{22}
+    - \Gamma^1_{12}\Gamma^2_{11} - (\Gamma^2_{12})^2$$
+  <p>(부호·배열은 틀의 방향 규약에 따르며, 요점은 <strong>우변이 오직 크리스토펠
+  기호와 그 도함수</strong> — 곧 $E, F, G$와 그 도함수 — 로만 이루어졌다는 것.)</p>
+  <p class="thm-punch"><strong>따라서 등거리사상은 $K$를 보존한다.</strong> 제1기본형식을
+  보존하는 사상은 $E, F, G$와 그 도함수를 보존하고, $K$는 그것들만의 함수이므로
+  자동으로 보존된다. 가우스는 이 결과를 스스로 <em>“정말 빼어난 정리(theorema
+  egregium)”</em>라 이름 붙였다 — 라틴어 <em>egregium</em>은 “무리에서 빼어난”이라는 뜻.</p>
+</div>
+
+<details class="proof">
+  <summary>왜 “빼어난가” — 논증의 뼈대 <span class="proof-strategy">— 좌변 $K$는 외재량, 우변은 내재량. 등식 하나가 둘을 접착한다.</span></summary>
+  <p><strong>1) 가우스 방정식 유도:</strong> $\mathbf{x}_{uu}, \mathbf{x}_{uv}, \mathbf{x}_{vv}$를
+  틀로 전개해 두고 $(\mathbf{x}_{uu})_v = (\mathbf{x}_{uv})_u$를 계산한다. 좌·우변을
+  틀 $\{\mathbf{x}_u, \mathbf{x}_v, N\}$으로 다시 전개하면 세 성분 각각이 하나의
+  항등식을 준다. $\mathbf{x}_v$ 성분을 비교하면 위 가우스 방정식이 나오는데, 이때
+  $e, f, g$가 만든 항이 바인가르텐 공식을 거쳐 $\dfrac{E(eg - f^2)}{EG - F^2} = EK$로
+  뭉친다.</p>
+  <p><strong>2) 정리의 급소:</strong> 좌변 $EK$는 겉보기엔 제2기본형식($eg - f^2$)이
+  들어간 <em>외재</em>량이다. 그런데 우변은 $\Gamma^k_{ij}$와 그 도함수뿐 — 2절에서
+  본 대로 완전히 <em>내재</em>적이다. 한 등식의 양변이 이렇게 성격이 다른데 같다는
+  것 — 그래서 <strong>외재적으로 정의된 $K$가 사실은 내재량</strong>이라는 결론이
+  강제된다. $\mathbf{x}$의 이계도함수가 곡면 밖 정보를 담고 있음에도, 그 <em>특정
+  조합</em>은 곡면 안에서 이미 완결된다.</p>
+  <p><strong>3) 등거리 불변:</strong> $\varphi$가 등거리사상이면 대응하는 좌표에서
+  $E, F, G$가 일치한다. $\Gamma$도, 그 도함수도, 따라서 우변 전체가 일치하므로
+  $K \circ \varphi = K$. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $E, F, G$만으로 $K$ 계산하기 (직교 좌표 브리오스키 공식)</span>
+  <p>$F = 0$일 때 가우스 방정식은 다음의 깔끔한 <strong>내재 공식</strong>으로 정리된다:</p>
+  $$K = -\frac{1}{2\sqrt{EG}}\left[
+     \frac{\partial}{\partial u}\!\left(\frac{G_u}{\sqrt{EG}}\right)
+   + \frac{\partial}{\partial v}\!\left(\frac{E_v}{\sqrt{EG}}\right)\right].$$
+  <p><strong>구 $S^2_R$ (반지름 $R$):</strong> $\mathbf{x}(\theta,\phi) =
+  (R\sin\theta\cos\phi,\, R\sin\theta\sin\phi,\, R\cos\theta)$에서
+  $E = R^2$, $F = 0$, $G = R^2\sin^2\theta$이고 $\sqrt{EG} = R^2\sin\theta$.
+  $E_\phi = 0$이고 $\dfrac{G_\theta}{\sqrt{EG}} = \dfrac{2R^2\sin\theta\cos\theta}{R^2\sin\theta} = 2\cos\theta$이므로
+  $$K = -\frac{1}{2R^2\sin\theta}\,\frac{\partial}{\partial\theta}(2\cos\theta)
+      = -\frac{-2\sin\theta}{2R^2\sin\theta} = \frac{1}{R^2}.$$
+  <strong>법선도 제2기본형식도 쓰지 않고</strong> $K = 1/R^2$을 얻었다 — 빼어난 정리가
+  약속한 그대로. (평면을 극좌표로 넣으면 $E = 1, G = r^2$에서 같은 공식이 $K = 0$을 준다.)</p>
+</div>
+
+<h2 id="sec-consequences">4. 결과 — 지도는 왜 항상 거짓말을 하는가</h2>
+
+<div class="box box-thm">
+  <span class="box-label">따름 · 완벽한 세계지도는 불가능하다</span>
+  <p>구는 $K = 1/R^2 > 0$, 평면은 $K = 0$. 등거리사상은 $K$를 보존하므로,
+  <strong>구의 어떤 조각도 평면과 국소 등거리가 될 수 없다</strong> — 곡률 값이 이미
+  다르니까. 지도(평면)에 지구(구) 조각을 옮기는 모든 사상은 길이·각·넓이 중 적어도
+  하나를 반드시 왜곡한다. 메르카토르 도법은 각을 살리는 대신 넓이를 폭발시키고
+  (그린란드가 아프리카만 해 보인다), 정적도법은 넓이를 살리는 대신 모양을 뭉갠다.
+  “완벽한 지도”가 없는 것은 지도 제작 기술의 한계가 아니라 <strong>기하학의 정리</strong>다.</p>
+</div>
+
+<p><strong>종이는 구가 될 수 없다.</strong> 평면 종이는 $K = 0$이다. 찢지 않고 굽히는
+것은 등거리 변형이라 $K$를 보존하므로, 종이로 만들 수 있는 곡면은 전부 $K = 0$이어야
+한다 — <strong>원기둥·원뿔은 되지만($K = 0$), 구($K > 0$)는 절대 안 된다.</strong>
+선물 포장이 매끈하게 안 되는 이유, 지구본을 종이로 못 싸는 이유가 이것이다. 거꾸로
+<strong>피자 접기의 역학</strong>도 같은 정리다: 피자 한 조각($K = 0$)을 손으로 반
+접으면 한 방향으로 굽는 순간 다른 방향으로는 굳어져 끝이 처지지 않는다 — 굽힘이
+$K = 0$을 지켜야 하므로, 한쪽이 휘면 수직 방향은 평평할 수밖에 없기 때문이다.</p>
+
+<div class="box box-def">
+  <span class="box-label">개요 · 곡면의 기본정리 (두 카르모 §4)</span>
+  <p>가우스 방정식은 “적합성 조건”의 절반이다. 나머지 절반은 $(\mathbf{x}_{uu})_v =
+  (\mathbf{x}_{uv})_u$의 <strong>$N$ 성분</strong>(및 $\mathbf{x}_{vv}$ 쪽 교환)에서
+  나오는 <strong>마이나르디–코다치 방정식</strong>으로, 제2기본형식의 도함수들을
+  묶는다. 이 둘을 합치면 곡면판 “기본정리”가 성립한다:</p>
+  <p><strong>곡면의 기본정리(봉네):</strong> 열린 영역 위에 주어진 $E, F, G$(양의 정부호)와
+  $e, f, g$가 <strong>가우스 방정식 + 마이나르디–코다치 방정식</strong>을 만족하면,
+  이 두 기본형식을 갖는 정칙곡면이 $\mathbb{R}^3$의 강체운동을 무시하면
+  <strong>유일하게 존재</strong>한다. — 곡선의 기본정리(“곡률·열률이 곡선을 결정”,
+  §2)의 곡면판이며, 프레네 공식이 곡률·열률로 곡선을 재건하듯 두 기본형식이 곡면을
+  재건한다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>“$k_1, k_2$가 외재적이니 $K = k_1 k_2$도 외재적”은 거짓.</strong>
+  두 주곡률 각각은 분명 외재적이지만, 그 <em>곱</em>만은 신기하게 내재적이다 — 두
+  외재량의 특정 결합이 외재 정보를 상쇄해 버린다. 이 상쇄가 바로 빼어난 정리의
+  전부다. (합 $k_1 + k_2$는 상쇄되지 않는다 → 아래 ③.)</p>
+  <p>② <strong>“$K$가 같으면 등거리”는 거짓</strong> — 정리의 역은 성립하지 않는다.
+  등거리 $\Rightarrow$ $K$ 보존은 참이지만, $K$가 점마다 같다고 두 곡면이 등거리인
+  것은 아니다(곡률이 상수가 아니면 반례가 많다). 다만 <strong>$K$가 같은 상수</strong>일
+  때는 국소적으로 등거리다(민딩 정리) — 그래서 $K = 0$인 평면·원기둥·원뿔이 서로 국소
+  등거리인 것이다. 대역(global)에서는 더 미묘해서, 국소 등거리라고 전체가 등거리인
+  것도 아니다(평면 전체 vs 원기둥 전체).</p>
+  <p>③ <strong>평균곡률 $H = \tfrac12(k_1 + k_2)$는 외재적이다.</strong> 결정적 반례:
+  평면($H = 0$)과 원기둥($H = \tfrac{1}{2R} \neq 0$)은 국소 등거리인데 $H$가 다르다 —
+  등거리가 보존하지 못하므로 $H$는 내재량이 아니다. “$K$는 내재, $H$는 외재”가 이
+  장의 핵심 대비다. (그래서 비눗막의 극소곡면 $H = 0$은 외재적 조건이다.)</p>
+  <p>④ <strong>크리스토펠 기호는 곡률이 아니다</strong> — 예제 (b)처럼 평면에서도
+  좌표만 바꾸면 $\Gamma \neq 0$이 된다. $\Gamma$는 좌표계의 부산물이고, 곡률은
+  가우스 방정식이 지정하는 $\Gamma$의 <em>특정 미분 조합</em>에서만 태어난다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">5장의 줄거리</span>
+  <p><strong>내재 vs 외재</strong>: 제1기본형식 $E, F, G$만으로 아는 것(길이·각·넓이)이
+  내재적, 법선·제2기본형식이 필요한 것(주곡률 $k_1, k_2$, 평균곡률 $H$)이 외재적.
+  등거리사상 = 제1기본형식 보존 = 개미가 구별 못 하는 변형.
+  → <a class="term" data-term="total-derivative">틀</a> $\{\mathbf{x}_u, \mathbf{x}_v, N\}$의
+  이계도함수를 전개한 <strong>크리스토펠 기호</strong> $\Gamma^k_{ij}$는 내적을 통해
+  $E, F, G$와 그 도함수만으로 풀린다 — 완전히 내재적(단, 좌표 의존).
+  → 미분 순서 교환이 <strong>가우스 방정식</strong> $EK = (\Gamma\text{들의 조합})$을
+  주고, 좌변의 외재량 $K$가 우변의 내재량과 같아지는 순간
+  <strong>빼어난 정리 — $K$는 내재적</strong>이 확정된다.
+  → 열매: 등거리는 $K$ 보존 → 구($K > 0$)와 평면($K = 0$)은 국소 등거리 불가 →
+  <strong>완벽한 세계지도 불가능</strong>, 종이는 원기둥은 되어도 구는 못 됨.
+  가우스 방정식 + 마이나르디–코다치 = <strong>곡면의 기본정리</strong>.</p>
+  <p><strong>선형대수와의 합류:</strong> 제2기본형식은 형상 연산자의
+  <a class="term" data-term="bilinear-quadratic-form">이차형식</a>이고 $k_1, k_2$는 그
+  <a class="term" data-term="spectral-theorem">스펙트럼 정리</a>가 주는 고유값 —
+  $K = \det$, $H = \tfrac12\operatorname{tr}$. 빼어난 정리는 이 “$\det$만은 내재적”이라는
+  뜻밖의 사실이다. 다음 장에서 이 내재 곡률이 측지선·가우스–보네 정리를 통해
+  곡면의 위상(오일러 지표)과 만난다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+    <span>내재 / 외재 분류</span>
+  </div>
+  <p>다음 각 양이 <strong>내재적</strong>인지 <strong>외재적</strong>인지 판정하라.</p>
+  <p>(1) 곡선의 길이 &nbsp; (2) 가우스 곡률 $K$ &nbsp; (3) 주곡률 $k_1$ &nbsp;
+  (4) 평균곡률 $H$ &nbsp; (5) 영역의 넓이 &nbsp; (6) 두 접벡터 사이의 각</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>“제1기본형식 $E, F, G$와 그 도함수만으로 계산되는가?”가 유일한 기준.
+    등거리사상(종이 굽히기)으로 보존되면 내재, 아니면 외재.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>내재:</strong> (1) 길이, (5) 넓이, (6) 각 — 전부 제1기본형식이 직접
+    재는 양. (2) $K$ — 겉보기엔 외재지만 <strong>빼어난 정리</strong>로 내재.</p>
+    <p><strong>외재:</strong> (3) $k_1$ — 법선 방향 휘어짐이라 등거리로 안 보존
+    (평면 vs 원기둥에서 $0$ vs $1/R$). (4) $H = \tfrac12(k_1 + k_2)$ — 평면($0$)과
+    원기둥($1/2R$)이 등거리인데 값이 다르므로 외재.</p>
+    <p>급소: $k_1, k_2$는 외재인데 곱 $K = k_1 k_2$만 내재, 합에서 나온 $H$는 외재.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+    <span>크리스토펠 기호 계산</span>
+  </div>
+  <p>곡면의 제1기본형식이 $E = 1$, $F = 0$, $G = f(u)^2$ ($f > 0$)로 주어졌다
+  (회전면의 표준 형태). 여섯 크리스토펠 기호를 모두 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$F = 0$이므로 직교 공식을 그대로 대입: $\Gamma^2_{12} = \dfrac{G_u}{2G}$,
+    $\Gamma^1_{22} = -\dfrac{G_u}{2E}$ 등. $G_u = 2f f'$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$E = 1$이라 $E_u = E_v = 0$; $G = f^2$이라 $G_u = 2ff'$, $G_v = 0$.
+    직교 공식에 대입:</p>
+    <p>$\Gamma^1_{11} = \dfrac{E_u}{2E} = 0$, &nbsp;
+       $\Gamma^2_{11} = -\dfrac{E_v}{2G} = 0$, &nbsp;
+       $\Gamma^1_{12} = \dfrac{E_v}{2E} = 0$,</p>
+    <p>$\Gamma^2_{12} = \dfrac{G_u}{2G} = \dfrac{2ff'}{2f^2} = \dfrac{f'}{f}$, &nbsp;
+       $\Gamma^1_{22} = -\dfrac{G_u}{2E} = -ff'$, &nbsp;
+       $\Gamma^2_{22} = \dfrac{G_v}{2G} = 0$.</p>
+    <p>(덤: 브리오스키 공식에 넣으면 $K = -\dfrac{f''}{f}$ — 회전면 곡률의 유명한
+    공식이 제1기본형식만으로 나온다. $f(u) = \cos u$(반지름 1 구의 $E=1$ 형태)면
+    $K = 1$을 확인할 수 있다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">do Carmo §4 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>평면 $\mathbf{x}(u,v) = (u, v, 0)$과 원기둥 $\bar{\mathbf{x}}(u,v) =
+  (\cos u, \sin u, v)$의 제1기본형식을 각각 구하고, 두 곡면이 국소 등거리임을 보여라.
+  그럼에도 $\mathbb{R}^3$에서 “같지 않다”고 말할 수 있는 근거는 무엇인가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\bar{\mathbf{x}}_u = (-\sin u, \cos u, 0)$, $\bar{\mathbf{x}}_v = (0, 0, 1)$를
+    내적하라. 등거리는 $E, F, G$가 같음으로 충분. “다름”은 등거리가 보존하지 못하는
+    외재량에서 찾아라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>평면:</strong> $\mathbf{x}_u = (1,0,0)$, $\mathbf{x}_v = (0,1,0)$ →
+    $E = 1, F = 0, G = 1$.</p>
+    <p><strong>원기둥:</strong> $\bar{\mathbf{x}}_u = (-\sin u, \cos u, 0)$,
+    $\bar{\mathbf{x}}_v = (0,0,1)$ → $E = \sin^2 u + \cos^2 u = 1$, $F = 0$, $G = 1$.</p>
+    <p>두 제1기본형식이 <strong>동일</strong>($du^2 + dv^2$)하므로 대응
+    $(u,v) \mapsto (u,v)$는 국소 등거리사상이다 — 종이를 말아 원기둥을 만드는 그
+    변형. 따라서 개미에게 두 세계는 구별 불가.</p>
+    <p><strong>그럼에도 다른 근거(외재):</strong> 원기둥의 주곡률은 $k_1 = 1$(원 방향),
+    $k_2 = 0$(모선 방향)이라 $H = \tfrac12 \neq 0$인데 평면은 $H = 0$. $H$가 외재량이라
+    $\mathbb{R}^3$ 안에서의 “생김새”가 다른 것이다. <strong>내재적으로는 같고
+    ($K = 0 = K$로도 일관), 외재적으로만 다르다.</strong> 이것이 빼어난 정리의 반대편
+    얼굴 — 등거리가 모든 것을 같게 만들지는 않는다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">do Carmo §4 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>반지름 $R$인 구의 조각과 평면 조각 사이에는 등거리사상이 존재하지 않음을,
+  <strong>빼어난 정리를 인용하여</strong> 엄밀히 증명하라. (이 사실이 지도 제작에
+  주는 함의를 한 줄로 서술하라.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>귀류법. 등거리가 있다고 가정하면 무엇이 두 곡면에서 같아야 하는가?
+    구와 평면의 $K$를 각각 계산해 비교하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>등거리사상 $\varphi$가 존재한다고 가정하자. 빼어난 정리에 의해 $\varphi$는
+    가우스 곡률을 보존하므로, 대응하는 점에서 $K_{\text{구}} = K_{\text{평면}}$이어야 한다.</p>
+    <p>그러나 브리오스키 공식(또는 $K = \det(\text{형상연산자})$)으로
+    $K_{\text{구}} = \dfrac{1}{R^2} > 0$이고 $K_{\text{평면}} = 0$이다.
+    $\dfrac{1}{R^2} \neq 0$이므로 <strong>모순</strong>. 따라서 어떤 등거리사상도
+    존재하지 않는다. $\blacksquare$</p>
+    <p><strong>함의:</strong> 지구(구) 표면을 평면 지도에 길이·각·넓이를 모두
+    보존하며 옮기는 것은 원리적으로 불가능하다 — 모든 지도는 반드시 왜곡을 포함한다.</p>
+    <p>(서술 만점 뼈대: ① “등거리 ⇒ $K$ 보존”[빼어난 정리 인용] → ② 두 $K$ 값 계산
+    → ③ 값이 달라 모순. 세 단계를 모두 적을 것.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>서술형 — 내재성의 논증</span>
+  </div>
+  <p>가우스의 빼어난 정리를 서술하고, “왜 이것이 빼어난가”를 가우스 방정식의 양변이
+  갖는 성격 차이로 설명하라. 이어서 평균곡률 $H$는 왜 같은 방식으로 내재적이 될 수
+  없는지 <strong>구체적 반례</strong>로 논하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>가우스 방정식 $EK = (\Gamma\text{들의 조합})$에서 좌변과 우변은 각각 어떤
+    기본형식에 속하는가? $H$에 대해서는 평면과 원기둥을 비교하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>정리:</strong> 가우스 곡률 $K$는 제1기본형식 $E, F, G$와 그 도함수만으로
+    결정된다(내재적). 따라서 제1기본형식을 보존하는 등거리사상은 $K$를 보존한다.</p>
+    <p><strong>왜 빼어난가:</strong> $K = \dfrac{eg - f^2}{EG - F^2}$는 정의상 제2기본형식
+    $e, f, g$(외재)를 담는다. 그런데 가우스 방정식은 $EK$를 크리스토펠 기호와 그
+    도함수만의 식과 같다고 말한다 — 우변은 순수 내재량. 한 등식으로 <strong>외재적
+    정의가 내재적 값과 동일함</strong>이 강제되는 것이 이 정리의 “빼어남”이다.
+    이계도함수는 곡면 밖 정보를 품지만, 그 특정 조합 $K$만은 곡면 안에서 완결된다.</p>
+    <p><strong>$H$의 반례:</strong> 평면과 원기둥은 제1기본형식이 같아($du^2 + dv^2$)
+    국소 등거리다. 만약 $H$가 내재적이라면 두 곡면에서 같아야 한다. 그러나
+    평면은 $H = 0$, 반지름 $R$ 원기둥은 $H = \dfrac{1}{2R} \neq 0$이다. 등거리가
+    보존하지 못하므로 $H$는 내재량이 <strong>아니다</strong>. — $K$(곱)와 달리
+    $H$(합 $\tfrac12(k_1 + k_2)$)에서는 외재 정보가 상쇄되지 않기 때문이다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>계산형 — 브리오스키 공식</span>
+  </div>
+  <p>제1기본형식이 $E = 1$, $F = 0$, $G(u,v)$인 직교 좌표계에서 가우스 곡률이
+  $$K = -\frac{1}{\sqrt{G}}\,\big(\sqrt{G}\,\big)_{uu}$$
+  임을 브리오스키 공식으로부터 유도하라. 이를 이용해 $G = \cosh^2 u$인 곡면(현수면형)의
+  $K$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$E = 1$을 직교 브리오스키 공식
+    $K = -\dfrac{1}{2\sqrt{EG}}\big[(G_u/\sqrt{EG})_u + (E_v/\sqrt{EG})_v\big]$에
+    대입하고 $E_v = 0$을 쓴다. $(\sqrt{G})_u = \dfrac{G_u}{2\sqrt{G}}$에 주목.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$E = 1$, $E_v = 0$, $\sqrt{EG} = \sqrt{G}$이므로 브리오스키 공식은
+    $$K = -\frac{1}{2\sqrt{G}}\,\frac{\partial}{\partial u}\!\left(\frac{G_u}{\sqrt{G}}\right).$$
+    그런데 $\dfrac{G_u}{\sqrt{G}} = \dfrac{2\sqrt{G}\,G_u}{2G} = 2(\sqrt{G})_u$이므로
+    $$K = -\frac{1}{2\sqrt{G}}\cdot 2(\sqrt{G})_{uu} = -\frac{(\sqrt{G})_{uu}}{\sqrt{G}}. \qquad\checkmark$$
+    </p>
+    <p><strong>적용</strong> $G = \cosh^2 u$: $\sqrt{G} = \cosh u$,
+    $(\sqrt{G})_{uu} = (\cosh u)'' = \cosh u$. 따라서
+    $$K = -\frac{\cosh u}{\cosh u} = -1.$$
+    상수 음곡률 $K = -1$ — 이런 곡면은 국소적으로 서로 등거리다(민딩 정리). 제2기본형식을
+    한 번도 쓰지 않고 $K$를 얻었다는 점이 빼어난 정리의 실전 위력이다.</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

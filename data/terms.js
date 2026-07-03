@@ -1321,5 +1321,86 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "rational canonical form",
     "short": "임의의 체 위 모든 선형연산자를 불변인자 $p_1\\mid p_2\\mid\\cdots\\mid p_k$의 동반행렬 블록대각으로 유일하게 나타낸 표준형. 특성다항식이 분해 안 돼도 존재하며 조던형은 특수경우. 최소다항식 $=p_k$ — 유한생성 아벨군 기본정리의 선형대수 쌍둥이.",
     "href": "subjects/linear-algebra/ch07.html#def-rational-canonical-form"
+  },
+
+  /* ---------- 미분기하학 (do Carmo) ---------- */
+
+  "regular-curve": {
+    "ko": "정칙곡선과 호장",
+    "en": "regular curve, arc length",
+    "short": "미분가능 사상 $\\alpha:I\\to\\mathbb{R}^3$ 중 $\\alpha'(t)\\neq0$인 것 — 진행 방향이 늘 존재. 호장 $s=\\int|\\alpha'|$로 다시 매개하면 단위속력($|\\beta'|=1$)이 되어 기하가 속도에 오염되지 않는다.",
+    "href": "subjects/differential-geometry/ch01.html#def-regular-curve"
+  },
+  "frenet-formulas": {
+    "ko": "프레네 공식",
+    "en": "Frenet formulas",
+    "short": "단위속력 곡선의 움직이는 정규직교틀 $\\{T,N,B\\}$의 도함수를 자신으로 전개한 식: $T'=\\kappa N$, $N'=-\\kappa T+\\tau B$, $B'=-\\tau N$. 도함수 행렬이 반대칭이라는 사실에서 강제되며, 곡률 $\\kappa$와 열률 $\\tau$가 곡선의 국소 기하를 전부 담는다.",
+    "href": "subjects/differential-geometry/ch01.html#def-frenet-formulas"
+  },
+  "rotation-index": {
+    "ko": "회전지수와 호프 정리",
+    "en": "rotation index",
+    "short": "단순 닫힌 평면곡선에서 접선벡터가 한 바퀴 도는 동안 회전하는 순 횟수 $I=\\frac{1}{2\\pi}\\oint\\kappa\\,ds$. 호프의 회전정리(Umlaufsatz): 단순 닫힌곡선의 회전지수는 방향에 따라 $\\pm1$이며 $\\oint\\kappa\\,ds=\\pm2\\pi$.",
+    "href": "subjects/differential-geometry/ch02.html#def-rotation-index"
+  },
+  "isoperimetric-inequality": {
+    "ko": "등주부등식",
+    "en": "isoperimetric inequality",
+    "short": "길이 $L$, 넓이 $A$인 단순 닫힌 평면곡선은 $L^2\\ge4\\pi A$를 만족하고, 등호는 원일 때만. '같은 둘레로 넓이를 최대화하는 도형은 원'의 정확한 형태 — 그린 정리와 푸리에 급수로 증명.",
+    "href": "subjects/differential-geometry/ch02.html#def-isoperimetric-inequality"
+  },
+  "regular-surface": {
+    "ko": "정칙곡면",
+    "en": "regular surface",
+    "short": "각 점 근방이 평면 조각처럼 매개화되는 곡면 $S\\subset\\mathbb{R}^3$ — 매끄러움 + 위상동형 + 정칙($\\mathbf{x}_u\\times\\mathbf{x}_v\\neq\\mathbf{0}$). 정칙값 $a$의 역상 $f^{-1}(a)$도 곡면(음함수 정리).",
+    "href": "subjects/differential-geometry/ch03.html#def-regular-surface"
+  },
+  "first-fundamental-form": {
+    "ko": "제1기본형식",
+    "en": "first fundamental form",
+    "short": "접평면에 물려준 내적 $I_p(w)=\\langle w,w\\rangle=Ea^2+2Fab+Gb^2$ ($E,F,G$는 $\\mathbf{x}_u,\\mathbf{x}_v$의 내적). 곡면 위 길이·각도·넓이($\\iint\\sqrt{EG-F^2}$)를 재는 내재적 자.",
+    "href": "subjects/differential-geometry/ch03.html#def-first-fundamental-form"
+  },
+  "gauss-map": {
+    "ko": "가우스 사상과 형상연산자",
+    "en": "Gauss map, shape operator",
+    "short": "단위법선을 대응시키는 사상 $N:S\\to S^2$과 그 미분인 형상연산자(바인가르텐 사상) $dN_p:T_pS\\to T_pS$. 혼합편도 대칭 때문에 $dN_p$는 제1기본형식에 대해 자기수반이라 스펙트럼 정리를 곡면론으로 불러온다.",
+    "href": "subjects/differential-geometry/ch04.html#def-gauss-map"
+  },
+  "second-fundamental-form": {
+    "ko": "제2기본형식",
+    "en": "second fundamental form",
+    "short": "$II_p(w)=-\\langle dN_p(w),w\\rangle$ — 곡면이 접평면에서 떨어져 나가는 정도를 재는 대칭 이차형식. $II=e\\,du^2+2f\\,du\\,dv+g\\,dv^2$이고, 법곡률 $\\kappa_n=II_p(w)/I_p(w)$는 방향에만 의존(뫼스니에 정리).",
+    "href": "subjects/differential-geometry/ch04.html#def-second-fundamental-form"
+  },
+  "principal-curvatures": {
+    "ko": "주곡률·가우스·평균곡률",
+    "en": "principal, Gaussian, mean curvature",
+    "short": "형상연산자 $dN_p$의 고유값이 $-k_1,-k_2$(주곡률), 고유벡터가 직교 주방향(스펙트럼 정리). 가우스 곡률 $K=k_1k_2=\\frac{eg-f^2}{EG-F^2}$, 평균곡률 $H=\\frac{k_1+k_2}{2}$; $K$ 부호로 타원·쌍곡·포물점을 가르고 $H=0$이면 극소곡면.",
+    "href": "subjects/differential-geometry/ch04.html#def-principal-curvatures"
+  },
+  "christoffel-symbols": {
+    "ko": "크리스토펠 기호",
+    "en": "Christoffel symbols",
+    "short": "이계도함수 $\\mathbf{x}_{uu},\\mathbf{x}_{uv},\\mathbf{x}_{vv}$를 틀 $\\{\\mathbf{x}_u,\\mathbf{x}_v,N\\}$으로 전개한 접성분 계수 $\\Gamma^k_{ij}$. $E,F,G$와 그 도함수만으로 풀려 내재적이며, 공변미분·측지선 방정식의 재료.",
+    "href": "subjects/differential-geometry/ch05.html#def-christoffel-symbols"
+  },
+  "theorema-egregium": {
+    "ko": "빼어난 정리",
+    "en": "Theorema Egregium",
+    "short": "가우스 곡률 $K$는 제1기본형식 $E,F,G$와 그 도함수만으로 결정된다(내재적) — 가우스 방정식이 외재량 $K$를 내재량과 접착. 등거리사상은 $K$를 보존하고, 구($K\\gt0$)와 평면($K=0$)은 국소등거리가 될 수 없다(완벽한 지도 불가).",
+    "href": "subjects/differential-geometry/ch05.html#def-theorema-egregium"
+  },
+  "geodesic": {
+    "ko": "측지선",
+    "en": "geodesic",
+    "short": "곡면 위의 '직선' — 측지곡률 $k_g=0$, 즉 가속도의 접평면 성분이 0인 곡선. 크리스토펠 기호로 쓴 측지선 방정식은 $E,F,G$만 담아 내재적이고 국소적으로 최단경로다. 예: 평면의 직선, 구의 대원, 원기둥의 나선.",
+    "href": "subjects/differential-geometry/ch06.html#def-geodesic"
+  },
+  "gauss-bonnet": {
+    "ko": "가우스-보네 정리",
+    "en": "Gauss–Bonnet theorem",
+    "short": "단순 영역에서 $\\oint k_g\\,ds+\\iint_R K\\,dA+\\sum\\theta_i=2\\pi$, 컴팩트 곡면에서는 $\\iint_S K\\,dA=2\\pi\\chi(S)$ — 곡률의 총합이 오일러 지표(위상 불변량)와 같다. 기하와 위상을 잇는 다리.",
+    "href": "subjects/differential-geometry/ch06.html#def-gauss-bonnet"
   }
 });
