@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1장 복소수와 복소평면 — 복소해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="complex-analysis" data-chapter="ch01.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">복소해석학 · Brown-Churchill (§1–3)</p>
+  <h1><span class="ch-num">1</span> 복소수와 복소평면</h1>
+  <p class="ch-source">해석학에서 $\mathbb{C}$는 “$i^2=-1$인 체”라는 대수적 신분증만 있었다 —
+  이제 그 수에게 <strong>평면이라는 몸</strong>을 주면, 곱셈이 회전이 되고 방정식이 정다각형이 된다.</p>
+</div>
+
+<p>해석학 1장에서 <a class="term" data-term="complex-number">복소수</a>는 순서쌍 $(a,b)$에
+곱셈을 준 <a class="term" data-term="field">체</a>로 태어났습니다 — 순수하게 대수적인 존재였죠.
+복소해석학은 여기서 한 걸음 더 나아가, 이 수들을 <strong>평면 위의 점</strong>으로 보는 순간
+드러나는 기하를 이용합니다. 핵심은 <strong>극형식</strong>입니다: 복소수를 “크기와 방향”으로
+적으면 <em>곱셈이 방향의 덧셈(회전)</em>이 되고, 그 한 줄에서 드무아브르 공식, 거듭제곱근,
+그리고 현대대수의 원분확대까지 전부 흘러나옵니다. 이 장은 앞으로 함수·미분·적분을 펼칠
+<strong>무대(복소평면의 영역)</strong>까지 세워 둡니다.</p>
+
+<h2 id="sec-algebra">1. 복소수의 대수 — 평면 위의 산술</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>복소수 $z=a+bi$는 좌표 $(a,b)$인 <strong>평면 위의 점</strong>, 또는 원점에서 그 점으로
+  향하는 <strong>화살표(벡터)</strong>입니다.</p>
+  <ul>
+    <li><strong>덧셈</strong>은 화살표를 이어 붙이기 — 벡터 덧셈 그대로입니다.</li>
+    <li><strong>곱셈</strong>은 “크기는 곱하고 방향은 더하기”입니다. 특히 $i$를 곱하는 것은
+    <strong>$90^\circ$ 반시계 회전</strong>: $i\cdot i$를 두 번 돌리면 $180^\circ$가 되어
+    $-1$에 도착하니 $i^2=-1$이 그림으로 설명됩니다.</li>
+  </ul>
+  <p>“$i^2=-1$인 수를 억지로 상상한다”가 아니라, <strong>회전이라는 실체</strong>가 먼저 있고
+  $i$는 그중 직각 회전에 붙인 이름일 뿐입니다.</p>
+</div>
+
+<p><strong>실수부·허수부.</strong> $z=a+bi$에서 $\operatorname{Re}z=a$, $\operatorname{Im}z=b$
+(둘 다 실수). 실수축은 $\{b=0\}$, 허수축은 $\{a=0\}$. 두 복소수가 같다는 것은
+실수부·허수부가 각각 같다는 것입니다.</p>
+
+<p><strong>덧셈과 곱셈.</strong> 실수처럼 전개하고 $i^2=-1$로 정리합니다:</p>
+$$(a+bi)+(c+di)=(a+c)+(b+d)i,\qquad
+(a+bi)(c+di)=(ac-bd)+(ad+bc)i.$$
+<p>이 두 연산에 대해 $\mathbb{C}$는 교환·결합·분배법칙을 만족하고 $0=0+0i$, $1=1+0i$을
+가지며, $0$이 아닌 원소마다 역원이 있는 <a class="term" data-term="field">체</a>입니다
+(해석학 1장에서 확인).</p>
+
+<p><strong>켤레와 절댓값(재사용).</strong> $z=a+bi$의
+<a class="term" data-term="conjugate-modulus">켤레복소수와 절댓값</a>은 각각
+$\bar z=a-bi$, $|z|=\sqrt{a^2+b^2}$입니다. 기억할 급소는
+$$z\bar z=|z|^2,\qquad \operatorname{Re}z=\tfrac{z+\bar z}{2},\quad
+\operatorname{Im}z=\tfrac{z-\bar z}{2i},\qquad |zw|=|z|\,|w|.$$
+켤레는 실수축에 대한 <strong>거울 반사</strong>, 절댓값은 원점까지의 <strong>거리</strong>입니다.
+$|z-w|$는 두 점 사이의 거리이므로, 복소평면은 그 자체로
+<a class="term" data-term="metric-space">거리공간</a>이 됩니다(해석학 2장의 무대).</p>
+
+<p><strong>나눗셈 — 켤레로 유리화.</strong> $w\ne 0$이면 분모의 켤레를 위아래에 곱해
+분모를 실수 $|w|^2$으로 만듭니다:</p>
+$$\frac{z}{w}=\frac{z\,\bar w}{w\,\bar w}=\frac{z\,\bar w}{|w|^2}.$$
+
+<div class="box box-example">
+  <span class="box-label">예제 · 대수 계산 세 번</span>
+  <p><strong>(a) 곱셈.</strong> $(2+3i)(1-i)=2-2i+3i-3i^2=(2+3)+(-2+3)i=5+i.$</p>
+  <p><strong>(b) 나눗셈.</strong>
+  $\dfrac{1+2i}{3-4i}=\dfrac{(1+2i)(3+4i)}{3^2+4^2}
+  =\dfrac{3+4i+6i+8i^2}{25}=\dfrac{-5+10i}{25}=-\tfrac15+\tfrac{2}{5}i.$</p>
+  <p><strong>(c) 절댓값의 곱셈성.</strong> $|(1+i)^2|=|1+i|^2=(\sqrt2)^2=2$ —
+  $(1+i)^2=2i$이므로 $|2i|=2$와 일치. 절댓값은 곱셈을 “존중”하지만
+  <em>덧셈은 존중하지 않습니다</em>(다음 삼각부등식 참고).</p>
+</div>
+
+<p><strong>삼각부등식(재사용).</strong> 절댓값은 덧셈에 대해 부등식으로만 제어됩니다:</p>
+$$\bigl|\,|z|-|w|\,\bigr|\;\le\;|z\pm w|\;\le\;|z|+|w|.$$
+오른쪽이 <a class="term" data-term="triangle-inequality">삼각부등식</a>(“돌아가는 길이 더 길다”),
+왼쪽이 그 역방향 형태입니다. 기하로는 세 점 $0,\;z,\;z+w$가 이루는 삼각형에서
+한 변이 다른 두 변의 합을 넘지 못한다는 이야기이며, 등호는 $z,w$가
+<strong>같은 방향</strong>(하나가 다른 하나의 음 아닌 실수배)일 때만 성립합니다.</p>
+
+<h2 id="sec-polar">2. 극형식과 지수형식 — 곱셈이 회전이 되는 곳</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>점을 “가로세로 $(a,b)$” 대신 “<strong>원점까지의 거리 $r$과 양의 실수축에서 잰 각 $\theta$</strong>”로
+  적는 것이 극형식입니다. 이 좌표계에서는 복소수의 곱셈이 놀랄 만큼 단순해집니다 —
+  <strong>거리는 곱하고, 각은 더한다.</strong> 즉 곱셈은 “확대·축소 + 회전”입니다.</p>
+</div>
+
+<div class="box box-def" id="def-complex-polar">
+  <span class="box-label">정의 · 극형식과 지수형식 <span class="label-en">polar and exponential form</span> (브라운-처칠 §2)</span>
+  <p>$z\ne 0$을 크기 $r=|z|\gt 0$과 각 $\theta$로 나타낸 것을 <strong>극형식</strong>이라 한다:</p>
+  $$z=r(\cos\theta+i\sin\theta).$$
+  <p><strong>오일러 공식</strong> $e^{i\theta}=\cos\theta+i\sin\theta$를 쓰면 같은 것을
+  <strong>지수형식</strong>으로 압축한다:</p>
+  $$\boxed{\,z=re^{i\theta}\,}$$
+  <p>여기서 $\theta$를 $z$의 <strong>편각</strong> $\arg z$라 부른다. 각은 $2\pi$의 정수배만큼
+  더해도 같은 점을 가리키므로 $\arg z$는 <strong>다가(multi-valued)</strong>이다:
+  $\arg z=\Theta+2k\pi\ (k\in\mathbb{Z})$. 이 중 구간 $(-\pi,\pi]$에 드는 유일한 값을
+  <strong>주치(주편각)</strong> $\operatorname{Arg}z$라 한다. 요약하면</p>
+  $$\arg z=\operatorname{Arg}z+2k\pi,\qquad \operatorname{Arg}z\in(-\pi,\pi].$$
+  <p><strong>핵심 성질 — 편각은 곱셈을 덧셈으로 바꾼다.</strong>
+  $z_1=r_1e^{i\theta_1}$, $z_2=r_2e^{i\theta_2}$이면</p>
+  $$z_1z_2=r_1r_2\,e^{i(\theta_1+\theta_2)},\qquad
+  \frac{z_1}{z_2}=\frac{r_1}{r_2}\,e^{i(\theta_1-\theta_2)}.$$
+  <p>즉 $|z_1z_2|=|z_1||z_2|$이고 $\arg(z_1z_2)=\arg z_1+\arg z_2$
+  (다가 등식으로서 성립). 특히 $e^{i\theta}$끼리의 곱 $e^{i\theta_1}e^{i\theta_2}=e^{i(\theta_1+\theta_2)}$는
+  삼각함수의 덧셈정리를 한 줄로 요약한 것이다.</p>
+</div>
+
+<p>오일러 공식은 해석학 8장에서 <a class="term" data-term="exp-function">지수함수</a>와
+<a class="term" data-term="trig-functions">삼각함수</a>를 멱급수로 정의하면 코시 곱과
+항별 미분으로 증명되는 정리였습니다(여기서는 그 결과를 정의처럼 사용). 그 덕분에
+$|e^{i\theta}|=\sqrt{\cos^2\theta+\sin^2\theta}=1$이 되어, $e^{i\theta}$는 언제나
+<strong>단위원 위의 점</strong>임을 기억하세요. 특히 $e^{i\pi}=-1$, $e^{i\pi/2}=i$,
+$e^{2\pi i}=1$입니다.</p>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 극형식으로 옮기고 곱하기</span>
+  <p><strong>(a)</strong> $z=-1+\sqrt3\,i$. 크기 $r=\sqrt{1+3}=2$. 점 $(-1,\sqrt3)$은 제2사분면,
+  기준각 $\arctan(\sqrt3/1)=\pi/3$이므로 $\operatorname{Arg}z=\pi-\tfrac{\pi}{3}=\tfrac{2\pi}{3}$.
+  따라서 $z=2e^{\,i2\pi/3}$.</p>
+  <p><strong>(b)</strong> $1+i=\sqrt2\,e^{\,i\pi/4}$. 곱셈이 왜 편한지 보려면 거듭제곱을 보세요:
+  $(1+i)^8=(\sqrt2)^8 e^{\,i\cdot 8\pi/4}=16\,e^{\,i2\pi}=16$. 직교좌표로 여덟 번 전개하는
+  대신 “크기 $^8$, 각 $\times 8$” 한 줄로 끝납니다.</p>
+  <p><strong>(c) 곱 = 회전.</strong> 임의의 $z$에 $i=e^{\,i\pi/2}$를 곱하면 크기는 그대로,
+  편각만 $+\tfrac\pi2$ — 정확히 $90^\circ$ 반시계 회전. §1의 직관이 식으로 확인됩니다.</p>
+</div>
+
+<h2 id="sec-roots">3. 드무아브르와 거듭제곱근 — 방정식이 정다각형이 된다</h2>
+
+<div class="box box-thm" id="def-complex-roots">
+  <span class="box-label">정리 · 드무아브르 공식과 거듭제곱근 <span class="label-en">De Moivre's formula, nth roots</span> (브라운-처칠 §2)</span>
+  <p><strong>이 정리가 하는 일:</strong> “각은 더한다”는 곱셈 법칙을 같은 수에 $n$번 적용하면,
+  거듭제곱과 거듭제곱근이 <em>각의 산수</em>로 환원된다. 그 결과 $z^n=w$라는 방정식의 해가
+  복소평면 위 <strong>정 $n$각형의 꼭짓점</strong>으로 한눈에 그려진다.</p>
+  <p><strong>드무아브르 공식</strong> — 모든 정수 $n$에 대해</p>
+  $$(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta,
+  \qquad\text{즉}\qquad \bigl(e^{i\theta}\bigr)^n=e^{\,in\theta}.$$
+  <p><strong>$n$제곱근</strong> — $z=re^{i\theta}\ (r\gt 0)$의 $n$제곱근, 곧 $w^n=z$의 해는
+  정확히 $n$개이며</p>
+  $$w_k=r^{1/n}\,\exp\!\Bigl(i\,\frac{\theta+2k\pi}{n}\Bigr),
+  \qquad k=0,1,\dots,n-1.$$
+  <p>이들은 모두 반지름 $r^{1/n}$인 원 위에 있고, 이웃한 근끼리 각이 $\dfrac{2\pi}{n}$씩
+  벌어져 있으므로 <strong>정 $n$각형의 꼭짓점</strong>을 이룬다. 특히 $z=1$이면
+  <strong>1의 $n$제곱근</strong> $\zeta_k=e^{\,2k\pi i/n}$을 얻는데, 이는 현대대수에서
+  <a class="term" data-term="cyclotomic-extension">원분확대</a> $\mathbb{Q}(\zeta_n)$을 낳는
+  바로 그 수들이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 드무아브르는 곱셈 법칙의 귀납, 근 공식은 “$w^n=z \iff$ 크기와 각을 각각 맞춤”.</span></summary>
+  <p><strong>드무아브르(자연수 $n$, 귀납):</strong> $n=1$은 자명. $n$에서 성립한다고 가정하면,
+  극형식 곱셈 법칙(각은 더한다)에 의해</p>
+  $$(\cos\theta+i\sin\theta)^{n+1}=(\cos n\theta+i\sin n\theta)(\cos\theta+i\sin\theta)
+  =\cos(n\theta+\theta)+i\sin(n\theta+\theta),$$
+  <p>즉 $\cos(n+1)\theta+i\sin(n+1)\theta$. $n=0$은 양변이 $1$. 음의 정수는
+  $(\cos\theta+i\sin\theta)^{-1}=\cos\theta-i\sin\theta=\cos(-\theta)+i\sin(-\theta)$에서
+  같은 논법으로 확장된다.</p>
+  <p><strong>근 공식:</strong> $w=\rho e^{i\varphi}$로 두면 드무아브르로
+  $w^n=\rho^n e^{\,in\varphi}$. 이것이 $z=re^{i\theta}$와 같으려면
+  <em>크기</em>가 같아야 하니 $\rho^n=r$, 즉 $\rho=r^{1/n}$(양의 실수근으로 유일).
+  또 <em>각</em>이 $2\pi$의 정수배 차이여야 하니 $n\varphi=\theta+2k\pi$, 곧
+  $\varphi=\dfrac{\theta+2k\pi}{n}$. $k=0,\dots,n-1$이 서로 다른 점을 주고,
+  $k$를 $n$만큼 늘리면 각이 $2\pi$ 증가해 같은 점으로 되돌아온다 — 그래서 정확히 $n$개.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 근이 그리는 정다각형</span>
+  <p><strong>(a) $8$의 세제곱근.</strong> $8=8e^{\,i0}$이므로 세 근은
+  $2\,e^{\,i(0+2k\pi)/3}$ $(k=0,1,2)$, 곧
+  $2,\ 2e^{\,i2\pi/3}=-1+\sqrt3\,i,\ 2e^{\,i4\pi/3}=-1-\sqrt3\,i$ —
+  반지름 $2$ 원에 내접하는 정삼각형. 실수 세제곱근 $2$는 그중 하나일 뿐입니다.</p>
+  <p><strong>(b) 1의 $n$제곱근.</strong> $\zeta_k=e^{\,2k\pi i/n}$은 단위원을 $n$등분한
+  꼭짓점. $\zeta=\zeta_1=e^{2\pi i/n}$ 하나가 나머지를 전부 생성합니다:
+  $\{1,\zeta,\zeta^2,\dots,\zeta^{n-1}\}$ — 곱셈에 대한
+  <a class="term" data-term="cyclic-group">순환군</a>이며(현대대수와의 합류점),
+  이 근들을 $\mathbb{Q}$에 이어 붙인 것이
+  <a class="term" data-term="cyclotomic-extension">원분확대</a>입니다.</p>
+  <p><strong>(c) 근의 합.</strong> $n\ge 2$이면 $1+\zeta+\zeta^2+\cdots+\zeta^{n-1}=0$ —
+  정 $n$각형 꼭짓점 벡터를 다 더하면 대칭에 의해 원점. (등비수열 합
+  $\dfrac{\zeta^n-1}{\zeta-1}=0$으로도 즉시.)</p>
+</div>
+
+<h2 id="sec-regions">4. 복소평면의 영역 — 함수를 펼칠 무대</h2>
+
+<p>앞으로 다룰 극한·연속·미분·적분은 모두 “$z$가 어떤 <strong>집합 위</strong>에서 움직일 때”를
+전제로 합니다. 그 집합의 위상적 성질에 이름을 붙여 둡니다 — 해석학 2장
+(<a class="term" data-term="metric-space">거리공간</a>)의 어휘를 거리
+$d(z,w)=|z-w|$로 그대로 옮긴 것입니다.</p>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 근방·열린집합·영역 <span class="label-en">neighborhood, open set, domain</span> (브라운-처칠 §3)</span>
+  <ul>
+    <li><strong>$\varepsilon$-근방:</strong> $|z-z_0|\lt\varepsilon$인 점들의 모임 —
+    $z_0$ 중심, 반지름 $\varepsilon$인 <strong>열린 원판</strong>.</li>
+    <li><strong>내점 / 열린집합:</strong> $z_0$의 어떤 근방이 통째로 $S$에 들면 $z_0$는 $S$의
+    <strong>내점</strong>. 모든 점이 내점인 집합이 <a class="term" data-term="open-set">열린집합</a>.</li>
+    <li><strong>경계점 / 경계:</strong> 모든 근방이 $S$의 점과 $S$ 밖의 점을 <em>동시에</em>
+    포함하는 점. 경계점 전체가 $S$의 <strong>경계</strong>. 닫힌집합은 경계를 모두 포함한다.</li>
+    <li><strong>연결(열린):</strong> 열린집합 $S$의 임의의 두 점을 $S$ 안에 놓인
+    유한 개의 선분(꺾은선)으로 이을 수 있으면 $S$는 연결이다.</li>
+    <li><strong>영역(domain):</strong> <em>공집합이 아닌, 열린 + 연결</em> 집합 — “한 덩어리로
+    이어진 열린 무대”. 복소해석의 정리들이 사는 표준 서식이다.
+    영역에 그 경계 일부/전부를 더한 것을 <strong>구역(region)</strong>이라 부른다.</li>
+    <li><strong>유계:</strong> 어떤 $R$에 대해 $S\subseteq\{|z|\lt R\}$ — 원점 중심 큰 원판
+    하나에 통째로 들어가는 것.</li>
+  </ul>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 무대인가 아닌가</span>
+  <p><strong>열린 원판</strong> $\{|z|\lt 1\}$: 열림 + 연결 + 유계 → <strong>영역</strong>.
+  <strong>고리(annulus)</strong> $\{1\lt|z|\lt 2\}$: 역시 영역(구멍이 있어도 한 덩어리).
+  <strong>오른쪽 반평면</strong> $\{\operatorname{Re}z\gt 0\}$: 영역이지만 <em>유계가 아님</em>.
+  <strong>닫힌 원판</strong> $\{|z|\le 1\}$: 경계를 포함하므로 열림이 아니라 영역이 아님(구역).
+  <strong>$\{|z|\ne 1\}$</strong>: 열려 있지만 안쪽 원판과 바깥이 <em>분리</em>되어 연결이 아님 →
+  영역이 아님.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p><strong>① $\operatorname{Arg}$의 범위·다가성.</strong> 주편각은
+  $\operatorname{Arg}z\in(-\pi,\pi]$입니다($[0,2\pi)$가 아님 — 책마다 다르니 반드시 확인).
+  “$\arg$”는 값이 아니라 <em>집합</em>($\{\operatorname{Arg}z+2k\pi\}$)이라는 점이 급소입니다.
+  그래서 $\operatorname{Arg}(z_1z_2)=\operatorname{Arg}z_1+\operatorname{Arg}z_2$는
+  <strong>거짓</strong>일 수 있습니다: $z_1=z_2=-1$이면 좌변은 $\operatorname{Arg}(1)=0$인데
+  우변은 $\pi+\pi=2\pi$. 옳은 등식은 다가 $\arg$끼리($\bmod\,2\pi$) 또는
+  “$\operatorname{Arg}z_1+\operatorname{Arg}z_2$에 적당한 $2k\pi$를 더해 주치로 되돌린 값”입니다.</p>
+  <p><strong>② $\sqrt{z}$는 하나가 아니다.</strong> 실수에서 $\sqrt{4}=2$처럼 한 값을 고르던 습관이
+  복소수에서는 통하지 않습니다. $z\ne0$의 제곱근은 <em>항상 두 개</em>($w$와 $-w$)이고,
+  $n$제곱근은 <em>$n$개</em>입니다. “$\sqrt z$”라는 기호를 쓰려면 어느 근을 택할지(가지·주치)를
+  먼저 약속해야 합니다 — 3장 초등함수에서 다룰 <em>가지(branch)</em>의 씨앗입니다.</p>
+  <p><strong>③ 절댓값은 덧셈을 존중하지 않는다.</strong> $|z_1z_2|=|z_1||z_2|$는 <em>등식</em>이지만,
+  덧셈은 부등식 $|z_1+z_2|\le|z_1|+|z_2|$만 성립합니다. 등호는 $z_1,z_2$가 같은 방향
+  ($\arg$가 같음, 곧 하나가 다른 하나의 음 아닌 실수배)일 때 <em>뿐</em>. 예:
+  $|1+(-1)|=0\lt 2=|1|+|-1|$.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">1장의 줄거리</span>
+  <p><a class="term" data-term="complex-number">복소수</a> = 평면 위의 점(덧셈은 벡터 합,
+  <a class="term" data-term="conjugate-modulus">켤레·절댓값</a>은 반사·거리,
+  나눗셈은 켤레로 유리화, <a class="term" data-term="triangle-inequality">삼각부등식</a>)
+  → <a class="term" data-term="complex-polar">극형식·지수형식</a> $z=re^{i\theta}$:
+  곱셈이 “크기 곱 + 각 덧셈”, 오일러 공식과 주편각 $\operatorname{Arg}z\in(-\pi,\pi]$
+  → <a class="term" data-term="complex-roots">드무아브르·거듭제곱근</a>: 거듭제곱은 각의 배수,
+  $n$제곱근은 정 $n$각형 꼭짓점, 1의 $n$제곱근은
+  <a class="term" data-term="cyclotomic-extension">원분확대</a>의 씨앗
+  → <strong>영역(domain)</strong> = 열린 + 연결, 앞으로 함수를 펼칠 무대.</p>
+  <p><strong>한 줄 표어:</strong> <em>“복소수의 곱셈은 회전이다.”</em> 이 문장 하나가
+  드무아브르·근·오일러 공식을 전부 품고 있으며, 다음 장에서 <strong>해석함수</strong>가
+  “국소적으로 회전+확대(=곱셈)처럼 행동하는 사상”으로 밝혀질 때 다시 등장합니다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●○○</span>
+  </div>
+  <p>다음을 $a+bi$ 꼴로 나타내거나 값을 구하라.</p>
+  <p>(1) $(3-2i)(1+4i)$ &nbsp; (2) $\dfrac{2+i}{1-2i}$ &nbsp; (3) $\left|\dfrac{(1+i)^3}{2-i}\right|$
+  &nbsp; (4) $\operatorname{Re}\!\left(\dfrac{1}{z}\right)$ ($z=a+bi\ne0$).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(2) 분모의 켤레를 곱해 유리화. (3) 절댓값은 곱·몫을 존중하니 따로따로.
+    (4) $\dfrac1z=\dfrac{\bar z}{|z|^2}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $3+12i-2i-8i^2=(3+8)+(12-2)i=11+10i.$</p>
+    <p>(2) $\dfrac{(2+i)(1+2i)}{1+4}=\dfrac{2+4i+i-2}{5}=\dfrac{5i}{5}=i.$</p>
+    <p>(3) $\dfrac{|1+i|^3}{|2-i|}=\dfrac{(\sqrt2)^3}{\sqrt5}=\dfrac{2\sqrt2}{\sqrt5}
+    =\dfrac{2\sqrt{10}}{5}.$</p>
+    <p>(4) $\dfrac1z=\dfrac{\bar z}{|z|^2}=\dfrac{a-bi}{a^2+b^2}$이므로
+    $\operatorname{Re}(1/z)=\dfrac{a}{a^2+b^2}.$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) $z=-\sqrt3+i$를 지수형식 $re^{i\theta}$로 쓰고 $\operatorname{Arg}z$를 구하라.
+  (2) 드무아브르로 $(-\sqrt3+i)^6$을 계산하라.
+  (3) $\left(\dfrac{1+i}{\sqrt2}\right)^{2024}$의 값을 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $r=|z|$, 점의 사분면으로 각 결정. (3) 밑을 $e^{i\theta}$ 꼴로 먼저 정리하면
+    지수만 계산.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $r=\sqrt{3+1}=2$. 점 $(-\sqrt3,1)$은 제2사분면, 기준각 $\arctan(1/\sqrt3)=\pi/6$이니
+    $\operatorname{Arg}z=\pi-\tfrac\pi6=\tfrac{5\pi}{6}$. 따라서 $z=2e^{\,i5\pi/6}.$</p>
+    <p>(2) $z^6=2^6 e^{\,i\cdot 6\cdot 5\pi/6}=64\,e^{\,i5\pi}=64\,e^{\,i\pi}=-64.$</p>
+    <p>(3) $\dfrac{1+i}{\sqrt2}=e^{\,i\pi/4}$이므로
+    $\bigl(e^{\,i\pi/4}\bigr)^{2024}=e^{\,i\cdot 506\pi}=e^{\,i\cdot 2\pi\cdot 253}=1.$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §2 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>(1) $-8i$의 세제곱근을 모두 구하고, 복소평면 위에 그려 정삼각형을 이룸을 확인하라.
+  (2) 일반적으로 $n\ge2$일 때 1의 $n$제곱근의 합이 $0$임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $-8i=8e^{\,i(-\pi/2)}$. 근 공식에 $r^{1/3}=2$, 각 $\dfrac{-\pi/2+2k\pi}{3}$.
+    (2) 등비수열의 합 또는 $x^n-1$의 근과 계수 관계.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $-8i=8\,e^{\,i(-\pi/2+2k\pi)}$. 세제곱근은
+    $w_k=2\,e^{\,i(-\pi/2+2k\pi)/3}=2\,e^{\,i(-\pi/6+2k\pi/3)}$ $(k=0,1,2)$:</p>
+    $$w_0=2e^{-i\pi/6}=\sqrt3-i,\quad
+    w_1=2e^{\,i\pi/2}=2i,\quad
+    w_2=2e^{\,i7\pi/6}=-\sqrt3-i.$$
+    <p>세 점 모두 반지름 $2$ 원 위, 각이 $2\pi/3$씩 벌어져 정삼각형 ✓.
+    (검산: $w_1^3=(2i)^3=-8i$ ✓.)</p>
+    <p>(2) $\zeta=e^{\,2\pi i/n}$이라 하면 1의 $n$제곱근은 $1,\zeta,\dots,\zeta^{n-1}$이고
+    $\zeta\ne1$. 등비수열 합으로
+    $$\sum_{k=0}^{n-1}\zeta^k=\frac{\zeta^n-1}{\zeta-1}=\frac{1-1}{\zeta-1}=0.
+    \qquad\blacksquare$$
+    <p>(구조적 해석: 이 근들은 $x^n-1$의 근 전체이고, 근과 계수의 관계에서
+    합 $=-\dfrac{(x^{n-1}\text{의 계수})}{1}=0$. 기하로는 정 $n$각형 꼭짓점 벡터의 합이
+    대칭에 의해 $0$.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>편각의 다가성</span>
+  </div>
+  <p>등식 $\operatorname{Arg}(z_1 z_2)=\operatorname{Arg}z_1+\operatorname{Arg}z_2$가
+  <strong>항상 성립하지는 않음</strong>을 구체적 반례로 보이고, 임의의 $z_1,z_2\ne0$에서
+  옳게 성립하는 편각 등식을 그 성립 의미와 함께 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>주치의 범위 $(-\pi,\pi]$를 넘기는 두 각을 고르면 반례가 나온다.
+    옳은 등식은 다가 집합 $\arg$의 등식($\bmod\,2\pi$).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>반례.</strong> $z_1=z_2=-1+i=\sqrt2\,e^{\,i3\pi/4}$이면
+    $\operatorname{Arg}z_1=\operatorname{Arg}z_2=\tfrac{3\pi}{4}$, 합은 $\tfrac{3\pi}{2}$.
+    그러나 $z_1z_2=(-1+i)^2=-2i=2e^{\,-i\pi/2}$이므로
+    $\operatorname{Arg}(z_1z_2)=-\tfrac{\pi}{2}\ne\tfrac{3\pi}{2}$. (차이는 정확히 $2\pi$.)</p>
+    <p><strong>옳은 등식.</strong> 다가 편각의 집합 등식으로는 언제나
+    $$\arg(z_1z_2)=\arg z_1+\arg z_2$$
+    이 성립한다 — 좌변의 값 하나를 고르면 우변에서 적당한 대표를 골라 같게 만들 수 있고,
+    그 역도 된다는 뜻(집합으로서 일치, 또는 $\bmod\,2\pi$ 합동). 주치로 환원하면
+    $\operatorname{Arg}(z_1z_2)=\operatorname{Arg}z_1+\operatorname{Arg}z_2+2k\pi$이며,
+    합을 $(-\pi,\pi]$에 넣도록 $k\in\{-1,0,1\}$을 고른다. $\blacksquare$</p>
+    <p>(만점 포인트: “$\arg$는 값이 아니라 $2\pi$ 주기의 집합”이라는 다가성을 명시하고,
+    주치 $\operatorname{Arg}$에서는 등식이 깨질 수 있음을 반례로 못박는 것.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>영역 판정 서술형</span>
+  </div>
+  <p>다음 각 집합이 <strong>영역(domain)</strong>인지 판정하고(열림·연결·(비)유계를 근거로),
+  아니라면 어떤 조건이 깨지는지 서술하라.</p>
+  <p>(1) $\{z:0\lt|z-1|\lt 2\}$ &nbsp; (2) $\{z:\operatorname{Re}z\ge 0\}$ &nbsp;
+  (3) $\{z:|z|\lt 1\ \text{또는}\ |z-3|\lt 1\}$ &nbsp; (4) $\{z:\operatorname{Im}z\ne 0\}$.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>영역 $=$ 공집합 아님 $+$ 열림 $+$ 연결. 경계를 포함하면 열림이 깨지고,
+    서로 닿지 않는 두 조각으로 갈라지면 연결이 깨진다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>영역이다.</strong> 중심 $1$을 뺀 반지름 $2$ 열린 원판(뚫린 원판) —
+    열림 ✓, 한 점을 빼도 평면에서는 여전히 꺾은선으로 연결 ✓, 유계 ✓.</p>
+    <p>(2) <strong>영역이 아니다.</strong> 경계인 허수축 $\operatorname{Re}z=0$을
+    포함하므로 <em>열림이 깨진다</em>(그 위의 점은 내점이 아님). 연결·비유계이지만
+    닫힌 반평면이라 domain이 아니라 구역(region). 부등호를 $\gt$로 바꾸면 영역이 된다.</p>
+    <p>(3) <strong>영역이 아니다.</strong> 두 열린 원판은 각각 열려 있으나
+    $\{|z|\lt1\}$과 $\{|z-3|\lt1\}$은 서로 떨어져(거리 $3\gt1+1$) 만나지 않으므로
+    <em>연결이 깨진다</em>. (예컨대 $z=3$을 잇는 어떤 꺾은선도 두 원판 사이 빈 구간을
+    지나 집합을 벗어난다.)</p>
+    <p>(4) <strong>영역이 아니다.</strong> 실수축을 제거한 것은 열려 있지만
+    위쪽 반평면과 아래쪽 반평면으로 <em>분리</em>되어 연결이 깨진다. 각 반평면은
+    그 자체로 영역. $\blacksquare$</p>
+    <p>(서술 뼈대: ① 공집합 아님 ② 열림(경계 포함 여부) ③ 연결(꺾은선 존재) —
+    세 관문을 차례로 통과시키는 것이 만점 답안.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

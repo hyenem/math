@@ -142,8 +142,17 @@ window.MATH_TOC = [
     en: "Complex Analysis",
     book: "Brown & Churchill, Complex Variables and Applications (9th ed.)",
     desc: "복소수 위의 미적분 — 실수에서는 보이지 않던 구조가 드러난다.",
-    status: "planned",
-    chapters: []
+    status: "active",
+    chapters: [
+      { file: "ch01.html", num: 1, title: "복소수와 복소평면", ready: true },
+      { file: "ch02.html", num: 2, title: "해석함수와 코시-리만 방정식", ready: true },
+      { file: "ch03.html", num: 3, title: "초등함수 — 지수·로그·삼각", ready: true },
+      { file: "ch04.html", num: 4, title: "복소적분과 코시-구르사 정리", ready: true },
+      { file: "ch05.html", num: 5, title: "코시 적분공식과 리우빌 정리", ready: true },
+      { file: "ch06.html", num: 6, title: "테일러 급수와 로랑 급수", ready: true },
+      { file: "ch07.html", num: 7, title: "유수정리와 극점", ready: true },
+      { file: "ch08.html", num: 8, title: "유수의 응용과 등각사상", ready: true }
+    ]
   },
   {
     slug: "probability-statistics",

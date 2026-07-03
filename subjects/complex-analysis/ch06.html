@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6장 테일러 급수와 로랑 급수 — 복소해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="complex-analysis" data-chapter="ch06.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">복소해석학 · Brown-Churchill (§5 급수)</p>
+  <h1><span class="ch-num">6</span> 테일러 급수와 로랑 급수</h1>
+  <p class="ch-source">“한 번 미분 가능하면, 곧 멱급수다” —
+  5장까지의 적분 정리(코시 적분공식)가 이 장에서 <strong>급수</strong>라는
+  대수적 형태로 결정화된다. 그리고 특이점 둘레에서는 음수 지수가 등장한다.</p>
+</div>
+
+<p>실해석에서 “무한 번 미분 가능”과 “테일러 급수로 표현됨”은 <em>다른</em> 조건이었다
+($e^{-1/x^2}$은 매끄럽지만 매클로린 급수가 자기 자신이 아니다). 복소해석에서는 이
+간극이 사라진다 — <strong>해석적(=한 번 복소미분 가능)이면 곧바로 멱급수와 같다.</strong>
+이 장은 그 두 얼굴을 잇는다: 해석 영역(원판)에서는 <strong>테일러 급수</strong>,
+특이점을 도려낸 환형영역에서는 음수 지수를 품은 <strong>로랑 급수</strong>. 그리고 그
+음수 지수 부분(주요부)이 다음 장 유수 계산의 원료가 된다.</p>
+
+<h2 id="sec-series">1. 복소수열·급수와 멱급수 — 무대 다시 깔기</h2>
+
+<div class="box box-def" id="box-complex-series">
+  <span class="box-label">정의 · 복소수열과 급수의 수렴 <span class="label-en">convergence of complex sequences and series</span> (브라운-처칠 §5)</span>
+  <p>복소수열 $z_n \to z$란 임의의 $\varepsilon \gt 0$에 대해 $N$이 존재하여
+  $n \ge N$이면 $|z_n - z| \lt \varepsilon$인 것 — 형태는 실수와 똑같고, 실제로
+  $z_n = x_n + i y_n \to x + iy \iff x_n \to x$ 그리고 $y_n \to y$ (실·허수부로 쪼갬).</p>
+  <p><a class="term" data-term="series">급수</a> $\sum_{n=1}^\infty z_n$은 부분합
+  $S_N = z_1 + \cdots + z_N$의 수열이 수렴할 때 수렴한다 — “무한합은 부분합의 극한”이라는
+  해석학 3장의 정의를 그대로 물려받는다. 수렴하면 $z_n \to 0$ (역은 거짓).
+  $\sum |z_n|$이 수렴하면 <a class="term" data-term="absolute-convergence">절대수렴</a>이라
+  하고, 절대수렴 $\Rightarrow$ 수렴이다 (실수 급수의 비교판정으로 환원).</p>
+</div>
+
+<div class="box box-def" id="box-power-series-cx">
+  <span class="box-label">정의 + 정리 · 멱급수와 수렴반지름 <span class="label-en">power series, radius of convergence</span> (브라운-처칠 §5)</span>
+  <p>$z_0$을 중심으로 하는 <a class="term" data-term="power-series">멱급수</a>
+  (해석학 8장 재사용)</p>
+  $$\sum_{n=0}^\infty a_n (z - z_0)^n$$
+  <p>에는 <strong>수렴반지름</strong> $R \in [0, \infty]$이 있어
+  ($R = 1/\limsup_n \sqrt[n]{|a_n|}$, 코시-아다마르), $|z - z_0| \lt R$이면 절대수렴,
+  $|z - z_0| \gt R$이면 발산한다 — 수렴 영역이 이름 그대로 <strong>원판</strong>이다
+  (실수에서 “구간”이던 것의 2차원 판).</p>
+  <p>세 가지 도구가 원판 안에서 공짜로 따라온다:</p>
+  <p>① <strong>균등수렴</strong>: 임의의 닫힌 부분원판 $|z - z_0| \le \rho \lt R$에서
+  <a class="term" data-term="uniform-convergence">균등수렴</a>한다
+  (<a class="term" data-term="m-test">바이어슈트라스 M-판정법</a>이 다리).
+  따라서 합 $f(z)$는 <strong>연속</strong>이다.<br>
+  ② <strong>항별 적분</strong>: 원판 안 임의의 경로에서 급수와 적분을 바꿔도 된다
+  (균등수렴 덕분).<br>
+  ③ <strong>항별 미분</strong>: $f'(z) = \sum_{n=1}^\infty n\,a_n (z - z_0)^{n-1}$이고,
+  미분된 급수의 수렴반지름은 <strong>그대로 $R$</strong>. 이걸 반복하면 멱급수의 합은
+  원판에서 무한 번 미분 가능 — 즉 <strong>해석적</strong>이다.</p>
+  <p>거꾸로 계수는 합으로부터 유일하게 복원된다: $a_n = f^{(n)}(z_0)/n!$
+  (③을 $n$번 하고 $z = z_0$ 대입). <strong>“멱급수의 계수는 곧 도함수의 값”</strong> —
+  이 한 줄이 다음 절 테일러 정리의 절반이다.</p>
+</div>
+
+<h2 id="sec-taylor">2. 테일러 급수 — 해석함수 = 국소적으로 멱급수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 이 절이 뒤집는 것</span>
+  <p>앞 절은 “멱급수 $\Rightarrow$ 해석적”을 말했다. 테일러 정리는 그 <strong>완전한
+  역</strong>이다: <em>해석적이기만 하면</em> 곧바로 멱급수와 같다. 실해석에서는 거짓이던
+  방향(매끄러움 $\not\Rightarrow$ 급수 표현)이 복소해석에서는 참이 된다 — 한 번의
+  복소미분 가능성이 그만큼 강하다. 결론은 표어 하나: <strong>해석함수 = 국소적으로
+  멱급수.</strong></p>
+</div>
+
+<div class="box box-thm" id="thm-taylor"><span class="box-label">정리 · 테일러 정리 <span class="label-en">Taylor's theorem</span> (브라운-처칠 §5)</span>
+  <p>$f$가 원판 $|z - z_0| \lt R_0$ 전체에서 <strong>해석적</strong>이면, 그 원판의 모든
+  점에서</p>
+  $$f(z) = \sum_{n=0}^\infty \frac{f^{(n)}(z_0)}{n!}\,(z - z_0)^n
+  \qquad (|z - z_0| \lt R_0)$$
+  <p>이고 이 급수는 절대수렴한다. ($z_0 = 0$이면 <strong>매클로린 급수</strong>.)
+  실해석의 <a class="term" data-term="taylor-theorem">테일러 정리</a>와 달리
+  <strong>나머지 항이 필요 없다</strong> — 오차가 남는 게 아니라, 무한급수가 함수와
+  <em>정확히</em> 같다.</p>
+  <p><strong>수렴반지름의 정체:</strong> 전개의 수렴반지름은
+  <strong>$z_0$에서 가장 가까운 특이점까지의 거리</strong>다. 특이점이 없으면
+  (전해석함수) $R = \infty$.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 코시 적분공식 + 기하급수 전개. 5장의 적분 정리가 급수로 “펼쳐지는” 순간.</span></summary>
+  <p>$z$를 원판 안의 한 점으로 고정하고, $z$를 감싸며 원판 안에 있는 양의 방향
+  원 $C$ (반지름 $r$, $|z - z_0| \lt r \lt R_0$)를 잡자. <strong>코시 적분공식</strong>:</p>
+  $$f(z) = \frac{1}{2\pi i} \oint_C \frac{f(w)}{w - z}\,dw.$$
+  <p>핵심은 $\frac{1}{w-z}$를 $z - z_0$의 멱급수로 펼치는 것. $C$ 위에서
+  $|z - z_0| \lt |w - z_0|$이므로 기하급수가 수렴한다:</p>
+  $$\frac{1}{w - z} = \frac{1}{(w - z_0) - (z - z_0)}
+  = \frac{1}{w - z_0} \cdot \frac{1}{1 - \frac{z - z_0}{w - z_0}}
+  = \sum_{n=0}^\infty \frac{(z - z_0)^n}{(w - z_0)^{n+1}}.$$
+  <p>이 급수는 $C$ 위에서 ($w$에 대해) 균등수렴하므로 적분과 합을 바꿔도 된다:</p>
+  $$f(z) = \sum_{n=0}^\infty (z - z_0)^n \cdot
+  \underbrace{\frac{1}{2\pi i}\oint_C \frac{f(w)}{(w - z_0)^{n+1}}\,dw}_{=\ f^{(n)}(z_0)/n!}.$$
+  <p>마지막 등호는 코시 적분공식의 <strong>도함수 형태</strong>
+  ($f^{(n)}(z_0) = \frac{n!}{2\pi i}\oint_C \frac{f(w)\,dw}{(w-z_0)^{n+1}}$, 5장) —
+  “한 번 해석적이면 무한 번”이라는 사실이 여기서 계수 공식으로 회수된다. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 기본 전개 세 개와 “특이점까지의 거리”</span>
+  <p><strong>(a) 기하급수 </strong> $\dfrac{1}{1 - z} = \displaystyle\sum_{n=0}^\infty z^n$
+  ($|z| \lt 1$). 유일한 특이점은 $z = 1$이고 원점에서 거리 $1$ — 그래서 $R = 1$.
+  이것이 모든 전개의 원자재다.</p>
+  <p><strong>(b) 지수함수 </strong> 해석학 8장의 급수 정의
+  <a class="term" data-term="exp-function">$e^z = \sum z^n/n!$</a>가 그대로 복소평면으로
+  확장된다. $f^{(n)}(z) = e^z$, $f^{(n)}(0) = 1$이므로
+  $e^z = \sum_{n=0}^\infty \frac{z^n}{n!}$ — 전해석함수라 $R = \infty$. 마찬가지로</p>
+  $$\sin z = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!} z^{2n+1}, \qquad
+  \cos z = \sum_{n=0}^\infty \frac{(-1)^n}{(2n)!} z^{2n}$$
+  <p>이 온 평면에서 성립한다 (홀함수엔 홀수차, 짝함수엔 짝수차만 — 뒤 연습문제에서
+  그 이유를 증명한다).</p>
+  <p><strong>(c) 중심을 옮기면 반지름이 바뀐다.</strong> $\dfrac{1}{1 - z}$을 이번엔
+  $z_0 = i$ 중심으로:</p>
+  $$\frac{1}{1 - z} = \frac{1}{(1 - i) - (z - i)}
+  = \frac{1}{1 - i} \cdot \frac{1}{1 - \frac{z - i}{1 - i}}
+  = \sum_{n=0}^\infty \frac{(z - i)^n}{(1 - i)^{n+1}}.$$
+  <p>수렴 조건은 $|z - i| \lt |1 - i| = \sqrt{2}$ — 바로 $z_0 = i$에서 특이점 $z = 1$까지의
+  거리다. 같은 함수라도 중심을 옮기면 “가장 가까운 특이점”이 바뀌어 반지름이 달라진다.</p>
+</div>
+
+<h2 id="sec-laurent">3. 로랑 급수 — 특이점을 도려낸 환형에서</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 테일러가 안 되는 곳에서</span>
+  <p>$\dfrac{1}{z}$이나 $e^{1/z}$은 $z = 0$에서 해석적이지 않다. 원점을 포함한 원판에서는
+  테일러 전개 자체가 불가능하다. 그렇다면 <strong>원점만 콕 도려낸 도넛(환형)</strong>
+  $0 \lt |z| \lt R$에서라면? 거기서는 음수 지수 $z^{-1}, z^{-2}, \dots$까지 허용하는
+  <strong>양방향 급수</strong>가 함수를 정확히 표현한다. 이것이 로랑 급수이고, 그
+  음수 지수 부분이 “특이점의 지문”이다.</p>
+</div>
+
+<div class="box box-thm" id="def-laurent-series"><span class="box-label">정의 + 정리 · 로랑 급수 <span class="label-en">Laurent series</span> (브라운-처칠 §5)</span>
+  <p>$f$가 <strong>환형영역</strong> $R_1 \lt |z - z_0| \lt R_2$ 전체에서 해석적이면,
+  그 환형의 모든 점에서 $f$는 <strong>유일한</strong> 양방향 급수로 표현된다:</p>
+  $$f(z) = \underbrace{\sum_{n=0}^\infty a_n (z - z_0)^n}_{\text{해석적 부분}}
+  \; + \; \underbrace{\sum_{n=1}^\infty \frac{b_n}{(z - z_0)^n}}_{\text{주요부(principal part)}}
+  \;=\; \sum_{n=-\infty}^\infty c_n (z - z_0)^n,$$
+  <p>계수는 <strong>미분이 아니라 적분</strong>으로 주어진다. 환형 안에 놓인 $z_0$을 감싸는
+  임의의 양의 방향 단순폐곡선 $C$에 대해</p>
+  $$c_n = \frac{1}{2\pi i} \oint_C \frac{f(z)}{(z - z_0)^{n+1}}\,dz
+  \qquad (n = 0, \pm 1, \pm 2, \dots).$$
+  <p>(코시-구르사 정리에 의해 값은 $C$의 선택과 무관하다.) 음수 지수들의 모임
+  $\sum b_n / (z - z_0)^n$을 <strong>주요부</strong>라 하며, 이것이 $z_0$에서의
+  특이점 정보를 통째로 담는다. 특히 계수 $b_1 = c_{-1}$이 다음 장의 <strong>유수</strong>다.</p>
+  <p><strong>테일러는 로랑의 특수한 경우다.</strong> $f$가 원판 전체($R_1 = 0$이고 중심도
+  해석적)에서 해석적이면 코시-구르사 정리로 모든 $b_n = 0$ — 주요부가 사라지고 테일러
+  급수만 남는다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 두 원 사이의 코시 적분공식. 바깥 원은 양수 지수를, 안쪽 원은 음수 지수를 낳는다.</span></summary>
+  <p>환형 안의 점 $z$를 고정하고, 두 동심원 $C_1$ (반지름 $\approx R_1$, 안쪽)과
+  $C_2$ (반지름 $\approx R_2$, 바깥)로 $z$를 사이에 낀다. 환형용 코시 적분공식
+  (경로 변형으로 얻음)은</p>
+  $$f(z) = \frac{1}{2\pi i}\oint_{C_2}\frac{f(w)}{w - z}\,dw
+  \;-\; \frac{1}{2\pi i}\oint_{C_1}\frac{f(w)}{w - z}\,dw.$$
+  <p><strong>바깥 적분:</strong> $C_2$ 위에서 $|z - z_0| \lt |w - z_0|$ —
+  테일러 증명과 똑같은 기하급수로 $\dfrac{1}{w-z} = \sum_{n \ge 0}\dfrac{(z-z_0)^n}{(w-z_0)^{n+1}}$,
+  <strong>음이 아닌 지수</strong> $a_n$이 나온다.</p>
+  <p><strong>안쪽 적분:</strong> $C_1$ 위에서는 부등호가 뒤집혀 $|w - z_0| \lt |z - z_0|$.
+  이번엔 $z - z_0$으로 묶는다:</p>
+  $$\frac{1}{w - z} = \frac{-1}{(z - z_0) - (w - z_0)}
+  = -\frac{1}{z - z_0}\cdot\frac{1}{1 - \frac{w - z_0}{z - z_0}}
+  = -\sum_{n=0}^\infty \frac{(w - z_0)^n}{(z - z_0)^{n+1}}.$$
+  <p>$-$부호와 상쇄되어 <strong>음수 지수</strong> $b_n$이 나온다. 두 조각을 합치면 로랑
+  급수이고, 코시-구르사 정리로 모든 계수 적분을 환형 안의 <em>한</em> 곡선 $C$로 통일할
+  수 있다. $\blacksquare$</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 로랑 전개 두 번 (적분 없이, 알려진 급수 조작으로)</span>
+  <p>실전에서 계수 적분 $c_n$을 직접 계산하는 일은 거의 없다. <strong>유일성</strong>
+  덕분에, 알려진 급수를 조작해 얻은 양방향 급수가 곧 로랑 급수다.</p>
+  <p><strong>(a) 본질적 특이점의 표본 </strong>$e^{1/z}$. $e^w = \sum w^n/n!$에
+  $w = 1/z$를 대입:</p>
+  $$e^{1/z} = \sum_{n=0}^\infty \frac{1}{n!}\,z^{-n}
+  = 1 + \frac{1}{z} + \frac{1}{2!\,z^2} + \frac{1}{3!\,z^3} + \cdots
+  \qquad (0 \lt |z| \lt \infty).$$
+  <p>주요부에 음수 지수가 <strong>무한히</strong> 많다 — $z = 0$은 <strong>진성(본질적)
+  특이점</strong>. 유수는 $b_1 = c_{-1} = 1$.</p>
+  <p><strong>(b) 같은 함수, 다른 환형, 다른 급수 </strong>$\dfrac{1}{z(z - 1)}$. 부분분수로
+  $\dfrac{1}{z(z-1)} = -\dfrac{1}{z} + \dfrac{1}{z - 1}$. 중심 $z_0 = 0$ 둘레의 두 환형에서:</p>
+  <p>· <strong>안쪽 환형 $0 \lt |z| \lt 1$</strong>: $\dfrac{1}{z-1} = -\dfrac{1}{1-z}
+  = -\sum_{n\ge0} z^n$이므로</p>
+  $$\frac{1}{z(z-1)} = -\frac{1}{z} - 1 - z - z^2 - \cdots
+  \qquad (0 \lt |z| \lt 1).$$
+  <p>주요부는 $-1/z$ 하나뿐 — $z = 0$은 <strong>단순극(1위 극점)</strong>, 유수 $-1$.</p>
+  <p>· <strong>바깥 환형 $|z| \gt 1$</strong>: $\dfrac{1}{z-1} = \dfrac{1}{z}\cdot
+  \dfrac{1}{1 - 1/z} = \sum_{n\ge1} z^{-n}$이므로 $-1/z$ 항이 상쇄되어</p>
+  $$\frac{1}{z(z-1)} = \frac{1}{z^2} + \frac{1}{z^3} + \frac{1}{z^4} + \cdots
+  \qquad (1 \lt |z| \lt \infty).$$
+  <p>완전히 다른 급수다. 심지어 $1/z$ 항이 없다! <strong>“$z_0$에서의 로랑 급수”는
+  어느 환형인지를 정해야 비로소 하나로 정해진다</strong> — 이 점이 초심자를 가장 자주
+  넘어뜨린다.</p>
+</div>
+
+<h2 id="sec-classify">4. 주요부로 특이점 분류하기 (7장 예고)</h2>
+
+<div class="box box-def" id="box-singularity-preview">
+  <span class="box-label">정의 · 고립특이점의 세 종류 <span class="label-en">isolated singularity: removable / pole / essential</span> (브라운-처칠 §5–6)</span>
+  <p>$z_0$이 <strong>고립특이점</strong>이라 함은 어떤 구멍 뚫린 원판
+  $0 \lt |z - z_0| \lt R$에서 $f$가 해석적인 것. 거기서의 로랑 급수 주요부
+  $\sum_{n\ge1} b_n/(z-z_0)^n$의 <strong>음수 지수 항 개수</strong>가 특이점의 정체를
+  결정한다:</p>
+  <p>① <strong>제거가능 특이점</strong> — 주요부가 아예 없음(모든 $b_n = 0$). 값 하나만
+  적절히 정의하면 해석함수로 이어진다. 예: $\dfrac{\sin z}{z} = 1 - \dfrac{z^2}{3!}
+  + \cdots$ ($z = 0$에서 $1$로 메우면 전해석).</p>
+  <p>② <strong>극점(pole)</strong> — 음수 지수가 <strong>유한개</strong>. 가장 낮은 지수가
+  $-m$ ($b_m \neq 0$, 그 아래는 $0$)이면 <strong>$m$위 극점</strong>. 예: $\dfrac{1}{z(z-1)}$은
+  $z=0$에서 단순극(1위), $\dfrac{e^z}{z^3}$은 3위 극점.</p>
+  <p>③ <strong>진성(본질적) 특이점</strong> — 음수 지수가 <strong>무한개</strong>. 예:
+  $e^{1/z}$. 근방에서 함수값이 (거의) 모든 복소수를 무한히 취한다(카소라티-바이어슈트라스,
+  피카르 — 7장).</p>
+  <p>핵심 연결고리: 계수 $b_1 = c_{-1}$을 <strong>유수(residue)</strong>라 하고, 다음 장의
+  유수정리는 이 한 계수만으로 폐곡선 적분을 $2\pi i \cdot b_1$로 계산한다. <strong>로랑
+  급수는 유수 계산의 원료</strong>다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>테일러는 원판, 로랑은 환형.</strong> 원판 <em>전체</em>에서 해석적인 함수는
+  주요부가 없다(테일러 = 로랑의 특수경우). 반대로 “로랑 급수를 구하라”는 요구에는
+  <strong>반드시 어느 환형인지</strong>가 딸려야 한다 — $\dfrac{1}{z(z-1)}$이 환형마다 다른
+  답을 주는 것이 그 증거. 환형 명시를 빠뜨린 답은 미완이다.</p>
+  <p>② <strong>로랑 계수는 미분이 아니라 적분.</strong> 테일러 계수는 $a_n = f^{(n)}(z_0)/n!$
+  이지만, 로랑에서는 $f$가 $z_0$에서 <em>해석적이지 않아</em>(값도 없고 미분도 안 됨)
+  $f^{(n)}(z_0)$이라는 것 자체가 존재하지 않는다. 그래서 계수는 오직 적분
+  $c_n = \frac{1}{2\pi i}\oint f/(z-z_0)^{n+1}dz$로만 정의된다 (실전에서는 알려진 급수 조작 +
+  유일성으로 대신함).</p>
+  <p>③ <strong>수렴반지름 = 가장 가까운 특이점까지의 거리</strong>(“식이 멀쩡해 보이는 데까지”가
+  아니다). 이것이 실해석의 오랜 수수께끼를 푼다: $\dfrac{1}{1 + x^2}$은 실수축 전체에서
+  무한 번 미분 가능한데 매클로린 급수 $\sum (-1)^n x^{2n}$의 수렴반지름은 왜 $1$인가?
+  복소평면에서 보면 $\pm i$에 극점이 있고 원점에서 거리 $1$이기 때문이다 — 실축만
+  보는 눈에는 보이지 않던 특이점이 반지름을 결정한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">6장의 줄거리</span>
+  <p><a class="term" data-term="power-series">멱급수</a>(해석 8장) = 원판에서 절대·균등수렴하고
+  항별 미분·적분이 자유로운 대상 → <strong>테일러 정리</strong>: 원판에서 해석적이면
+  곧 그 멱급수와 같다(<em>해석 = 국소적 멱급수</em>, 수렴반지름 = 가장 가까운 특이점까지의
+  거리) → <strong>로랑 급수</strong>: 특이점을 도려낸 환형에서는 음수 지수까지 허용한
+  양방향 급수, 계수는 미분이 아니라 적분, 주요부가 특이점의 지문 → <strong>분류</strong>:
+  주요부 항 개수로 제거가능·극점·진성 특이점을 가르고, 유수 $b_1 = c_{-1}$이 7장
+  유수정리의 씨앗.</p>
+  <p><strong>과목 흐름 속 위치:</strong> 4–5장(적분: 코시-구르사, 코시 적분공식)이
+  급수의 <em>존재</em>를 보증했고(테일러·로랑 증명의 엔진이 바로 코시 적분공식),
+  이 장은 그 적분을 급수라는 계산 가능한 형태로 결정화했다. 7장은 이 급수의 단
+  한 계수($b_1$)로 실적분·급수까지 계산하는 <strong>유수정리</strong>로 이어진다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 함수를 주어진 중심에서 테일러(또는 매클로린) 전개했을 때의 수렴반지름 $R$을,
+  계수를 구하지 말고 <strong>가장 가까운 특이점까지의 거리</strong>로 결정하라.</p>
+  <p>(1) $\dfrac{1}{1 + z^2}$, 중심 $z_0 = 0$ &nbsp;&nbsp;
+  (2) $\dfrac{e^z}{z - 3}$, 중심 $z_0 = 0$ &nbsp;&nbsp;
+  (3) $\dfrac{z}{(z - 1)(z - 2i)}$, 중심 $z_0 = 0$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>특이점(분모의 영점)을 모두 찍고 $z_0$에서의 거리 중 최소를 취하면 된다.
+    분자의 $e^z$는 전해석이라 특이점을 만들지 않는다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 특이점 $z = \pm i$ (분모 $z^2 + 1 = 0$), 원점에서 거리 모두 $1$. <strong>$R = 1$.</strong>
+    ($\frac{1}{1+x^2}$이 실축에서 매끈한데도 반지름이 $1$인 이유가 바로 이 복소 극점이다.)</p>
+    <p>(2) 특이점 $z = 3$ 하나. <strong>$R = 3$.</strong></p>
+    <p>(3) 특이점 $z = 1$ (거리 $1$)과 $z = 2i$ (거리 $2$). 최소는 $1$이므로 <strong>$R = 1$.</strong></p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\dfrac{1}{1 - z} = \sum_{n=0}^\infty z^n$ ($|z| \lt 1$)에서 출발해 <strong>항별
+  미분</strong>으로 다음을 유도하고, 각 급수의 수렴반지름이 $1$로 유지됨을 확인하라.</p>
+  <p>(1) $\dfrac{1}{(1 - z)^2}$ &nbsp;&nbsp; (2) $\dfrac{z}{(1 - z)^2}$
+  &nbsp;&nbsp; (3) 그 결과로 $\displaystyle\sum_{n=1}^\infty \frac{n}{2^n}$의 값</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>멱급수는 수렴원판 안에서 항별 미분이 정당하고, 미분해도 반지름이 그대로다.
+    (3)은 (2)에 $z = \tfrac12$를 대입.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 양변을 $z$로 미분: $\dfrac{1}{(1-z)^2} = \sum_{n=1}^\infty n z^{n-1}
+    = \sum_{m=0}^\infty (m+1) z^m$ ($|z| \lt 1$). 항별 미분은 반지름을 보존하므로 여전히 $R = 1$.</p>
+    <p>(2) 양변에 $z$를 곱함: $\dfrac{z}{(1-z)^2} = \sum_{n=1}^\infty n z^n$ ($|z| \lt 1$).</p>
+    <p>(3) $z = \tfrac12$ 대입 ($|z| \lt 1$이라 적법):
+    $\displaystyle\sum_{n=1}^\infty \frac{n}{2^n} = \frac{1/2}{(1 - 1/2)^2}
+    = \frac{1/2}{1/4} = 2.$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §5 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f(z) = \dfrac{-1}{(z - 1)(z - 2)}$을 중심 $z_0 = 0$ 둘레의 세 영역에서 전개하라.</p>
+  <p>(a) $|z| \lt 1$ &nbsp;&nbsp; (b) $1 \lt |z| \lt 2$ &nbsp;&nbsp; (c) $|z| \gt 2$</p>
+  <p>각 경우가 테일러인지 로랑인지, 주요부가 무엇인지 밝혀라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>부분분수 $f = \dfrac{1}{z - 1} - \dfrac{1}{z - 2}$. 각 조각을 “해당 영역에서
+    수렴하는” 기하급수로 펼친다: $|z| \lt 1$이면 $\frac{1}{1-z}$ 꼴, $|z| \gt 1$이면
+    $\frac{1}{z}\cdot\frac{1}{1 - 1/z}$ 꼴.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>부분분수: $-1 = A(z-2) + B(z-1)$에서 $A = 1$, $B = -1$, 즉
+    $f = \dfrac{1}{z-1} - \dfrac{1}{z-2}$.</p>
+    <p><strong>(a) $|z| \lt 1$</strong> — 둘 다 $|z|$가 작음.
+    $\dfrac{1}{z-1} = -\dfrac{1}{1-z} = -\sum_{n\ge0} z^n$,
+    $-\dfrac{1}{z-2} = \dfrac{1}{2-z} = \dfrac12\dfrac{1}{1 - z/2} = \sum_{n\ge0}\dfrac{z^n}{2^{n+1}}$.
+    합쳐서</p>
+    $$f(z) = \sum_{n=0}^\infty \left(\frac{1}{2^{n+1}} - 1\right) z^n.$$
+    <p><strong>테일러</strong> (원판에서 해석적, 주요부 없음).</p>
+    <p><strong>(b) $1 \lt |z| \lt 2$</strong> — $\dfrac{1}{z-1}$은 $|z| \gt 1$ 꼴로,
+    $-\dfrac{1}{z-2}$는 $|z| \lt 2$ 꼴로:
+    $\dfrac{1}{z-1} = \dfrac1z\dfrac{1}{1 - 1/z} = \sum_{n\ge1} z^{-n}$,
+    $\dfrac{1}{2-z} = \sum_{n\ge0}\dfrac{z^n}{2^{n+1}}$. 합쳐서</p>
+    $$f(z) = \sum_{n=1}^\infty \frac{1}{z^n} + \sum_{n=0}^\infty \frac{z^n}{2^{n+1}}.$$
+    <p><strong>로랑</strong>. 주요부는 $\sum_{n\ge1} z^{-n}$.</p>
+    <p><strong>(c) $|z| \gt 2$</strong> — 둘 다 $|z| \gt$(극점) 꼴.
+    $\dfrac{1}{z-1} = \sum_{n\ge1} z^{-n}$,
+    $\dfrac{1}{z-2} = \dfrac1z\dfrac{1}{1 - 2/z} = \sum_{n\ge1}\dfrac{2^{n-1}}{z^n}$. 빼면</p>
+    $$f(z) = \sum_{n=1}^\infty \frac{1 - 2^{n-1}}{z^n}.$$
+    <p><strong>로랑</strong>, 전부 음수 지수(해석적 부분 $0$). 세 영역, 세 개의 다른 급수 —
+    “$z_0 = 0$에서의 급수”가 환형마다 다르다는 것의 결정적 예다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §5 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 함수의 $z = 0$에서의 로랑 전개(주요부)를 구해 특이점을 <strong>제거가능·극점·진성</strong>
+  중으로 분류하고, 유수 $b_1 = c_{-1}$을 구하라.</p>
+  <p>(1) $\dfrac{\sin z}{z^4}$ &nbsp;&nbsp; (2) $z^2 e^{1/z}$ &nbsp;&nbsp;
+  (3) $\dfrac{e^z - 1}{z}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>알려진 매클로린 급수($\sin z$, $e^z$)를 대입하고 지수를 조정만 하면 된다.
+    유수는 $1/z$ 항의 계수.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\sin z = z - \dfrac{z^3}{3!} + \dfrac{z^5}{5!} - \cdots$이므로</p>
+    $$\frac{\sin z}{z^4} = \frac{1}{z^3} - \frac{1}{3!\,z} + \frac{z}{5!} - \cdots.$$
+    <p>음수 지수가 유한개(최저 $-3$) → <strong>3위 극점</strong>. 유수 $b_1 = -\dfrac{1}{3!} = -\dfrac16$.</p>
+    <p>(2) $e^{1/z} = \sum_{n\ge0}\dfrac{1}{n!}z^{-n}$이므로
+    $z^2 e^{1/z} = \sum_{n\ge0}\dfrac{1}{n!}z^{2-n} = z^2 + z + \dfrac12 + \dfrac{1}{6z}
+    + \dfrac{1}{24 z^2} + \cdots$. 음수 지수가 무한개 → <strong>진성 특이점</strong>.
+    유수는 $2 - n = -1$, 즉 $n = 3$ 항의 계수 $\dfrac{1}{3!} = \dfrac16$.</p>
+    <p>(3) $e^z - 1 = z + \dfrac{z^2}{2!} + \cdots$이므로
+    $\dfrac{e^z - 1}{z} = 1 + \dfrac{z}{2!} + \dfrac{z^2}{3!} + \cdots$. 음수 지수 없음 →
+    <strong>제거가능 특이점</strong>($z=0$에서 $1$로 메움). 유수 $b_1 = 0$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>실·복소의 다리 서술형</span>
+  </div>
+  <p>실함수 $g(x) = \dfrac{1}{1 + x^2}$은 $\mathbb{R}$ 전체에서 무한 번 미분 가능하다.
+  그럼에도 그 매클로린 급수 $\sum_{n=0}^\infty (-1)^n x^{2n}$의 수렴반지름은 $1$뿐이어서
+  $|x| \ge 1$에서는 함수를 표현하지 못한다. 이 현상을 복소해석의 관점에서 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$g$를 복소함수 $f(z) = \dfrac{1}{1 + z^2}$로 확장해 특이점을 찾고, 테일러
+    정리의 “수렴반지름 = 가장 가까운 특이점까지의 거리”를 적용한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f(z) = \dfrac{1}{1 + z^2}$는 $z = \pm i$에서 극점을 갖고 그 밖에서는 해석적이다.
+    테일러 정리에 의해 원점 중심 전개의 수렴반지름은 원점에서 가장 가까운 특이점까지의
+    거리, 즉 $|\pm i| = 1$이다. 실축만 보는 실해석의 눈에는 $\pm i$가 보이지 않아
+    “매끈한데 왜 반지름이 유한한가”가 미스터리로 남지만, 복소평면으로 올라가면 극점이
+    반지름을 강제한다.</p>
+    <p>일반화: 실해석함수의 테일러 급수 수렴반지름은 언제나 복소 확장의 <strong>가장 가까운
+    복소 특이점까지의 거리</strong>다 — “실수축 위에서는 아무 이상이 없는데 급수가
+    유한 반지름을 갖는” 모든 경우가 이렇게 설명된다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>계수 유일성 증명형</span>
+  </div>
+  <p>(1) 원판 $|z| \lt R$에서 해석적인 $f$가 두 멱급수
+  $f(z) = \sum_{n\ge0} a_n z^n = \sum_{n\ge0} a_n' z^n$로 표현되면 모든 $n$에서
+  $a_n = a_n'$임을(<strong>멱급수 표현의 유일성</strong>) 보여라. (2) 이를 이용해
+  <strong>짝함수의 매클로린 전개에는 홀수차 항이 없음</strong>을 설명하고, $\cos z$가
+  그 예임을 확인하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 멱급수 계수는 도함수로 복원된다: 항별 미분 후 $z = 0$ 대입. (2) 짝함수
+    $f(-z) = f(z)$의 급수를 견주고 유일성을 적용.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1)</strong> 멱급수의 합은 수렴원판 안에서 항별 미분이 가능하고 계수는
+    도함수의 값으로 복원된다: $k$번 미분하고 $z = 0$을 대입하면 오직 $n = k$ 항만 살아남아
+    $f^{(k)}(0) = k!\,a_k$. 두 표현 모두 같은 함수 $f$에서 나오므로
+    $k!\,a_k = f^{(k)}(0) = k!\,a_k'$, 따라서 $a_k = a_k'$ (모든 $k$). 표현은 유일하다.</p>
+    <p><strong>(2)</strong> $f$가 짝함수($f(-z) = f(z)$)이고 $f(z) = \sum a_n z^n$이면,
+    $f(-z) = \sum a_n (-z)^n = \sum (-1)^n a_n z^n$ 역시 같은 함수 $f$의 매클로린 급수다.
+    유일성(1)에 의해 계수가 일치해야 하므로 $a_n = (-1)^n a_n$, 즉 홀수 $n$에 대해
+    $2 a_n = 0 \Rightarrow a_n = 0$. <strong>홀수차 항이 전부 사라진다.</strong></p>
+    <p>확인: $\cos z$는 짝함수이고 실제로
+    $\cos z = \sum_{n\ge0}\dfrac{(-1)^n}{(2n)!}z^{2n}$ — 짝수차만 존재. (같은 논리로
+    홀함수 $\sin z$에는 홀수차만 남는다.) $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

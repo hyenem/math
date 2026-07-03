@@ -1402,5 +1402,110 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "Gauss–Bonnet theorem",
     "short": "단순 영역에서 $\\oint k_g\\,ds+\\iint_R K\\,dA+\\sum\\theta_i=2\\pi$, 컴팩트 곡면에서는 $\\iint_S K\\,dA=2\\pi\\chi(S)$ — 곡률의 총합이 오일러 지표(위상 불변량)와 같다. 기하와 위상을 잇는 다리.",
     "href": "subjects/differential-geometry/ch06.html#def-gauss-bonnet"
+  },
+
+  /* ---------- 복소해석학 (Brown & Churchill) ---------- */
+
+  "complex-polar": {
+    "ko": "극형식과 지수형식",
+    "en": "polar and exponential form",
+    "short": "복소수를 크기 $r=|z|$와 편각 $\\theta=\\arg z$로 적은 $z=r(\\cos\\theta+i\\sin\\theta)=re^{i\\theta}$. 오일러 공식 $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$가 핵심이며, 곱셈이 '크기 곱·편각 덧셈'이 된다. 주편각은 $\\operatorname{Arg}z\\in(-\\pi,\\pi]$.",
+    "href": "subjects/complex-analysis/ch01.html#def-complex-polar"
+  },
+  "complex-roots": {
+    "ko": "드무아브르와 거듭제곱근",
+    "en": "De Moivre, nth roots",
+    "short": "드무아브르 공식 $(\\cos\\theta+i\\sin\\theta)^n=\\cos n\\theta+i\\sin n\\theta$. $z=re^{i\\theta}$의 $n$제곱근은 $r^{1/n}e^{i(\\theta+2k\\pi)/n}$ ($k=0,\\dots,n-1$)로 정확히 $n$개이며, 복소평면 위 정 $n$각형의 꼭짓점을 이룬다. 1의 $n$제곱근은 원분확대의 씨앗.",
+    "href": "subjects/complex-analysis/ch01.html#def-complex-roots"
+  },
+  "cauchy-riemann": {
+    "ko": "코시-리만 방정식",
+    "en": "Cauchy–Riemann equations",
+    "short": "$f=u+iv$가 미분가능이면 $u_x=v_y$, $u_y=-v_x$ (필요조건). 편도함수가 근방에서 연속이고 CR을 만족하면 역도 성립해 해석적. $f'=u_x+iv_x$이고 극좌표형은 $ru_r=v_\\theta$, $u_\\theta=-rv_r$.",
+    "href": "subjects/complex-analysis/ch02.html#def-cauchy-riemann"
+  },
+  "analytic-function": {
+    "ko": "해석함수",
+    "en": "analytic function",
+    "short": "한 점의 어떤 근방 전체에서 미분가능하면 그 점에서 해석적, 영역 전체면 해석적, $\\mathbb{C}$ 전체면 전해석(entire). 다항식·$e^z$는 전해석, $1/z$는 원점을 빼고, $\\bar z$·$|z|^2$는 비해석. 한 점 미분가능과 해석성은 다르다.",
+    "href": "subjects/complex-analysis/ch02.html#def-analytic-function"
+  },
+  "harmonic-function": {
+    "ko": "조화함수",
+    "en": "harmonic function",
+    "short": "2계 편도가 연속이고 라플라스 방정식 $u_{xx}+u_{yy}=0$을 만족하는 실함수. 해석함수 $f=u+iv$의 실·허부는 모두 조화이며, $v$는 $u$의 조화켤레. 정상상태 온도·정전기 퍼텐셜·유체 흐름을 기술.",
+    "href": "subjects/complex-analysis/ch02.html#def-harmonic-function"
+  },
+  "complex-exponential": {
+    "ko": "복소지수함수",
+    "en": "complex exponential",
+    "short": "$e^z=e^x(\\cos y+i\\sin y)$. 전해석이고 $\\frac{d}{dz}e^z=e^z$, 덧셈정리 성립하지만 실수엔 없던 주기 $2\\pi i$를 가지며 $|e^z|=e^x\\neq0$이라 결코 $0$이 되지 않는다.",
+    "href": "subjects/complex-analysis/ch03.html#def-complex-exponential"
+  },
+  "complex-logarithm": {
+    "ko": "복소로그와 거듭제곱",
+    "en": "complex logarithm",
+    "short": "$\\log z=\\ln|z|+i\\arg z$ — 지수의 주기 $2\\pi i$ 때문에 다가함수. 주치 $\\operatorname{Log}$, 가지(branch)와 가지 절단이 필요하며, 거듭제곱 $z^c=e^{c\\log z}$도 다가($i^i=e^{-\\pi/2-2k\\pi}$).",
+    "href": "subjects/complex-analysis/ch03.html#def-complex-logarithm"
+  },
+  "contour-integral": {
+    "ko": "경로적분과 ML 부등식",
+    "en": "contour integral",
+    "short": "경로 $C:z=z(t)$를 따라 $\\int_C f\\,dz=\\int_a^b f(z(t))z'(t)\\,dt$로 정의하는 적분 — 계산은 언제나 실적분. 선형·경로 반전·분할이 성립하고, 크기는 ML 부등식 $|\\int_C f\\,dz|\\le ML$로 어림.",
+    "href": "subjects/complex-analysis/ch04.html#def-contour-integral"
+  },
+  "cauchy-goursat": {
+    "ko": "코시-구르사 정리",
+    "en": "Cauchy–Goursat theorem",
+    "short": "$f$가 단순연결 영역에서 해석적이면 그 안의 모든 닫힌 경로에서 $\\oint_C f\\,dz=0$. 구르사가 $f'$ 연속 가정을 제거했다. 구멍이 있으면($1/z$) 성립 안 하며, 경로 변형 원리로 $\\oint_C dz/z=2\\pi i$.",
+    "href": "subjects/complex-analysis/ch04.html#def-cauchy-goursat"
+  },
+  "cauchy-integral-formula": {
+    "ko": "코시 적분공식",
+    "en": "Cauchy integral formula",
+    "short": "$f$가 닫힌경로 $C$ 위·내부에서 해석적이고 $z_0$가 내부면 $f(z_0)=\\frac{1}{2\\pi i}\\oint_C\\frac{f(z)}{z-z_0}\\,dz$ — 경계값이 내부를 완전히 결정. 도함수 공식 $f^{(n)}(z_0)=\\frac{n!}{2\\pi i}\\oint_C\\frac{f(z)}{(z-z_0)^{n+1}}\\,dz$로 해석함수는 무한 번 미분가능.",
+    "href": "subjects/complex-analysis/ch05.html#def-cauchy-integral-formula"
+  },
+  "liouville-maximum": {
+    "ko": "리우빌 정리와 최대절댓값 원리",
+    "en": "Liouville and maximum modulus",
+    "short": "코시 부등식 $|f^{(n)}(z_0)|\\le n!M/R^n$에서: 유계인 전해석함수는 상수(리우빌) — 대수학의 기본정리의 열쇠. 최대절댓값 원리: 비상수 해석함수의 $|f|$는 내부에서 최댓값을 못 갖고 경계에서 취한다.",
+    "href": "subjects/complex-analysis/ch05.html#def-liouville-maximum"
+  },
+  "laurent-series": {
+    "ko": "로랑 급수",
+    "en": "Laurent series",
+    "short": "환형영역 $r\\lt|z-z_0|\\lt R$에서 해석적인 함수를 음수 지수까지 포함해 표현하는 양방향 급수 $\\sum_{n=-\\infty}^\\infty c_n(z-z_0)^n$. 계수는 미분이 아니라 적분 $c_n=\\frac{1}{2\\pi i}\\oint\\frac{f}{(z-z_0)^{n+1}}dz$로 주어지며, 주요부가 특이점 정보를 담는다. 테일러는 주요부가 0인 특수경우.",
+    "href": "subjects/complex-analysis/ch06.html#def-laurent-series"
+  },
+  "isolated-singularity": {
+    "ko": "고립특이점의 분류",
+    "en": "isolated singularity",
+    "short": "뚫린 원판 $0\\lt|z-z_0|\\lt R$에서 해석적인 $f$의 특이점. 로랑 급수 주요부로 분류 — 주요부 없음=제거가능, 유한($c_{-m}\\neq0$)=$m$차 극점, 무한=진성특이점. $\\frac{\\sin z}{z}$·$\\frac1{z^2}$·$e^{1/z}$가 각각의 예.",
+    "href": "subjects/complex-analysis/ch07.html#def-isolated-singularity"
+  },
+  "residue-theorem": {
+    "ko": "유수정리",
+    "en": "residue theorem",
+    "short": "$\\operatorname{Res}_{z_0}f=c_{-1}$(로랑 계수)이고 $\\oint_C f\\,dz=2\\pi i\\sum\\operatorname{Res}$. $\\oint(z-z_0)^n\\,dz$가 $n=-1$에서만 $2\\pi i$라 $c_{-1}$만 살아남는다. 코시-구르사·코시 적분공식을 통일하는 마스터 정리.",
+    "href": "subjects/complex-analysis/ch07.html#def-residue-theorem"
+  },
+  "residue-real-integrals": {
+    "ko": "유수로 실적분 계산",
+    "en": "real integrals via residues",
+    "short": "유수정리로 실적분을 계산. 유리함수는 반원 경로+ML, 푸리에형 $\\int\\frac{p}{q}\\cos ax\\,dx$는 $e^{iaz}$와 조던 보조정리, $\\int_0^{2\\pi}R(\\cos,\\sin)d\\theta$는 $z=e^{i\\theta}$ 단위원 치환. 실축 위 극점은 함몰경로로 절반 유수·주값.",
+    "href": "subjects/complex-analysis/ch08.html#def-residue-real-integrals"
+  },
+  "argument-principle": {
+    "ko": "편각 원리와 루셰 정리",
+    "en": "argument principle, Rouché",
+    "short": "$\\frac{1}{2\\pi i}\\oint\\frac{f'}{f}dz=Z-P$ (영점 수 − 극점 수) = 상이 원점을 감는 회전수. 루셰 정리: 경계에서 $|g|\\lt|f|$이면 $f$와 $f+g$의 영점 수가 같다 — 대수학의 기본정리 재증명·영점 위치 계산.",
+    "href": "subjects/complex-analysis/ch08.html#def-argument-principle"
+  },
+  "conformal-mapping": {
+    "ko": "등각사상",
+    "en": "conformal mapping",
+    "short": "해석적이고 $f'\\neq0$이면 각을 보존(등각). 뫼비우스 변환 $\\frac{az+b}{cz+d}$는 원-직선을 원-직선으로 보내며 군을 이룬다. 리만 사상정리: 평면 전체가 아닌 단순연결 영역은 단위원판과 등각동형. 디리클레 문제에 응용.",
+    "href": "subjects/complex-analysis/ch08.html#def-conformal-mapping"
   }
 });

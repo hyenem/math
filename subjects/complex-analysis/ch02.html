@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2장 해석함수와 코시-리만 방정식 — 복소해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="complex-analysis" data-chapter="ch02.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">복소해석학 · Brown-Churchill (§4–6)</p>
+  <h1><span class="ch-num">2</span> 해석함수와 코시-리만 방정식</h1>
+  <p class="ch-source">“한 번 미분되면 무한 번 미분된다” —
+  실해석과 형식이 똑같아 보이던 극한·연속이 <strong>미분</strong>이라는 한 단어에서
+  갈라진다. 복소미분가능은 실미분가능과 이름만 같은, 훨씬 강한 요구다.</p>
+</div>
+
+<p><a class="term" data-term="function-limit">함수의 극한</a>과 <a class="term" data-term="continuous-function">연속</a>을
+복소함수로 옮기는 일은 아무 일도 아닙니다. $z \to z_0$에서 $f(z) \to w_0$의 정의도,
+연속의 정의도 실해석의 $\varepsilon$–$\delta$를 절댓값 $|\cdot|$만 <a class="term" data-term="conjugate-modulus">복소 절댓값</a>으로
+바꿔 그대로 씁니다. 그런데 <strong>미분</strong>에 이르면 사정이 완전히 달라집니다.
+실수에서 미분은 좌·우 두 방향의 극한이 맞으면 되지만, 복소평면에서 $\Delta z \to 0$은
+<strong>모든 방향에서, 심지어 나선을 그리며</strong> 0으로 다가감을 뜻합니다. 그 무수한
+접근이 전부 같은 값을 줘야 한다는 이 과도한 요구가, 복소해석의 모든 기적
+(코시 적분공식·리우빌·유수정리)의 씨앗입니다.</p>
+
+<h2 id="sec-limit">1. 복소함수의 극한·연속, 그리고 미분계수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 극한과 연속은 공짜, 미분이 관문</span>
+  <p>$f = u + iv$라 쓰면 ($u, v$는 $(x,y)$의 실함수) $\lim_{z\to z_0} f = w_0 = u_0 + iv_0$은
+  단지 “$u \to u_0$이고 $v \to v_0$” — 두 실함수의 2변수 극한과 동치입니다. 연속도 마찬가지.
+  그래서 다항식·유리함수·$e^z$는 정의역에서 당연히 연속이고, $\bar z$나 $|z|^2$도
+  <strong>어디서나 연속</strong>입니다.</p>
+  <p>반전은 미분에서 옵니다. 실수 축 위 미분은 “왼쪽 기울기 = 오른쪽 기울기”라는
+  두 방향의 일치입니다. 복소 미분은 $z_0$을 향한 <strong>모든 방향의 할선 기울기가
+  하나의 복소수로 수렴</strong>해야 합니다 — 무한히 많은 조건이 동시에 걸리는 셈입니다.
+  이 강한 구속이 곧이어 코시-리만 방정식이라는 정확한 형태로 결정화됩니다.</p>
+</div>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 복소 미분계수 <span class="label-en">complex derivative</span> (브라운-처칠 §4)</span>
+  <p>$f$가 $z_0$의 근방에서 정의될 때 극한</p>
+  $$f'(z_0) = \lim_{\Delta z \to 0} \frac{f(z_0 + \Delta z) - f(z_0)}{\Delta z}$$
+  <p>이 (복소수로) 존재하면 $f$는 $z_0$에서 <strong>미분가능</strong>이라 한다. 형식은
+  <a class="term" data-term="derivative">실수 미분계수</a>와 글자 하나 다르지 않지만, $\Delta z \to 0$이
+  복소평면의 <strong>모든 경로</strong>를 따른 접근을 포함한다는 점이 결정적으로 다르다.</p>
+  <p>합·곱·몫·연쇄법칙과 $(z^n)' = n z^{n-1}$ 등 미분 규칙은 실해석과 형식이 같아
+  그대로 성립한다 (증명도 그대로 옮겨진다). 문제는 “규칙을 어떻게 쓰느냐”가 아니라
+  “<strong>애초에 미분가능한가</strong>”이며, 그 판정 기준이 이 장의 주제다.</p>
+</div>
+
+<h2 id="sec-cr">2. 코시-리만 방정식 — 미분가능의 좌표 기준</h2>
+
+<div class="box box-thm" id="def-cauchy-riemann">
+  <span class="box-label">정리 · 코시-리만 방정식 <span class="label-en">Cauchy–Riemann equations</span> (브라운-처칠 §4)</span>
+  <p><strong>이 정리가 하는 일:</strong> “모든 방향에서 극한이 같다”는 기하적·무한개의
+  조건을, $u$와 $v$의 <strong>편도함수 두 등식</strong>이라는 유한하고 계산 가능한
+  판정으로 번역한다. 복소미분가능의 실질적 검사 도구.</p>
+  <p><strong>필요조건.</strong> $f = u + iv$가 $z_0 = x_0 + iy_0$에서 미분가능하면, 그 점에서
+  네 편도함수가 존재하고</p>
+  $$u_x = v_y, \qquad u_y = -v_x$$
+  <p>가 성립한다. 더불어 미분계수는 실축 방향 계산으로 곧장 읽힌다:</p>
+  $$f'(z_0) = u_x + i v_x \;=\; v_y - i u_y.$$
+  <p><strong>충분조건(역).</strong> 역은 저절로 성립하지 않는다. 그러나 편도함수
+  $u_x, u_y, v_x, v_y$가 $z_0$의 <strong>어떤 근방에서 존재하고 $z_0$에서 연속</strong>이며
+  거기서 CR을 만족하면, $f$는 $z_0$에서 미분가능하다. 즉 <em>편도 연속 + CR ⟹ 미분가능</em>.
+  영역 $D$ 전체에서 편도가 연속이고 CR을 만족하면 $f$는 $D$에서 해석적이다.</p>
+  <p><strong>극좌표형.</strong> $z = re^{i\theta}$ ($r \neq 0$), $f = u(r,\theta) + iv(r,\theta)$이면
+  CR은</p>
+  $$r\,u_r = v_\theta, \qquad u_\theta = -\,r\,v_r$$
+  <p>가 되고, $f'(z_0) = e^{-i\theta}\,(u_r + i v_r)$. — $\log z$, $z^n$처럼 극형식이 자연스러운
+  함수의 해석성 판정에 위력적이다.</p>
+</div>
+
+<details class="proof">
+  <summary>필요조건의 증명 <span class="proof-strategy">— 방향 무관성을 두 번 써먹기: 실축·허축 두 접근으로 같은 $f'$를 두 방식으로 계산해 실부·허부를 맞춘다.</span></summary>
+  <p>$f'(z_0)$이 존재한다고 가정한다. 극한이 <strong>접근 경로와 무관</strong>하므로,
+  특별한 두 경로로 계산한 값이 서로 같아야 한다.</p>
+  <p><strong>① 실축을 따라</strong> $\Delta z = \Delta x \to 0$ (즉 $\Delta y = 0$):</p>
+  $$f'(z_0) = \lim_{\Delta x \to 0} \frac{\big[u(x_0+\Delta x, y_0) - u\big] + i\big[v(x_0+\Delta x, y_0) - v\big]}{\Delta x}
+  = u_x + i v_x.$$
+  <p><strong>② 허축을 따라</strong> $\Delta z = i\,\Delta y \to 0$ (즉 $\Delta x = 0$):</p>
+  $$f'(z_0) = \lim_{\Delta y \to 0} \frac{\Delta u + i\,\Delta v}{i\,\Delta y}
+  = \frac{1}{i}\big(u_y + i v_y\big) = v_y - i u_y.$$
+  <p>두 결과가 같은 복소수여야 하므로 실부끼리·허부끼리 비교하면</p>
+  $$u_x = v_y, \qquad v_x = -u_y \quad(\text{즉 } u_y = -v_x).$$
+  <p>이것이 코시-리만 방정식이며, ①에서 얻은 $f'(z_0) = u_x + i v_x$가 덤으로 남는다.
+  두 방향만으로 필요조건이 나오지만 — 뒤집으면 <strong>다른 방향들까지 일치한다는
+  보장은 없어서</strong>, 충분조건에는 편도의 연속성이 추가로 필요하다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · CR로 미분가능성 판정하기</span>
+  <p><strong>(a) $f(z) = z^2$.</strong> $z^2 = (x^2 - y^2) + i(2xy)$이므로 $u = x^2 - y^2$,
+  $v = 2xy$. $u_x = 2x = v_y$, $u_y = -2y = -v_x$ ✓ — 모든 점에서 CR 성립, 편도도 연속.
+  $f'(z) = u_x + i v_x = 2x + i\,2y = 2z$ (예상대로).</p>
+  <p><strong>(b) $f(z) = e^z = e^x(\cos y + i\sin y)$.</strong> $u = e^x\cos y$, $v = e^x\sin y$.
+  $u_x = e^x\cos y = v_y$, $u_y = -e^x\sin y = -v_x$ ✓ — 온 평면에서 CR.
+  $f'(z) = e^x\cos y + i\,e^x\sin y = e^z$ — <strong>자기 자신이 도함수</strong>인 성질이
+  복소평면에서도 유지된다.</p>
+  <p><strong>(c) $f(z) = \bar z = x - iy$.</strong> $u = x$, $v = -y$이므로 $u_x = 1$이지만
+  $v_y = -1$ — $u_x = v_y$가 <strong>어디서도 성립하지 않는다.</strong> 연속함수인데도
+  복소미분은 한 점에서도 불가능하다 (아래 오해 상자에서 다시 본다).</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">반례 · CR을 만족해도 미분 불가능할 수 있다</span>
+  <p>한 점에서 CR이 성립한다고 <strong>그 점에서 미분가능한 것은 아니다.</strong>
+  고전적 반례:</p>
+  $$f(z) = \begin{cases} \dfrac{\bar z^{\,2}}{z}, & z \neq 0 \\[4pt] 0, & z = 0. \end{cases}$$
+  <p>원점에서의 차분몫을 보면 $\dfrac{f(\Delta z)}{\Delta z} = \dfrac{\bar{\Delta z}^{\,2}}{\Delta z^{2}}$.
+  실축($\Delta z = \Delta x$)이나 허축($\Delta z = i\Delta y$)을 따라가면 값이 $1$이지만,
+  대각선 $\Delta z = \Delta x(1+i)$를 따라가면 $\dfrac{(1-i)^2}{(1+i)^2} = -1$ — <strong>방향마다
+  극한이 달라</strong> $f'(0)$은 존재하지 않는다. 그런데도 실·허축 접근에서 읽은 편도
+  $u_x = 1, v_y = 1, u_y = 0, v_x = 0$은 원점에서 CR($u_x = v_y$, $u_y = -v_x$)을 만족한다.</p>
+  <p>교훈: CR은 <strong>필요조건</strong>일 뿐, 충분조건이 되려면 “편도가 근방에서 연속”이
+  반드시 따라붙어야 한다. 이 반례에서는 편도가 원점에서 연속이 아니다.</p>
+</div>
+
+<h2 id="sec-analytic">3. 해석함수 — 점이 아니라 근방 전체에서</h2>
+
+<div class="box box-def" id="def-analytic-function">
+  <span class="box-label">정의 · 해석함수 <span class="label-en">analytic function</span> (브라운-처칠 §5)</span>
+  <p>$f$가 $z_0$의 <strong>어떤 근방의 모든 점에서</strong> 미분가능하면 $f$는 $z_0$에서
+  <strong>해석적(analytic)</strong>이라 한다 — “정칙(holomorphic)”이라고도 한다. 열린집합(영역)
+  $D$의 모든 점에서 해석적이면 $f$는 <strong>$D$에서 해석적</strong>, 복소평면 $\mathbb{C}$
+  전체에서 해석적이면 <strong>전해석(entire)</strong>이라 한다.</p>
+  <p><strong>“점 하나에서 미분가능”과 “해석적”은 다르다.</strong> 해석적은 항상 한 점이 아니라
+  <em>근방 전체</em>를 요구한다 — 이 차이가 복소해석의 강력함(테일러 전개 등)이 나오는
+  출발점이다. $f$가 해석적이 아니지만 그 임의의 근방에 해석적인 점이 있는 점을
+  <strong>특이점(singular point)</strong>이라 한다.</p>
+  <ul>
+    <li><strong>다항식</strong>과 <strong>$e^z$</strong>: 온 평면에서 CR·편도 연속 ⟹ <strong>전해석.</strong></li>
+    <li><strong>유리함수 $1/z$</strong>: $z \neq 0$에서 해석적, $z = 0$은 특이점.</li>
+    <li><strong>$\bar z$</strong>: CR을 어디서도 만족하지 않아 <strong>비해석</strong>(어디서도 미분 불가). 연속이지만 해석성과는 무관.</li>
+    <li><strong>$|z|^2 = x^2 + y^2$</strong>: CR이 <em>원점에서만</em> 성립 ⟹ $z=0$에서만 미분가능, 그러나 근방 전체가 아니므로 <strong>어디서도 해석적이지 않다.</strong> “한 점 미분가능 ≠ 해석적”의 표본.</li>
+  </ul>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $|z|^2$은 왜 한 점에서만 미분되는가</span>
+  <p>$f(z) = |z|^2$이면 $u = x^2 + y^2$, $v = 0$. CR:</p>
+  $$u_x = 2x \overset{!}{=} v_y = 0, \qquad u_y = 2y \overset{!}{=} -v_x = 0.$$
+  <p>둘 다 만족하려면 $x = y = 0$ — <strong>원점뿐.</strong> 원점에서는 편도가 연속이므로
+  충분조건이 채워져 미분가능하고 $f'(0) = u_x + iv_x = 0$. 하지만 원점의 어떤 근방을
+  잡아도 그 안에는 미분 불가능한 점(원점 아닌 모든 점)이 있으므로, $f$는
+  <strong>어디서도 해석적이지 않다.</strong> 미분가능한 점들의 집합이 “속이 빈”
+  (내부가 없는) 집합일 때 벌어지는 전형적 현상이다.</p>
+</div>
+
+<h2 id="sec-harmonic">4. 조화함수 — 해석함수의 그림자</h2>
+
+<div class="box box-def" id="def-harmonic-function">
+  <span class="box-label">정의 · 조화함수와 조화켤레 <span class="label-en">harmonic function, harmonic conjugate</span> (브라운-처칠 §6)</span>
+  <p>영역 $D$에서 2계 편도함수가 연속이고 <strong>라플라스 방정식</strong></p>
+  $$H_{xx} + H_{yy} = 0$$
+  <p>을 만족하는 실함수 $H(x,y)$를 $D$에서 <strong>조화함수(harmonic)</strong>라 한다.</p>
+  <p><strong>핵심 연결.</strong> $f = u + iv$가 $D$에서 해석적이면, $u$와 $v$는 <strong>모두
+  $D$에서 조화</strong>이다. 이때 $v$를 $u$의 <strong>조화켤레(harmonic conjugate)</strong>라 부른다.
+  거꾸로, 단순연결 영역에서 $u$가 조화이면 CR로부터 $u$의 조화켤레 $v$를
+  (상수 차이를 빼고 유일하게) 복원할 수 있고, $f = u + iv$가 해석적이 된다 —
+  조화함수는 “해석함수의 실부”와 정확히 같은 대상이다.</p>
+  <p><strong>순서에 주의:</strong> $v$가 $u$의 조화켤레라고 해서 $u$가 $v$의 조화켤레인 것은
+  아니다. $f = u+iv$가 해석적일 때 $if = -v + iu$도 해석적이므로, $v$의 조화켤레는
+  $u$가 아니라 <strong>$-u$</strong>이다.</p>
+  <p><strong>응용.</strong> 정상상태 온도, 정전기 퍼텐셜, 비압축·비회전 유체 흐름이
+  전부 라플라스 방정식으로 기술된다. $u = \text{const}$ (등온·등퍼텐셜선)와
+  $v = \text{const}$ (흐름선)는 서로 <strong>직교</strong>하는 두 곡선족을 이룬다 —
+  해석함수 하나가 물리장 하나를 통째로 담는다.</p>
+</div>
+
+<details class="proof">
+  <summary>“해석적 ⟹ 실·허부가 조화”의 뼈대 <span class="proof-strategy">— CR을 한 번 더 미분한 뒤, 혼합편도의 교환가능성으로 상쇄시킨다.</span></summary>
+  <p>$f = u + iv$가 해석적이면 (뒤 장에서 보듯) $u, v$는 <strong>무한 번 미분가능</strong>하여
+  2계 편도가 연속이고 혼합편도가 교환된다: $v_{xy} = v_{yx}$. CR $u_x = v_y$, $u_y = -v_x$를
+  각각 $x$, $y$로 미분하면</p>
+  $$u_{xx} = v_{yx}, \qquad u_{yy} = -\,v_{xy}.$$
+  <p>더하면 $u_{xx} + u_{yy} = v_{yx} - v_{xy} = 0$. 같은 방식으로 $v_{xx} + v_{yy} = 0$.
+  두 함수 모두 라플라스 방정식을 만족한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 조화켤레 만들기</span>
+  <p>$u(x,y) = x^2 - y^2$이 조화임을 확인하고 조화켤레 $v$를 찾자. 먼저 $u_{xx} = 2$,
+  $u_{yy} = -2$이므로 $u_{xx} + u_{yy} = 0$ ✓.</p>
+  <p>CR을 방정식으로 삼아 $v$를 적분한다. $v_y = u_x = 2x$에서 $y$로 적분하면
+  $v = 2xy + \phi(x)$. 다시 $v_x = 2y + \phi'(x)$이고 CR의 $v_x = -u_y = 2y$와 견주면
+  $\phi'(x) = 0$, 즉 $\phi = c$ (상수). 따라서</p>
+  $$v = 2xy + c, \qquad f = (x^2 - y^2) + i\,(2xy) + ic = z^2 + ic.$$
+  <p>조화함수 $u$ 하나에서 해석함수 $z^2$이 (상수 차이를 빼고 유일하게) 되살아난다.
+  이 “적분으로 켤레 복원” 절차가 임용의 단골 계산이다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">2장의 줄거리</span>
+  <p>복소함수의 극한·연속은 실부·허부 두 실함수의 극한·연속일 뿐 — 실해석과 다를 게
+  없다. 갈림길은 <strong>미분</strong>: $f'(z_0)$은 $\Delta z$가 모든 방향에서 0으로 가도
+  같은 값이어야 하는 강한 극한이다
+  → 이 요구를 좌표로 번역한 것이 <a class="term" data-term="cauchy-riemann">코시-리만 방정식</a>
+  $u_x = v_y,\ u_y = -v_x$ (필요조건; <strong>편도 연속을 더하면 충분조건</strong>), 극좌표형과
+  $f' = u_x + iv_x$까지
+  → 한 <em>근방 전체</em>에서 미분가능하면 <a class="term" data-term="analytic-function">해석적</a>,
+  $\mathbb{C}$ 전체면 전해석 — “한 점 미분 ≠ 해석”($|z|^2$), $\bar z$는 비해석
+  → 해석함수의 실·허부는 <a class="term" data-term="harmonic-function">조화</a>($u_{xx}+u_{yy}=0$),
+  $v$는 $u$의 조화켤레이며 물리장을 담는다.</p>
+  <p><strong>과목 안에서의 위치:</strong> 이 장의 “해석적”이 다음 장부터 전개될 모든 마법
+  (코시-구르사, 코시 적분공식, 테일러·로랑, 유수)의 <strong>입장권</strong>이다.
+  임용 최빈출 축은 <strong>CR로 미분가능·해석성 판정 · 조화켤레 복원 · $f' = u_x + iv_x$
+  계산</strong>이다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>CR만으로는 해석성은커녕 미분가능성도 보장 못 한다.</strong> 한 점 CR은
+  실축·허축 두 방향의 일치일 뿐 — 다른 방향까지 맞으려면 “편도가 근방에서 연속”이
+  필요하다 ($\bar z^2/z$ 반례). 답안에서 CR만 확인하고 “해석적”이라 결론지으면 감점.<br>
+  ② <strong>실미분가능 ≠ 복소미분가능.</strong> $u, v$가 실함수로서 아무리 매끄러워도
+  (예: $\bar z$의 $u=x, v=-y$는 $C^\infty$) CR을 어기면 복소미분은 불가능하다. 복소미분가능은
+  야코비 행렬이 $\left(\begin{smallmatrix} a & -b \\ b & a \end{smallmatrix}\right)$ 꼴
+  (회전·확대)일 것 — 즉 CR — 을 요구하는 훨씬 좁은 조건이다.<br>
+  ③ <strong>$\bar z$는 연속이지만 어디서도 미분 불가.</strong> 연속성과 해석성은 별개다.
+  연속은 값의 근접, 해석은 방향 독립적 극한 — 후자가 압도적으로 강하다.<br>
+  ④ <strong>“한 점에서 미분가능”과 “해석적”을 혼동하지 말 것.</strong> $|z|^2$은 원점에서
+  미분가능하지만 어디서도 해석적이지 않다. 해석성은 언제나 <em>근방 전체</em>를 요구한다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>코시-리만 방정식으로 다음이 미분가능·해석적인 곳을 각각 판정하라.</p>
+  <p>(1) $f(z) = x^2 + i\,y^2$ &nbsp;&nbsp; (2) $f(z) = e^z$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$u, v$를 적어 $u_x = v_y$, $u_y = -v_x$가 성립하는 점의 집합을 구하라.
+    해석적이려면 그 집합이 어떤 <strong>열린 근방</strong>을 통째로 포함해야 한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $u = x^2$, $v = y^2$. $u_x = 2x$, $v_y = 2y$이므로 $u_x = v_y \iff x = y$.
+    $u_y = 0 = -v_x$는 항상 성립. 따라서 <strong>직선 $y = x$ 위에서만 미분가능</strong>하고,
+    이 직선은 내부(근방)를 갖지 못하므로 <strong>어디서도 해석적이지 않다.</strong>
+    (직선 위 점 $z=x+ix$에서 $f' = u_x + iv_x = 2x + i\cdot 0 = 2x$.)</p>
+    <p>(2) $u = e^x\cos y$, $v = e^x\sin y$. $u_x = e^x\cos y = v_y$, $u_y = -e^x\sin y = -v_x$ ✓ —
+    <strong>온 평면에서 CR</strong>, 편도도 연속이므로 $e^z$는 <strong>전해석</strong>이고
+    $f'(z) = u_x + iv_x = e^x\cos y + i e^x \sin y = e^z$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$u(x,y) = x^3 - 3xy^2$이 조화임을 보이고, 조화켤레 $v$와 그에 대응하는 해석함수
+  $f = u + iv$를 $z$로 표현하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$u_{xx} + u_{yy}$를 계산해 조화성 확인. 그다음 $v_y = u_x$를 $y$로 적분하고
+    $v_x = -u_y$로 적분상수 함수를 결정하라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>조화성:</strong> $u_x = 3x^2 - 3y^2$, $u_{xx} = 6x$; $u_y = -6xy$, $u_{yy} = -6x$.
+    $u_{xx} + u_{yy} = 6x - 6x = 0$ ✓.</p>
+    <p><strong>켤레 복원:</strong> $v_y = u_x = 3x^2 - 3y^2 \Rightarrow v = 3x^2 y - y^3 + \phi(x)$.
+    이때 $v_x = 6xy + \phi'(x)$이고 CR의 $v_x = -u_y = 6xy$와 비교하면 $\phi'(x) = 0$, $\phi = c$.
+    따라서 $v = 3x^2 y - y^3 + c$.</p>
+    <p><strong>$z$로 표현:</strong> $f = (x^3 - 3xy^2) + i(3x^2 y - y^3) + ic = z^3 + ic$
+    (실제로 $z^3 = (x+iy)^3$의 실·허부가 정확히 $u, v$다). $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §5 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f(z) = |z|^2$은 원점 $z = 0$에서만 미분가능하고 <strong>어디서도 해석적이지 않음</strong>을
+  보여라. 또 “한 점에서 미분가능”과 “해석적”의 차이를 이 예로 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$u = x^2 + y^2$, $v = 0$으로 CR이 성립하는 점을 구하라. 미분가능한 점의 집합이
+    열린가?를 물으면 해석성이 갈린다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$u = x^2 + y^2$, $v = 0$. CR: $u_x = 2x = v_y = 0$이고 $u_y = 2y = -v_x = 0$ —
+    둘을 동시에 만족하는 점은 $x = y = 0$, 즉 <strong>원점뿐.</strong> 원점에서는 편도가
+    연속이라 충분조건이 채워져 미분가능하며 $f'(0) = u_x + iv_x = 0$.</p>
+    <p>해석적이려면 <strong>어떤 근방의 모든 점에서</strong> 미분가능해야 하는데, 원점의
+    어떤 작은 원판을 잡아도 그 안의 원점 아닌 점들에서는 CR이 깨져 미분 불가능하다.
+    따라서 <strong>원점을 포함해 어느 점에서도 해석적이지 않다.</strong></p>
+    <p><strong>차이의 요점:</strong> ‘미분가능’은 점 하나의 성질이지만, ‘해석적’은
+    <em>열린 근방 전체</em>에 걸친 성질이다. 미분가능한 점들의 집합이 내부를 갖지 못하는
+    (여기서는 한 점) 순간, 해석성은 어디에서도 성립하지 않는다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §4 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>극좌표형 코시-리만 방정식을 이용해, $r &gt; 0$, $-\pi &lt; \theta &lt; \pi$에서 정의된
+  로그의 주분지 $f(z) = \ln r + i\theta$ ($z = re^{i\theta}$)가 해석적이고 $f'(z) = 1/z$임을
+  보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$u = \ln r$, $v = \theta$. 극형식 CR은 $r u_r = v_\theta$, $u_\theta = -r v_r$이고
+    $f' = e^{-i\theta}(u_r + i v_r)$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$u = \ln r$, $v = \theta$이므로 $u_r = 1/r$, $u_\theta = 0$, $v_r = 0$, $v_\theta = 1$.</p>
+    <p><strong>극형식 CR 확인:</strong> $r u_r = r\cdot\frac1r = 1 = v_\theta$ ✓;
+    $u_\theta = 0 = -r\cdot 0 = -r v_r$ ✓. 이 편도들은 주어진 영역($r&gt;0$)에서 연속이므로,
+    $f$는 그 영역에서 <strong>해석적</strong>이다.</p>
+    <p><strong>도함수:</strong></p>
+    $$f'(z) = e^{-i\theta}(u_r + i v_r) = e^{-i\theta}\Big(\frac1r + 0\Big)
+    = \frac{e^{-i\theta}}{r} = \frac{1}{re^{i\theta}} = \frac1z. \qquad \blacksquare$$
+    <p>(이 $f$가 바로 $\log z$의 주분지이며, 익숙한 $(\log z)' = 1/z$가 극형식 CR로
+    깔끔히 확인된다. 절단선 $\theta = \pm\pi$에서는 정의가 끊긴다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>해석성 서술형</span>
+  </div>
+  <p>영역 $D$에서 $f$와 그 켤레 $\bar f$가 <strong>둘 다 해석적</strong>이면 $f$는 $D$에서
+  상수임을 증명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$f = u + iv$의 CR과, $\bar f = u + i(-v)$의 CR을 각각 써서 네 편도를 연립하라.
+    편도가 전부 0이고 $D$가 연결이면 함수는 상수.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f = u + iv$가 해석적이므로 CR:
+    $$u_x = v_y, \qquad u_y = -v_x. \tag{1}$$
+    $\bar f = u + i(-v)$가 해석적이므로 실부 $u$·허부 $-v$에 대한 CR:
+    $$u_x = (-v)_y = -v_y, \qquad u_y = -(-v)_x = v_x. \tag{2}$$</p>
+    <p>(1)과 (2)의 첫 등식에서 $v_y = -v_y \Rightarrow v_y = 0$, 따라서 $u_x = v_y = 0$.
+    둘째 등식에서 $-v_x = v_x \Rightarrow v_x = 0$, 따라서 $u_y = -v_x = 0$.
+    결국 $u_x = u_y = v_x = v_y = 0$이 $D$ 전체에서 성립한다.</p>
+    <p>모든 1계 편도가 $0$이고 $D$는 (영역이므로) 연결이니 $u, v$는 각각 상수 —
+    그러므로 $f = u + iv$는 $D$에서 <strong>상수</strong>이다. $\blacksquare$</p>
+    <p>(같은 논법으로 “$f$ 해석적이고 $|f|$ 또는 $\operatorname{Re} f$가 상수이면 $f$ 상수”도
+    나온다 — CR로 편도를 소거하는 이 서술이 임용의 표준 답안 형식이다.)</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

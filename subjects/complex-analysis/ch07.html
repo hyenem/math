@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7장 유수정리와 극점 — 복소해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="complex-analysis" data-chapter="ch07.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">복소해석학 · Brown-Churchill (§6 유수)</p>
+  <h1><span class="ch-num">7</span> 유수정리와 극점</h1>
+  <p class="ch-source">“적분을 계산하지 말고 계수 하나만 읽어라.” —
+  <a class="term" data-term="laurent-series">로랑 급수</a>의 단 한 항 $c_{-1}$이 폐곡선
+  적분 전체를 결정하고, 코시-구르사와 코시 적분공식이 하나의 정리로 합쳐지는 장.</p>
+</div>
+
+<p>6장에서 우리는 특이점을 둘러싼 고리 모양 영역에서 함수를
+<a class="term" data-term="laurent-series">로랑 급수</a>로 전개했습니다. 이 장의
+발견은 놀랍도록 단순합니다: <strong>그 급수의 음의 차수 부분(주요부)이 특이점의
+성격과 폐곡선 적분값을 동시에 지배한다</strong>는 것. 특이점을 “분류”하는 문법도,
+복소적분을 “계산”하는 지름길도 모두 로랑 계수 하나 — $c_{-1}$ — 를 읽는 일로
+귀착됩니다. 코시-구르사 정리(특이점 없으면 적분 $0$)와 코시 적분공식(값이 경계에서
+결정됨)이 사실은 이 한 정리의 두 특수 사례였다는 사실이 이 장의 절정입니다.</p>
+
+<h2 id="sec-singularity">1. 고립특이점의 분류 — 주요부가 성격을 말한다</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 특이점의 “세 가지 얼굴”</span>
+  <p>함수가 어떤 점 $z_0$에서만 정의되지 않지만 그 <em>둘레</em>에서는 멀쩡히 해석적일
+  때, $z_0$를 <strong>고립특이점</strong>이라 합니다. 이때 $z_0$에 다가가며 함수가 하는
+  행동은 딱 세 가지뿐입니다.</p>
+  <p>① <strong>얌전히 수렴</strong>한다 ($\frac{\sin z}{z} \to 1$) — 구멍은 “메꿀 수 있는
+  가짜 특이점”. ② <strong>무한대로 폭발</strong>한다 ($\frac1{z^2} \to \infty$) — 극점.
+  ③ <strong>미쳐 날뛴다</strong> ($e^{1/z}$은 극한이 아예 없다) — 진성특이점. 이 세 얼굴이
+  로랑 급수의 <strong>주요부</strong>(음의 차수 항들)의 길이와 정확히 대응합니다.</p>
+</div>
+
+<div class="box box-def" id="def-isolated-singularity">
+  <span class="box-label">정의 · 고립특이점의 분류 <span class="label-en">isolated singularity</span> (브라운-처칠 §6)</span>
+  <p>$f$가 뚫린 원판 $0 \lt |z - z_0| \lt R$에서 해석적이지만 $z_0$ 자체에서는
+  그렇지 않으면, $z_0$를 $f$의 <strong>고립특이점</strong>이라 한다. 이 영역에서 $f$는
+  로랑 급수를 갖는다:</p>
+  $$f(z) = \underbrace{\sum_{n=0}^{\infty} c_n (z - z_0)^n}_{\text{해석적 부분}}
+  \;+\; \underbrace{\sum_{n=1}^{\infty} \frac{c_{-n}}{(z - z_0)^n}}_{\text{주요부 (principal part)}}$$
+  <p><strong>주요부의 길이</strong>가 특이점의 종류를 결정한다:</p>
+  <p>① <strong>제거가능 특이점</strong>(removable): 주요부가 통째로 $0$
+  ($c_{-n} = 0$ for all $n \ge 1$). $f$를 $c_0$으로 정의하면 $z_0$에서 해석적이 된다.
+  극한 $\lim_{z \to z_0} f(z)$가 (유한하게) 존재. — <strong>리만 제거가능 정리</strong>:
+  $z_0$ 근처에서 $f$가 유계이기만 하면 제거가능이다.</p>
+  <p>② <strong>$m$차 극점</strong>(pole of order $m$): 주요부가 유한 개 항으로 끝나고,
+  가장 높은 음의 차수가 $-m$이다 — 즉 $c_{-m} \neq 0$이고 $c_{-m-1} = c_{-m-2} = \cdots = 0$.
+  $\lim_{z \to z_0} |f(z)| = \infty$. $m = 1$이면 <strong>단순극점</strong>.</p>
+  <p>③ <strong>진성(본질적)특이점</strong>(essential): 주요부에 음의 차수 항이
+  <strong>무한히 많다</strong>. 극한이 (무한대로도) 존재하지 않는다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 세 얼굴의 실물</span>
+  <p><strong>(a) 제거가능 — $\dfrac{\sin z}{z}$ (at $z_0 = 0$):</strong>
+  $\sin z = z - \frac{z^3}{3!} + \frac{z^5}{5!} - \cdots$이므로
+  $\frac{\sin z}{z} = 1 - \frac{z^2}{6} + \frac{z^4}{120} - \cdots$ — 음의 차수 항이
+  전혀 없다. $z = 0$에 값 $1$을 주면 해석적. “특이점이었던 적도 없는” 셈이다.</p>
+  <p><strong>(b) 2차 극점 — $\dfrac1{z^2}$ (at $z_0 = 0$):</strong> 이미 로랑 급수이다.
+  주요부 $\frac1{z^2}$의 최고 음의 차수 $-2$, $c_{-2} = 1 \neq 0$ — 정확히 $2$차 극점.
+  $z \to 0$일 때 $|f| \to \infty$.</p>
+  <p><strong>(c) 진성특이점 — $\dfrac{e^{1/z}}{1}$ (at $z_0 = 0$):</strong>
+  <a class="term" data-term="exp-function">지수함수</a>의 급수에 $1/z$를 대입하면</p>
+  $$e^{1/z} = \sum_{n=0}^{\infty} \frac{1}{n!\,z^{n}}
+  = 1 + \frac1{z} + \frac{1}{2!\,z^2} + \frac{1}{3!\,z^3} + \cdots$$
+  <p>음의 차수 항이 <strong>무한히</strong> 이어진다 — 진성특이점. $z \to 0$의 방향에 따라
+  $e^{1/z}$은 $0$에도, $\infty$에도, 어떤 값에도 다가갈 수 있어 극한이 없다.</p>
+</div>
+
+<div class="box box-thm" id="thm-casorati">
+  <span class="box-label">정리 · 카소라티-바이어슈트라스 (브라운-처칠 §6)</span>
+  <p><strong>이 정리가 하는 일:</strong> 진성특이점 근처의 “미친 행동”을 정량화한다 —
+  단지 극한이 없는 정도가 아니라, <strong>모든 복소수 값에 한없이 가까워진다</strong>.</p>
+  <p>$z_0$가 $f$의 진성특이점이면, $z_0$의 임의의 뚫린 근방에서 $f$의 상(image)은
+  $\mathbb{C}$에서 <strong>조밀</strong>하다. 즉 임의의 복소수 $w$와 $\varepsilon \gt 0$에
+  대해 $|f(z) - w| \lt \varepsilon$인 $z$가 $z_0$에 얼마든지 가까이 존재한다.</p>
+  <p>(더 강한 <strong>피카르 대정리</strong>: $f$는 최대 한 값을 제외한 <em>모든</em>
+  복소수 값을 진성특이점 근방에서 무한히 자주 취한다. 예: $e^{1/z}$은 $0$을 제외한
+  모든 값을 취한다 — 지수함수는 결코 $0$이 되지 않기 때문.)</p>
+</div>
+
+<h2 id="sec-residue">2. 유수와 유수정리 — 마스터 정리</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 왜 하필 $c_{-1}$인가</span>
+  <p>고립특이점 $z_0$를 감싸는 작은 양의 방향 원 $C_\rho$ 위에서 로랑 급수를 항별로
+  적분해 봅시다. 핵심은 다음 계산 하나입니다 — $z = z_0 + \rho e^{i\theta}$로 놓으면</p>
+  $$\oint_{C_\rho} (z - z_0)^n \, dz =
+  \begin{cases} 2\pi i, & n = -1, \\[2pt] 0, & n \neq -1. \end{cases}$$
+  <p>즉 로랑 급수의 <strong>수많은 항 중에서 오직 $(z - z_0)^{-1}$ 항만이 적분에서
+  살아남습니다.</strong> 그 계수가 바로 $c_{-1}$. 폐곡선 적분이라는 “대역적” 양이
+  단 하나의 로랑 계수라는 “국소적” 양으로 응축되는 이 사실이 유수 이론 전체의 씨앗입니다.</p>
+</div>
+
+<div class="box box-thm" id="def-residue-theorem">
+  <span class="box-label">정의 + 정리 · 유수와 유수정리 <span class="label-en">residue, residue theorem</span> (브라운-처칠 §6)</span>
+  <p><strong>이 정리가 하는 일:</strong> 복소적분을 “계산”하지 않고 “세는” 것으로
+  바꾼다. 폐곡선 안의 특이점마다 로랑 계수 $c_{-1}$을 읽어 더하기만 하면 적분이 끝난다 —
+  코시-구르사와 코시 적분공식을 통일하는 <strong>마스터 정리</strong>.</p>
+  <p><strong>유수의 정의:</strong> 고립특이점 $z_0$에서 $f$의 <strong>유수</strong>는 로랑
+  급수의 $(z - z_0)^{-1}$ 항의 계수다:</p>
+  $$\operatorname{Res}_{z = z_0} f(z) = c_{-1}
+  = \frac{1}{2\pi i} \oint_{C_\rho} f(z)\, dz.$$
+  <p><strong>유수정리:</strong> $C$가 양의 방향(반시계)의 단순 폐곡선이고, $f$가 $C$ 위와
+  그 내부에서 <strong>유한 개</strong>의 고립특이점 $z_1, \dots, z_n$을 제외하고
+  해석적이면</p>
+  $$\oint_C f(z)\, dz = 2\pi i \sum_{k=1}^{n} \operatorname{Res}_{z = z_k} f(z).$$
+  <p><strong>통일의 두 얼굴:</strong> 내부에 특이점이 하나도 없으면 합이 비어
+  $\oint_C f = 0$ — <strong>코시-구르사</strong>. 또 $\frac{f(z)}{z - z_0}$은 $z_0$에서
+  단순극점이고 그 유수가 $f(z_0)$이므로 $\oint_C \frac{f(z)}{z-z_0}\,dz = 2\pi i f(z_0)$ —
+  <strong>코시 적분공식</strong>. 둘 다 유수정리의 특수 사례다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 변형정리로 큰 적분을 작은 원들의 합으로 쪼갠 뒤, 각 원에서 로랑 급수를 항별 적분: $c_{-1}$만 살아남는다.</span></summary>
+  <p><strong>1단계 (변형).</strong> 각 특이점 $z_k$를 서로 겹치지 않는 작은 양의 방향 원
+  $C_k$로 둘러싼다 ($C_k$는 전부 $C$의 내부). $f$는 $C$와 $C_k$들 사이의 다중연결
+  영역에서 해석적이므로, 코시-구르사 정리의 다중연결 버전(변형정리)에 의해</p>
+  $$\oint_C f\, dz = \sum_{k=1}^{n} \oint_{C_k} f\, dz.$$
+  <p><strong>2단계 (항별 적분).</strong> 각 $C_k$ 위에서 $f$는 $z_k$ 둘레의 로랑 급수
+  $f = \sum_{m} c_m^{(k)} (z - z_k)^m$로 전개되고, 이 급수는 $C_k$ 위에서 균등수렴하므로
+  항별 적분이 정당하다. 앞의 핵심 계산 $\oint_{C_k}(z - z_k)^m dz = 2\pi i\,[m = -1]$에
+  의해 오직 $m = -1$ 항만 살아남아</p>
+  $$\oint_{C_k} f\, dz = c_{-1}^{(k)} \cdot 2\pi i = 2\pi i \operatorname{Res}_{z = z_k} f.$$
+  <p><strong>3단계.</strong> 1단계에 대입해 합하면 정리를 얻는다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-computing">3. 극점에서 유수 계산법 — 급수 없이 유수 뽑기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 · 로랑 급수를 매번 구하긴 싫다</span>
+  <p>유수 $= c_{-1}$이지만, 유수를 얻자고 매번 로랑 급수를 통째로 구하는 건 낭비입니다.
+  특이점이 <strong>극점</strong>임을 알면 미분·극한만으로 $c_{-1}$을 곧장 뽑을 수 있습니다.
+  아이디어는 하나 — <strong>극점을 곱해서 없앤 뒤 남은 해석함수의 테일러 계수를 읽는다.</strong></p>
+</div>
+
+<div class="box box-thm" id="thm-pole-residue">
+  <span class="box-label">정리 · 극점에서의 유수 공식 (브라운-처칠 §6)</span>
+  <p><strong>이 정리가 하는 일:</strong> 극점의 위수만 알면 유수를 “미분 → 극한”의
+  기계적 절차로 준다.</p>
+  <p><strong>① 단순극점 ($m = 1$):</strong></p>
+  $$\operatorname{Res}_{z = z_0} f = \lim_{z \to z_0} (z - z_0) f(z).$$
+  <p><strong>② $\dfrac{p(z)}{q(z)}$ 꼴 단순극점:</strong> $p(z_0) \neq 0$이고 $q$가 $z_0$에서
+  <strong>단순영점</strong>($q(z_0) = 0,\ q'(z_0) \neq 0$)이면</p>
+  $$\operatorname{Res}_{z = z_0} \frac{p(z)}{q(z)} = \frac{p(z_0)}{q'(z_0)}.$$
+  <p><strong>③ $m$차 극점:</strong></p>
+  $$\operatorname{Res}_{z = z_0} f = \frac{1}{(m-1)!}
+  \lim_{z \to z_0} \frac{d^{\,m-1}}{dz^{\,m-1}} \Big[ (z - z_0)^m f(z) \Big].$$
+</div>
+
+<details class="proof">
+  <summary>증명의 뼈대 <span class="proof-strategy">— 극점을 곱으로 상쇄하면 해석함수 $\varphi$가 되고, 유수는 그 $(m-1)$차 테일러 계수다.</span></summary>
+  <p><strong>③ (일반, ①은 $m=1$ 특수 사례).</strong> $z_0$가 $m$차 극점이면 로랑 급수는
+  $f = \frac{c_{-m}}{(z-z_0)^m} + \cdots + \frac{c_{-1}}{z-z_0} + c_0 + \cdots$. 양변에
+  $(z - z_0)^m$을 곱하면</p>
+  $$\varphi(z) := (z - z_0)^m f(z) = c_{-m} + c_{-m+1}(z - z_0) + \cdots
+  + c_{-1}(z - z_0)^{m-1} + c_0 (z - z_0)^m + \cdots$$
+  <p>이 $\varphi$는 $z_0$에서 <strong>해석적</strong>이고, 우리가 원하는 $c_{-1}$은 그
+  테일러 전개의 $(z - z_0)^{m-1}$ 계수 — 즉 $c_{-1} = \varphi^{(m-1)}(z_0)/(m-1)!$.
+  이것이 공식 ③이다.</p>
+  <p><strong>② ($p/q$ 꼴).</strong> ①을 적용하면
+  $\operatorname{Res} = \lim_{z\to z_0}(z-z_0)\frac{p(z)}{q(z)}
+  = \lim_{z\to z_0}\frac{p(z)}{\frac{q(z) - q(z_0)}{z - z_0}}
+  = \frac{p(z_0)}{q'(z_0)}$
+  (분모는 $q(z_0)=0$이므로 도함수의 정의 그 자체).</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 공식 세 개 돌려보기</span>
+  <p><strong>(a) 단순극점 (공식 ②):</strong>
+  $\operatorname{Res}_{z = i} \dfrac{z}{z^2 + 1}$. 분모 $q = z^2 + 1$은 $z = i$에서
+  단순영점, $q' = 2z$. 따라서 $\dfrac{p(i)}{q'(i)} = \dfrac{i}{2i} = \dfrac12$.</p>
+  <p><strong>(b) $3$차 극점 (공식 ③):</strong>
+  $\operatorname{Res}_{z = 0} \dfrac{e^z}{z^3}$. $m = 3$이므로
+  $\varphi(z) = z^3 f(z) = e^z$, </p>
+  $$\operatorname{Res} = \frac1{2!}\lim_{z \to 0}\frac{d^2}{dz^2} e^z
+  = \frac{1}{2} e^0 = \frac12.$$
+  <p>(검산: $\dfrac{e^z}{z^3} = \dfrac1{z^3} + \dfrac1{z^2} + \dfrac1{2z} + \cdots$ —
+  $c_{-1} = \tfrac12$ ✓.)</p>
+  <p><strong>(c) 유수정리 종합:</strong>
+  $\displaystyle\oint_{|z| = 3} \frac{5z - 2}{z(z - 1)}\, dz$. 극점 $z = 0, 1$ 둘 다
+  $|z| = 3$ 내부. 공식 ①로
+  $\operatorname{Res}_{0} = \dfrac{5(0)-2}{0-1} = 2$,
+  $\operatorname{Res}_{1} = \dfrac{5(1)-2}{1} = 3$. 따라서 적분
+  $= 2\pi i (2 + 3) = 10\pi i$ — 부정적분 없이 끝난다.</p>
+</div>
+
+<h2 id="sec-zeros-poles">4. 영점과 극점 — 위수는 거울상이다</h2>
+
+<div class="box box-thm" id="thm-zero-pole">
+  <span class="box-label">정리 · 극점의 위수 = 분모 영점의 위수 (브라운-처칠 §6)</span>
+  <p><strong>이 정리가 하는 일:</strong> 몫함수의 극점 위수를, 어렵게 로랑 전개하지 않고
+  <strong>분모의 영점 위수</strong>만 세어 즉시 알아낸다.</p>
+  <p>해석함수 $g, h$가 $z_0$에서 해석적이고 $g(z_0) \neq 0$이며, $h$가 $z_0$에서
+  <strong>$m$차 영점</strong>을 가지면 ($h(z_0) = h'(z_0) = \cdots = h^{(m-1)}(z_0) = 0$,
+  $h^{(m)}(z_0) \neq 0$), 몫</p>
+  $$f(z) = \frac{g(z)}{h(z)} \quad\text{은 } z_0\text{에서 정확히 } m\text{차 극점을 갖는다.}$$
+  <p><strong>이유:</strong> $m$차 영점은 $h(z) = (z - z_0)^m \psi(z)$로 쓸 수 있다
+  ($\psi$ 해석적, $\psi(z_0) \neq 0$). 그러면
+  $f = \dfrac{g(z)/\psi(z)}{(z - z_0)^m}$이고 분자 $g/\psi$는 $z_0$에서 해석적이며
+  $0$이 아니다 — 정확히 $m$차 극점의 꼴.</p>
+  <p><strong>따름 (단순극점 유수):</strong> $h$가 단순영점이면 위 공식 ②가 그대로
+  $\operatorname{Res}_{z_0}\frac{g}{h} = \frac{g(z_0)}{h'(z_0)}$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 영점을 세어 극점을 읽다</span>
+  <p><strong>(a) $\cot z = \dfrac{\cos z}{\sin z}$:</strong> $\sin z$는 $z = n\pi$에서
+  <strong>단순영점</strong>($(\sin)'(n\pi) = \cos n\pi = \pm 1 \neq 0$)이고 분자
+  $\cos(n\pi) \neq 0$. 따라서 각 $n\pi$는 단순극점이고
+  $\operatorname{Res}_{n\pi} \cot z = \dfrac{\cos n\pi}{\cos n\pi} = 1$.</p>
+  <p><strong>(b) $\dfrac{z^2 + 1}{z\,(z - 1)^2}$:</strong> 분모의 영점 — $z = 0$은
+  단순영점(단순극점), $z = 1$은 $2$차 영점($2$차 극점). 각 유수:</p>
+  <p>$\operatorname{Res}_{0} = \lim_{z\to 0} z \cdot f
+  = \dfrac{0 + 1}{(0-1)^2} = 1$,</p>
+  <p>$\operatorname{Res}_{1} = \dfrac1{1!}\lim_{z\to 1}\dfrac{d}{dz}
+  \Big[(z-1)^2 f\Big] = \dfrac{d}{dz}\!\left[\dfrac{z^2+1}{z}\right]_{z=1}
+  = \left[1 - \dfrac1{z^2}\right]_{z=1} = 0$.</p>
+  <p>(위수를 “보이는 대로” 읽는 것이 핵심 — $z=1$이 $2$차 극점임을 놓치고 공식 ①을
+  쓰면 극한이 발산해 실패한다.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>유수는 오직 $c_{-1}$</strong>이다 — $c_{-2}$도, $c_{-3}$도 아니다.
+  적분에서 $(z - z_0)^{-1}$ 항만 살아남기 때문. “가장 낮은 차수 계수”나 “주요부의 합”이
+  아니라 정확히 $-1$차 계수 하나.</p>
+  <p>② <strong>극점 위수 판정 함정</strong>: 진성특이점은 극점이 아니다.
+  $z^3 e^{1/z}$을 보고 “$3$차 극점”이라 하면 오답 — $z^3 e^{1/z} = z^3 + z^2 + \frac{z}{2}
+  + \frac16 + \frac1{24 z} + \cdots$로 여전히 음의 차수가 무한하다. <strong>유한한
+  $m$으로 $(z - z_0)^m f$를 해석적으로 만들 수 없으면 극점이 아니다.</strong></p>
+  <p>③ <strong>진성특이점도 고립특이점</strong>이므로 유수정리는 여전히 적용된다 —
+  다만 극점 공식(①②③)은 못 쓰고 로랑 급수에서 $c_{-1}$을 직접 읽어야 한다. 예:
+  $\operatorname{Res}_{0} e^{1/z} = 1$ ($n = 1$ 항 $\frac1{1!\,z}$의 계수). 유수가
+  $0$이 아니라는 사실에 주의.</p>
+  <p>④ <strong>제거가능 특이점의 유수는 $0$</strong> (주요부가 없어 $c_{-1} = 0$). 하지만
+  “유수가 $0$”과 “특이점이 아님”은 별개다.</p>
+  <p>⑤ <strong>$\frac{p}{q'}$ 공식은 단순극점 전용</strong>이다. 분모가 중근($2$차 이상
+  영점)이면 $q'(z_0) = 0$이 되어 공식이 붕괴하니 반드시 공식 ③(고차 극점)을 써야 한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">7장의 줄거리</span>
+  <p><a class="term" data-term="laurent-series">로랑 급수</a>의 주요부가 모든 것을
+  결정한다 → <a class="term" data-term="isolated-singularity">고립특이점의 분류</a>:
+  주요부 없음(제거가능) · 유한($m$차 극점) · 무한(진성특이점) — $\frac{\sin z}{z}$,
+  $\frac1{z^2}$, $e^{1/z}$이 각 표본, 진성특이점의 난폭함은 카소라티-바이어슈트라스로
+  정량화 → 핵심 계산 $\oint (z-z_0)^n dz = 2\pi i\,[n = -1]$이
+  <a class="term" data-term="residue-theorem">유수정리</a>를 낳는다:
+  $\oint_C f = 2\pi i \sum \operatorname{Res}$, 유수는 $c_{-1}$ 하나 — 코시-구르사와
+  코시 적분공식을 통일하는 마스터 정리 → 극점이면 급수 없이
+  ($\lim (z - z_0) f$, $\frac{p}{q'}$, $\frac1{(m-1)!}$ 미분공식)으로 유수를 뽑고,
+  극점의 위수는 분모 영점의 위수와 같다.</p>
+  <p><strong>다음 장 예고:</strong> 이 계산 기계를 실전에 투입한다 — 반원·부채꼴
+  경로로 실적분 $\int_{-\infty}^{\infty}\frac{dx}{1+x^2}$·삼각적분·급수 합을
+  유수 하나로 떨어뜨리고, 편각원리와 등각사상으로 이어진다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>다음 각 함수의 $z = 0$에서의 고립특이점을 분류하고(제거가능 / $m$차 극점 / 진성),
+  유수를 구하라.</p>
+  <p>(1) $\dfrac{\sin z}{z}$ &nbsp; (2) $\dfrac{1 - \cos z}{z^3}$ &nbsp;
+  (3) $\dfrac{e^z - 1}{z^2}$ &nbsp; (4) $z^2 e^{1/z}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>전부 알려진 급수를 대입해 로랑 전개의 주요부를 눈으로 확인하라. 유수는 $c_{-1}$.
+    (4)는 $z^2$을 곱해도 진성특이점이 사라지지 않는다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>제거가능.</strong> $\frac{\sin z}{z} = 1 - \frac{z^2}{6} + \cdots$ —
+    주요부 없음. $\operatorname{Res} = 0$.</p>
+    <p>(2) <strong>단순극점.</strong> $1 - \cos z = \frac{z^2}{2} - \frac{z^4}{24} + \cdots$,
+    나누면 $\frac{1}{2z} - \frac{z}{24} + \cdots$. 최고 음차수 $-1$ →
+    $\operatorname{Res} = \frac12$.</p>
+    <p>(3) <strong>단순극점.</strong> $e^z - 1 = z + \frac{z^2}{2} + \cdots$,
+    나누면 $\frac1z + \frac12 + \cdots$. $\operatorname{Res} = 1$.</p>
+    <p>(4) <strong>진성특이점.</strong> $z^2 e^{1/z} = z^2\big(1 + \frac1z + \frac1{2z^2}
+    + \frac1{6z^3} + \cdots\big) = z^2 + z + \frac12 + \frac1{6z} + \frac1{24 z^2} + \cdots$
+    — 음의 차수가 무한. $\operatorname{Res} = c_{-1} = \frac16$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>공식 ①②③을 이용해 다음 유수를 계산하라.</p>
+  <p>(1) $\operatorname{Res}_{z = 2i}\dfrac{z}{z^2 + 4}$ &nbsp;
+  (2) $\operatorname{Res}_{z = 0}\dfrac{\cos z}{z^4}$ &nbsp;
+  (3) $\operatorname{Res}_{z = \pi}\dfrac{1}{\sin z}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $p/q'$ 꼴. (2) $4$차 극점 — 공식 ③, 또는 $\cos z$ 급수를 나눠 $c_{-1}$을 읽어라.
+    (3) $\sin z$의 $\pi$에서의 영점 위수를 먼저 확인.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $q = z^2 + 4$, $q' = 2z$: $\dfrac{2i}{2(2i)} = \dfrac12$.</p>
+    <p>(2) $\cos z = 1 - \frac{z^2}{2} + \frac{z^4}{24} - \cdots$이므로
+    $\frac{\cos z}{z^4} = \frac1{z^4} - \frac1{2 z^2} + \frac1{24} - \cdots$ —
+    $z^{-1}$ 항이 없다. $\operatorname{Res} = 0$. (공식 ③으로도
+    $\frac1{3!}\frac{d^3}{dz^3}\cos z\big|_0 = \frac1{6}\sin 0 = 0$.)</p>
+    <p>(3) $\sin z$는 $\pi$에서 단순영점, $(\sin)'(\pi) = \cos\pi = -1$.
+    $\operatorname{Res} = \dfrac{1}{-1} = -1$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §6 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>유수정리로 다음 폐곡선 적분을 계산하라. 경로는 모두 양의 방향(반시계)이다.</p>
+  <p>(1) $\displaystyle\oint_{|z| = 3}\frac{5z - 2}{z(z - 1)}\,dz$ &nbsp;&nbsp;
+  (2) $\displaystyle\oint_{|z| = 2}\frac{e^{z}}{z^2 (z - 1)}\,dz$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>먼저 경로 내부의 극점을 전부 찾고 위수를 판정하라. (1)은 단순극점 둘,
+    (2)는 $z = 0$($2$차)과 $z = 1$(단순).</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 극점 $z = 0, 1$ 모두 내부. 공식 ①:
+    $\operatorname{Res}_0 = \frac{5(0)-2}{0-1} = 2$,
+    $\operatorname{Res}_1 = \frac{5(1)-2}{1} = 3$. 적분
+    $= 2\pi i(2 + 3) = \boxed{10\pi i}$.</p>
+    <p>(2) 극점 $z = 0$($2$차), $z = 1$(단순) 모두 내부.</p>
+    <p>$\operatorname{Res}_1 = \dfrac{e^z}{z^2}\Big|_{z=1} = e$.</p>
+    <p>$\operatorname{Res}_0 = \dfrac1{1!}\lim_{z\to0}\dfrac{d}{dz}
+    \!\left[\dfrac{e^z}{z - 1}\right]
+    = \left[\dfrac{e^z(z - 1) - e^z}{(z-1)^2}\right]_{z=0}
+    = \left[\dfrac{e^z(z - 2)}{(z-1)^2}\right]_{z=0} = \dfrac{1 \cdot(-2)}{1} = -2$.</p>
+    <p>적분 $= 2\pi i(e - 2)$.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §6 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$f(z) = \dfrac{1}{\sin z}$의 모든 특이점을 찾아 종류를 밝히고, 각 특이점에서의
+  유수를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\sin z = 0 \iff z = n\pi$ ($n \in \mathbb{Z}$). 각 영점의 위수를 확인하면
+    극점 위수와 유수 공식이 정해진다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\sin z$의 영점은 $z = n\pi$뿐이고 $(\sin)'(n\pi) = \cos n\pi = (-1)^n \neq 0$이므로
+    모두 <strong>단순영점</strong>. 따라서 $f$는 각 $z = n\pi$에서 <strong>단순극점</strong>을
+    갖는다 (다른 특이점은 없음).</p>
+    <p>공식 ②($p = 1$, $q = \sin z$):</p>
+    $$\operatorname{Res}_{z = n\pi}\frac{1}{\sin z}
+    = \frac{1}{\cos n\pi} = \frac{1}{(-1)^n} = (-1)^n.$$
+    <p>즉 짝수 $n$에서 $+1$, 홀수 $n$에서 $-1$. (영점 위수 → 극점 위수 → 유수 공식의
+    3단 논법이 만점 답안의 뼈대.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>참·거짓 판정 서술형</span>
+  </div>
+  <p>다음 각 주장의 참·거짓을 판정하고 근거를 서술하라.</p>
+  <p>(1) $z^5 e^{1/z}$은 $z = 0$에서 $5$차 극점을 갖는다.<br>
+  (2) 제거가능 특이점에서의 유수는 항상 $0$이다.<br>
+  (3) 진성특이점에는 유수정리를 적용할 수 없다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>“극점”의 정의(주요부가 유한)를 정확히 떠올려라. 진성특이점도 고립특이점인가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $z^5 e^{1/z} = z^5\sum \frac1{n! z^n}$은 여전히 음의
+    차수 항이 무한하다 (예: $\frac1{6! z}$ 등). 유한한 거듭제곱을 곱해도 주요부를 유한하게
+    만들 수 없으므로 <strong>진성특이점</strong>이다 — 극점이 아니다.</p>
+    <p>(2) <strong>참.</strong> 제거가능이면 주요부가 없어 $c_{-1} = 0$, 곧 유수 $= 0$.</p>
+    <p>(3) <strong>거짓.</strong> 진성특이점도 <em>고립</em>특이점이므로 유수정리는 그대로
+    적용된다. 다만 극점 공식은 못 쓰고 로랑 급수에서 $c_{-1}$을 직접 읽어야 한다
+    (예: $\operatorname{Res}_0 e^{1/z} = 1$).</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>극점 위수와 유수 종합</span>
+  </div>
+  <p>$f(z) = \dfrac{z}{(z^2 + 1)^2}$에 대하여, (1) 모든 특이점과 그 위수를 구하고,
+  (2) $z = i$에서의 유수를 구하라. (3) 이를 이용해
+  $\displaystyle\oint_{|z| = 2} f(z)\,dz$를 계산하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$z^2 + 1 = (z - i)(z + i)$이므로 $(z^2+1)^2$은 $z = \pm i$에서 각각 $2$차 영점.
+    $z = i$의 유수는 공식 ③($m = 2$): $\frac{d}{dz}\big[(z - i)^2 f\big]$을 $z = i$에서
+    평가. $z = -i$도 내부임에 유의.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $(z^2 + 1)^2 = (z - i)^2 (z + i)^2$ — $z = i$와 $z = -i$가 각각
+    <strong>$2$차 극점</strong> (분자 $z$는 이 점들에서 $0$이 아님).</p>
+    <p>(2) $m = 2$이므로 $\varphi(z) = (z - i)^2 f(z) = \dfrac{z}{(z + i)^2}$,</p>
+    $$\operatorname{Res}_{z = i} f = \varphi'(i)
+    = \left[\frac{(z + i)^2 - z\cdot 2(z + i)}{(z + i)^4}\right]_{z = i}
+    = \left[\frac{(z + i) - 2z}{(z + i)^3}\right]_{z = i}
+    = \frac{i - 2i}{(2i)^3} = \frac{-i}{-8i} = \frac1{8}.$$
+    <p>(3) 대칭으로 $\operatorname{Res}_{z = -i} f = \dfrac18$ (또는 직접 계산). $z = \pm i$
+    둘 다 $|z| = 2$ 내부이므로</p>
+    $$\oint_{|z|=2} f\,dz = 2\pi i\left(\frac18 + \frac18\right) = \frac{\pi i}{2}.$$
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

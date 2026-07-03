@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8장 유수의 응용과 등각사상 — 복소해석학 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="complex-analysis" data-chapter="ch08.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">복소해석학 · Brown-Churchill (§7–8)</p>
+  <h1><span class="ch-num">8</span> 유수의 응용과 등각사상</h1>
+  <p class="ch-source">“실수 위에서 꿈쩍 않던 적분이, 복소평면을 한 바퀴 돌면 유수 하나로
+  떨어진다” — 유수정리가 계산의 무기로, 나아가 기하(등각사상)로 꽃피는 복소해석의 피날레.</p>
+</div>
+
+<p>7장에서 우리는 <a class="term" data-term="residue-theorem">유수정리</a>를 완성했다:
+닫힌 경로 안에 갇힌 특이점들의 유수만 세면
+$$\oint_C f(z)\,dz = 2\pi i \sum_k \operatorname{Res}_{z_k} f$$
+로 적분이 끝난다. 이 장은 그 정리를 <strong>휘두르는</strong> 장이다. 세 갈래로
+간다. ① 복소적분을 우회로 삼아 <strong>실적분</strong>을 계산하고, ② 적분
+$\oint f'/f$가 <strong>영점과 극점의 수</strong>를 세게 하여(편각 원리·루셰) 대수학의
+기본정리를 재증명하며, ③ 해석함수의 국소적 모습이 <strong>각도를 보존</strong>한다는
+사실(등각사상)로 미분방정식과 유체까지 건드린다. 하나의 조건 “미분 가능”이
+얼마나 멀리 가는지를 마지막으로 확인하는 자리다.</p>
+
+<div class="box box-intuition">
+  <span class="box-label">먼저 손에 쥐고 갈 도구 — 유수 계산 두 공식</span>
+  <p>이 장 내내 쓰므로 7장에서 가져와 벽에 붙여 둔다.</p>
+  <p><strong>단순극(1위 극점):</strong> $\displaystyle \operatorname{Res}_{z_0} f
+  = \lim_{z\to z_0}(z-z_0)f(z)$. 특히 $f = p/q$이고 $q$가 $z_0$에서 단순영점이면
+  $\displaystyle \operatorname{Res}_{z_0}\frac{p}{q} = \frac{p(z_0)}{q'(z_0)}$.</p>
+  <p><strong>$m$위 극점:</strong> $\displaystyle \operatorname{Res}_{z_0} f
+  = \frac{1}{(m-1)!}\lim_{z\to z_0}\frac{d^{\,m-1}}{dz^{\,m-1}}\big[(z-z_0)^m f(z)\big]$.
+  (로랑 급수의 $c_{-1}$ 계수를 뽑는 계산 규칙일 뿐이다.)</p>
+</div>
+
+<h2 id="sec-real-integrals">1. 실적분의 계산 — 복소평면을 우회로 삼기</h2>
+
+<p>발상은 하나다. 계산하고 싶은 실적분이 어떤 복소적분의 <strong>일부</strong>가 되도록
+닫힌 경로를 설계하고, 전체는 유수정리로 값을 알며, 나머지 조각(원호 등)은
+$0$으로 사라지게 만든다. 남는 것이 원하던 실적분이다.</p>
+
+<div class="box box-def" id="def-residue-real-integrals">
+  <span class="box-label">방법 · 유수로 실적분 계산 <span class="label-en">real integrals via residues</span> (브라운-처칠 §7)</span>
+  <p>세 가지 표준 유형이 임용·교재의 거의 전부를 덮는다.</p>
+  <p><strong>(a) 유리함수 $\displaystyle\int_{-\infty}^{\infty}\frac{p(x)}{q(x)}\,dx$</strong>
+  — $q$가 실근이 없고 $\deg q \ge \deg p + 2$일 때. 반원 경로
+  $C_R = [-R,R] \cup (\text{상반평면 반원호 } \Gamma_R)$를 잡는다. 차수 차이가 $2$
+  이상이라 $\Gamma_R$ 위에서 $|f| \le M/R^2$, 호의 길이는 $\pi R$이므로
+  (<strong>ML 부등식</strong>) $\int_{\Gamma_R}\to 0$. 따라서
+  $$\int_{-\infty}^{\infty}\frac{p}{q}\,dx = 2\pi i \sum_{\text{상반평면 극점}} \operatorname{Res}\frac{p}{q}.$$</p>
+  <p><strong>(b) 푸리에형 $\displaystyle\int_{-\infty}^{\infty}\frac{p(x)}{q(x)}\cos ax\,dx$
+  또는 $\sin ax\,dx$</strong> ($a>0$) — $\cos ax, \sin ax$를 직접 쓰지 말고
+  <a class="term" data-term="exp-function">지수함수</a> $e^{iaz}$로 바꿔
+  $\int \frac{p}{q}e^{iaz}dz$를 계산한 뒤 <strong>실부·허부</strong>를 취한다.
+  상반평면에서 $|e^{iaz}| = e^{-a\,\mathrm{Im}\,z} \le 1$이라 원호가 잘 죽는다
+  (조던 보조정리 — 아래). 조건이 (a)보다 약해 $\deg q \ge \deg p + 1$이면 충분.</p>
+  <p><strong>(c) 삼각함수 유리식 $\displaystyle\int_0^{2\pi} R(\cos\theta,\sin\theta)\,d\theta$</strong>
+  — $z = e^{i\theta}$로 치환하면 경로가 <strong>단위원</strong> $|z|=1$이 된다:
+  $$\cos\theta = \frac{z + z^{-1}}{2},\quad
+  \sin\theta = \frac{z - z^{-1}}{2i},\quad d\theta = \frac{dz}{iz}.$$
+  실적분이 $\oint_{|z|=1} g(z)\,dz = 2\pi i \sum_{|z_k|<1}\operatorname{Res} g$로 바뀐다.</p>
+</div>
+
+<div class="box box-thm" id="thm-jordan">
+  <span class="box-label">보조정리 · 조던 보조정리 <span class="label-en">Jordan's lemma</span> (브라운-처칠 §7)</span>
+  <p><strong>이 보조정리가 하는 일:</strong> 푸리에형 적분에서 반원호를 지우는 면허증.</p>
+  <p>상반평면 반원호 $\Gamma_R$ 위에서 $M_R = \max_{z\in\Gamma_R}|f(z)| \to 0$
+  ($R\to\infty$)이면, <strong>임의의 $a>0$</strong>에 대해
+  $$\left|\int_{\Gamma_R} f(z)\,e^{iaz}\,dz\right| \le \frac{\pi}{a}\,M_R \;\longrightarrow\; 0.$$
+  핵심은 $\int_0^{\pi} e^{-aR\sin\theta}\,d\theta < \dfrac{\pi}{aR}$라는 부등식
+  ($\sin\theta \ge 2\theta/\pi$, 조던 부등식). $f = p/q$가 단지 $\to 0$이기만
+  해도(차수 차이 $1$로 충분) 원호가 사라진다 — 오직 유리함수만 있을 때 필요한
+  “차수 차이 $2$”보다 훨씬 관대하다. 이 관대함의 대가는 $e^{iaz}$의 감쇠다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 유형 (a) 유리함수 두 개</span>
+  <p><strong>① $\displaystyle\int_{-\infty}^{\infty}\frac{dx}{1+x^2} = \pi$.</strong>
+  극점 $z = \pm i$, 상반평면은 $z=i$뿐. 단순극이므로
+  $\operatorname{Res}_{i}\frac{1}{z^2+1} = \frac{1}{2z}\Big|_{z=i} = \frac{1}{2i}$.
+  따라서 $2\pi i \cdot \frac{1}{2i} = \pi$. (실수 계산으로는 $\arctan$의 값이지만,
+  유수는 “극점 하나 세기”로 끝낸다.)</p>
+  <p><strong>② $\displaystyle\int_{-\infty}^{\infty}\frac{dx}{1+x^4}
+  = \frac{\pi}{\sqrt2}$.</strong>
+  극점은 $z^4 = -1$의 네 근 $e^{i\pi/4}, e^{i3\pi/4}, e^{i5\pi/4}, e^{i7\pi/4}$ 중
+  상반평면의 둘 $z_1 = e^{i\pi/4}, z_2 = e^{i3\pi/4}$. 단순극에서
+  $\operatorname{Res}_{z_k}\frac{1}{z^4+1} = \frac{1}{4z_k^3} = \frac{z_k}{4z_k^4}
+  = -\frac{z_k}{4}$ (분모 $z_k^4 = -1$). 두 유수의 합은
+  $-\frac14(z_1+z_2) = -\frac14\big(\tfrac{\sqrt2}{2}(1+i)+\tfrac{\sqrt2}{2}(-1+i)\big)
+  = -\frac14(\sqrt2\,i) = -\frac{\sqrt2}{4}i$. 그러므로
+  $2\pi i \cdot \big(-\frac{\sqrt2}{4}i\big) = \frac{\pi\sqrt2}{2} = \frac{\pi}{\sqrt2}$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 유형 (b) 푸리에형 — $\displaystyle\int_{-\infty}^{\infty}\frac{\cos x}{1+x^2}dx = \frac{\pi}{e}$</span>
+  <p>$\cos x$를 직접 적분하려 하면 원호에서 $\cos z$가 폭발한다 ($|\cos z|$는
+  허축으로 지수적으로 커진다). 대신 $\displaystyle\int\frac{e^{iz}}{1+z^2}dz$를 본다.
+  상반평면 극점 $z=i$에서
+  $\operatorname{Res}_{i}\frac{e^{iz}}{z^2+1} = \frac{e^{i\cdot i}}{2i} = \frac{e^{-1}}{2i}$.
+  조던 보조정리로 원호는 사라지므로
+  $$\int_{-\infty}^{\infty}\frac{e^{ix}}{1+x^2}dx = 2\pi i\cdot\frac{e^{-1}}{2i} = \frac{\pi}{e}.$$
+  <strong>실부</strong>가 $\displaystyle\int\frac{\cos x}{1+x^2}dx = \frac{\pi}{e}$이고,
+  <strong>허부</strong>는 $\displaystyle\int\frac{\sin x}{1+x^2}dx = 0$ (피적분함수가
+  기함수 — 애초에 당연). 하나의 복소적분이 두 실적분을 동시에 준다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 유형 (c) 단위원 치환 — $\displaystyle\int_0^{2\pi}\frac{d\theta}{a+\cos\theta} = \frac{2\pi}{\sqrt{a^2-1}}$ ($a>1$)</span>
+  <p>$z = e^{i\theta}$, $\cos\theta = \frac{z+z^{-1}}{2}$, $d\theta = \frac{dz}{iz}$:
+  $$a+\cos\theta = \frac{z^2 + 2az + 1}{2z}
+  \;\Rightarrow\; \frac{d\theta}{a+\cos\theta}
+  = \frac{2}{i(z^2 + 2az + 1)}\,dz.$$
+  분모의 근 $z = -a \pm \sqrt{a^2-1}$ 중 단위원 <strong>안</strong>에 있는 것은
+  $z_+ = -a + \sqrt{a^2-1}$ 하나뿐 ($a>1$이면 $|z_+|<1$, $|z_-|>1$이고
+  $z_+z_- = 1$). 단순극에서
+  $\operatorname{Res}_{z_+}\frac{2/i}{z^2+2az+1} = \frac{2/i}{2z_+ + 2a}
+  = \frac{2/i}{2\sqrt{a^2-1}} = \frac{1}{i\sqrt{a^2-1}}$.
+  따라서 $2\pi i \cdot \frac{1}{i\sqrt{a^2-1}} = \frac{2\pi}{\sqrt{a^2-1}}$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 함몰경로 — 실축 위의 극점 $\displaystyle\int_0^{\infty}\frac{\sin x}{x}dx = \frac{\pi}{2}$</span>
+  <p>$\frac{\sin x}{x}$는 $x=0$에서 멀쩡하지만(제거가능), $\frac{e^{iz}}{z}$로 옮기면
+  $z=0$이 진짜 극점이 되어 경로 <strong>위에</strong> 놓인다. 이럴 땐 반지름 $\varepsilon$의
+  작은 반원 $C_\varepsilon$으로 $0$을 <strong>피해 판다</strong>(함몰). 경로:
+  $[-R,-\varepsilon] \to C_\varepsilon(\text{시계방향}) \to [\varepsilon,R]
+  \to \Gamma_R$. 내부에 극점이 없으니 전체 적분은 $0$, 큰 원호 $\Gamma_R$은 조던으로
+  사라진다.</p>
+  <p><strong>작은 반원의 몫:</strong> 단순극을 각 $\alpha$만큼 도는 원호는
+  $\big(\text{부호}\big)\,\alpha i \cdot \operatorname{Res}$에 수렴한다. 반원($\alpha=\pi$)을
+  시계방향으로 돌므로 $C_\varepsilon$의 기여는 $-\pi i \cdot \operatorname{Res}_0\frac{e^{iz}}{z}
+  = -\pi i \cdot 1 = -\pi i$. 이것을 빼면 실축의 <strong>주값</strong>이
+  $\mathrm{PV}\!\int_{-\infty}^{\infty}\frac{e^{ix}}{x}dx = \pi i$. 허부를 취해
+  $\int_{-\infty}^{\infty}\frac{\sin x}{x}dx = \pi$, 우함수이므로
+  $\int_0^{\infty}\frac{\sin x}{x}dx = \frac{\pi}{2}$.</p>
+  <p>(작은 반원은 유수의 <strong>절반</strong> $\pi i\,\mathrm{Res}$만 준다 — 전체 원이면
+  $2\pi i$였을 것. 이 “절반” 규칙은 단순극에서만 성립한다.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 원호를 언제 지울 수 있나</span>
+  <p>① <strong>조던 보조정리는 $e^{iaz}$가 있고 $a>0$이며 상반평면 반원일 때</strong>
+  쓴다. $a<0$이면 지수가 하반평면에서 감쇠하므로 경로를 <strong>아래로</strong> 잡아야
+  한다 ($\int e^{-ix}\cdots$ 유형). 순수 유리함수($e^{iaz}$ 없음)에는 조던이 아니라
+  ML 부등식을 쓰고, 이때는 차수 차이 $2$가 필요하다 — 둘을 뒤섞지 말 것.</p>
+  <p>② $\cos z, \sin z$를 그대로 원호에 올리면 안 된다. $|\cos z|,|\sin z|$는 허축
+  방향으로 $e^{|\mathrm{Im}\,z|}$처럼 폭발한다. 반드시 $e^{iaz}$로 바꾸고 마지막에
+  실부·허부를 취한다.</p>
+  <p>③ 실축 위 극점은 <strong>함몰경로 + 주값(PV)</strong>으로만 다룬다. 보통 의미의
+  적분은 발산할 수 있고, 작은 반원의 몫은 $2\pi i$가 아니라 $\pm\pi i\,\mathrm{Res}$
+  (반원이니 절반)임에 주의.</p>
+</div>
+
+<h2 id="sec-argument-principle">2. 편각 원리와 루셰 정리 — 적분으로 영점을 세다</h2>
+
+<p>이제 유수정리를 <strong>거꾸로</strong> 쓴다. 적분값을 구하는 것이 아니라, 적분이
+셈해 주는 정수(영점 수 − 극점 수)를 읽는다. 그 열쇠는 특별한 피적분함수
+$f'/f$다.</p>
+
+<div class="box box-thm" id="def-argument-principle">
+  <span class="box-label">정리 · 편각 원리 <span class="label-en">argument principle</span> (브라운-처칠 §7)</span>
+  <p><strong>이 정리가 하는 일:</strong> 함수를 뜯어보지 않고도, 경계를 한 바퀴 돌며
+  적분하는 것만으로 내부의 영점·극점 개수를 센다.</p>
+  <p>$f$가 단순 닫힌 양의 방향 경로 $C$의 안과 위에서 유리형(meromorphic)이고
+  $C$ 위에는 영점도 극점도 없으면
+  $$\frac{1}{2\pi i}\oint_C \frac{f'(z)}{f(z)}\,dz = Z - P$$
+  ($Z$ = 내부 영점의 개수, $P$ = 내부 극점의 개수, 각각 <strong>중복도·위수를
+  세어서</strong>).</p>
+  <p><strong>왜 성립하나:</strong> $\frac{f'}{f} = \dfrac{d}{dz}\log f$. $z_0$에서
+  $m$위 영점이면 $f = (z-z_0)^m g$ ($g(z_0)\ne0$)이라
+  $\frac{f'}{f} = \frac{m}{z-z_0} + \frac{g'}{g}$ — 유수가 $+m$.
+  $n$위 극점이면 같은 계산으로 유수가 $-n$. 유수정리로 전부 더하면 $Z-P$. $\square$</p>
+  <p><strong>이름의 뜻(편각):</strong> $\frac{1}{2\pi i}\oint \frac{f'}{f}dz
+  = \frac{1}{2\pi}\Delta_C \arg f(z)$ — $z$가 $C$를 한 바퀴 돌 때 상 $f(z)$가
+  원점을 <strong>몇 바퀴 감는가</strong>(회전수). 영점이 $f$의 상을 원점 둘레로
+  감게 만든다.</p>
+</div>
+
+<div class="box box-thm" id="thm-rouche">
+  <span class="box-label">정리 · 루셰 정리 <span class="label-en">Rouché's theorem</span> (브라운-처칠 §7)</span>
+  <p>$f, g$가 단순 닫힌 경로 $C$의 안과 위에서 해석적이고, <strong>경계 $C$ 위에서</strong>
+  $$|g(z)| < |f(z)|$$
+  이면, $f$와 $f+g$는 $C$ 내부에서 <strong>같은 개수</strong>의 영점을 갖는다
+  (중복도 포함).</p>
+  <p><strong>직관 — 목줄 논법:</strong> $C$를 도는 동안 지배항 $f$가 원점을 감는
+  횟수는 정해져 있고, 섭동 $g$는 $|g|<|f|$라 $f+g$를 $f$로부터 “목줄 길이 이내”로만
+  끌어당긴다. 목줄이 원점까지 닿지 못하므로 $f+g$도 원점을 정확히 같은 횟수로 감는다.
+  편각 원리로 회전수 = 영점 수이니, 영점 수가 같다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">응용 · 대수학의 기본정리 재증명</span>
+  <p>$P(z) = z^n + a_{n-1}z^{n-1} + \cdots + a_0$ ($n\ge1$)이 복소근을 <strong>정확히
+  $n$개</strong> 가짐을 보인다. $f(z) = z^n$, $g(z) = a_{n-1}z^{n-1}+\cdots+a_0$로 놓자.
+  충분히 큰 $R$에 대해 $|z|=R$ 위에서
+  $$|g(z)| \le |a_{n-1}|R^{n-1} + \cdots + |a_0| < R^n = |f(z)|$$
+  (최고차항이 결국 이긴다). 루셰에 의해 $P = f+g$는 $|z|<R$ 안에서 $z^n$과 같은
+  개수, 즉 $n$개의 영점을 갖는다. $R$를 키우면 모든 근을 포섭하므로 근은 정확히 $n$개.
+  $\blacksquare$</p>
+  <p>5장에서 리우빌 정리로 이미 증명했던 대수학의 기본정리를, 이번엔 “회전수를 세는”
+  전혀 다른 논법으로 다시 얻었다. (현대대수에서 미뤄 둔 “$\mathbb{C}$는 대수적으로
+  닫힌 체”가 이렇게 복소해석에서 결판난다 — 그 근들이
+  <a class="term" data-term="cyclotomic-extension">원분확대</a>의 1의 거듭제곱근처럼
+  복소평면 위 도형으로 산다.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">응용 · 영점의 위치 세기</span>
+  <p><strong>$z^4 - 5z + 1$은 $|z|<1$ 안에 영점이 몇 개인가?</strong>
+  경계 $|z|=1$ 위에서 어느 항이 지배하는지 고른다. $f(z) = -5z$ ($|f|=5$),
+  $g(z) = z^4 + 1$ ($|g| \le 1+1 = 2 < 5$). 루셰로 $f+g = z^4-5z+1$은 $-5z$와 같은
+  영점 수, 즉 <strong>정확히 $1$개</strong>를 $|z|<1$ 안에 갖는다.</p>
+  <p>같은 다항식을 $|z|<2$에서 보면 이번엔 $f=z^4$가 지배
+  ($|f|=16$, $|{-5z+1}|\le 11 < 16$)하여 영점 $4$개 — 즉 $1<|z|<2$ 고리 안에
+  나머지 $3$개가 산다. 지배항을 바꿔 가며 원의 크기를 조절하면 근의 분포가
+  드러난다.</p>
+</div>
+
+<h2 id="sec-conformal">3. 등각사상 — 해석성의 기하학</h2>
+
+<p>지금까지는 해석함수를 <strong>계산기</strong>로 썼다. 마지막으로 해석함수를
+<strong>지도</strong>로 본다. 놀랍게도 $f'\ne0$인 점에서 해석함수는 아무리 휘어도
+<strong>각도를 그대로 보존</strong>한다.</p>
+
+<div class="box box-def" id="def-conformal-mapping">
+  <span class="box-label">정의 + 정리 · 등각사상 <span class="label-en">conformal mapping</span> (브라운-처칠 §8)</span>
+  <p>사상 $w=f(z)$가 $z_0$을 지나는 두 곡선이 이루는 각을 <strong>크기와 방향까지</strong>
+  보존하면 $z_0$에서 <strong>등각(conformal)</strong>이라 한다.</p>
+  <p><strong>정리:</strong> $f$가 $z_0$에서 해석적이고 $f'(z_0)\ne0$이면 $f$는 $z_0$에서
+  등각이다.</p>
+  <p><strong>왜:</strong> $z_0$을 지나는 곡선 $\gamma(t)$ (단, $\gamma(0)=z_0$)는
+  $f(\gamma(t))$로 옮겨지고, 그 접벡터는 연쇄법칙으로 $f'(z_0)\,\gamma'(0)$. 즉 모든
+  접벡터가 <strong>똑같이</strong> $f'(z_0)=|f'(z_0)|e^{i\alpha}$만큼 회전(각 $\alpha$)하고
+  $|f'(z_0)|$배 확대된다. 회전각이 모든 방향에 공통이므로 두 곡선 <strong>사이의
+  각</strong>은 불변. 국소적으로는 “회전 + 확대”(닮음 변환)로 보인다.</p>
+  <p><strong>$f'(z_0)=0$이면 깨진다:</strong> $w=z^2$은 원점에서 $f'=0$이고 각을
+  <strong>2배</strong>로 벌린다 (일반적으로 $m$위 영점에서 각이 $m$배). 등각의 생명은
+  $f'\ne0$이다.</p>
+</div>
+
+<div class="box box-thm" id="thm-mobius">
+  <span class="box-label">정리 · 뫼비우스 변환 <span class="label-en">Möbius (linear fractional) transformation</span> (브라운-처칠 §8)</span>
+  <p>$$w = \frac{az+b}{cz+d},\qquad ad-bc \ne 0.$$
+  가장 유용한 등각사상 무리. 성질:</p>
+  <p>① <strong>어디서나 등각:</strong> $\dfrac{dw}{dz} = \dfrac{ad-bc}{(cz+d)^2} \ne 0$
+  (극점 $z=-d/c$ 제외). 확장복소평면 $\hat{\mathbb{C}} = \mathbb{C}\cup\{\infty\}$의
+  전단사이며, $z=-d/c \mapsto \infty$, $z=\infty \mapsto a/c$로 매끄럽게 잇는다.</p>
+  <p>② <strong>원-직선 보존:</strong> 뫼비우스 변환은 “원과 직선”을 “원과 직선”으로
+  옮긴다 (직선을 “$\infty$를 지나는 원”으로 보면 하나의 족). 원이 직선으로,
+  직선이 원으로 바뀔 수 있다.</p>
+  <p>③ <strong>군 구조:</strong> 합성에 대해 닫혀 있고 역도 뫼비우스라
+  <a class="term" data-term="group">군</a>을 이룬다 ($PGL_2(\mathbb{C})$, 즉 행렬
+  $\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)$의 곱과 정확히 대응 —
+  현대대수와 합류). 서로 다른 세 점의 상을 지정하면 변환이 <strong>유일하게</strong>
+  결정되고, 네 점의 비조화비(cross-ratio)를 보존한다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 상반평면을 단위원판으로 (케일리 변환)</span>
+  <p>$$w = \frac{z-i}{z+i}$$
+  는 상반평면 $\{\mathrm{Im}\,z>0\}$을 단위원판 $\{|w|<1\}$ 위로 옮기는 등각
+  전단사다. 확인: 실축의 점 $x$는 $|x-i| = \sqrt{x^2+1} = |x+i|$라 $|w|=1$
+  (경계→경계); $z=i \mapsto 0$이고 $z=2i \mapsto \frac{i}{3i} = \frac13$ (내부→내부).
+  경계가 경계로, 한 내부점이 내부로 가면 연결성에 의해 전체가 옳게 대응한다.
+  디리클레 문제·유체 문제에서 “복잡한 반평면”을 “다루기 쉬운 원판”으로 바꾸는
+  대표 도구.</p>
+</div>
+
+<div class="box box-thm" id="thm-riemann-mapping">
+  <span class="box-label">정리 · 리만 사상정리 <span class="label-en">Riemann mapping theorem</span> (브라운-처칠 §8, 서술)</span>
+  <p>$\mathbb{C}$ 전체가 아닌 임의의 <strong>단순연결 영역</strong>
+  $D \subsetneq \mathbb{C}$ (공집합 아님)은 단위원판 $\mathbb{D}$와 등각동형이다.
+  게다가 한 점 $z_0\in D$를 골라 $z_0\mapsto0$, $f'(z_0)>0$을 요구하면 그런 등각
+  전단사 $f:D\to\mathbb{D}$가 <strong>유일</strong>하다.</p>
+  <p>충격적인 점: 영역의 <strong>모양은 아무 상관 없다</strong>. 찌그러진 아메바든
+  삐죽한 다각형이든, “단순연결이고 평면 전체는 아니다”라는 위상 조건만 맞으면
+  전부 원판과 등각으로 같다. ($\mathbb{C}$ 전체가 제외되는 이유: 유계인 전해석함수
+  $\mathbb{C}\to\mathbb{D}$는 리우빌 정리로 상수뿐이라 전단사가 불가능.)</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">왜 등각이 쓸모 있나 — 디리클레 문제</span>
+  <p>라플라스 방정식 $\nabla^2\phi = 0$의 해(조화함수)는 해석함수의 실부·허부다.
+  결정적 사실: <strong>조화함수를 해석함수와 합성하면 다시 조화함수</strong>다. 그래서
+  복잡한 영역 $D$ 위의 디리클레 문제(경계값이 주어진 라플라스 방정식)를 풀려면,
+  등각사상 $f:D\to\mathbb{D}$로 문제를 <strong>원판으로 옮겨</strong> 거기서 풀고
+  (원판에선 푸아송 적분으로 즉시 해결) 다시 $f$로 끌어오면 된다. 정전기 퍼텐셜,
+  정상 열분포, 이상유체의 흐름선이 모두 이 조화함수이므로, 등각사상은 물리
+  경계값 문제를 “쉬운 영역”으로 번역하는 사전이 된다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해 — 루셰·등각·뫼비우스</span>
+  <p>① <strong>루셰의 부등식 방향:</strong> 부등식은 경계 위에서 $|g|<|f|$ —
+  <strong>작은 쪽이 섭동 $g$</strong>, 개수를 아는 <strong>지배항이 $f$</strong>다.
+  누가 큰지 헷갈려 “$|f|<|g|$”로 쓰면 결론이 뒤집힌다. 지배항은 보통 최고차항
+  아니면 세기가 압도적인 한 항으로 고른다.</p>
+  <p>② <strong>등각에는 $f'\ne0$이 필수</strong>다. “해석적이다”만으로는 부족하다.
+  임계점($f'=0$)에서는 각이 보존되지 않고 정수배로 벌어진다 ($z^2$은 원점에서 각을
+  2배로). 등각사상을 설계할 때 $f'$이 정의역에서 사라지지 않는지 반드시 확인.</p>
+  <p>③ <strong>뫼비우스는 “원”만 “원”으로 보내는 게 아니다.</strong> “원과 직선”을 한
+  덩어리로 보존한다 — 원이 직선이 되기도, 직선이 원이 되기도 한다. “원 → 원”이라고만
+  외우면 반례에 걸린다.</p>
+  <p>④ 리만 사상정리에서 <strong>$\mathbb{C}$ 전체는 예외</strong>다 (원판과 등각동형이
+  아님). “단순연결이면 무조건 원판과 같다”가 아니라 “<em>평면 전체가 아닌</em>
+  단순연결”이어야 한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약 — 그리고 복소해석의 끝</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">8장의 줄거리</span>
+  <p><strong>유수정리를 휘두르는 세 방향.</strong>
+  <a class="term" data-term="residue-real-integrals">유수로 실적분</a>
+  — 반원 경로(유리함수, ML)·조던 보조정리(푸리에형 $e^{iaz}$)·단위원 치환
+  ($z=e^{i\theta}$)·함몰경로(실축 위 극점은 절반 유수·주값)로 실적분을 극점 세기로
+  환원. →
+  <a class="term" data-term="argument-principle">편각 원리와 루셰</a>
+  — $\frac{1}{2\pi i}\oint\frac{f'}{f} = Z-P$ = 상이 원점을 감는 회전수; 루셰
+  ($|g|<|f|$)로 대수학의 기본정리 재증명과 영점 위치 계산. →
+  <a class="term" data-term="conformal-mapping">등각사상</a>
+  — $f'\ne0$이면 각 보존; 뫼비우스(원-직선 보존, $PGL_2$ 군), 리만 사상정리
+  (평면 아닌 단순연결 = 원판), 디리클레 문제로의 응용.</p>
+  <p><strong>복소해석 전권 되돌아보기 — “미분 가능” 한 조건의 위력:</strong>
+  1장 복소수·복소평면 → 2장 해석함수와 <strong>코시-리만 방정식</strong>(미분가능의
+  정체) → 3장 초등함수(지수·로그·삼각의 복소 확장) → 4장 복소적분과
+  <strong>코시-구르사</strong>(해석함수의 닫힌 경로 적분 $=0$) → 5장
+  <strong>코시 적분공식·리우빌</strong>(경계가 내부를 결정하고, 유계 전해석함수는
+  상수, 대수학의 기본정리) → 6장 <strong>테일러·로랑 급수</strong>(해석 = 국소
+  멱급수, 특이점 분류) → 7장 <strong>유수정리</strong>(로랑의 $c_{-1}$ 한 계수가
+  적분을 결정) → 8장 그 응용과 기하. 한 줄로: <strong>“한 번 미분 가능이 무한 번
+  미분 가능을 낳고, 그 강함이 실적분·대수학·기하까지 지배한다.”</strong> 임용
+  최중요 축은 <strong>코시-리만 판정 · 코시 적분공식 · 로랑 전개와 유수 계산 ·
+  유수로 실적분</strong>이다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>유수정리로 다음을 계산하라.</p>
+  <p>(1) $\displaystyle\int_{-\infty}^{\infty}\frac{dx}{x^2+4}$ &nbsp;&nbsp;
+  (2) $\displaystyle\int_0^{2\pi}\frac{d\theta}{2+\cos\theta}$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 유형 (a): 상반평면 극점은 $2i$ 하나. (2) 유형 (c): $z=e^{i\theta}$로
+    치환하면 단위원 안 극점 하나.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) 극점 $z=\pm2i$, 상반평면은 $2i$.
+    $\operatorname{Res}_{2i}\frac{1}{z^2+4} = \frac{1}{2z}\big|_{2i} = \frac{1}{4i}$.
+    차수 차이 $2$라 원호는 ML로 소멸하므로
+    $\int = 2\pi i\cdot\frac{1}{4i} = \dfrac{\pi}{2}$.</p>
+    <p>(2) $z=e^{i\theta}$: $2+\cos\theta = \frac{z^2+4z+1}{2z}$,
+    $\frac{d\theta}{2+\cos\theta} = \frac{2}{i(z^2+4z+1)}dz$. 근
+    $z=-2\pm\sqrt3$ 중 단위원 안은 $z_+=-2+\sqrt3$.
+    $\operatorname{Res}_{z_+} = \frac{2/i}{2z_++4} = \frac{2/i}{2\sqrt3}
+    = \frac{1}{i\sqrt3}$. 따라서 $2\pi i\cdot\frac{1}{i\sqrt3} = \dfrac{2\pi}{\sqrt3}$.
+    ($a=2$인 공식 $\frac{2\pi}{\sqrt{a^2-1}}$과 일치.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$\displaystyle\int_{-\infty}^{\infty}\frac{\cos 2x}{x^2+1}\,dx$를 구하라. 왜
+  $\cos 2z$를 직접 적분하면 안 되는지도 한 줄로 설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\cos 2x = \operatorname{Re}\,e^{2ix}$. $\int\frac{e^{2iz}}{z^2+1}dz$를 조던
+    보조정리($a=2>0$)로 계산하고 실부를 취한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$f(z)=\frac{e^{2iz}}{z^2+1}$. 상반평면 극점 $z=i$:
+    $\operatorname{Res}_{i} = \frac{e^{2i\cdot i}}{2i} = \frac{e^{-2}}{2i}$.
+    조던 보조정리로 원호 소멸(상반평면에서 $|e^{2iz}|\le1$, $a=2>0$):
+    $$\int_{-\infty}^{\infty}\frac{e^{2ix}}{x^2+1}dx = 2\pi i\cdot\frac{e^{-2}}{2i}
+    = \frac{\pi}{e^2}.$$
+    실부를 취해 $\displaystyle\int_{-\infty}^{\infty}\frac{\cos 2x}{x^2+1}dx
+    = \frac{\pi}{e^2}$.</p>
+    <p>$\cos 2z$를 직접 쓰면 안 되는 이유: $|\cos 2z|$는 상반평면 원호에서
+    $e^{2\,\mathrm{Im}\,z}$처럼 지수적으로 폭발해 원호 적분이 $0$으로 가지 않는다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §7 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>이차·삼차가 아닌 <strong>이중극</strong>을 다룬다.
+  $\displaystyle\int_{-\infty}^{\infty}\frac{dx}{(x^2+1)^2} = \frac{\pi}{2}$임을
+  보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$z=i$는 <strong>2위 극점</strong>. $m$위 극점 공식으로
+    $\operatorname{Res}_{i}\frac{1}{(z^2+1)^2} = \frac{d}{dz}\big[(z-i)^2 f\big]\big|_{i}$,
+    여기서 $(z-i)^2 f = \frac{1}{(z+i)^2}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$(z^2+1)^2 = (z-i)^2(z+i)^2$이므로 $z=i$는 2위 극점. $m=2$ 공식:
+    $$\operatorname{Res}_{i}\frac{1}{(z^2+1)^2}
+    = \frac{d}{dz}\!\left[\frac{1}{(z+i)^2}\right]_{z=i}
+    = \left[\frac{-2}{(z+i)^3}\right]_{z=i}
+    = \frac{-2}{(2i)^3} = \frac{-2}{-8i} = \frac{1}{4i}.$$
+    차수 차이 $4\ge2$라 원호 소멸.
+    $\int = 2\pi i\cdot\frac{1}{4i} = \dfrac{\pi}{2}$. $\blacksquare$</p>
+    <p>(단순극과 달리 <strong>미분 한 번</strong>이 더 들어간다 — 로랑 급수의
+    $c_{-1}$을 뽑으려면 $(z-i)^2f$를 테일러 전개해 1차 계수를 봐야 하기 때문.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §7 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>다항식 $p(z) = z^7 - 4z^3 + z - 1$의 영점이 $|z|<1$ 안에 몇 개 있는지
+  루셰 정리로 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$|z|=1$ 위에서 어느 항의 절댓값이 압도적인가? $|-4z^3|=4$, 나머지 세 항의
+    합은 절댓값이 최대 얼마?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$|z|=1$ 위에서 $f(z) = -4z^3$을 지배항으로 잡는다: $|f| = 4$.
+    나머지 $g(z) = z^7 + z - 1$은
+    $|g| \le |z|^7 + |z| + 1 = 1+1+1 = 3 < 4 = |f|$.
+    루셰에 의해 $p = f+g$는 $-4z^3$과 같은 영점 수를 갖고, $-4z^3$은 $z=0$에서
+    3위 영점 — 즉 $|z|<1$ 안에 <strong>정확히 3개</strong>.</p>
+    <p>(핵심은 “지배항 고르기”. 최고차항 $z^7$은 $|z|=1$에선 크기 $1$에 불과해
+    지배하지 못한다 — 작은 원에서는 <strong>낮은 차수 항</strong>이 이길 수 있음에
+    주의.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>루셰 서술형</span>
+  </div>
+  <p>$p(z) = z^n + a_{n-1}z^{n-1} + \cdots + a_1 z + a_0$의 모든 근이
+  $|z| < 1 + M$ 안에 있음을 보여라. 단 $M = \max_{0\le k\le n-1}|a_k|$.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$R = 1+M$인 원 위에서 $f=z^n$을 지배항으로. 나머지의 합은 등비급수로
+    묶는다: $\sum_{k=0}^{n-1} R^k = \frac{R^n-1}{R-1}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$R = 1+M$ ($M\ge0$이면 $R\ge1$; $M=0$인 자명한 경우는 따로), $R>1$일 때
+    $|z|=R$ 위에서 $f(z)=z^n$, $g(z)=a_{n-1}z^{n-1}+\cdots+a_0$로 놓으면
+    $$|g| \le M\sum_{k=0}^{n-1} R^k = M\cdot\frac{R^n-1}{R-1}
+    = M\cdot\frac{R^n-1}{M} = R^n - 1 < R^n = |f|$$
+    ($R-1 = M$을 대입). 루셰에 의해 $p=f+g$는 $z^n$과 같은 영점 수 $n$개를
+    $|z|<R$ 안에 갖는다. 대수학의 기본정리로 $p$의 근은 정확히 $n$개이므로
+    <strong>모든 근이 $|z|<1+M$ 안에 있다</strong>. $\blacksquare$</p>
+    <p>(근의 크기를 계수로 제어하는 고전 정리. $f=z^n$을 “최고차항이 결국 이긴다”로
+    잡고, 나머지를 등비급수로 깔끔히 묶는 것이 서술의 뼈대다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>등각·뫼비우스</span>
+  </div>
+  <p>(1) $w = \dfrac{z-i}{z+i}$가 상반평면 $\mathrm{Im}\,z>0$을 단위원판 $|w|<1$
+  위로 보내는 등각사상임을 보여라. (2) 이 사상이 등각인 이유($f'\ne0$)를 확인하고,
+  등각이 <strong>깨지는</strong> 대표 예를 하나 들어라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) 실축의 점에서 $|z-i|$와 $|z+i|$를 비교(경계→경계), 그리고 내부점 하나
+    ($z=i$ 또는 $2i$)의 상을 확인. (2) $\frac{dw}{dz}$를 계산; $z^2$을 떠올려 보라.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>(1)</strong> 실수 $x$에 대해 $|x-i| = \sqrt{x^2+1} = |x+i|$이므로
+    $|w| = 1$ — 경계(실축)가 경계(단위원)로 간다. 내부점 $z=i \mapsto 0$ (원판
+    내부). 뫼비우스 변환은 연결영역의 경계·내부 대응을 보존하므로 상반평면 전체가
+    $|w|<1$로 옮겨진다. (예: $z=2i\mapsto\frac{i}{3i}=\frac13$, 확인차 내부.)</p>
+    <p><strong>(2)</strong> $\dfrac{dw}{dz} = \dfrac{(z+i)-(z-i)}{(z+i)^2}
+    = \dfrac{2i}{(z+i)^2} \ne 0$ (상반평면에 극점 $z=-i$ 없음) — 어디서나 등각.
+    등각이 깨지는 예: $w=z^2$은 $z=0$에서 $f'(0)=0$이라 그 점에서 각을 <strong>2배</strong>로
+    벌린다 (양의 실축과 양의 허축이 이루는 직각 $\frac\pi2$가 상에서 $\pi$가 됨).
+    해석성만으로는 부족하고 $f'\ne0$이 등각의 조건임을 보여 준다. $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>

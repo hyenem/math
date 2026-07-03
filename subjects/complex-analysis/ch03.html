@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3장 초등함수 — 지수·로그·삼각 | 여백</title>
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script defer src="../../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script defer src="../../data/toc.js"></script>
+<script defer src="../../data/terms.js"></script>
+<script defer src="../../assets/site.js"></script>
+</head>
+<body data-page="chapter" data-subject="complex-analysis" data-chapter="ch03.html">
+
+<main class="content">
+
+<div class="chapter-head">
+  <p class="ch-eyebrow">복소해석학 · Brown-Churchill (§7)</p>
+  <h1><span class="ch-num">3</span> 초등함수 — 지수·로그·삼각</h1>
+  <p class="ch-source">“익숙한 함수를 복소평면에 풀어놓으면 낯선 얼굴이 드러난다” —
+  $e^z$는 주기를 얻고, $\log z$는 값이 여러 개가 되며, $\cos z$는 $1$보다 커진다.
+  실수에서 당연하던 성질이 어디서 무너지는지가 이 장의 핵심.</p>
+</div>
+
+<p>해석학 8장에서 <a class="term" data-term="exp-function">지수함수</a>를 멱급수
+$\sum z^n/n!$로 정의하고, 거기서 <a class="term" data-term="trig-functions">삼각함수</a>를
+오일러 공식으로 끄집어냈습니다. 그때 이미 변수 $z$를 복소수로 써도 급수가 수렴함을
+보았지요. 이 장은 그 확장을 정식으로 받아들여, <strong>실수 초등함수를 복소평면 전체로
+연장</strong>했을 때 무엇이 그대로이고 무엇이 완전히 달라지는지를 정리합니다.
+결론부터 말하면 — 미분 규칙과 덧셈정리는 그대로 살아남지만, <strong>주기·다가성·유계성</strong>
+세 곳에서 실수 세계와 결별합니다.</p>
+
+<h2 id="sec-exp">1. 복소지수함수 — 주기를 얻은 지수</h2>
+
+<div class="box box-def" id="def-complex-exponential">
+  <span class="box-label">정의 · 복소지수함수 <span class="label-en">complex exponential</span> (브라운-처칠 §7)</span>
+  <p>$z = x + iy$에 대해</p>
+  $$e^z = e^{x}\,(\cos y + i \sin y)$$
+  <p>로 정의한다 ($e^x$는 실지수함수, $\cos y,\ \sin y$는 실삼각함수). $y = 0$이면
+  $e^z = e^x$이니 실지수함수의 참된 확장이고, $x = 0$이면 <strong>오일러 공식</strong>
+  $e^{iy} = \cos y + i\sin y$가 된다. 핵심 성질:</p>
+  <p>① <strong>전해석(entire).</strong> $e^z$는 복소평면 전체에서 해석적이고
+  $$\frac{d}{dz}e^z = e^z$$
+  이다 (코시-리만 방정식을 항등적으로 만족한다).</p>
+  <p>② <strong>덧셈정리.</strong> $e^{z_1 + z_2} = e^{z_1} e^{z_2}$, 따라서 $e^{-z} = 1/e^z$.</p>
+  <p>③ <strong>크기와 편각.</strong> $|e^z| = e^{x} \gt 0$, $\arg e^z = y$. 크기가 항상
+  양수라는 사실에서 곧바로 <strong>$e^z \neq 0$ (모든 $z$)</strong> — 지수함수는 결코
+  $0$이 되지 않는다.</p>
+  <p>④ <strong>주기 $2\pi i$.</strong> $e^{z + 2\pi i} = e^z$. 실수에서는 없던
+  성질이다 — 복소지수함수는 허수축 방향으로 주기 $2\pi i$를 갖는 <em>주기함수</em>이고,
+  $e^{z_1} = e^{z_2} \iff z_1 - z_2 = 2k\pi i\ (k \in \mathbb{Z})$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 값 계산과 주기</span>
+  <p><strong>(a)</strong> $e^{i\pi} = \cos\pi + i\sin\pi = -1$ (오일러 항등식),
+  $\ e^{i\pi/2} = i$, $\ e^{2\pi i} = 1$.</p>
+  <p><strong>(b)</strong> $e^{\,1 + i\pi/3} = e^{1}\!\left(\cos\tfrac{\pi}{3} + i\sin\tfrac{\pi}{3}\right)
+  = e\left(\tfrac12 + i\tfrac{\sqrt3}{2}\right)$. 크기 $|e^{1+i\pi/3}| = e$, 편각 $\pi/3$ — 정의를
+  그대로 읽으면 된다.</p>
+  <p><strong>(c) 주기의 실감.</strong> $e^{z} = -1$을 푸는 문제. $|-1| = 1$이니
+  $e^x = 1$, 즉 $x = 0$; $\arg(-1) = \pi + 2k\pi$이니 $y = \pi + 2k\pi$. 따라서
+  해는 $z = i(\pi + 2k\pi) = (2k+1)\pi i$로 <strong>무한히 많다</strong>. 실수 방정식
+  $e^x = -1$은 해가 없지만, 복소에서는 세로로 늘어선 무한 해가 생긴다.</p>
+</div>
+
+<h2 id="sec-log">2. 복소로그와 거듭제곱 — 값이 여러 개인 함수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">직관 — 왜 다가(多價)가 되는가</span>
+  <p>로그는 지수의 역, 즉 $e^w = z$를 푸는 $w$다. 그런데 $e^w$는 주기 $2\pi i$를 가지므로
+  한 $z$에 대응하는 $w$가 <strong>$2\pi i$ 간격으로 무한히 많다</strong>. 실수 로그가
+  단일값이었던 것은 실지수함수가 단사였기 때문 — 복소지수함수는 단사가 아니라서
+  그 역이 함수가 되지 못하고 <strong>다가 대응</strong>이 된다.</p>
+</div>
+
+<div class="box box-def" id="def-complex-logarithm">
+  <span class="box-label">정의 · 복소로그와 복소 거듭제곱 <span class="label-en">complex logarithm, complex power</span> (브라운-처칠 §7)</span>
+  <p>$z \neq 0$에 대해 <strong>복소로그</strong>를
+  $$\log z = \ln |z| + i\,\arg z$$
+  로 정의한다. 여기서 $\ln|z|$는 실로그(단일값)지만 $\arg z$는 $2\pi$의 정수배만큼
+  자유롭다. $\arg z = \operatorname{Arg} z + 2k\pi$로 쓰면
+  $$\log z = \ln|z| + i\,(\operatorname{Arg} z + 2k\pi), \qquad k \in \mathbb{Z}$$
+  — 값이 세로로 $2\pi i$ 간격으로 늘어선 <strong>다가함수</strong>다.</p>
+  <p><strong>주치(주요 값) <span class="label-en">principal value</span>:</strong>
+  주편각 $\operatorname{Arg} z \in (-\pi, \pi]$를 택한 것을
+  $$\operatorname{Log} z = \ln|z| + i\operatorname{Arg} z$$
+  로 쓴다 (대문자 $\operatorname{Log}$). 무한히 많은 값 중 하나를 규약으로 고정한 것.</p>
+  <p><strong>가지(branch)와 가지 절단(branch cut):</strong> $\arg z$를 연속으로 고르는
+  구간 하나를 정하면 그 위에서 $\log z$가 단일값·해석적 함수가 되며, 이를 로그의
+  <em>가지</em>라 한다. 주가지($\operatorname{Log}$)는 <strong>음의 실축과 원점</strong>
+  ($\arg = \pi$에서 $-\pi$로 튀는 자리)에서 불연속이라, 이 반직선을 도려낸다 — 이것이
+  <strong>가지 절단</strong>이고, 원점은 어떤 가지에서도 피할 수 없는
+  <strong>가지점(branch point)</strong>이다.</p>
+  <p><strong>역함수 관계의 비대칭:</strong> 항상 $e^{\log z} = z$이지만,
+  $$\log e^z = z + 2k\pi i$$
+  — 순서를 바꾸면 $2\pi i$의 오차가 남는다 (지수의 주기 때문). 실수에서
+  $\ln e^x = x$가 깔끔하던 것과 대비된다.</p>
+  <p><strong>복소 거듭제곱:</strong> $c \in \mathbb{C}$, $z \neq 0$에 대해
+  $$z^{c} = e^{\,c \log z}$$
+  로 정의한다. $\log z$가 다가이므로 $z^c$도 일반적으로 <strong>다가</strong>이며,
+  가지를 정하거나 주치 $\operatorname{Log}$를 쓰면 주값이 정해진다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 로그와 거듭제곱 계산</span>
+  <p><strong>(a)</strong> $\log 1 = \ln 1 + i(0 + 2k\pi) = 2k\pi i$, 주치 $\operatorname{Log} 1 = 0$.</p>
+  <p><strong>(b)</strong> $\log(-1) = \ln 1 + i(\pi + 2k\pi) = (2k+1)\pi i$, 주치
+  $\operatorname{Log}(-1) = i\pi$. &nbsp; $\log i = i\left(\tfrac{\pi}{2} + 2k\pi\right)$,
+  주치 $\operatorname{Log} i = i\tfrac{\pi}{2}$.</p>
+  <p><strong>(c)</strong> $\log(1+i) = \ln\sqrt2 + i\left(\tfrac{\pi}{4} + 2k\pi\right)
+  = \tfrac12\ln 2 + i\left(\tfrac{\pi}{4} + 2k\pi\right)$.</p>
+  <p><strong>(d) 놀라운 값 $i^{\,i}$.</strong>
+  $$i^{\,i} = e^{\,i\log i} = e^{\,i\cdot i(\pi/2 + 2k\pi)} = e^{-(\pi/2 + 2k\pi)}$$
+  — 순허수의 순허수 거듭제곱이 <strong>실수</strong>이고, 게다가 무한히 많은 실숫값이다.
+  주치는 $e^{-\pi/2} \approx 0.2079$.</p>
+</div>
+
+<h2 id="sec-trig">3. 복소삼각·쌍곡함수 — 유계를 잃다</h2>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 복소삼각함수와 쌍곡함수 <span class="label-en">complex trigonometric &amp; hyperbolic functions</span> (브라운-처칠 §7)</span>
+  <p>오일러 공식 $e^{iz} = \cos z + i\sin z$를 정의로 뒤집어(해석학 8장의
+  <a class="term" data-term="trig-functions">해석적 정의</a>와 같은 정신), 모든 $z$에 대해</p>
+  $$\cos z = \frac{e^{iz} + e^{-iz}}{2}, \qquad \sin z = \frac{e^{iz} - e^{-iz}}{2i}$$
+  <p>로 정의한다. 둘 다 <strong>전해석</strong>이고 $\dfrac{d}{dz}\sin z = \cos z$,
+  $\dfrac{d}{dz}\cos z = -\sin z$이며, $\sin^2 z + \cos^2 z = 1$과 덧셈정리 등
+  <strong>모든 대수적 항등식이 그대로</strong> 성립한다 (증명은 지수 정의를 대입하면 끝).</p>
+  <p><strong>쌍곡함수</strong>도 지수로 정의한다:
+  $$\cosh z = \frac{e^{z} + e^{-z}}{2}, \qquad \sinh z = \frac{e^{z} - e^{-z}}{2}.$$
+  복소평면에서는 삼각함수와 쌍곡함수가 $90^\circ$ 돌린 같은 가족이다:
+  $$\cos(iz) = \cosh z,\quad \sin(iz) = i\sinh z,\quad \cosh(iz) = \cos z,\quad \sinh(iz) = i\sin z.$$
+  실·허 성분으로 펼치면
+  $\cos z = \cos x\cosh y - i\sin x\sinh y$, $\ \sin z = \sin x\cosh y + i\cos x\sinh y$.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 실수와 결별하는 두 지점</span>
+  <p><strong>유계가 아니다.</strong> 위 전개에서 크기를 계산하면
+  $$|\cos z|^2 = \cos^2 x + \sinh^2 y, \qquad |\sin z|^2 = \sin^2 x + \sinh^2 y.$$
+  $y \to \infty$이면 $\sinh y \to \infty$이므로 $|\cos z|, |\sin z|$가
+  <strong>얼마든지 커진다</strong>. 예컨대 $\cos(iy) = \cosh y \to \infty$. 실수에서
+  철칙이던 $|\cos x| \le 1$은 복소에서 완전히 거짓 — 뒤에서 $\cos z = 2$의 해도 구한다.</p>
+  <p><strong>영점은 실축 위에만.</strong> $|\sin z|^2 = \sin^2 x + \sinh^2 y = 0$이려면
+  $\sinh y = 0$ (즉 $y = 0$)이고 $\sin x = 0$이어야 하므로
+  $$\sin z = 0 \iff z = n\pi, \qquad \cos z = 0 \iff z = \tfrac{\pi}{2} + n\pi \quad (n \in \mathbb{Z}).$$
+  복소평면으로 확장해도 <strong>새로운 영점은 생기지 않는다</strong> — 실수 영점이 전부다.
+  (유계는 잃었지만 영점 목록은 지켰다는 이 비대칭이 시험에서 자주 노려진다.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>① <strong>$\log z$는 “함수”가 아니다.</strong> 가지를 고르기 전까지는 다가 대응이다.
+  $\operatorname{Log}$(주가지)를 쓰더라도 <strong>음의 실축(가지 절단)에서 불연속·비해석</strong>임을
+  잊으면 안 된다. 실적분 계산에서 가지 절단을 무시하면 값이 어긋난다.</p>
+  <p>② <strong>$\log(z_1 z_2) = \log z_1 + \log z_2$는 주치에서 거짓.</strong> 다가 집합
+  등식($\bmod\ 2\pi i$)으로는 참이지만 $\operatorname{Log}$로는 $2\pi i$ 오차가 날 수 있다.
+  예: $z_1 = -1,\ z_2 = i$이면 $\operatorname{Log}(-i) = -i\tfrac{\pi}{2}$인데
+  $\operatorname{Log}(-1) + \operatorname{Log}(i) = i\pi + i\tfrac{\pi}{2} = i\tfrac{3\pi}{2}$ —
+  둘은 $2\pi i$만큼 다르다.</p>
+  <p>③ <strong>$|\cos z| \le 1$, $|\sin z| \le 1$은 복소에서 거짓.</strong> 실축을 벗어나면
+  $\sinh y$ 항 때문에 무한대로 커진다. “삼각함수는 유계”라는 실수 직관을 복소에 끌고 오면 안 된다.</p>
+  <p>④ <strong>$z^c$는 다가.</strong> $z^c = e^{c\log z}$의 $\log$가 다가라 값이 여러 개다
+  ($i^i$가 실수 무한족인 이유). 또 주가지에서는 지수법칙도 부분적으로만 성립한다 —
+  $(z_1 z_2)^c \neq z_1^{\,c} z_2^{\,c}$, $(e^z)^c \neq e^{cz}$가 일반적으로 성립하니
+  거듭제곱을 다룰 땐 항상 “어느 가지인가”를 먼저 정해야 한다.</p>
+</div>
+
+<h2 id="sec-summary">한 장 요약</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">3장의 줄거리 — 무엇이 살아남고 무엇이 무너지는가</span>
+  <p><a class="term" data-term="complex-exponential">복소지수함수</a> $e^z = e^x(\cos y + i\sin y)$:
+  미분 규칙($\frac{d}{dz}e^z = e^z$)·덧셈정리는 <strong>그대로</strong>, 대신
+  <strong>주기 $2\pi i$</strong>를 얻고 $|e^z| = e^x$라 <strong>결코 $0$이 아니다</strong>.
+  &nbsp;→&nbsp; <a class="term" data-term="complex-logarithm">복소로그</a>
+  $\log z = \ln|z| + i\arg z$: 지수의 주기 때문에 <strong>다가</strong>(주치 $\operatorname{Log}$,
+  가지·가지 절단·가지점 $0$); $e^{\log z} = z$이나 $\log e^z = z + 2k\pi i$; 거듭제곱
+  $z^c = e^{c\log z}$도 다가($i^i = e^{-\pi/2 - 2k\pi}$).
+  &nbsp;→&nbsp; 복소삼각함수 $\cos z = \frac{e^{iz}+e^{-iz}}{2}$: 항등식은 살아남지만
+  <strong>유계를 잃고</strong>($|\cos z|^2 = \cos^2 x + \sinh^2 y$) 대신 <strong>영점은
+  실축에만</strong> 남으며, 쌍곡함수와 한 가족($\cos(iz) = \cosh z$)이 된다.</p>
+  <p><strong>한 줄 정리:</strong> 복소로 넘어가며 <em>대수(덧셈정리·항등식)</em>는 보존되고
+  <em>해석·기하(주기·다가·유계)</em>가 달라진다. 이 세 가지 결별 지점 —
+  주기 · 다가성 · 무계 — 이 다음 장 이후 코시 이론과 유수 계산의 밑돌이 된다.</p>
+</div>
+
+<section class="problems">
+<h2 id="sec-problems">연습문제</h2>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 1</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) $e^{\,1 + i\pi/4}$를 $a + bi$ 꼴로 쓰라. &nbsp; (2) $|e^{\,3 + 4i}|$와 편각 하나를
+  구하라. &nbsp; (3) 임의의 $z$에 대해 $e^z \neq 0$임을 보여라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>정의 $e^{x+iy} = e^x(\cos y + i\sin y)$에서 크기 $e^x$, 편각 $y$를 바로 읽는다.
+    (3)은 크기가 $e^x$임을 이용.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $e^{1+i\pi/4} = e\left(\cos\tfrac{\pi}{4} + i\sin\tfrac{\pi}{4}\right)
+    = e\cdot\tfrac{\sqrt2}{2}(1 + i) = \dfrac{e\sqrt2}{2} + \dfrac{e\sqrt2}{2}\,i$.</p>
+    <p>(2) $|e^{3+4i}| = e^{3}$, 편각은 $\arg = 4$ (라디안, $+2k\pi$ 자유).</p>
+    <p>(3) $|e^z| = e^{x} \gt 0$이 모든 실수 $x$에서 성립하므로 $e^z$의 크기가 $0$이 될 수
+    없다. 크기가 $0$이 아니면 값도 $0$이 아니다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 2</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) $\operatorname{Log}(-1)$, $\operatorname{Log}(i)$, $\operatorname{Log}(1+i)$를 각각 구하라.
+  &nbsp; (2) $\log(1+i)$의 <em>모든</em> 값을 써라. &nbsp; (3) $i^{\,i}$의 주치를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\operatorname{Log} z = \ln|z| + i\operatorname{Arg} z$, $\operatorname{Arg} \in (-\pi,\pi]$.
+    $z^c = e^{c\log z}$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $\operatorname{Log}(-1) = \ln 1 + i\pi = i\pi$. &nbsp;
+    $\operatorname{Log}(i) = \ln 1 + i\tfrac{\pi}{2} = i\tfrac{\pi}{2}$. &nbsp;
+    $\operatorname{Log}(1+i) = \ln\sqrt2 + i\tfrac{\pi}{4} = \tfrac12\ln 2 + i\tfrac{\pi}{4}$.</p>
+    <p>(2) $\log(1+i) = \tfrac12\ln 2 + i\left(\tfrac{\pi}{4} + 2k\pi\right),\ k \in \mathbb{Z}$.</p>
+    <p>(3) $i^{\,i} = e^{i\operatorname{Log} i} = e^{\,i\cdot i\pi/2} = e^{-\pi/2} \approx 0.2079$
+    (실수!). $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §7 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>방정식 $e^{z} = 1 + \sqrt3\,i$를 만족하는 모든 복소수 $z$를 구하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>우변을 극형식으로: 크기와 편각을 읽으면 $x = \ln|\text{우변}|$, $y = \arg(\text{우변})$.
+    편각은 $2\pi$ 자유도를 남긴다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$|1 + \sqrt3 i| = \sqrt{1 + 3} = 2$, $\arg(1+\sqrt3 i) = \tfrac{\pi}{3} + 2k\pi$.
+    $e^z = e^x(\cos y + i\sin y)$와 비교하면 $e^x = 2$, 즉 $x = \ln 2$이고
+    $y = \tfrac{\pi}{3} + 2k\pi$. 따라서</p>
+    $$z = \ln 2 + i\left(\tfrac{\pi}{3} + 2k\pi\right), \qquad k \in \mathbb{Z}.$$
+    <p>해가 세로로 무한히 늘어서는 것은 $e^z$의 주기 $2\pi i$ 때문이다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Brown-Churchill §7 연습 유형</span>
+    <span class="difficulty">●●●</span>
+  </div>
+  <p>$\cos z = 2$의 모든 해를 구하라. (실수에서는 해가 없지만 복소에서는 존재함 —
+  삼각함수가 유계가 아님을 직접 보이는 문제.)</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$w = e^{iz}$로 치환하면 $\cos z = \tfrac12(w + w^{-1})$. 이차방정식을 풀고 다시
+    $\log$를 취한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$w = e^{iz}$라 하면 $\cos z = \dfrac{w + w^{-1}}{2} = 2$, 즉 $w^2 - 4w + 1 = 0$.
+    근의 공식으로 $w = 2 \pm \sqrt3$ (둘 다 양의 실수, 서로 역수:
+    $(2+\sqrt3)(2-\sqrt3) = 1$).</p>
+    <p>$e^{iz} = 2 \pm \sqrt3$에서 우변이 양의 실수이므로 편각은 $2k\pi$:
+    $iz = \ln(2 \pm \sqrt3) + 2k\pi i$, 즉 $z = 2k\pi - i\ln(2 \pm \sqrt3)$.
+    $\ln(2-\sqrt3) = -\ln(2+\sqrt3)$이므로 두 계열을 합쳐서</p>
+    $$z = 2k\pi \pm i\ln(2 + \sqrt3), \qquad k \in \mathbb{Z}.$$
+    <p>$\cos z$가 실수 $2$를 값으로 갖는다는 것 자체가 $|\cos z| \le 1$이 복소에서
+    깨진다는 증거다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●○</span>
+    <span>로그 법칙의 성립 조건</span>
+  </div>
+  <p>주치에 대해 $\operatorname{Log}(z_1 z_2) = \operatorname{Log} z_1 + \operatorname{Log} z_2$가
+  <strong>항상 성립하지는 않음</strong>을 반례로 보이고, 이 등식이 성립하는 조건을 서술하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$\operatorname{Arg}$은 $(-\pi,\pi]$로 잘려 있다. $\operatorname{Arg} z_1 + \operatorname{Arg} z_2$가
+    이 구간을 벗어나면 $2\pi$ 조정이 일어난다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>반례.</strong> $z_1 = -1,\ z_2 = i$. 곱은 $z_1 z_2 = -i$이고
+    $\operatorname{Log}(-i) = -i\tfrac{\pi}{2}$. 그러나
+    $\operatorname{Log}(-1) + \operatorname{Log}(i) = i\pi + i\tfrac{\pi}{2} = i\tfrac{3\pi}{2}$.
+    두 값은 $2\pi i$만큼 다르므로 등식이 깨진다.</p>
+    <p><strong>성립 조건.</strong> 근본 이유는 $\operatorname{Arg}(z_1 z_2)$가
+    $\operatorname{Arg} z_1 + \operatorname{Arg} z_2$와 $2\pi$ 정수배만큼 다를 수 있다는 데
+    있다. 따라서
+    $$-\pi \lt \operatorname{Arg} z_1 + \operatorname{Arg} z_2 \le \pi$$
+    일 때(그리고 그때에만 조정이 필요 없어) 주치 등식이 성립한다. 예컨대 $z_1, z_2$가
+    모두 우반평면($\operatorname{Re} \gt 0$)에 있으면 편각의 합이 $(-\pi,\pi)$ 안에 들어
+    등식이 성립한다. (다가함수 $\log$의 <em>집합</em> 등식 $\log(z_1 z_2) = \log z_1 + \log z_2$는
+    항상 참이라는 점도 함께 언급하면 만점 답안.) $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-exam">임용 스타일</span>
+    <span class="difficulty">●●●</span>
+    <span>복소 거듭제곱의 다가성</span>
+  </div>
+  <p>$(1+i)^{\,i}$의 모든 값을 구하고 주치를 구하라. 답이 다가가 되는 이유를 한 줄로 밝혀라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$(1+i)^i = e^{\,i\log(1+i)}$. 앞 예제의 $\log(1+i)$를 그대로 대입하고,
+    $i\cdot i = -1$에 주의하여 실·허 성분을 분리한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$\log(1+i) = \tfrac12\ln 2 + i\left(\tfrac{\pi}{4} + 2k\pi\right)$이므로</p>
+    $$i\log(1+i) = i\cdot\tfrac12\ln 2 + i^2\left(\tfrac{\pi}{4} + 2k\pi\right)
+    = -\left(\tfrac{\pi}{4} + 2k\pi\right) + i\,\tfrac{\ln 2}{2}.$$
+    <p>따라서</p>
+    $$(1+i)^{\,i} = e^{-(\pi/4 + 2k\pi)}\left[\cos\!\Big(\tfrac{\ln 2}{2}\Big)
+    + i\sin\!\Big(\tfrac{\ln 2}{2}\Big)\right], \qquad k \in \mathbb{Z}.$$
+    <p>주치($k = 0$, 즉 $\operatorname{Log}$ 사용)는
+    $e^{-\pi/4}\left[\cos\big(\tfrac{\ln 2}{2}\big) + i\sin\big(\tfrac{\ln 2}{2}\big)\right]$.</p>
+    <p><strong>다가인 이유:</strong> $z^c = e^{c\log z}$에서 $\log(1+i)$의 허부가 $2\pi$
+    간격으로 무한히 많고, 그 차이가 지수의 실부 $-(\pi/4 + 2k\pi)$에 실려 크기를
+    $e^{-2k\pi}$배씩 바꾸기 때문이다. $\blacksquare$</p>
+  </details>
+</div>
+
+<p style="font-family: var(--gothic); font-size: 0.85rem; color: var(--pencil);">
+※ 임용 스타일 배지는 기출 유형을 따른 자체 제작 문제입니다.</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
