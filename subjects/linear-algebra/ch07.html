@@ -114,6 +114,96 @@
   $m \mid f$이므로 후보는 $f$의 약수들뿐이다.</p>
 </div>
 
+<h2 id="sec-rational">3. 유리표준형 — 어느 체 위에서든</h2>
+
+<p>조던 표준형의 아킬레스건은 <strong>“특성다항식이 분해되어야 한다”</strong>였습니다.
+$\mathbb{C}$에서는 대수학의 기본정리로 공짜지만, $\mathbb{R}$에서 회전행렬
+$R = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}$의 특성다항식은 $t^2 + 1$ — 실근이 없어
+고유벡터도, 조던 블록도 없습니다. $\mathbb{Q}$ 위에서는 상황이 더 나쁩니다.
+그렇다면 <strong>분해를 전혀 요구하지 않는</strong> 표준형이 있을까요? 있습니다 —
+고유벡터 대신 <strong>다항식이 만드는 사슬</strong>을 벽돌로 쓰면 됩니다.</p>
+
+<div class="box box-def">
+  <span class="box-label">정의 · 순환부분공간과 동반행렬 <span class="label-en">cyclic subspace, companion matrix</span></span>
+  <p>연산자 $T$와 벡터 $v \neq 0$에 대해, $v$를 담는 <strong>가장 작은 $T$-불변 부분공간</strong>을
+  <strong>$T$-순환부분공간</strong>이라 하고 $\langle v \rangle$로 쓴다:</p>
+  $$\langle v \rangle = \operatorname{span}\{v,\ Tv,\ T^2 v,\ \dots\}.$$
+  <p>$\dim \langle v \rangle = k$이면 $\{v,\ Tv,\ \dots,\ T^{k-1}v\}$가 그 기저이고,
+  $T^k v$를 이 기저로 되쓴 관계식이 유일한 <strong>모닉</strong> 다항식
+  $p(t) = t^k + c_{k-1}t^{k-1} + \cdots + c_1 t + c_0$을 낳는다 ($p(T)v = 0$ —
+  이 $p$가 $\langle v \rangle$로 제한한 $T$의 최소다항식이다).</p>
+  <p>이 기저에서 $T|_{\langle v \rangle}$의 행렬이 $p$의 <strong>동반행렬</strong> $C(p)$다:</p>
+  $$C(p) = \begin{pmatrix}
+  0 &amp; 0 &amp; \cdots &amp; 0 &amp; -c_0 \\
+  1 &amp; 0 &amp; \cdots &amp; 0 &amp; -c_1 \\
+  0 &amp; 1 &amp; \cdots &amp; 0 &amp; -c_2 \\
+  \vdots &amp; &amp; \ddots &amp; &amp; \vdots \\
+  0 &amp; 0 &amp; \cdots &amp; 1 &amp; -c_{k-1}
+  \end{pmatrix}$$
+  <p>아래대각의 밀기($1$들)는 $v \mapsto Tv \mapsto \cdots \mapsto T^{k-1}v$, 마지막 열은
+  $T^k v = -(c_0 v + c_1 Tv + \cdots + c_{k-1}T^{k-1}v)$를 적은 것이다. $C(p)$의
+  특성다항식과 최소다항식은 <strong>둘 다 $p$</strong> — 동반행렬은 “다항식 하나를 행렬로
+  구현”한 물건이다.</p>
+</div>
+
+<div class="box box-thm" id="def-rational-canonical-form">
+  <span class="box-label">정리 · 유리표준형 <span class="label-en">rational canonical form</span> (Friedberg §7.4)</span>
+  <p><strong>이 정리가 하는 일:</strong> 조던형이 요구하던 “분해” 가정을 없앤다 —
+  <strong>임의의 체</strong> 위 모든 선형연산자에 표준형 신원증명서를 발급하는 완전 불변량.</p>
+  <p>임의의 체 $F$ 위 유한차원 벡터공간의 모든 선형연산자 $T$는, 적당한 기저에서
+  <strong>동반행렬들의 블록대각</strong>으로 유일하게 표현된다:</p>
+  $$[T] = C(p_1) \oplus C(p_2) \oplus \cdots \oplus C(p_k),
+  \qquad p_1 \mid p_2 \mid \cdots \mid p_k$$
+  <p>여기서 모닉 다항식들 $p_1 \mid \cdots \mid p_k$ (각 $\deg p_i \ge 1$)를 $T$의
+  <strong>불변인자(invariant factors)</strong>라 하며, 순서까지 포함해 유일하게 결정된다.
+  그리고</p>
+  <p>· <strong>최소다항식 $= p_k$</strong> — 가장 큰(마지막) 불변인자.<br>
+  · <strong>특성다항식 $= p_1 p_2 \cdots p_k$</strong> — 불변인자 전부의 곱.<br>
+  · 각 $p_i$를 기약다항식의 거듭제곱들로 인수분해한 조각들이 <strong>초등인자
+  (elementary divisors)</strong>이고, 그 조각 하나하나의 동반행렬로 더 잘게 나눈 것이
+  <strong>초등인자 꼴</strong>이다.</p>
+  <p><strong>조던형은 특수경우다.</strong> 특성다항식이 일차식으로 완전분해되는 체(예:
+  $\mathbb{C}$)에서는 초등인자가 전부 $(t - \lambda)^m$ 꼴이고, 동반행렬
+  $C\big((t-\lambda)^m\big)$은 기저를 바꾸면 조던 블록 $J_m(\lambda)$과 닮음이다 —
+  즉 <em>유리표준형의 초등인자 꼴 $=$ 조던 표준형</em>. 분해가 안 되는 체에서는 조던형이
+  없어도 유리표준형은 언제나 존재한다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">한 줄로 — 구조정리의 두 얼굴</span>
+  <p>이 정리는 현대대수 8장
+  <a class="term" data-term="finitely-generated-abelian">유한생성 아벨군의 기본정리</a>와
+  <strong>글자 그대로 평행</strong>합니다. 벡터공간 $V$에 연산자 $T$를 얹으면 $V$는
+  다항식환 $F[t]$ 위의 가군이 되고($t$가 $T$로 작용), 유리표준형은 그 가군의
+  구조정리입니다 — 불변인자 꼴 $p_1 \mid \cdots \mid p_k$는 아벨군의
+  $d_1 \mid \cdots \mid d_s$에, 초등인자 꼴은 소수 거듭제곱 조각 $\mathbb{Z}_{p^k}$에
+  정확히 대응합니다. $\mathbb{Z}$와 $F[t]$가 <em>둘 다 주 아이디얼 정역</em>이라 같은
+  정리가 두 번 나타나는 것 — <strong>주 아이디얼 정역 위 유한생성 가군의 구조정리</strong>가
+  아벨군 분류와 유리표준형의 공통 본체입니다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\mathbb{R}$ 위에서 더 못 줄이는 행렬</span>
+  <p>회전행렬 $R = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}$의 특성다항식은
+  $t^2 + 1$ — $\mathbb{R}$에서 기약이다. 불변인자는 $p_1 = t^2 + 1$ 하나뿐이라
+  유리표준형은 $C(t^2+1) = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix} = R$
+  <strong>자기 자신</strong> — $\mathbb{R}$ 위에서는 이보다 더 대각에 가깝게 갈 수 없다.
+  ($\mathbb{C}$로 올라가면 $t^2 + 1 = (t - i)(t + i)$로 쪼개져 $\operatorname{diag}(i, -i)$로
+  대각화된다. 유리표준형이 “체가 허락하는 만큼만” 단순화함을 보여준다.)</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">이름의 뜻 · 흔한 혼동</span>
+  <p>① <strong>왜 “유리(rational)”인가?</strong> 고윳값을 손에 넣으려면 체를 넓혀
+  무리수·복소수로 나가야 할 수 있지만, 유리표준형은 <strong>기반 체 $F$ 안의 연산(유리적
+  연산)만으로</strong> 얻어진다 — 성분이 $F$를 벗어나지 않고, 조던형이 요구하던 근(고윳값)이
+  필요 없다.<br>
+  ② <strong>불변인자 $\neq$ 초등인자.</strong> 불변인자는 $p_1 \mid \cdots \mid p_k$로
+  “나누어떨어지게” 늘어놓아 블록이 크고 적으며, 초등인자는 각 $p_i$를 기약 거듭제곱으로
+  잘게 쪼개 블록이 작고 많다 — 8장의 <strong>불변인자 꼴 ↔ 기본인자 꼴</strong> 관계와
+  똑같다.</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약 — 그리고 선형대수의 끝</h2>
 
 <div class="box box-intuition">
@@ -124,7 +214,10 @@
   → <a class="term" data-term="generalized-eigenvector">일반화 고유공간</a>이 부족분을
   정확히 채운다 (블록 개수 $= \dim E_\lambda$, 크기 합 $=$ 대수 중복도)
   → <a class="term" data-term="minimal-polynomial">최소다항식</a>: 가장 짧은 소멸 다항식,
-  $m \mid f$, 중근 없음 $\iff$ 대각화 가능 (멱등·유한 위수 행렬이 즉시 처리됨).</p>
+  $m \mid f$, 중근 없음 $\iff$ 대각화 가능 (멱등·유한 위수 행렬이 즉시 처리됨)
+  → <a class="term" data-term="rational-canonical-form">유리표준형</a>: 체가 분해를
+  안 해줘도($\mathbb{Q}$ 위 $t^2+1$처럼) 동반행렬 블록으로 표준형이 존재 — 조던형은 그
+  특수경우이자, 현대대수 8장 아벨군 구조정리의 선형대수 쌍둥이다.</p>
   <p><strong>과목 전체 되돌아보기:</strong> 벡터공간(1) → 선형변환과 차원정리(2) →
   rank와 연립방정식(3) → 행렬식(4) → 대각화(5) → 내적과 스펙트럼 정리(6) →
   조던(7). 임용 최중요 축은 <strong>2장 차원정리 · 5장 대각화 판정 · 6장 직교대각화</strong>
@@ -259,6 +352,41 @@
     $2$와 $3$뿐이다 (각각 $A = 2I$, $A = 3I$, 또는 둘 다 등장).
     $\blacksquare$ (거듭제곱 관계식 하나가 대각화까지 보장하는 것 — 최소다항식
     관점의 위력이다. 5장 방식으로 고유공간을 직접 계산할 필요가 없다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Friedberg 7장 연습 유형</span>
+    <span class="difficulty">●●●</span>
+    <span>유리표준형</span>
+  </div>
+  <p>$\mathbb{Q}$ 위의 행렬 $A$가 특성다항식 $f(t) = (t^2 + 1)^2 (t - 2)$,
+  최소다항식 $m(t) = (t^2 + 1)(t - 2)$를 가진다. $A$의 불변인자와 유리표준형을 구하라
+  (조던형은 왜 불가능한가?).</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>가장 큰 불변인자 $p_k = m$이고, 불변인자 전부의 곱 $= f$. 나머지 조각은
+    $f / m$이며 $p_1 \mid p_2$를 만족해야 한다. 동반행렬은 계수를 마지막 열에
+    $-c_i$로 적는다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>불변인자.</strong> 마지막 불변인자는 최소다항식과 같으므로
+    $p_2 = (t^2+1)(t-2)$ (차수 3). 불변인자 전부의 곱이 특성다항식(차수 5)이니
+    나머지는 $p_1 = f / p_2 = (t^2+1)^2(t-2) \big/ (t^2+1)(t-2) = t^2 + 1$ (차수 2).
+    가분성 $p_1 \mid p_2$ ($(t^2+1) \mid (t^2+1)(t-2)$)가 성립하므로 확정:</p>
+    <p style="text-align:center;">$p_1 = t^2 + 1, \qquad p_2 = (t^2+1)(t-2) = t^3 - 2t^2 + t - 2.$</p>
+    <p><strong>유리표준형.</strong> 각 불변인자의 동반행렬을 블록대각으로 놓는다.
+    $t^2+1$은 $c_0 = 1, c_1 = 0$, $t^3 - 2t^2 + t - 2$는 $c_0 = -2, c_1 = 1, c_2 = -2$이므로</p>
+    $$C(t^2+1) = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}, \qquad
+    C(t^3 - 2t^2 + t - 2) = \begin{pmatrix} 0 &amp; 0 &amp; 2 \\ 1 &amp; 0 &amp; -1 \\ 0 &amp; 1 &amp; 2 \end{pmatrix},$$
+    $$A \sim \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix} \oplus
+    \begin{pmatrix} 0 &amp; 0 &amp; 2 \\ 1 &amp; 0 &amp; -1 \\ 0 &amp; 1 &amp; 2 \end{pmatrix} \quad (5 \times 5,\ 2 + 3 = \deg f).$$
+    <p><strong>조던형이 불가능한 이유:</strong> $t^2 + 1$이 $\mathbb{Q}$(그리고 $\mathbb{R}$)에서
+    기약이라 특성다항식이 일차식으로 분해되지 않는다 — 조던 블록의 대각에 놓을 고윳값이
+    $\mathbb{Q}$ 안에 없다. $\mathbb{C}$로 확장해 $t^2+1 = (t-i)(t+i)$로 쪼개야 비로소
+    조던형($J_1(i), J_1(-i)$ 등)이 생긴다. $\blacksquare$</p>
   </details>
 </div>
 

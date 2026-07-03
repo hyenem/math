@@ -100,6 +100,47 @@
   일반위상 반례의 단골 무대가 된다 — 이름을 기억해 둘 것.</p>
 </div>
 
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>기저조차 나열하기 번거로울 때가 있습니다. 그럴 땐 <strong>재료를 더 성기게</strong> —
+  “이것들만 열려 있으면 좋겠다”는 최소한의 조각들만 던지고, 나머지는 기계적으로
+  채우게 하면 됩니다. 그 조각들끼리 <strong>유한 번 교집합</strong>해서 기저를 만들고,
+  그 기저로 위상을 짓는 것 — 이 최초의 조각 목록이 부분기저입니다. 기저의 두 조건 중
+  “교집합 속 벽돌”을 <em>공짜로 만들어 주는</em> 한 단계 아래의 재료예요.</p>
+</div>
+
+<div class="box box-def" id="def-subbasis">
+  <span class="box-label">정의 · 부분기저 <span class="label-en">subbasis</span></span>
+  <p>$X$의 부분집합 모임 $\mathcal{S}$가 <strong>합집합이 $X$ 전체</strong>이면
+  (덮음 조건 하나뿐 — 기저와 달리 교집합 조건은 요구하지 않는다) $\mathcal{S}$를
+  <strong>부분기저</strong>라 한다 (문크레스 §13).</p>
+  <p>$\mathcal{S}$로 위상을 짓는 절차는 두 단계다. 먼저 $\mathcal{S}$의 원소들의
+  <strong>유한 교집합</strong> 전체를 모으면 이것이 기저 $\mathcal{B}$가 된다
+  (덮음은 $\mathcal{S}$에서 물려받고, 교집합 조건은 “유한 교집합의 유한 교집합은 다시
+  유한 교집합”이라 공짜로 성립). 이 $\mathcal{B}$가 생성하는 위상을
+  <strong>$\mathcal{S}$가 생성하는 위상</strong>이라 부른다.</p>
+  <p>이 위상은 <strong>$\mathcal{S}$를 포함하는 가장 성긴(coarsest) 위상</strong>과
+  같다 — 부분기저의 원소를 모두 열게 만드는 데 필요한 <em>최소한의</em> 위상.
+  ($\mathcal{S} \subset \mathcal{T}$인 위상 $\mathcal{T}$는 유한 교집합·임의 합집합에
+  닫혀 있어 생성 위상을 통째로 포함하므로.)</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · $\mathbb{R}$의 반직선 부분기저, 그리고 무한곱의 표준 정의</span>
+  <p><strong>(a) 실직선:</strong> 반직선들 $(a, \infty)$와 $(-\infty, b)$ 전체
+  $\mathcal{S}$는 $\mathbb{R}$의 부분기저다 (아무 점이나 어떤 반직선엔 들어가므로 덮음 ✓).
+  이들의 유한 교집합 $(a, \infty) \cap (-\infty, b) = (a, b)$가 바로 열린구간 — 즉
+  부분기저의 유한 교집합이 표준위상의 기저(열린구간들)를 정확히 되돌려준다.
+  <strong>반직선만 열려 있다고 선언해도 표준위상이 통째로 살아난다.</strong></p>
+  <p><strong>(b) 곱위상의 진짜 정의:</strong> 부분기저가 없으면 <em>무한</em> 곱위상을
+  제대로 정의할 수 없다. 곱공간 $\prod_i X_i$에서 사영
+  $\pi_j : \prod_i X_i \to X_j$의 원상 $\pi_j^{-1}(U_j)$ ($U_j \subset X_j$ 열림) 전체를
+  <strong>부분기저</strong>로 삼은 것이 곱위상의 표준 정의다. 이 부분기저의 유한
+  교집합은 “유한 개의 좌표만 열린집합으로 제한한” 집합이 되므로, 2장에서 강조할
+  “무한 곱은 유한 개 좌표만 건드린다(상자위상이 아니다)”는 성질이 <em>정의에서 자동으로</em>
+  따라 나온다 (<a class="term" data-term="product-topology">곱위상</a>, 2장).</p>
+</div>
+
 <h2 id="sec-closed">3. 닫힌집합, 폐포, 집적점 — 거리 없이 다시 짓기</h2>
 
 <div class="box box-def" id="def-topology-closure">
@@ -199,7 +240,8 @@
   <a class="term" data-term="topology">위상</a>
   (동물원: 이산·밀착·여유한·거리위상, finer/coarser)
   → 위상을 벽돌로 지정: <a class="term" data-term="basis-topology">기저</a>
-  ($\mathbb{R}_\ell$ 하한위상 — 반례계의 스타 탄생)
+  ($\mathbb{R}_\ell$ 하한위상 — 반례계의 스타 탄생), 더 성긴 재료
+  <a class="term" data-term="subbasis">부분기저</a>(유한교로 기저 생성 — 무한곱 위상의 표준 정의)
   → 닫힘 = 여집합 열림(이제 정의), <a class="term" data-term="topology-closure">폐포·내부</a>
   = 최소 닫힌 포장·최대 열린 속, $\bar{A} = A \cup A'$ 복원
   (폐포는 위상에 따라 다르다!)
@@ -290,6 +332,41 @@
     내점이 아니다.</p>
     <p>(“clopen 집합이 $\varnothing, X$ 말고도 존재한다” — 3장에서 이것이
     $\mathbb{R}_\ell$의 <strong>비연결성</strong>과 정확히 같은 말임을 보게 된다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §13 연습 유형</span>
+    <span class="difficulty">●●○</span>
+    <span>부분기저</span>
+  </div>
+  <p>$\mathbb{R}$에서 반직선들
+  $\mathcal{S} = \{(a, \infty) : a \in \mathbb{R}\} \cup \{(-\infty, b) : b \in \mathbb{R}\}$이
+  부분기저임을 확인하고, $\mathcal{S}$가 생성하는 위상이 표준위상과 같음을 보여라.
+  만약 오른쪽 반직선만 남긴 $\mathcal{S}' = \{(a, \infty) : a \in \mathbb{R}\}$로 바꾸면
+  어떤 위상이 생기는가?</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>부분기저 판정은 “합집합이 $X$” 하나뿐이다. 생성 위상은 유한 교집합으로 기저를
+    만든 뒤 표준위상의 기저(열린구간)와 서로 포함을 보이면 된다. $\mathcal{S}'$에서는
+    두 오른쪽 반직선의 교집합이 다시 오른쪽 반직선임에 주목.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p><strong>덮음:</strong> 임의의 $x$는 $(x-1, \infty) \in \mathcal{S}$에 속하므로
+    $\bigcup \mathcal{S} = \mathbb{R}$ — 부분기저 조건 충족.</p>
+    <p><strong>표준위상 복원:</strong> $\mathcal{S}$의 유한 교집합은
+    $(a, \infty) \cap (-\infty, b) = (a, b)$ 꼴(및 반직선 자신, 공집합)이라, 생성 기저가
+    열린구간 전체를 포함한다 $\Rightarrow$ 생성 위상 $\supset$ 표준위상. 역으로 각 반직선은
+    표준위상에서 이미 열려 있으므로 생성 위상 $\subset$ 표준위상. 따라서 둘은 일치한다.</p>
+    <p><strong>$\mathcal{S}'$만 쓰면:</strong> 오른쪽 반직선끼리의 교집합
+    $(a, \infty) \cap (a', \infty) = (\max(a, a'), \infty)$은 다시 오른쪽 반직선이라,
+    기저원소가 전부 $(a, \infty)$ 꼴이다. 그 합집합도 다시 반직선이므로 열린집합은
+    $\varnothing, \mathbb{R}$과 $(a, \infty)$들뿐 — 표준위상보다 순전히 더 성긴
+    “오른쪽 반직선 위상”이 나온다. 공집합 아닌 두 열린집합이 반드시 만나므로 이 위상은
+    하우스도르프도, $T_1$도 아니다 (점이 닫히지 않는다). <strong>부분기저를 어떻게
+    고르느냐가 위상을 통째로 바꾼다</strong>는 예다.</p>
   </details>
 </div>
 

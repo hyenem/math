@@ -17,7 +17,7 @@
 <main class="content">
 
 <div class="chapter-head">
-  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§26–28)</p>
+  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§26–29)</p>
   <h1><span class="ch-num">4</span> 컴팩트성</h1>
   <p class="ch-source">해석학 2장의 컴팩트가 일반 위상으로 올라옵니다 —
   하우스도르프와 만나면 특히 강력해지고, “컴팩트의 세 얼굴”이 거리공간에서
@@ -109,6 +109,117 @@
   ③ 컴팩트는 닫힌 부분공간으로만 유전 — 열린 부분공간은 아니다:
   $[0,1]$ 컴팩트지만 $(0,1)$은 아니고, 반대로 컴팩트가 아닌 공간이 컴팩트 부분공간을
   가질 수도 있다.</p>
+</div>
+
+<h2 id="sec-local">3. 국소컴팩트성과 일점컴팩트화</h2>
+
+<p>$\mathbb{R}^n$은 컴팩트가 아니다 — 무한히 뻗어 나가니까. 그러나 <strong>어느 한
+점 주변만</strong> 보면 언제나 컴팩트한 닫힌 공 $\overline{B}(x, 1)$이 있다. 이
+“국소적” 컴팩트성만으로도 대역적 컴팩트성이 주던 좋은 성질이 상당 부분 되살아나고
+(정칙성!), 나아가 단 <strong>한 점</strong>을 보태는 것만으로 진짜 컴팩트 공간을
+빚어낼 수 있다 — 이 장의 마지막 마술이다 (문크레스 §29).</p>
+
+<div class="box box-def" id="def-locally-compact">
+  <span class="box-label">정의 · 국소컴팩트 공간 <span class="label-en">locally compact space</span> (문크레스 §29)</span>
+  <p>$X$가 점 $x$에서 <strong>국소컴팩트</strong>하다는 것은 — 어떤 컴팩트 집합 $C$와
+  열린집합 $U$가 있어</p>
+  $$x \in U \subset C$$
+  <p>가 성립하는 것, 즉 $x$가 <strong>어떤 컴팩트 집합의 내부</strong>에 들어가는
+  것이다 (동치로: $x$가 컴팩트 근방을 가짐). 모든 점에서 국소컴팩트하면 그냥
+  $X$를 <strong>국소컴팩트</strong>라 부른다.</p>
+  <p>컴팩트 공간은 자명하게 국소컴팩트 ($C = U = X$로 두면 끝). 하지만 역은 거짓 —
+  국소컴팩트는 “점마다 그 근처에서만” 컴팩트를 요구하므로 훨씬 헐거운 조건이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 국소컴팩트한 것과 아닌 것</span>
+  <p>· <strong>$\mathbb{R}^n$ ✓:</strong> 각 점 $x$는 닫힌 공 $\overline{B}(x,1)$
+  (컴팩트 — 하이네-보렐)의 내부 $B(x,1)$에 들어간다. 컴팩트가 아니면서 국소컴팩트인
+  대표 공간.<br>
+  · <strong>컴팩트 공간 ✓, 이산공간 ✓:</strong> 이산공간은 각 점 $\{x\}$ 자체가
+  컴팩트 열린 근방.<br>
+  · <strong>$\mathbb{Q}$ ✗:</strong> $\mathbb{Q}$의 어떤 컴팩트 집합도 $\mathbb{Q}$에서
+  내부를 갖지 못한다 — 유리수 “구간”의 폐포에는 항상 무리수 구멍이 뚫려 컴팩트
+  ($=\mathbb{R}$에서 닫힘)가 될 수 없기 때문 (아래 연습문제).<br>
+  · <strong>무한차원 노름공간 ✗:</strong> $\ell^2$ 같은 공간에서는 어떤 닫힌 공도
+  컴팩트가 아니다 (리스 보조정리) — 원점조차 컴팩트 근방이 없다. 국소컴팩트성은
+  사실상 “유한차원”의 위상적 지문이다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 국소컴팩트 하우스도르프 ⇒ 정칙 (문크레스 §29)</span>
+  <p>$X$가 국소컴팩트 <a class="term" data-term="hausdorff">하우스도르프</a>이면
+  $X$는 <strong>정칙</strong>(T₃)이다 — 점과 그를 담지 않는 닫힌집합을 서로소
+  열린집합으로 가를 수 있다 (5장 <a class="term" data-term="separation-axioms">분리공리</a>의
+  예고편). 실은 더 강한 핵심 보조정리가 성립한다: $x$의 임의의 근방 $U$에 대해,
+  <strong>폐포가 컴팩트이고 $\overline{V} \subset U$</strong>인 열린 근방 $V$가 있다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 컴팩트 근방 하나를 확보한 뒤, “컴팩트 하우스도르프는 정규(따라서 정칙)”라는 앞 절의 결실을 그 근방 안에서 써먹는다.</span></summary>
+  <p><strong>핵심 보조정리:</strong> $x \in U$ ($U$ 열림). 국소컴팩트성으로 컴팩트
+  근방 $C \supset W \ni x$ ($W$ 열림)를 잡는다. $C$는 컴팩트 하우스도르프 —
+  따라서 <strong>정규</strong>(앞의 §26 연습문제)이자 정칙이다. $C$ 안에서 점 $x$와
+  닫힌집합 $C \setminus (W \cap U)$를 정칙성으로 가르면, $C$에서 열린 $V \ni x$로
+  $\operatorname{cl}_C(V) \subset W \cap U$인 것을 얻는다. $C$가 닫혀(컴팩트⊂하우스도르프)
+  있으므로 $\operatorname{cl}_C(V) = \overline{V}$($X$에서의 폐포)이고, $C$의 닫힌
+  부분집합이라 컴팩트이며 $\overline{V} \subset U$. $V \subset W$라 $X$에서도 열림.</p>
+  <p><strong>정칙성:</strong> 닫힌집합 $A$와 $x \notin A$가 주어지면 $U = X \setminus A$가
+  $x$의 열린 근방 — 보조정리로 $\overline{V} \subset U$인 열린 $V \ni x$를 얻는다.
+  그러면 $V$와 $X \setminus \overline{V}$가 각각 $x$와 $A$를 담는 서로소 열린집합.
+  $\blacksquare$</p>
+</details>
+
+<div class="box box-thm" id="def-one-point-compactification"><span class="box-label">정리 · 일점컴팩트화 <span class="label-en">one-point compactification</span> (문크레스 §29)</span>
+  <p><strong>구성:</strong> 공간 $X$에 새 점 하나 $\infty$(“무한점”)를 더해
+  $X^{+} = X \cup \{\infty\}$를 만들고, 열린집합을 두 종류로 정한다:</p>
+  <p style="text-align:center;">① $X$의 열린집합들, &nbsp;②
+  $X^{+} \setminus C = (X \setminus C) \cup \{\infty\}$ &nbsp;($C \subset X$가
+  컴팩트 <strong>이고</strong> $X$에서 닫힘).</p>
+  <p>즉 $\infty$의 근방은 “컴팩트 덩어리의 바깥” — 무한대로 빠져나가는 것들만
+  담는다. 이때:</p>
+  <p style="text-align:center;"><strong>$X$가 국소컴팩트 하우스도르프</strong>
+  $\;\iff\;$ <strong>$X^{+}$가 컴팩트 하우스도르프</strong>이고 $X$가 그 열린
+  부분공간 ($X^{+} \setminus X = \{\infty\}$).</p>
+  <p>이미 컴팩트인 공간에 이 짓을 하면 $\infty$가 <strong>고립점</strong>으로 툭
+  떨어져 나올 뿐 — 일점컴팩트화가 “딱 맞게” 작동하는 것은 국소컴팩트 하우스도르프일
+  때다. (그리고 그 결과는 위상동형을 무시하면 <strong>유일</strong>하다.)</p>
+</div>
+
+<details class="proof">
+  <summary>왜 컴팩트하고 왜 하우스도르프인가 <span class="proof-strategy">— 컴팩트성은 “$\infty$를 덮는 조각이 컴팩트 여집합만 남긴다”에서, 하우스도르프성은 국소컴팩트성이 공급하는 컴팩트 근방에서.</span></summary>
+  <p><strong>컴팩트:</strong> $X^{+}$의 열린 덮개 $\{U_\alpha\}$를 잡자. $\infty$를
+  덮는 조각은 ②형이라 $U_{\alpha_0} = (X \setminus C) \cup \{\infty\}$, $C$ 컴팩트.
+  남은 컴팩트 $C$를 나머지 조각들의 유한 개로 덮고 $U_{\alpha_0}$을 보태면 유한
+  부분덮개 완성 (이 한 줄이 일점컴팩트화의 심장이다).</p>
+  <p><strong>하우스도르프:</strong> $X$ 안의 두 점은 $X$의 하우스도르프성으로 가른다.
+  $x \in X$와 $\infty$는 — 국소컴팩트성으로 $x$의 컴팩트 근방 $C \supset V \ni x$를
+  잡으면, $V$와 $(X \setminus C) \cup \{\infty\}$가 서로소 열린쌍. 국소컴팩트성이
+  정확히 여기서 필요하다 (역방향: $X^{+}$가 컴팩트 하우스도르프이면 그 열린 부분공간
+  $X$는 앞 정리로 국소컴팩트).</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 구면과 리만구</span>
+  <p>· <strong>$(\mathbb{R}^n)^{+} = S^n$:</strong> 스테레오 투영이
+  $S^n \setminus \{N\} \approx \mathbb{R}^n$을 주고, 빠진 북극 $N$이 바로 $\infty$
+  역할을 한다. $n=1$이면 $\mathbb{R}^{+} = S^1$ (직선의 양끝을 한 점에서 붙임),
+  $n=2$면 평면의 일점컴팩트화가 $S^2$.<br>
+  · <strong>$\mathbb{C}^{+} =$ 리만구:</strong> $\mathbb{C} \approx \mathbb{R}^2$의
+  일점컴팩트화 $S^2$를 복소해석에서 부르는 이름. $\infty$를 정식 점으로 승격시켜
+  $1/z$ 같은 함수를 $0 \leftrightarrow \infty$로 매끈하게 잇는다 — 뫼비우스 변환의
+  무대.<br>
+  · <strong>$\mathbb{N}^{+} = \{0\} \cup \{1/n : n \ge 1\}$:</strong> 이산
+  $\mathbb{N}$의 일점컴팩트화는 “$0$으로 수렴하는 수열” 공간과 위상동형 — $\infty$가
+  극한점 $0$이 된다.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">3절 한 줄</span>
+  <p>국소컴팩트 = “점마다 컴팩트 방석” — 유한차원의 지문이자, 하우스도르프와 만나면
+  정칙성이 공짜. 그리고 <a class="term" data-term="compact-hausdorff">컴팩트 하우스도르프</a>의
+  좋은 세계로 들어가는 입장권이 <strong>일점컴팩트화</strong>: 점 하나 보태
+  $\mathbb{R}^n \rightsquigarrow S^n$.</p>
 </div>
 
 <h2 id="sec-summary">한 장 요약</h2>
@@ -236,6 +347,40 @@
     정리가 적용되지 않고 실제로 위상동형이 아니다
     ($S^1$은 컴팩트인데 $[0,1)$은 아니므로 — 컴팩트성은 위상 불변량).
     가정 하나($[0,1]$의 오른쪽 끝점!)가 결론을 가른다. $\blacksquare$</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 3</span>
+    <span class="difficulty">●●○</span>
+    <span>국소컴팩트 · 일점컴팩트화</span>
+  </div>
+  <p>(1) $\mathbb{Q}$가 국소컴팩트가 <strong>아님</strong>을 보여라 — $0$을 담는 어떤
+  컴팩트 집합도 $\mathbb{Q}$에서 내부를 갖지 못함을 논증하라.<br>
+  (2) $\mathbb{R}$의 일점컴팩트화가 원 $S^1$과 위상동형임을 스테레오 투영으로
+  설명하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $\mathbb{Q}$의 컴팩트 부분집합은 $\mathbb{R}$에서도 컴팩트 — 따라서
+    $\mathbb{R}$에서 닫혀 있어야 한다(본문 ②). (2) 북극에서 쏘는 투영이
+    $S^1 \setminus \{N\}$과 $\mathbb{R}$을 잇는다; $\infty \leftrightarrow N$.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) $C \subset \mathbb{Q}$가 컴팩트이고 $0 \in \operatorname{int}_{\mathbb{Q}} C$라
+    가정하자. 그러면 어떤 $\varepsilon \gt 0$에 대해 $(-\varepsilon, \varepsilon) \cap
+    \mathbb{Q} \subset C$. $C$는 컴팩트이므로 $\mathbb{R}$(하우스도르프)에서 닫혀
+    있다(본문 ②) — 그런데 무리수 $\xi \in (0, \varepsilon)$는 $C$ 안 유리수열의
+    극한이면서 $\xi \notin \mathbb{Q} \supset C$라 $C$에 속하지 않는다. $C$가
+    $\mathbb{R}$에서 닫히지 않음 — 모순. 그러므로 $0$(및 임의의 점)은 컴팩트 근방을
+    갖지 않는다: $\mathbb{Q}$는 국소컴팩트가 아니다.</p>
+    <p>(2) 스테레오 투영 $\pi : S^1 \setminus \{N\} \to \mathbb{R}$ (북극 $N$에서
+    직선으로 쏘기)은 위상동형이다. $S^1$은 컴팩트 하우스도르프이고 $S^1 \setminus \{N\}$은
+    그 열린 부분공간 — 여집합이 한 점 $\{N\}$뿐이다. 이는 일점컴팩트화의 특징짓기
+    ($X^{+}$가 컴팩트 하우스도르프 $+$ $X$가 여집합 한 점인 열린 부분공간)에 정확히
+    부합하고, 일점컴팩트화의 유일성에 의해 $\mathbb{R}^{+} \approx S^1$ — $\infty$가
+    북극 $N$에 대응한다. $\blacksquare$</p>
   </details>
 </div>
 

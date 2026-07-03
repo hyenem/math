@@ -111,6 +111,39 @@
   “정규성은 깨지기 쉬운 성질”). 이 비대칭이 $T_4$ 관련 반례 문제의 단골 출처다.</p>
 </div>
 
+<div class="box box-def" id="def-completely-regular">
+  <span class="box-label">정의 · 완전정칙 공간 ($T_{3.5}$·티호노프) <span class="label-en">completely regular space</span> (문크레스 §33)</span>
+  <p>사다리에는 $T_3$과 $T_4$ 사이에 숨은 한 칸이 더 있다. $X$가 $T_1$이고, 임의의 점 $x_0$와
+  그를 담지 않는 닫힌집합 $A$ ($x_0 \notin A$)에 대해 연속함수</p>
+  $$f : X \to [0,1], \qquad f(x_0) = 0, \quad f(A) = \{1\}$$
+  <p>가 존재하면 $X$를 <strong>완전정칙</strong>($T_{3.5}$)이라 한다 — <strong>티호노프 공간</strong>이라고도.
+  정칙($T_3$)은 점과 닫힌집합을 <em>서로소 열린집합</em>으로 가르는 데 그치지만, 완전정칙은 그 둘 사이에
+  <em>연속적인 높이 함수</em>(<a class="term" data-term="urysohn-lemma">우리손 함수</a>)를 요구한다 —
+  위상의 분리를 해석의 분리로 끌어올린 것. (반정수 번호 $3.5$가 “$T_3$보다 세고 $T_4$보다 약하다”는
+  자리를 그대로 말해 준다.)</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">사다리에서의 자리 — 그리고 왜 하필 여기가 중요한가</span>
+  <p><strong>$T_3 \subsetneq T_{3.5} \subsetneq T_4$</strong>, 즉
+  정규$(T_4) \Rightarrow$ 완전정칙$(T_{3.5}) \Rightarrow$ 정칙$(T_3)$이고 두 화살표의 역은 모두 거짓
+  (문크레스 §33의 반례들).</p>
+  <p>· <strong>완전정칙 $\Rightarrow$ 정칙:</strong> 우리손 함수 $f$가 있으면 열린집합은 공짜다 —
+  $f^{-1}\big([0,\tfrac12)\big)$와 $f^{-1}\big((\tfrac12,1]\big)$이 $x_0$과 $A$를 가르는 서로소 열린집합
+  (문제 3·4의 그 원상 기법).<br>
+  · <strong>정규 $\Rightarrow$ 완전정칙:</strong> 이 화살표를 놓아 주는 것이 바로 위의
+  <a class="term" data-term="urysohn-lemma">우리손 보조정리</a>다 — $T_1$이라 $\{x_0\}$이 닫혔고
+  $x_0 \notin A$이니 $\{x_0\}, A$는 서로소 닫힌집합, 우리손이 곧장 $f$를 만들어 준다 (아래 문제).</p>
+  <p><strong>큐브에 묻기(embedding)의 전제.</strong> 완전정칙이면 우리손 함수들
+  $\{f_\alpha : X \to [0,1]\}_{\alpha \in J}$이 점과 닫힌집합을 전부 분리할 만큼 풍부해서, 이들을 좌표로 묶은
+  $x \mapsto (f_\alpha(x))_{\alpha \in J}$가 큐브 $[0,1]^J$ 속으로의 위상적 묻기가 된다 —
+  가산이면 특히 <strong>힐베르트 큐브</strong> $[0,1]^\omega$로. 이 “$[0,1]^J$에 묻기”가
+  6장 <a class="term" data-term="metrizable">우리손 거리화 정리</a>의 묻기 단계의 뼈대다.</p>
+  <p><strong>정규성과의 결정적 차이:</strong> 완전정칙성은 <strong>부분공간·곱에서 유전된다</strong> —
+  방금 “흔한 오해 ②”에서 정규성$(T_4)$이 유전에 실패하던 그 약점을 완전정칙은 갖지 않는다.
+  그래서 큐브에 묻는 이론의 올바른 무대는 $T_4$가 아니라 $T_{3.5}$(티호노프)다.</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약</h2>
 
 <div class="box box-intuition">
@@ -120,7 +153,8 @@
   — 거리공간에선 셋 동치, $\mathbb{R}_\ell$은 가분인데 제2가산 아님
   ($\Rightarrow$ 거리화 불가!)
   → <a class="term" data-term="separation-axioms">분리공리</a> 사다리:
-  $T_1$(점 닫힘) ⊂ $T_2$(하우스도르프) ⊂ $T_3$(정칙) ⊂ $T_4$(정규);
+  $T_1$(점 닫힘) ⊂ $T_2$(하우스도르프) ⊂ $T_3$(정칙) ⊂
+  <a class="term" data-term="completely-regular">$T_{3.5}$(완전정칙·티호노프)</a> ⊂ $T_4$(정규);
   거리공간·컴팩트 하우스도르프는 $T_4$
   → 정점: <a class="term" data-term="urysohn-lemma">우리손 보조정리</a> —
   정규성에서 연속함수를 창조 ($0$과 $1$을 잇는 등고선), 티체 확장으로 강화
@@ -235,6 +269,36 @@
     <p>(그러므로 우리손 보조정리는 “정규성의 함수적 재정의”다 — 위상 조건과 해석
     조건이 정확히 같은 힘이라는 것. 이런 “위상 ⟷ 함수” 왕복이 다음 장 거리화
     정리의 문법이 된다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §33 연습 유형</span>
+    <span class="difficulty">●●○</span>
+    <span>사다리 채우기</span>
+  </div>
+  <p>정규공간($T_4$)은 완전정칙($T_{3.5}$)임을
+  <a class="term" data-term="urysohn-lemma">우리손 보조정리</a>로 증명하라 —
+  즉 사다리의 화살표 $T_4 \Rightarrow T_{3.5}$를 채워라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>점 $x_0$과 그를 안 담는 닫힌집합 $A$가 주어졌다. $T_1$ 덕분에 $\{x_0\}$은 무엇인가?
+    그러면 $\{x_0\}$과 $A$는 어떤 관계의 두 <strong>닫힌집합</strong>이 되어 — 우리손을 바로 적용할 수 있는가?</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$X$가 정규이므로 $T_1$이고, 따라서 한 점 집합 $\{x_0\}$은 <strong>닫혀 있다</strong>.
+    가정에서 $x_0 \notin A$이므로 $\{x_0\} \cap A = \varnothing$ — 즉 $\{x_0\}$과 $A$는
+    <strong>서로소인 두 닫힌집합</strong>이다.</p>
+    <p>정규성에 우리손 보조정리를 적용하면 연속함수 $f : X \to [0,1]$로</p>
+    $$f(\{x_0\}) = \{0\}, \qquad f(A) = \{1\}$$
+    <p>인 것이 존재한다. 특히 $f(x_0) = 0$, $f(A) = \{1\}$ — 이것이 바로 완전정칙의 정의가
+    요구하는 함수다. 따라서 $X$는 완전정칙. $\blacksquare$</p>
+    <p>(역은 거짓 — 완전정칙이지만 정규가 아닌 공간이 있다 (문크레스 §33). 이로써 $T_{3.5}$가
+    $T_3$과 $T_4$ 사이의 <em>진짜</em> 중간 칸임이 확인된다. 이 문제는 “위상 분리($T_4$)를 우리손으로
+    함수 분리($T_{3.5}$)로 바꾸는” 앞 문제의 반대 방향 — 정규성이라는 강한 위상 가정이 점–닫힌집합
+    수준의 함수 분리를 남김없이 내려 준다는 뜻이다.)</p>
   </details>
 </div>
 

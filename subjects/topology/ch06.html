@@ -17,7 +17,7 @@
 <main class="content">
 
 <div class="chapter-head">
-  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§34, §43, §48)</p>
+  <p class="ch-eyebrow">위상수학 · Munkres, Topology (§34, §43, §45, §46, §48)</p>
   <h1><span class="ch-num">6</span> 거리화와 완비성</h1>
   <p class="ch-source">여정의 완결 — “어떤 위상공간이 사실은 거리공간인가?”(우리손
   거리화 정리), 그리고 해석학의 완비성이 위상의 무대에서 마지막으로 한 번 더
@@ -103,6 +103,57 @@
   일반이었던 것.</p>
 </div>
 
+<h2 id="sec-function-space">3. 함수공간의 위상 — 콤팩트-열림</h2>
+
+<p>2절 끝에서 $C(X, \mathbb{R})$에 <strong>균등거리</strong>
+$\rho(f,g) = \sup_x |f(x) - g(x)|$를 주어 완비성을 논했다. 그런데 이 거리는 $Y$가
+거리공간이고 $X$가 컴팩트일 때만 자연스럽다 — $Y$에 거리가 없거나 $X$가 컴팩트가
+아니면 $\sup$이 무너진다. 거리에 기대지 않고 <em>연속함수들의 공간 자체에 위상</em>을
+얹는 순수 위상적 방법이 콤팩트-열림 위상이다. 이 장의 마지막 승격 — “점을 모으던
+위상”에서 “함수를 모으는 위상”으로.</p>
+
+<div class="box box-def" id="def-compact-open-topology">
+  <span class="box-label">정의 · 콤팩트-열림 위상 <span class="label-en">compact-open topology</span> (문크레스 §46)</span>
+  <p>위상공간 $X, Y$에 대해 연속함수 전체 $C(X, Y)$ 위의 위상을, 다음 꼴의 집합들을
+  <strong>부분기저</strong>로 삼아 정의한다:
+  $$S(K, U) = \{\, f \in C(X, Y) : f(K) \subseteq U \,\}, \qquad
+  K \subseteq X \text{ 컴팩트}, \ U \subseteq Y \text{ 열림.}$$
+  즉 “컴팩트 조각 $K$ 위에서 $f$가 통째로 열린집합 $U$ 안에 들어가는 함수들”을 기본
+  열린조각으로 삼는다 (부분기저 → 유한 교 → 합집합으로 위상이 완성).</p>
+  <p><strong>거리와의 다리:</strong> $Y$가 거리공간이고 $X$가 <strong>컴팩트</strong>이면,
+  콤팩트-열림 위상은 2절의 <strong>균등수렴 위상</strong>(균등거리 $\rho$가 만드는 위상)과
+  <strong>정확히 일치</strong>한다 — 즉 $C(X, \mathbb{R})$의 완비성 이야기가 바로 이 위상
+  위에서 벌어진 일이었다. $X$의 컴팩트성이 없으면 $S(K,U)$는 “컴팩트 집합마다의
+  균등수렴”, 곧 <strong>컴팩트 수렴</strong> 위상을 준다 (점별수렴보다 강하고 균등수렴보다
+  약한 중간 지대).</p>
+  <p><strong>왜 중요한가:</strong> $S(K,U)$의 정의에는 거리가 한 번도 등장하지 않으므로
+  $Y$가 거리화 불가능해도 통한다. $X$가 국소컴팩트 하우스도르프일 때 지수 법칙
+  $C(X \times Z, Y) \cong C(Z,\, C(X,Y))$가 이 위상에서 성립해, <strong>호모토피 이론</strong>
+  (경로·고리 공간 $\Omega Y = C(S^1, Y)$)과 <strong>계산위상</strong>에서 “함수를 점처럼
+  다루는” 표준 무대가 된다.</p>
+</div>
+
+<div class="box box-thm">
+  <span class="box-label">정리 · 아르첼라-아스콜리 정리 <span class="label-en">Arzelà–Ascoli theorem</span> (문크레스 §45)</span>
+  <p><strong>이 정리가 하는 일:</strong> 함수공간에서 “컴팩트한 함수족”이 무엇인지를
+  손에 잡히는 두 조건으로 번역한다 — 함수해석의 하이네-보렐.</p>
+  <p>$X$가 컴팩트일 때, $C(X, \mathbb{R}^n)$(콤팩트-열림 $=$ 균등 위상)의 부분집합
+  $\mathcal{F}$에 대해 다음이 동치이다:</p>
+  <p style="text-align:center;"><strong>$\mathcal{F}$가 상대컴팩트</strong>
+  ($\overline{\mathcal{F}}$가 컴팩트) $\iff$ $\mathcal{F}$가 <strong>점별유계</strong>이고
+  <a class="term" data-term="equicontinuity">동등연속</a>.</p>
+  <p>점별유계: 각 $x$에서 $\{f(x) : f \in \mathcal{F}\}$가 $\mathbb{R}^n$에서 유계.
+  동등연속: 하나의 $\delta$가 족 전체의 <em>모든</em> 함수를 동시에 감당
+  ($d(x, x') \lt \delta \Rightarrow |f(x) - f(x')| \lt \varepsilon$, $\forall f \in \mathcal{F}$).</p>
+  <p><strong>해석학과의 재회:</strong> 이것은 해석학 7장 아스콜리 정리
+  (<a class="term" data-term="equicontinuity">동등연속</a> $+$ 점별유계 $\Rightarrow$
+  균등수렴 부분수열, Rudin 7.25)의 <strong>위상 판</strong>이다 — “수렴 부분수열의
+  존재”(점열컴팩트)를 “상대컴팩트”(덮개컴팩트)로 바꿔 말했을 뿐, 거리공간
+  $C(X, \mathbb{R}^n)$에서는 4장의 세 컴팩트가 동치라 같은 정리다. 동등연속이 함수족의
+  “균등한 떨림 제어”여서, 무한차원 공간에서 유계만으로는 결코 얻지 못하는 컴팩트성을
+  되살린다 — 이것이 미분방정식 해의 존재(페아노)와 정규족(몬텔) 뒤에 숨은 엔진.</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약 — 그리고 위상수학의 끝</h2>
 
 <div class="box box-intuition">
@@ -114,6 +165,11 @@
   → <a class="term" data-term="baire-category">베어 범주 정리</a>:
   완비 공간은 얇은 조각 가산 개로 못 덮는다 — $\mathbb{Q}$의 완비화 불가능,
   $\mathbb{R}$의 비가산성, “전형적 연속함수는 처처 미분불능”.</p>
+  <p><strong>함수공간의 위상:</strong> <a class="term" data-term="compact-open-topology">콤팩트-열림
+  위상</a>은 거리 없이 $C(X,Y)$에 위상을 얹고 ($X$ 컴팩트·$Y$ 거리공간이면 균등거리와
+  일치), <strong>아르첼라-아스콜리</strong>는 그 위에서 “상대컴팩트 $=$ 점별유계 $+$
+  <a class="term" data-term="equicontinuity">동등연속</a>”으로 컴팩트성을 손에 쥐여 준다 —
+  해석학 7장 아스콜리의 위상 판.</p>
   <p><strong>과목 전체 되돌아보기:</strong> 위상 공리(1) → 연속·곱(2) → 연결(3) →
   컴팩트(4) → 가산·분리공리(5) → 거리화·완비성(6). 한 문장으로:
   <em>해석학에서 거리로 했던 모든 일을 열린집합만으로 다시 하고, 마지막에 “언제
@@ -227,6 +283,39 @@
     <p>(3) <strong>위상동형이다.</strong> $h(x) = \tan\left( \pi x - \frac{\pi}{2} \right)$가
     $(0,1) \to \mathbb{R}$의 전단사이고 양방향 연속 (연속 전단사 + 연속 역함수 $\arctan$
     변환). — “유계/완비”가 위상 불변량이 아님을 함께 언급하면 만점 답안.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">Munkres §45–46 연습 유형</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>(1) $X$ 컴팩트, $Y$ 거리공간일 때 $C(X,Y)$의 콤팩트-열림 위상이 균등거리 위상과
+  일치함을, 부분기저 $S(K,U)$와 균등공 $B_\rho(f,\varepsilon)$이 서로를 세분함을 통해
+  개략 설명하라.<br>
+  (2) $C[0,1]$에서 족 $\mathcal{F} = \{f_n(x) = x^n : n \in \mathbb{N}\}$이 균등($=$콤팩트-열림)
+  위상으로 상대컴팩트가 <em>아님</em>을 아르첼라-아스콜리로 판정하라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1) $f(K) \subseteq U$를 $\sup_{x} |f(x) - g(x)|$의 언어로 옮긴다 — $f(X)$가
+    컴팩트임을 쓴다. (2) 동등연속이 깨지는 자리를 $x = 1$ 근처에서 찾는다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>일치.</strong> ($\Leftarrow$) 균등공 $B_\rho(f,\varepsilon)$ 안의 함수를
+    잡으려면, $f(X)$가 컴팩트이므로 유한 개의 컴팩트 조각 $K_i \subseteq X$와 열린집합
+    $U_i = \{y : d(y, f(K_i)) \lt \varepsilon\}$을 잡아 $\bigcap_i S(K_i, U_i)$이
+    $B_\rho(f,\varepsilon)$에 담기게 만들 수 있다. ($\Rightarrow$) 역으로 각 $S(K,U)$는
+    균등거리로 열려 있다 ($f(K)$가 컴팩트라 $U$와의 거리에 여유 $\varepsilon$이 생김).
+    두 위상의 기본 근방계가 서로를 세분하므로 위상이 같다 (상세는 문크레스 §46).</p>
+    <p>(2) <strong>상대컴팩트 아님.</strong> $f_n(x) = x^n$은 점별유계다 ($0 \le x^n \le 1$).
+    그러나 <a class="term" data-term="equicontinuity">동등연속</a>이 깨진다: $f_n(1) = 1$인데
+    임의의 $\delta$에 대해 $f_n(1-\delta) = (1-\delta)^n \to 0$이므로, 충분히 큰 $n$에서
+    $|f_n(1) - f_n(1-\delta)| \to 1$ — 하나의 $\delta$가 족 전체를 감당하지 못한다.
+    동등연속 실패 $\Rightarrow$ 아르첼라-아스콜리에 의해 $\mathcal{F}$는 상대컴팩트가 아니다.
+    (실제로 극한 $\lim_n x^n$이 불연속 계단이라 $C[0,1]$ 밖 — 균등수렴 부분수열이 없다.
+    해석학 7장 점별수렴 대표 반례 $x^n$의 함수공간 판이다.) $\blacksquare$</p>
   </details>
 </div>
 

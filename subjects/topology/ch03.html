@@ -119,6 +119,68 @@
   (점 빼면: 비연결 vs 연결).</p>
 </div>
 
+<h2 id="sec-local">3. 국소연결성 — 성분을 열리게 하는 조건</h2>
+
+<p>연결성분은 항상 닫혀 있지만(보존 법칙 ③), <strong>열려 있지는 않다</strong> —
+$\mathbb{Q}$의 성분은 한 점씩이라 열리지 않는다. 성분이 열리려면 “전체”가 아니라
+“각 점 근처”가 연결이라는 <em>국소</em> 조건이 필요하다. 이 조건은 덤으로, 연결과
+경로연결이 갈라지는 사인 곡선의 병을 정확히 진단해 준다.</p>
+
+<div class="box box-def" id="def-locally-connected">
+  <span class="box-label">정의 · 국소연결·국소경로연결 <span class="label-en">locally (path) connected</span> (문크레스 §25)</span>
+  <p>$X$가 점 $x$에서 <strong>국소연결</strong>이라는 것은, $x$의 <em>임의의</em> 열린 근방
+  $U$마다 $x \in V \subset U$이면서 <strong>연결인 열린</strong> 근방 $V$가 존재한다는 뜻.
+  모든 점에서 그러면 $X$를 국소연결이라 한다. “연결”을 “경로연결”로 바꾸면
+  <strong>국소경로연결</strong>.</p>
+  <p><strong>연결성과는 독립 개념이다</strong> — 각 점의 임의로 작은 근방만 보는 조건이라
+  “전체가 한 덩어리냐”와 논리적으로 무관하다.<br>
+  · $[0,1] \cup [2,3]$: <strong>국소연결이지만 비연결</strong> (두 구간 각각은 국소적으로 멀쩡).<br>
+  · 위상수학자의 사인 곡선 $\bar{S}$: <strong>연결이지만 국소연결이 아니다</strong> —
+  세로 선분 위의 점은 근방을 아무리 줄여도 곡선의 무한 진동 조각들이 딸려 들어와,
+  연결(하물며 경로연결) 근방을 만들 수 없다.</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 국소(경로)연결의 세 열매 (문크레스 §25)</span>
+  <p>① <strong>성분·경로성분이 열린다:</strong> $X$가 국소연결이면 각 연결성분이
+  <strong>열려 있다</strong> (이미 닫혀 있으니 <strong>clopen</strong>). $X$가 국소경로연결이면
+  각 <a class="term" data-term="path-component">경로성분</a>도 열린다.</p>
+  <p>② <strong>성분 = 경로성분:</strong> $X$가 국소경로연결이면 연결성분과 경로성분이
+  완전히 일치한다 — “거친 성분”과 “고운 경로성분”의 차이가 사라진다.</p>
+  <p>③ <strong>연결 + 국소경로연결 $\Rightarrow$ 경로연결.</strong> ②의 특수한 경우다
+  (성분이 하나뿐이면 경로성분도 하나뿐). $\mathbb{R}^n$의 <strong>열린</strong> 연결
+  부분집합, 다양체가 이 정리로 “연결이면 경로연결”을 공짜로 얻는다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 (① → ③) <span class="proof-strategy">— 국소 조건으로 경로성분을 열리게 만들면, 경로성분이 clopen이 되어 연결 공간에서는 하나로 뭉친다.</span></summary>
+  <p><strong>① 경로성분은 열린다.</strong> $C$를 경로성분, $x \in C$라 하자. 국소경로연결이므로
+  $x$는 경로연결인 열린 근방 $V$를 갖는다. $V$의 임의의 점은 $x$와 경로로 이어지므로 $x$와
+  같은 경로성분에 속한다 — 즉 $V \subset C$. 따라서 $C$의 모든 점이 내점이고 $C$는 열림.
+  (국소연결이면 “연결 근방”으로 같은 논증을 해 연결성분이 열린다.)</p>
+  <p><strong>③ 연결 + 국소경로연결 $\Rightarrow$ 경로연결.</strong> 각 경로성분이 열려 있고,
+  나머지 경로성분들의 합집합(서로소 분할의 여집합)도 열려 있으므로 각 경로성분은
+  <strong>clopen</strong>이다. $X$가 연결이면 공집합이 아닌 clopen은 $X$뿐이므로 경로성분은
+  정확히 하나 — $X$ 전체가 한 경로성분, 즉 경로연결이다.</p>
+  <p><strong>반례가 가정을 지킨다:</strong> 위상수학자의 사인 곡선 $\bar{S}$는 연결이지만
+  결론(경로연결)이 거짓이었다. 모순이 아니다 — $\bar{S}$는 <strong>국소경로연결이 아니므로</strong>
+  이 정리의 가정을 애초에 만족하지 않는다. 국소경로연결이 결코 빠질 수 없는 조건임을
+  이 한 예가 증언한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-def" id="def-path-component">
+  <span class="box-label">정의 · 경로성분 <span class="label-en">path component</span></span>
+  <p>“두 점을 경로로 이을 수 있다”는 관계는 동치관계다(상수 경로 = 반사, 역방향 경로 = 대칭,
+  경로 이어붙이기 = 추이 — 붙임 보조정리로 연속). 그 동치류를 <strong>경로성분</strong>이라
+  한다 — 경로연결인 “최대 조각”. 경로연결 $\Rightarrow$ 연결이므로 각 경로성분은 어떤
+  <a class="term" data-term="connected-component">연결성분</a> 안에 통째로 담긴다.</p>
+  <p><strong>성분과 일반적으로 다르다.</strong> 위상수학자의 사인 곡선 $\bar{S}$에서
+  <strong>연결성분은 1개</strong>($\bar{S}$ 자체 — 연결이니까),
+  <strong>경로성분은 2개</strong>(곡선 $S$와 세로 선분 $\{0\} \times [-1, 1]$ — 둘을 잇는
+  경로가 없다). 성분이 경로성분보다 “거칠다”(더 크게 뭉친다). 위 정리 ②처럼 국소경로연결이면
+  이 둘이 맞물려 일치한다.</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약</h2>
 
 <div class="box box-intuition">
@@ -131,7 +193,10 @@
   연결성을, 무한 진동이 경로를 각각 담당)
   → <a class="term" data-term="connected-component">연결성분</a> = 최대 연결 조각,
   개수는 위상 불변량 — “점 빼기”로 $[0,1) \not\approx (0,1)$,
-  $\mathbb{R} \not\approx \mathbb{R}^2$.</p>
+  $\mathbb{R} \not\approx \mathbb{R}^2$
+  → <strong>국소(경로)연결</strong>이면 성분·<a class="term" data-term="path-component">경로성분</a>이
+  열리고(clopen) 서로 일치 — 특히 <strong>연결 + 국소경로연결 ⇒ 경로연결</strong>
+  (사인 곡선은 국소경로연결이 아니라 반례 자격을 유지: 성분 1개 vs 경로성분 2개).</p>
   <p><strong>단 하나만 기억한다면:</strong> 연결성은 계산하는 성질이 아니라
   <em>보존 법칙으로 운반하는</em> 성질이다 — 아는 연결 집합(구간)에서 출발해
   연속상·합집합·폐포로 나른다.</p>
@@ -243,6 +308,34 @@
     <p>(서술의 뼈대: ① 불변량 정의 ② 불변량임의 근거(제한 위상동형) ③ 각 공간에서
     계산 ④ 비교. “유계/길이” 같은 비위상적 성질로 논증하면 감점 — $(-1,1) \approx \mathbb{R}$을
     기억하라.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">개념 확인 3</span>
+    <span class="difficulty">●●○</span>
+    <span>국소연결·경로성분</span>
+  </div>
+  <p>참인가 거짓인가? 참이면 근거, 거짓이면 반례.</p>
+  <p>(1) 국소연결이면 연결이다.<br>
+  (2) 연결이면 국소연결이다.<br>
+  (3) $\mathbb{R}^n$의 열린 연결 부분집합은 경로연결이다.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(1),(2)는 “국소는 각 점 근처, 연결은 전체”라는 독립성을 떠올린다. (3)은 열린집합
+    안의 각 점이 <em>공</em> 근방을 갖고, 공은 볼록이라 경로연결임을 쓴다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(1) <strong>거짓.</strong> $[0,1] \cup [2,3]$은 국소연결이지만 비연결.</p>
+    <p>(2) <strong>거짓.</strong> 위상수학자의 사인 곡선 $\bar{S}$는 연결이지만
+    세로 선분 위의 점에서 국소연결이 아니다.</p>
+    <p>(3) <strong>참.</strong> 열린 $U \subset \mathbb{R}^n$의 각 점 $x$는 $U$에 담긴 공
+    $B(x, r)$을 갖고, 공은 볼록이라 경로연결 — 즉 $U$는 <strong>국소경로연결</strong>이다.
+    거기에 $U$가 연결이라는 가정을 더하면 “연결 + 국소경로연결 $\Rightarrow$ 경로연결”
+    (문크레스 §25)에 의해 $U$는 경로연결. (그래서 해석학·복소해석에서 “열린 연결 = 영역”은
+    자유롭게 경로연결로 취급된다.)</p>
   </details>
 </div>
 

@@ -180,6 +180,138 @@
   숨어 있는 지점).</p>
 </div>
 
+<h2 id="sec-bilinear">5. 쌍선형형식·이차형식과 주축정리</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>스펙트럼 정리는 “대칭행렬은 직교기저로 대각화된다”는 <em>대수</em> 사실이었습니다.
+  이 절은 그 <em>기하</em> 얼굴입니다: 이차식 $2x^2 + 2xy + 2y^2 = 1$ 같은 곡선을
+  적당히 <strong>회전</strong>시키면 $xy$ 교차항이 사라지고
+  $\lambda_1 y_1^2 + \lambda_2 y_2^2 = 1$ 꼴(타원·쌍곡선의 표준형)이 됩니다.
+  그 회전축이 바로 대칭행렬의 고유벡터 — <strong>주축</strong>입니다.</p>
+</div>
+
+<div class="box box-def" id="def-bilinear-quadratic-form">
+  <span class="box-label">정의 · 쌍선형형식과 이차형식 <span class="label-en">bilinear and quadratic forms</span></span>
+  <p>$V$ 위의 함수 $B : V \times V \to F$가 <strong>각 변수마다 따로 선형</strong>이면
+  <strong>쌍선형형식</strong>이라 한다:
+  $B(cx + x', y) = cB(x,y) + B(x',y)$이고 $y$ 자리에서도 마찬가지.
+  $B(y,x) = B(x,y)$이면 <strong>대칭</strong> 쌍선형형식.</p>
+  <p>$V = \mathbb{R}^n$에서 모든 쌍선형형식은 유일한 행렬 $A$로
+  $B(x,y) = x^t A y$ ($A_{ij} = B(e_i, e_j)$)로 표현되고 —
+  <strong>$B$가 대칭 $\iff$ $A$가 대칭행렬</strong>이다.</p>
+  <p>대칭 $B$에서 두 변수를 겹치면 <strong>이차형식</strong>
+  $$q(x) = B(x,x) = x^t A x = \sum_{i,j} A_{ij}\, x_i x_j$$
+  — 변수들의 순수 2차 동차식이다. $A$를 대칭으로 잡으면 유일하고, 거꾸로
+  $B(x,y) = \tfrac12\bigl[q(x+y) - q(x) - q(y)\bigr]$로 $q$에서 $B$를 되찾는다(편극화).</p>
+</div>
+
+<div class="box box-thm"><span class="box-label">정리 · 주축정리 <span class="label-en">principal axis theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 스펙트럼 정리를 이차형식에 그대로 꽂아,
+  모든 실이차형식에서 교차항을 없앤다.</p>
+  <p>실대칭 $A$에 대해 직교행렬 $Q$($Q^tQ = I$)가 있어
+  $Q^tAQ = D = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$(스펙트럼 정리).
+  변수를 $x = Qy$로(직교변환 = 회전·반사) 바꾸면</p>
+  $$q(x) = x^t A x = (Qy)^t A (Qy) = y^t (Q^tAQ)\, y = y^t D y = \sum_{i=1}^n \lambda_i y_i^2.$$
+  <p>교차항 없는 <strong>순수 제곱합</strong>이 된다. 고유벡터 방향($=Q$의 열)이
+  <strong>주축</strong>, 고윳값이 각 축의 계수다. $q(x) = 1$이 그리는 이차곡면의 주축이
+  정확히 이 방향이라 — 원뿔곡선(타원·쌍곡선)의 표준형 변환이 곧 직교대각화다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 원뿔곡선의 주축</span>
+  <p>$q(x,y) = 2x^2 + 2xy + 2y^2$의 행렬은
+  $A = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$
+  (대각 = 제곱항 계수, 비대각 = 교차항 계수의 절반). 앞 절 문제에서 고윳값 $1, 3$,
+  직교 고유벡터 $(1,-1)$·$(1,1)$을 구했다.</p>
+  <p>$Q = \tfrac{1}{\sqrt2}\begin{pmatrix} 1 & 1 \\ -1 & 1 \end{pmatrix}$로 $45^\circ$ 회전하면
+  $q = 1\cdot y_1^2 + 3\cdot y_2^2$. 따라서 $q = 1$은 <strong>타원</strong>
+  (두 계수 모두 양수), 주축 반지름은 $1$과 $1/\sqrt3$이다.</p>
+</div>
+
+<div class="box box-thm" id="thm-sylvester"><span class="box-label">정리 · 실베스터 관성법칙 <span class="label-en">Sylvester's law of inertia</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 이차형식을 대각화하는 방법은 무수히 많은데
+  (직교변환이 아니어도 아무 가역행렬 $P$로 $A \mapsto P^tAP$면 된다 — <strong>합동변환</strong>),
+  그때 나오는 대각성분의 <strong>부호 분포</strong>는 방법과 무관한 불변임을 보증한다.</p>
+  <p>실대칭 $A$를 합동변환 $P^tAP$로 대각화했을 때 대각성분 중
+  양수 $n_+$개, 음수 $n_-$개, $0$이 $n_0$개라 하자. 이 세 수 — <strong>관성지표</strong>,
+  차 $s = n_+ - n_-$를 <strong>부호수(signature)</strong>라 함 — 는 $P$의 선택과 무관한
+  불변량이다 ($n_+ + n_- = \operatorname{rank} A$, 그리고 $n_+$ = $A$의 양의 고윳값 개수).</p>
+  <p>합동으로 부호까지 정규화하면
+  $q \cong y_1^2 + \cdots + y_{n_+}^2 - y_{n_+ + 1}^2 - \cdots - y_{n_+ + n_-}^2$
+  (실베스터 정규형). 판정으로 직결된다: $n_+ = n$이면 <strong>양의 정부호</strong>
+  ($x \neq 0 \Rightarrow q(x) > 0$), $n_- = n$이면 음의 정부호, 양·음이 섞이면
+  <strong>부정부호</strong>다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $n_+$을 “$q$가 양의 정부호가 되는 부분공간의 최대 차원”으로 특징지어 불변임을 본다.</span></summary>
+  <p>$\operatorname{rank} A = n_+ + n_-$는 이미 불변(합동은 rank 보존)이고
+  $n_0 = n - \operatorname{rank} A$도 그러하니, $n_+$만 불변임을 보이면 된다.
+  핵심은 기저를 언급하지 않는 특징이다: $n_+$은
+  <em>$q|_W$가 양의 정부호가 되는 부분공간 $W$의 최대 차원</em>과 같다.</p>
+  <p>($\ge$) 대각화의 양수 성분에 대응하는 $n_+$차원 좌표부분공간 위에서
+  $q = \sum_{i \le n_+} y_i^2 > 0$. ($\le$) $q|_W$가 양의 정부호인 $W$를 잡자.
+  음·영 성분 좌표만 남기는 부분공간 $U$(차원 $n - n_+$) 위에서는 $q \le 0$이다.
+  $W \cap U$에서 $q$는 양수이면서 $\le 0$이므로 $W \cap U = \{0\}$, 따라서
+  $\dim W + \dim U \le n$, 즉 $\dim W \le n_+$.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-svd">6. 특이값 분해</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>스펙트럼 정리는 <strong>정사각 대칭</strong>행렬만의 특권이었습니다. 그런데 세상의
+  행렬은 대부분 직사각이고 대칭도 아니죠. 특이값 분해(SVD)는 “그런
+  <strong>아무 행렬이나</strong> — 심지어 $m \neq n$이어도 — 회전 → 축별 늘이기 → 회전
+  세 동작으로 분해된다”는, 스펙트럼 정리의 만능 확장판입니다. 비결은 대칭이 아닌
+  $A$를 대칭인 $A^*A$로 바꿔 스펙트럼 정리를 빌려 쓰는 것.</p>
+</div>
+
+<div class="box box-thm" id="def-svd"><span class="box-label">정리 · 특이값 분해 <span class="label-en">singular value decomposition</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 임의의 $m \times n$ 행렬을 두 정규직교기저 사이의
+  대각행렬로 만든다 — 모든 행렬의 “표준형”.</p>
+  <p>임의의 $m \times n$ 실(또는 복소)행렬 $A$는</p>
+  $$A = U \Sigma V^{*}$$
+  <p>로 분해된다. 여기서 $U$($m \times m$)와 $V$($n \times n$)는 유니터리(실수면 직교),
+  $\Sigma$($m \times n$)는 대각성분이 $\sigma_1 \ge \sigma_2 \ge \cdots \ge 0$인
+  “대각”행렬이다. 이 $\sigma_i$가 <strong>특이값</strong>으로</p>
+  $$\sigma_i = \sqrt{\lambda_i(A^*A)} \ge 0$$
+  <p>— $A^*A$의 고윳값의 제곱근이다($A^*A$는 자기수반이고 고윳값 $\ge 0$이라 제곱근이
+  실수). $V$의 열은 $A^*A$의 정규직교 고유벡터(<strong>우특이벡터</strong>),
+  $U$의 열은 $AA^*$의 것(<strong>좌특이벡터</strong>)이며 $\sigma_i > 0$인 자리에서
+  $u_i = \tfrac{1}{\sigma_i} A v_i$로 이어진다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 스펙트럼 정리를 $A^*A$에 적용하고, $Av_i$들이 서로 직교임을 계산으로.</span></summary>
+  <p>$A^*A$는 자기수반이므로(스펙트럼 정리) 정규직교 고유기저 $\{v_1, \dots, v_n\}$과
+  고윳값 $\lambda_i \ge 0$을 갖는다(앞 절 문제에서 $\langle A^*Av, v \rangle = \|Av\|^2 \ge 0$).
+  $\lambda_i$를 큰 순서로 두고 $\sigma_i = \sqrt{\lambda_i}$, 그중 $\sigma_1, \dots, \sigma_r > 0$,
+  나머지는 $0$이라 하자($r = \operatorname{rank} A$).</p>
+  <p>$i, j \le r$에서
+  $\langle Av_i, Av_j \rangle = \langle A^*Av_i, v_j \rangle = \lambda_i \langle v_i, v_j \rangle = \lambda_i \delta_{ij}$
+  — 즉 $\{Av_i\}$는 서로 직교이고 $\|Av_i\| = \sigma_i$. 따라서
+  $u_i = Av_i / \sigma_i$ ($i \le r$)는 정규직교족이며, 이를 $\{u_1, \dots, u_m\}$으로 확장한다.
+  $i > r$이면 $\|Av_i\|^2 = \lambda_i = 0$이라 $Av_i = 0$이다.</p>
+  <p>이제 모든 $v_j$에서 $Av_j = \sigma_j u_j$($j > r$이면 양변이 $0$)이므로
+  $AV = U\Sigma$, 곧 $A = U\Sigma V^*$($V$가 유니터리라 $V^{-1} = V^*$). $\blacksquare$</p>
+</details>
+
+<div class="box box-intuition">
+  <span class="box-label">SVD가 한눈에 말해 주는 것</span>
+  <p><strong>계수·네 부분공간:</strong> $0$이 아닌 특이값의 개수가
+  $r = \operatorname{rank} A$. $\{u_1, \dots, u_r\}$은 열공간,
+  $\{u_{r+1}, \dots, u_m\}$은 좌영공간($= \ker A^*$), $\{v_1, \dots, v_r\}$은 행공간,
+  $\{v_{r+1}, \dots, v_n\}$은 <strong>영공간</strong>의 정규직교기저 — 4대 부분공간이
+  한 분해에서 전부 튀어나온다.</p>
+  <p><strong>유사역행렬·최소제곱:</strong> $\Sigma$에서 $0$ 아닌 특이값만 뒤집어 전치한
+  $\Sigma^+$로 $A^+ = V \Sigma^+ U^*$가 <strong>무어–펜로즈 유사역행렬</strong>이다.
+  $Ax = b$의 최소제곱·최소노름 해가 정확히 $x = A^+ b$ — 3절 최선 근사(정사영)의
+  행렬판 완성이다.</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약</h2>
 
 <div class="box box-intuition">

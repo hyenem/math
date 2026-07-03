@@ -215,6 +215,81 @@ $$\left| \int_a^b f \, dx \right| \le \int_a^b |f| \, dx$$
   치환적분(6.19)도 같은 방식으로 기본정리에서 나온다.)</p>
 </div>
 
+<h2 id="sec-stieltjes">4. 리만-스틸체스 적분 — 구간마다 무게를 주기</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>지금까지 각 소구간의 “폭”은 언제나 $\Delta x_i = x_i - x_{i-1}$, 즉 길이였습니다.
+  스틸체스의 아이디어는 이 폭을 <strong>증가함수 $\alpha$가 정한 무게</strong>
+  $\Delta\alpha_i = \alpha(x_i) - \alpha(x_{i-1})$로 바꾸는 것뿐이에요. $\alpha$가 가파른 곳은
+  “무겁게”, 평평한 곳은 “가볍게” 세는 저울입니다. $\alpha(x) = x$이면 모든 구간의 무게가
+  곧 길이라서 보통 리만 적분으로 되돌아오죠. 이 작은 일반화가 두 세계를 한 지붕 아래
+  넣습니다 — <em>연속적인 적분</em>과 <em>이산적인 급수</em>.</p>
+</div>
+
+<div class="box box-def" id="def-stieltjes-integral">
+  <span class="box-label">정의 6.1–6.2 (일반형) · 리만-스틸체스 적분 <span class="label-en">Riemann–Stieltjes integral</span></span>
+  <p>$\alpha$가 $[a, b]$에서 단조증가하고 $f$가 유계라 하자. 분할 $P$에 대해
+  $\Delta\alpha_i = \alpha(x_i) - \alpha(x_{i-1}) \ge 0$로 놓고 (정의 6.1의 $M_i, m_i$를 그대로 써서)
+  <strong>스틸체스 상합·하합</strong>을 정의한다:</p>
+  $$U(P, f, \alpha) = \sum_{i=1}^{n} M_i\, \Delta\alpha_i, \qquad L(P, f, \alpha) = \sum_{i=1}^{n} m_i\, \Delta\alpha_i$$
+  <p>상적분 $\inf_P U(P, f, \alpha)$와 하적분 $\sup_P L(P, f, \alpha)$가 일치하면 $f$를 $\alpha$에 대해
+  <strong>리만-스틸체스 적분가능</strong>($f \in \mathscr{R}(\alpha)$)하다 하고, 공통값을
+  $\int_a^b f\, d\alpha$로 쓴다.</p>
+  <p>리만 판정법(6.6)부터 존재 정리(6.8–6.10)와 선형성(6.12)까지 앞 절의 골격이
+  $\Delta x_i \to \Delta\alpha_i$ 교체만으로 그대로 성립한다 —
+  <strong>$\alpha(x) = x$가 바로 리만 적분</strong>이다. 남은 질문은 하나: 이 일반화로
+  <em>새로</em> 계산할 수 있는 것이 무엇인가?</p>
+</div>
+
+<div class="box box-thm" id="thm-6-17"><span class="box-label">정리 6.17 · 환원정리 <span class="label-en">reduction to a Riemann integral</span></span>
+  <p><strong>이 정리가 하는 일:</strong> $\alpha$가 매끄러우면 스틸체스 적분이 보통 리만 적분으로
+  “환원”된다 — 새 기호 $\int f\, d\alpha$를 실제로 계산하는 공식.</p>
+  <p>$\alpha$가 $[a, b]$에서 단조증가하고 $\alpha' \in \mathscr{R}$이라 하자. 유계함수 $f$에 대해
+  $f \in \mathscr{R}(\alpha) \iff f\alpha' \in \mathscr{R}$이고, 이때</p>
+  $$\int_a^b f\, d\alpha = \int_a^b f(x)\, \alpha'(x)\, dx$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 소구간마다 MVT로 $\Delta\alpha_i = \alpha'(t_i)\,\Delta x_i$. 그러면 스틸체스 합이 $f\alpha'$의 리만 합과 같아지고, $\alpha' \in \mathscr{R}$이 둘 사이의 오차를 흡수한다.</span></summary>
+  <p>분할 $P$의 각 소구간 $[x_{i-1}, x_i]$에 <a class="term" data-term="mean-value-theorem">MVT</a>를 적용하면
+  $\Delta\alpha_i = \alpha(x_i) - \alpha(x_{i-1}) = \alpha'(t_i)\, \Delta x_i$인 $t_i \in (x_{i-1}, x_i)$가 있다.
+  각 소구간에서 임의의 점 $s_i$를 골라 만든 두 합을 비교하자:</p>
+  $$\sum_i f(s_i)\, \Delta\alpha_i = \sum_i f(s_i)\, \alpha'(t_i)\, \Delta x_i, \qquad
+    \sum_i f(s_i)\, \alpha'(s_i)\, \Delta x_i$$
+  <p>차이는 $\sum_i f(s_i)\big[\alpha'(t_i) - \alpha'(s_i)\big]\Delta x_i$이다. $\alpha' \in \mathscr{R}$이므로
+  리만 판정법(6.6)으로 분할을 잘게 하면 $\alpha'$의 소구간 진폭의 가중합
+  $\sum_i \big(\sup \alpha' - \inf \alpha'\big)\Delta x_i$이 임의로 작아지고, $|f| \le M$이라 두 합의 차이는
+  $M\varepsilon$ 이하로 눌린다. 따라서 $f$의 스틸체스 합과 $f\alpha'$의 리만 합은 같은 극한에 붙으며,
+  한쪽이 적분가능이면 다른 쪽도 그렇고 두 적분값이 일치한다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-6-15"><span class="box-label">정리 6.15–6.16 · 계단함수와 급수 <span class="label-en">step functions and series</span></span>
+  <p><strong>이 정리가 하는 일:</strong> $\alpha$가 점프하는 계단함수이면 적분이 <strong>합</strong>이 된다 —
+  급수가 사실은 특별한 스틸체스 적분임을 드러낸다.</p>
+  <p><strong>단위계단함수</strong> $I(t) = 0\ (t \lt 0)$, $I(t) = 1\ (t \ge 0)$을 쓰자. $a \lt s \lt b$이고
+  $f$가 $s$에서 연속일 때, $\alpha(x) = I(x - s)$이면</p>
+  $$\int_a^b f\, d\alpha = f(s)$$
+  <p>($s$가 든 소구간에서만 $\Delta\alpha = 1$, 나머지는 $0$이라 상·하합이 그 구간의 $M_i, m_i$로 줄고,
+  세분하면 연속성에 의해 둘 다 $f(s)$로 붙는다.) 점프들을 <strong>겹치면</strong> — 서로 다른 점
+  $\{s_k\} \subset (a, b)$에서 각각 크기 $c_k \ge 0$의 점프를 갖는
+  $\alpha(x) = \sum_k c_k\, I(x - s_k)$ ($\sum_k c_k \lt \infty$) — 연속함수 $f$에 대해 적분은
+  그 점들에서의 값의 가중합이 된다:</p>
+  $$\int_a^b f\, d\alpha = \sum_k c_k\, f(s_k)$$
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">왜 중요한가 — 적분이 급수를 통일한다</span>
+  <p>일반적인 $\alpha$는 “매끄러운 부분 $+$ 점프 부분”으로 나뉩니다. 환원정리(6.17)가 매끄러운 부분을
+  $\int f\alpha'\, dx$로, 계단정리(6.15–6.16)가 점프 부분을 $\sum_k c_k f(s_k)$로 처리하니,
+  하나의 기호 $\int f\, d\alpha$ 안에서 <em>연속적인 적분과 이산적인 급수가 그냥 더해집니다</em>:</p>
+  $$\int_a^b f\, d\alpha = \underbrace{\int_a^b f(x)\alpha'(x)\, dx}_{\text{연속 — 밀도}} + \underbrace{\sum_k c_k\, f(s_k)}_{\text{점프 — 급수}}$$
+  <p>확률론의 “연속분포 $+$ 이산분포”, 물리의 “밀도 $+$ 점질량”이 전부 이 한 식의 얼굴입니다.
+  스틸체스 적분이 단순한 일반화가 아니라 <strong>통일</strong>인 이유예요 — 적분 기호 하나가
+  넓이와 합을 동시에 셉니다.</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약</h2>
 
 <div class="box box-intuition">
@@ -392,6 +467,33 @@ $$\left| \int_a^b f \, dx \right| \le \int_a^b |f| \, dx$$
     <p>(응용: $f(x) = \sin\frac{1}{x}$ ($x \neq 0$), $f(0) = 0$은 각 $[\delta, 1]$에서
     연속이라 적분가능하므로, 이 문제에 의해 $[0,1]$에서 적분가능 — $0$에서의 격렬한
     진동도 “폭이 좁으면” 적분을 방해하지 못한다.)</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-basic">스틸체스 계산</span>
+    <span class="difficulty">●●○</span>
+    <span>환원정리 · 계단함수</span>
+  </div>
+  <p>다음 리만-스틸체스 적분을 계산하고, 근거가 되는 정리를 밝혀라.</p>
+  <p>(a) $\displaystyle\int_0^1 x^2\, d(x^3)$<br>
+  (b) $[0, 3]$에서 $\alpha(x) = I(x - 1) + 2\,I(x - 2)$
+  (단, $I(t) = 0\ (t \lt 0)$, $I(t) = 1\ (t \ge 0)$)일 때 $\displaystyle\int_0^3 x^2\, d\alpha$</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>(a) 환원정리(6.17): $\alpha(x) = x^3$은 미분가능하고 $\alpha' = 3x^2$이 연속이니 보통 리만 적분으로 환원.<br>
+    (b) 계단함수(6.15–6.16): $\alpha$의 점프는 $s = 1$ (크기 $1$)과 $s = 2$ (크기 $2$)에서만 일어난다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>(a) $\alpha' = 3x^2 \in \mathscr{R}$이므로 환원정리에 의해</p>
+    $$\int_0^1 x^2\, d(x^3) = \int_0^1 x^2 \cdot 3x^2\, dx = 3\int_0^1 x^4\, dx = \frac{3}{5}$$
+    <p>(b) $\alpha$는 순수 계단함수로 점프가 $s = 1$에서 $c_1 = 1$, $s = 2$에서 $c_2 = 2$뿐이다.
+    $f(x) = x^2$은 두 점에서 연속이므로 정리 6.15–6.16으로</p>
+    $$\int_0^3 x^2\, d\alpha = c_1 f(1) + c_2 f(2) = 1 \cdot 1 + 2 \cdot 4 = 9$$
+    <p>(두 결과를 더하면 “매끄러운 부분 $+$ 점프”형 $\alpha$에 대한 계산이 된다 —
+    적분 하나가 리만 적분과 급수를 동시에 처리한다. $\blacksquare$)</p>
   </details>
 </div>
 

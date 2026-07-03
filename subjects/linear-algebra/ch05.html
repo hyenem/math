@@ -164,6 +164,100 @@
   대각화 가능 경우 + 연속성/조밀성 논증(또는 고전적 수반행렬 논증)으로 간다.</p>
 </div>
 
+<h2 id="sec-invariant">4. T-불변부분공간 — 표준형으로 가는 문</h2>
+
+<p>3절 끝의 두 실패 사례(고유벡터 부족, 체가 좁음)에서 봤듯, 공간 전체를 대각으로
+쪼갤 수 없는 변환이 있습니다. 그럴 때의 차선책은 <strong>공간을 $T$가 밖으로 새지
+않는 조각들로 나누고</strong>, 각 조각 위에서 $T$를 따로 들여다보는 것입니다. 그
+“$T$가 보존하는 조각”이 불변부분공간이고, 7장의 모든 표준형(조던 형식)이 바로 이
+아이디어의 완성입니다.</p>
+
+<div class="box box-def" id="def-invariant-subspace">
+  <span class="box-label">정의 · T-불변부분공간 <span class="label-en">T-invariant subspace</span></span>
+  <p>$T : V \to V$의 부분공간 $W$가 <strong>$T$-불변</strong>이라는 것은</p>
+  <p style="text-align:center;">$T(W) \subseteq W$ &nbsp;&nbsp;(즉 $w \in W \Rightarrow T(w) \in W$)</p>
+  <p>를 뜻한다. 대표 예 — 자명한 $\{0\}$과 $V$; 핵 $N(T) = \ker T$와 상
+  $R(T) = \operatorname{im} T$; 각 고유공간 $E_\lambda = N(T - \lambda I)$ (방향까지
+  보존); 그리고 <strong>$T$-순환부분공간</strong>
+  $\langle v \rangle = \operatorname{span}\{v, Tv, T^2 v, \dots\}$ — $v$에서 출발해
+  $T$를 계속 먹여 얻는, $v$를 담는 가장 작은 불변부분공간.</p>
+</div>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>$W$가 불변이라는 건 “$W$ 안에서 시작하면 $T$를 아무리 걸어도 $W$를 못
+  벗어난다”는 뜻입니다. 고유공간은 그 극단 — 벗어나기는커녕 방향조차 안 바뀌죠.
+  순환부분공간 $\langle v \rangle$는 반대 극단으로, $v, Tv, T^2 v, \dots$가 서로
+  독립인 동안 계속 커지다가 어느 순간 $T^k v$가 앞엣것들의 결합으로 “닫히면서”
+  멈춥니다. 그 닫히는 관계식이 곧 이 조각의 특성다항식이 됩니다.</p>
+</div>
+
+<div class="box box-thm" id="thm-5-21"><span class="box-label">정리 5.21 · 제한연산자와 블록 삼각화</span>
+  <p><strong>이 정리가 하는 일:</strong> 불변부분공간 하나가 특성다항식을 인수로
+  쪼갠다 — 큰 문제를 조각별 작은 문제로 나누는 근거.</p>
+  <p>$W$가 $T$-불변이면 제한 $T|_W : W \to W$, $w \mapsto T(w)$는 (불변성 덕분에
+  치역이 $W$ 안에 있어) 그 자체로 <strong>$W$의 선형연산자</strong>다. $W$의 기저
+  $\beta_1$을 $V$의 기저 $\beta$로 확장하면</p>
+  $$[T]_\beta = \begin{pmatrix} B_1 &amp; B_2 \\ O &amp; B_3 \end{pmatrix}, \qquad B_1 = [T|_W]_{\beta_1}$$
+  <p>블록 <strong>상</strong>삼각이 되고, 따라서
+  $f_T(t) = \det(B_1 - tI)\,\det(B_3 - tI)$ — <strong>$T|_W$의 특성다항식이 $T$의
+  특성다항식을 나눈다.</strong> 더 나아가 <span id="thm-5-25"></span>$V = W_1 \oplus
+  \cdots \oplus W_k$가 <em>전부</em> $T$-불변이면 (정리 5.25) 적절한 기저에서
+  $[T]_\beta = B_1 \oplus \cdots \oplus B_k$ 블록 <strong>대각</strong>이고
+  $f_T = f_{T|_{W_1}} \cdots f_{T|_{W_k}}$. 대각화는 이 분해가 1차원 고유공간
+  $k = n$개까지 극한으로 간 특수한 경우일 뿐이다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 확장 기저에서 $T(w) \in W$이므로 왼쪽 아래 블록이 $O$. 블록 상삼각 행렬식은 대각 블록 행렬식의 곱(4장).</span></summary>
+  <p>$\beta_1 = \{v_1, \dots, v_m\}$을 $\beta = \{v_1, \dots, v_m, v_{m+1}, \dots, v_n\}$으로
+  확장하자. $j \le m$이면 $T(v_j) \in W$이므로 $T(v_j)$를 $\beta$로 쓴 좌표는 아래쪽
+  ($m{+}1$행부터)이 전부 $0$ — 그래서 $[T]_\beta$의 왼쪽 아래 블록이 $O$이고
+  왼쪽 위 $m \times m$ 블록이 정확히 $[T|_W]_{\beta_1} = B_1$이다.</p>
+  <p>블록 상삼각 행렬의 행렬식은 대각 블록들의 곱이므로
+  $\det([T]_\beta - tI) = \det(B_1 - tI)\det(B_3 - tI)$. 좌변은 $f_T$, 첫 인수는
+  $f_{T|_W}$ — 나눗셈이 증명됐다. 직합의 경우 확장 대신 각 $W_i$의 기저를 이어
+  붙이면 교차 블록이 모두 $O$가 되어 블록 대각.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-5-22"><span class="box-label">정리 5.22 · T-순환부분공간과 동반행렬</span>
+  <p><strong>이 정리가 하는 일:</strong> 순환부분공간의 특성다항식을 “닫히는
+  관계식”에서 즉시 읽어 준다 — 케일리-해밀턴과 7장 표준형의 씨앗.</p>
+  <p>$v \neq 0$이 생성하는 $T$-순환부분공간 $W = \langle v \rangle$의 차원이 $k$이면
+  $\{v, Tv, \dots, T^{k-1} v\}$가 $W$의 기저이고, 유일한 관계</p>
+  $$T^k v = -\big(a_0 v + a_1 Tv + \cdots + a_{k-1} T^{k-1} v\big)$$
+  <p>에서 $T|_W$의 행렬은 <strong>동반행렬</strong>이 되어 그 특성다항식은
+  $(-1)^k\big(t^k + a_{k-1} t^{k-1} + \cdots + a_0\big)$이다. 이 관계식을 다시 쓰면
+  $g(T)\,v = 0$ ($g$ = $T|_W$의 특성다항식) — <strong>$v$는 자기 순환부분공간의
+  특성다항식에 의해 소멸된다.</strong></p>
+  <p>이것이 <a class="term" data-term="cayley-hamilton">케일리-해밀턴</a>의 진짜
+  증명 골격이다: 임의의 $v$를 $\langle v \rangle$에 가두면 $g(T)v = 0$이고,
+  정리 5.21로 $g \mid f_T$이므로 $f_T(T)v = 0$이 모든 $v$에서 성립한다. 그리고
+  공간을 이런 순환 조각들로 최대한 잘게 쪼개는 것이 7장 조던·유리(rational)
+  표준형의 전 과정이다.</p>
+</div>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 회전행렬을 순환부분공간으로 다시 보기</span>
+  <p>2절에서 실수 대각화에 실패했던
+  $A = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}$ ($f(t) = t^2 + 1$,
+  $\mathbb{R}$에서 기약). $\mathbb{R}$ 위에는 고유벡터가 없어 $\{0\}$과
+  $\mathbb{R}^2$ 말고는 $T$-불변부분공간이 아예 없다 (1차원 불변부분공간이 곧
+  고유공간인데 그게 없으니까).</p>
+  <p>$v = e_1$에서 순환시키면 $Tv = e_2$, $T^2 v = T e_2 = -e_1 = -v$. 그래서
+  $\langle e_1 \rangle = \operatorname{span}\{e_1, e_2\} = \mathbb{R}^2$ 전체가 하나의
+  순환부분공간이고, 닫히는 관계 $T^2 v + v = 0$이 특성다항식 $t^2 + 1$을 그대로
+  재현한다(동반행렬). 더는 쪼갤 수 없는(indecomposable) 한 덩어리 — 이런 순환
+  블록이 실수 위 표준형(유리 표준형)의 기본 벽돌이고, $\mathbb{C}$로 넘어가면
+  $\pm i$의 1차원 고유공간 둘로 마침내 쪼개진다.</p>
+</div>
+
+<p>정리하면 <a class="term" data-term="invariant-subspace">불변부분공간</a>은
+대각화가 안 되는 변환을 다루는 언어다: 특성다항식을 인수로 나누고(정리 5.21),
+순환 조각의 특성다항식을 관계식에서 읽어(정리 5.22) 케일리-해밀턴을 증명하며,
+그 조각들로의 분해가 7장 조던 형식으로 완성된다.</p>
+
 <h2 id="sec-summary">한 장 요약</h2>
 
 <div class="box box-intuition">

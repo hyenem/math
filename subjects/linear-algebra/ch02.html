@@ -172,7 +172,87 @@
   이것이 행렬표현의 존재 이유다.</p>
 </div>
 
-<h2 id="sec-iso">4. 동형사상 — “사실상 같은 공간”</h2>
+<h2 id="sec-dual">4. 쌍대공간 — 선형범함수의 세계</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>벡터를 “숫자 하나”로 보내는 선형함수 — <strong>선형범함수</strong> — 만 모아도
+  그 자체로 또 하나의 벡터공간이 됩니다. 이것이 <strong>쌍대공간</strong> $V^*$입니다.
+  좌표를 읽어 내는 함수, 적분 $f \mapsto \int_0^1 f$, 대각합(trace) 같은 것들이 여기 삽니다.
+  놀라운 사실: 유한차원에서는 $V$와 $V^*$가 차원이 같아 동형이지만 —
+  그 동형은 기저를 골라야만 만들어집니다. <strong>“기저 없이” 저절로 생기는 동형은
+  한 단계 더 간 $V \cong V^{**}$에서 비로소 나옵니다.</strong></p>
+</div>
+
+<div class="box box-def" id="def-dual-space">
+  <span class="box-label">정의 · 쌍대공간과 쌍대기저 <span class="label-en">dual space, dual basis</span></span>
+  <p>체 $F$ 위 벡터공간 $V$에서 스칼라 체 $F$($= F^1$)로 가는 선형변환 $f : V \to F$를
+  <strong>선형범함수</strong>(linear functional)라 한다. 이들 전체가 이루는 공간</p>
+  $$V^* = \mathcal{L}(V, F)$$
+  <p>을 $V$의 <strong>쌍대공간</strong>이라 한다 ($\mathcal{L}(V, W)$가 벡터공간이므로
+  $V^*$도 벡터공간이다). $V$가 순서기저 $\beta = \{v_1, \dots, v_n\}$을 가지면,</p>
+  $$f_i(v_j) = \delta_{ij} \quad (\text{크로네커 델타 — 같으면 } 1,\ \text{다르면 } 0)$$
+  <p>로 정의되는 $f_1, \dots, f_n \in V^*$이 $V^*$의 기저를 이룬다. 이것을 $\beta$의
+  <strong>쌍대기저</strong> $\beta^* = \{f_1, \dots, f_n\}$이라 한다.
+  — $f_i$는 “$i$번째 좌표를 읽어 내는 함수”다: $x = \sum_j a_j v_j$이면 $f_i(x) = a_i$.</p>
+</div>
+
+<div class="box box-thm" id="thm-2-24"><span class="box-label">정리 2.24 · 쌍대기저 <span class="label-en">dual basis</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 쌍대공간이 원래 공간과 정확히 같은 크기임을 확정한다.</p>
+  <p>$V$가 유한차원이고 $\beta = \{v_1, \dots, v_n\}$이 순서기저이면, 위의
+  $\beta^* = \{f_1, \dots, f_n\}$은 $V^*$의 순서기저이다. 따라서</p>
+  $$\dim V^* = \dim V.$$
+  <p>그리고 임의의 $f \in V^*$는 $f = \sum_{i=1}^{n} f(v_i)\, f_i$로 유일하게 전개된다 —
+  “기저에서의 값 $f(v_i)$가 곧 $\beta^*$-좌표”다 (정리 2.6의 쌍대 버전).</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— $\dim V^* = \dim\mathcal{L}(V,F) = (\dim V)(\dim F) = n$이므로, $\beta^*$이 $n$개짜리 생성집합임만 보이면 끝난다.</span></summary>
+  <p>임의의 $f \in V^*$와 $x = \sum_j a_j v_j$에 대해
+  $\left( \sum_i f(v_i) f_i \right)(x) = \sum_i f(v_i)\, f_i(x) = \sum_i f(v_i)\, a_i
+  = f\!\left( \sum_i a_i v_i \right) = f(x)$이므로 $f = \sum_i f(v_i) f_i$ —
+  즉 $\beta^*$이 $V^*$를 생성한다. $|\beta^*| = n = \dim V^*$이므로 (1장: 차원과
+  같은 크기의 생성집합은 자동으로 기저) $\beta^*$은 기저다.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-example">
+  <span class="box-label">예제 · 쌍대기저 계산</span>
+  <p>$V = \mathbb{R}^2$, 기저 $\beta = \{(2,1),\ (3,1)\}$. 쌍대기저 $\{f_1, f_2\}$는
+  $x = a_1 (2,1) + a_2 (3,1)$의 계수 $a_i$를 뽑아내는 함수다. $x = (x_1, x_2)$를
+  풀면 $a_1 = -x_1 + 3x_2$, $a_2 = x_1 - 2x_2$이므로</p>
+  $$f_1(x_1, x_2) = -x_1 + 3x_2, \qquad f_2(x_1, x_2) = x_1 - 2x_2.$$
+  <p>확인: $f_1(2,1) = -2 + 3 = 1$, $f_1(3,1) = -3 + 3 = 0$ ✓ (일반으로 $f_i(v_j) = \delta_{ij}$).
+  요령: 쌍대기저의 계수는 곧 “기저를 열로 세운 행렬의 역행렬의 <em>행</em>”이다.</p>
+</div>
+
+<div class="box box-thm" id="thm-2-25"><span class="box-label">정리 2.25 · 전치사상 = 행렬의 전치 <span class="label-en">transpose of a linear transformation</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 행렬의 전치 연산에 좌표 없는 뜻을 준다 —
+  “행과 열을 맞바꾸기”가 실은 “쌍대공간 쪽으로 화살표를 뒤집기”다.</p>
+  <p>선형변환 $T : V \to W$에 대해 <strong>전치사상</strong>(transpose)
+  $T^t : W^* \to V^*$를</p>
+  $$T^t(g) = g \circ T \qquad (g \in W^*)$$
+  <p>로 정의한다 (범함수 $g$를 $T$로 끌어당김 — 화살표가 반대로 간다). 이것은 선형이고,
+  유한차원에서 순서기저 $\beta, \gamma$와 그 쌍대기저 $\beta^*, \gamma^*$에 대해</p>
+  $$[T^t]_{\gamma^*}^{\beta^*} = \left( [T]_\beta^\gamma \right)^t.$$
+  <p>행렬표현의 전치가 정확히 전치사상의 표현이다 — 4장에서 만날 $\det A^t = \det A$가
+  “왜 하필 성립하는가”의 개념적 뿌리가 여기 있다.</p>
+</div>
+
+<div class="box box-thm" id="thm-2-26"><span class="box-label">정리 2.26 · 이중쌍대와 자연동형 <span class="label-en">double dual, natural isomorphism</span></span>
+  <p><strong>이 정리가 하는 일:</strong> $V$와 그 “쌍대의 쌍대” $V^{**}$를 기저 선택 없이
+  같은 것으로 본다.</p>
+  <p>각 $x \in V$마다 “범함수에서 값매기기” $\hat{x} \in V^{**}$를 $\hat{x}(f) = f(x)$로
+  정의하자. 그러면 사상 $\psi : V \to V^{**}$, $\psi(x) = \hat{x}$는 선형이고,
+  $V$가 유한차원이면 <strong>동형사상</strong>이다:</p>
+  $$V \cong V^{**}.$$
+  <p>핵심 차이: $V \cong V^*$도 (차원이 같으니) 성립하지만 그 동형은 <em>기저를 골라야</em>
+  만들어진다. 반면 $\psi$는 <strong>아무 선택 없이 정의된다</strong> — 이런 것을
+  <strong>자연동형</strong>(natural isomorphism)이라 하고, “$V$와 $V^{**}$는 사실상
+  같은 물건”이라 말할 자격을 준다.</p>
+</div>
+
+<h2 id="sec-iso">5. 동형사상 — “사실상 같은 공간”</h2>
 
 <div class="box box-def" id="def-isomorphism">
   <span class="box-label">정의 · 동형사상 <span class="label-en">isomorphism</span></span>

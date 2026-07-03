@@ -1222,5 +1222,104 @@ window.MATH_TERMS = Object.assign(window.MATH_TERMS || {}, {
     "en": "lifting theorem",
     "short": "피복 $p:E\\to B$ 위로 경로·호모토피가 시작점을 정하면 유일하게 올라간다(유일성엔 정의역 연결 필요). 감는 수 $=$ 올림의 끝점이라는 원리로 $\\pi_1(S^1)\\cong\\mathbb{Z}$를 증명. 일반 사상 $f:Y\\to B$는 $f_*\\pi_1(Y)\\subseteq p_*\\pi_1(E)$일 때만 올림이 존재.",
     "href": "subjects/topology/ch08.html#def-lifting-theorem"
+  },
+
+  /* ---------- 완전성 보강 (기존 챕터 추가 정의) ---------- */
+
+  "number-e": {
+    "ko": "자연상수 e",
+    "en": "the number e",
+    "short": "$e=\\sum_{n=0}^{\\infty}\\frac{1}{n!}$로 정의하는 상수. 극한 정의 $\\lim_{n\\to\\infty}(1+\\frac1n)^n=e$와 동치이며 무리수다 ($2\\lt e\\lt 3$).",
+    "href": "subjects/analysis/ch03.html#def-number-e"
+  },
+  "cauchy-product": {
+    "ko": "급수의 코시 곱",
+    "en": "Cauchy product",
+    "short": "$\\sum a_n$과 $\\sum b_n$의 곱으로 정의하는 급수 $\\sum c_n$, $c_n=\\sum_{k=0}^{n}a_k b_{n-k}$. 한쪽이 절대수렴하면 $\\sum c_n=(\\sum a_n)(\\sum b_n)$ (메르텐스). 지수법칙 $E(z)E(w)=E(z+w)$의 근거.",
+    "href": "subjects/analysis/ch03.html#def-cauchy-product"
+  },
+  "stieltjes-integral": {
+    "ko": "리만-스틸체스 적분",
+    "en": "Riemann–Stieltjes integral",
+    "short": "각 소구간의 폭을 길이 대신 증가함수의 증분 $\\Delta\\alpha_i=\\alpha(x_i)-\\alpha(x_{i-1})$로 잰 적분 $\\int f\\,d\\alpha$. $\\alpha(x)=x$이면 리만 적분(환원정리 $\\int f\\alpha'\\,dx$), $\\alpha$가 계단함수면 급수 $\\sum c_k f(s_k)$ — 적분과 급수를 통일.",
+    "href": "subjects/analysis/ch06.html#def-stieltjes-integral"
+  },
+  "subbasis": {
+    "ko": "부분기저",
+    "en": "subbasis",
+    "short": "합집합이 $X$인 부분집합족 $\\mathcal{S}$ — 조건은 덮음 하나뿐. $\\mathcal{S}$의 유한 교집합들이 기저를 이루고, 그 기저가 생성하는 위상이 '$\\mathcal{S}$가 생성하는 가장 성긴 위상'. 무한곱 위상을 사영 $\\pi_i$의 원상들로 정의할 때 필수.",
+    "href": "subjects/topology/ch01.html#def-subbasis"
+  },
+  "locally-connected": {
+    "ko": "국소연결·국소경로연결",
+    "en": "locally connected",
+    "short": "각 점이 임의의 열린 근방 안에 연결(경로연결) 열린 근방을 갖는 것 — 연결성과 독립($[0,1]\\cup[2,3]$은 국소연결·비연결, 사인 곡선은 연결·비국소연결). 국소연결이면 성분이 열리고, 연결 + 국소경로연결 $\\Rightarrow$ 경로연결.",
+    "href": "subjects/topology/ch03.html#def-locally-connected"
+  },
+  "path-component": {
+    "ko": "경로성분",
+    "en": "path component",
+    "short": "'경로로 이을 수 있다'는 동치관계의 동치류 — 경로연결인 최대 조각. 각 경로성분은 어떤 연결성분에 담기며 일반적으로 성분과 다르다(위상수학자의 사인 곡선: 성분 1개, 경로성분 2개). 국소경로연결이면 일치.",
+    "href": "subjects/topology/ch03.html#def-path-component"
+  },
+  "locally-compact": {
+    "ko": "국소컴팩트 공간",
+    "en": "locally compact space",
+    "short": "각 점이 컴팩트 근방을 갖는(어떤 컴팩트 집합의 내부에 들어가는) 공간. 컴팩트 ⇒ 국소컴팩트지만 역은 거짓. $\\mathbb{R}^n$은 국소컴팩트, $\\mathbb{Q}$·무한차원 노름공간은 아니다. 국소컴팩트 하우스도르프는 정칙.",
+    "href": "subjects/topology/ch04.html#def-locally-compact"
+  },
+  "one-point-compactification": {
+    "ko": "일점컴팩트화",
+    "en": "one-point compactification",
+    "short": "$X$에 무한점 $\\infty$ 하나를 더한 $X^{+}=X\\cup\\{\\infty\\}$. $X$가 국소컴팩트 하우스도르프 $\\iff X^{+}$가 컴팩트 하우스도르프이고 $X$가 그 열린 부분공간. $(\\mathbb{R}^n)^{+}=S^n$, $\\mathbb{C}^{+}=$ 리만구.",
+    "href": "subjects/topology/ch04.html#def-one-point-compactification"
+  },
+  "completely-regular": {
+    "ko": "완전정칙 공간",
+    "en": "completely regular space",
+    "short": "$T_1$이면서 점 $x_0$과 그를 안 담는 닫힌집합 $A$를 연속함수 $f:X\\to[0,1]$ ($f(x_0)=0$, $f(A)=\\{1\\}$)로 가르는 공간(티호노프 공간). 사다리에서 $T_3\\subsetneq T_{3.5}\\subsetneq T_4$. 부분공간·곱에 유전되어 $[0,1]^J$ 묻기의 전제.",
+    "href": "subjects/topology/ch05.html#def-completely-regular"
+  },
+  "compact-open-topology": {
+    "ko": "콤팩트-열림 위상",
+    "en": "compact-open topology",
+    "short": "$C(X,Y)$ 위의 위상: 부분기저 $S(K,U)=\\{f:f(K)\\subseteq U\\}$ ($K$ 컴팩트, $U$ 열림). $X$ 컴팩트·$Y$ 거리공간이면 균등수렴 위상과 일치, 일반적으로는 컴팩트 수렴 위상. 호모토피·계산위상의 함수공간 표준 무대.",
+    "href": "subjects/topology/ch06.html#def-compact-open-topology"
+  },
+  "direct-sum": {
+    "ko": "직합 (부분공간)",
+    "en": "direct sum",
+    "short": "$W_1+W_2$는 두 부분공간을 담는 최소 부분공간; 직합 $W_1\\oplus W_2$는 $W_1\\cap W_2=\\{0\\}$일 때 — 표현 $v=w_1+w_2$가 유일하고 두 기저의 합집합이 기저가 되며 $\\dim(W_1\\oplus W_2)=\\dim W_1+\\dim W_2$.",
+    "href": "subjects/linear-algebra/ch01.html#def-direct-sum"
+  },
+  "dual-space": {
+    "ko": "쌍대공간",
+    "en": "dual space",
+    "short": "선형범함수 전체 $V^*=\\mathcal{L}(V,F)$. 유한차원에서 $\\dim V^*=\\dim V$이고 쌍대기저 $\\{f_i\\}$($f_i(e_j)=\\delta_{ij}$)를 가지며, 전치사상 $T^t:W^*\\to V^*$와 자연동형 $V\\cong V^{**}$(이중쌍대)를 준다.",
+    "href": "subjects/linear-algebra/ch02.html#def-dual-space"
+  },
+  "invariant-subspace": {
+    "ko": "불변부분공간",
+    "en": "invariant subspace",
+    "short": "$T(W)\\subseteq W$인 부분공간 — 제한 $T|_W$가 다시 선형연산자. $\\{0\\},V,N(T),R(T)$, 고유공간, $T$-순환부분공간 $\\langle v\\rangle=\\operatorname{span}\\{v,Tv,T^2v,\\dots\\}$가 예. 블록삼각·블록대각 표현과 조던/유리표준형의 토대.",
+    "href": "subjects/linear-algebra/ch05.html#def-invariant-subspace"
+  },
+  "bilinear-quadratic-form": {
+    "ko": "쌍선형·이차형식",
+    "en": "bilinear and quadratic forms",
+    "short": "쌍선형형식 $B(x,y)$(각 변수에 선형); 대칭이면 대칭행렬로 $B(x,y)=x^TAy$, 이차형식 $q(x)=x^TAx$. 실대칭은 직교대각화되어 $q=\\sum\\lambda_i y_i^2$(주축정리); 관성지표(부호수)는 기저와 무관하게 불변(실베스터 관성법칙).",
+    "href": "subjects/linear-algebra/ch06.html#def-bilinear-quadratic-form"
+  },
+  "svd": {
+    "ko": "특이값 분해",
+    "en": "singular value decomposition",
+    "short": "임의의 $m\\times n$ 행렬 $A=U\\Sigma V^*$ — $U,V$ 유니터리, $\\Sigma$ 대각(특이값 $\\sigma_i=\\sqrt{\\lambda_i(A^*A)}\\ge0$). 스펙트럼 정리를 $A^*A$에 적용해 유도하며 계수·상/영공간·최소제곱·유사역행렬을 통일하는 만능 분해.",
+    "href": "subjects/linear-algebra/ch06.html#def-svd"
+  },
+  "rational-canonical-form": {
+    "ko": "유리표준형",
+    "en": "rational canonical form",
+    "short": "임의의 체 위 모든 선형연산자를 불변인자 $p_1\\mid p_2\\mid\\cdots\\mid p_k$의 동반행렬 블록대각으로 유일하게 나타낸 표준형. 특성다항식이 분해 안 돼도 존재하며 조던형은 특수경우. 최소다항식 $=p_k$ — 유한생성 아벨군 기본정리의 선형대수 쌍둥이.",
+    "href": "subjects/linear-algebra/ch07.html#def-rational-canonical-form"
   }
 });

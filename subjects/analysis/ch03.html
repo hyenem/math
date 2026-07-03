@@ -387,6 +387,137 @@
   급수를 다룰 때 “절대수렴인가?”를 먼저 묻는 습관이 여기서 나옵니다.</p>
 </div>
 
+<h2 id="sec-number-e">6. 수 $e$ — 급수로 태어난 상수</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>고등학교에서 $e$는 $\lim_{n\to\infty}\left(1+\frac1n\right)^n$으로 배웠지만, 이 극한이
+  <em>존재한다</em>는 사실부터가 증명거리입니다. 해석학은 훨씬 다루기 쉬운 급수
+  $\sum \frac1{n!}$로 $e$를 <strong>정의</strong>한 뒤, 두 얼굴이 같은 수임을 정리로 확인합니다.
+  급수 쪽은 수렴이 순식간에 보이고(비판정법), 항이 팩토리얼로 급히 작아져 무리수 증명까지
+  손에 들어와요.</p>
+</div>
+
+<div class="box box-def" id="def-number-e">
+  <span class="box-label">정의 3.30 · 수 $e$ <span class="label-en">the number e</span></span>
+  <p><strong>자연상수</strong> $e$를 다음 급수로 정의한다:</p>
+  $$e = \sum_{n=0}^{\infty} \frac{1}{n!} = 1 + 1 + \frac{1}{2!} + \frac{1}{3!} + \cdots$$
+  <p>이 급수는 수렴한다: $n \ge 1$이면 $\frac{1}{n!} \le \frac{1}{2^{n-1}}$이라 기하급수
+  $\sum 2^{-(n-1)}$과 비교하면 $e \lt 3$이고, 명백히 $e \gt 2$. (비판정법으로도 즉시:
+  $\frac{a_{n+1}}{a_n} = \frac{1}{n+1} \to 0 \lt 1$.) 실제 값은 $e = 2.71828\ldots$.</p>
+</div>
+
+<div class="box box-thm" id="thm-3-31"><span class="box-label">정리 3.31 · 두 정의의 동치</span>
+  <p><strong>이 정리가 하는 일:</strong> 급수 정의와 고전적 극한 정의가 같은 수임을 잇는다.</p>
+  $$\lim_{n\to\infty} \left( 1 + \frac{1}{n} \right)^{n} = \sum_{k=0}^{\infty} \frac{1}{k!} = e$$
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 이항정리로 $t_n=(1+\frac1n)^n$을 전개해 $s_n=\sum_{k\le n}\frac1{k!}$과 비교. 위로는 항마다 $t_n\le s_n$, 아래로는 $n\to\infty$를 먼저 보낸 뒤 항의 개수를 늘려 죄어든다. 상극한·하극한이 실전 투입.</span></summary>
+  <p>$s_n = \sum_{k=0}^{n} \frac{1}{k!}$, $t_n = \left(1+\frac1n\right)^n$이라 하자. 이항정리로</p>
+  $$t_n = \sum_{k=0}^{n} \binom{n}{k}\frac{1}{n^k}
+        = \sum_{k=0}^{n} \frac{1}{k!}\Big(1-\tfrac1n\Big)\Big(1-\tfrac2n\Big)\cdots\Big(1-\tfrac{k-1}{n}\Big).$$
+  <p>모든 괄호가 $\le 1$이므로 $t_n \le s_n$, 따라서 $\limsup_{n\to\infty} t_n \le e$.</p>
+  <p>거꾸로 $m$을 고정하고 $n \ge m$이면, 위 합에서 앞의 $m+1$개 항만 남겨도 (나머지가 음이 아니므로)</p>
+  $$t_n \ge \sum_{k=0}^{m} \frac{1}{k!}\Big(1-\tfrac1n\Big)\cdots\Big(1-\tfrac{k-1}{n}\Big).$$
+  <p>$m$을 고정한 채 $n\to\infty$를 보내면 각 괄호가 $1$로 가므로
+  $\liminf_{n\to\infty} t_n \ge \sum_{k=0}^{m}\frac1{k!} = s_m$. 이제 $m\to\infty$를 보내면
+  $\liminf t_n \ge e$. 두 부등식을 합치면 $\limsup t_n \le e \le \liminf t_n$이고
+  언제나 $\liminf \le \limsup$이므로 셋이 같다 — 즉 $\lim t_n = e$ (정리 3.17: 상극한 $=$ 하극한 $\iff$ 수렴).</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-thm" id="thm-3-32"><span class="box-label">정리 3.32 · $e$는 무리수</span>
+  <p><strong>이 정리가 하는 일:</strong> 급수 정의의 배당금 — 꼬리가 팩토리얼로 작아지는 덕에
+  무리수 증명이 반 페이지로 끝난다.</p>
+  <p>$e$는 무리수다.</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 꼬리 $e-s_n$을 기하급수로 눌러 $\frac1{n!\,n}$ 미만임을 얻고, 만약 $e=p/q$이면 $q!(e-s_q)$가 $0$과 $1$ 사이의 정수가 되어 모순.</span></summary>
+  <p>$s_n = \sum_{k=0}^n \frac{1}{k!}$이라 하자. 꼬리를 기하급수로 누르면</p>
+  $$e - s_n = \sum_{k=n+1}^{\infty}\frac{1}{k!}
+    = \frac{1}{(n+1)!}\Big(1 + \tfrac{1}{n+2} + \tfrac{1}{(n+2)(n+3)} + \cdots\Big)
+    \lt \frac{1}{(n+1)!}\sum_{j=0}^{\infty}\frac{1}{(n+1)^j} = \frac{1}{n!\,n}.$$
+  <p>따라서 모든 $n$에 대해 $0 \lt e - s_n \lt \dfrac{1}{n!\,n}$.</p>
+  <p>이제 $e = \dfrac{p}{q}$ ($p, q$는 자연수)라고 가정하자. $n = q$로 두면</p>
+  $$0 \lt q!\,(e - s_q) \lt \frac{1}{q} \le 1.$$
+  <p>그런데 $q!\,e = p\,(q-1)!$은 정수이고, $q!\,s_q = \sum_{k=0}^{q} \frac{q!}{k!}$도 정수이므로
+  $q!\,(e - s_q)$는 정수다 — $0$과 $1$ 사이에 낀 정수라는 모순. 그러므로 $e$는 무리수다.</p>
+  <p class="qed"></p>
+</details>
+
+<h2 id="sec-cauchy-product">7. 급수의 곱 — 코시 곱과 메르텐스 정리</h2>
+
+<div class="box box-intuition">
+  <span class="box-label">쉽게 말하면</span>
+  <p>두 급수 $\sum a_n$, $\sum b_n$을 곱하면 무엇이 될까요? 유한합이라면 모든 $a_i b_j$를 더하면
+  그만이지만, 무한합에서는 <strong>어떤 순서로 더하느냐</strong>가 다시 문제입니다(5절의 교훈).
+  거듭제곱을 곱할 때처럼 “같은 차수끼리” 모으는 자연스러운 묶음이 <strong>코시 곱</strong>이에요:
+  $\big(\sum a_n x^n\big)\big(\sum b_n x^n\big)$을 전개하면 $x^n$ 항의 계수가 $\sum_{k} a_k b_{n-k}$로
+  모입니다. 이 곱이 실제로 두 합의 곱과 같아지려면 — 재배열 때와 똑같이 — 적어도 한쪽이
+  절대수렴이면 충분합니다.</p>
+</div>
+
+<div class="box box-def" id="def-cauchy-product">
+  <span class="box-label">정의 3.48 · 급수의 코시 곱 <span class="label-en">Cauchy product</span></span>
+  <p>두 급수 $\sum_{n=0}^\infty a_n$과 $\sum_{n=0}^\infty b_n$의 <strong>코시 곱</strong>은
+  다음 항으로 이루어진 급수 $\sum_{n=0}^\infty c_n$이다:</p>
+  $$c_n = \sum_{k=0}^{n} a_k\, b_{n-k} = a_0 b_n + a_1 b_{n-1} + \cdots + a_n b_0.$$
+  <p>멱급수 $\big(\sum a_n x^n\big)\big(\sum b_n x^n\big)$을 전개했을 때 $x^n$의 계수가 바로 $c_n$이다 —
+  이것이 코시 곱을 “옳은 곱”으로 삼는 이유다.</p>
+</div>
+
+<div class="box box-warn">
+  <span class="box-label">흔한 오해</span>
+  <p>“두 급수가 수렴하기만 하면 코시 곱도 그 곱으로 수렴한다” — <strong>거짓입니다.</strong>
+  $a_n = b_n = \dfrac{(-1)^n}{\sqrt{n+1}}$이면 $\sum a_n$, $\sum b_n$은 (조건)수렴하지만,
+  $c_n = (-1)^n \sum_{k=0}^n \frac{1}{\sqrt{(k+1)(n-k+1)}}$에서 각 분모가
+  $\le \frac{n}{2}+1$이라 $|c_n| \ge \frac{2(n+1)}{n+2} \ge 1$ — 즉 $c_n \not\to 0$이라 코시 곱은
+  발산합니다. 절대수렴이라는 안전장치가 필요한 이유예요.</p>
+</div>
+
+<div class="box box-thm" id="thm-3-50"><span class="box-label">정리 3.50 · 메르텐스 정리 <span class="label-en">Mertens' theorem</span></span>
+  <p><strong>이 정리가 하는 일:</strong> 한쪽만 절대수렴이면 코시 곱이 “곱의 값”으로 수렴함을 보증한다.</p>
+  <p>$\sum a_n$이 $A$로 <strong>절대수렴</strong>하고 $\sum b_n$이 $B$로 (그냥) 수렴하면, 코시 곱
+  $\sum c_n$은 $AB$로 수렴한다:</p>
+  $$\left( \sum_{n=0}^{\infty} a_n \right)\left( \sum_{n=0}^{\infty} b_n \right)
+    = \sum_{n=0}^{\infty} c_n, \qquad c_n = \sum_{k=0}^{n} a_k b_{n-k}.$$
+  <p>(둘 다 절대수렴이면 곱급수의 모든 재배열이 $AB$로 수렴한다 — 정리 3.55의 힘.)</p>
+</div>
+
+<details class="proof">
+  <summary>증명 <span class="proof-strategy">— 전략: 부분합 $C_n$을 $A_n B + \gamma_n$ 꼴로 정리하고, 오차항 $\gamma_n = \sum a_k\beta_{n-k}$ ($\beta_m = B_m - B$)이 $0$으로 감을 $\sum|a_n|=\alpha$로 통제한다.</span></summary>
+  <p>$A_n = \sum_{k=0}^n a_k$, $B_n = \sum_{k=0}^n b_k$, $C_n = \sum_{k=0}^n c_k$,
+  $\beta_n = B_n - B$라 하자. 항을 $a_k$끼리 묶어 재정렬하면</p>
+  $$C_n = a_0 B_n + a_1 B_{n-1} + \cdots + a_n B_0
+        = A_n B + \underbrace{(a_0\beta_n + a_1\beta_{n-1} + \cdots + a_n\beta_0)}_{\gamma_n}.$$
+  <p>$A_n \to A$이므로 $A_n B \to AB$. 남은 것은 $\gamma_n \to 0$뿐이다.
+  $\alpha = \sum_{n=0}^\infty |a_n| \lt \infty$ (절대수렴)이라 하자. $\varepsilon \gt 0$이 주어지면
+  $\beta_n \to 0$이므로 $N$을 잡아 $m \ge N$이면 $|\beta_m| \le \varepsilon$이 되게 한다. 그러면 $n \gt N$일 때
+  $\gamma_n$을 두 덩어리로 가른다:</p>
+  $$|\gamma_n| \le \underbrace{\big|\beta_0 a_n + \cdots + \beta_N a_{n-N}\big|}_{(\mathrm{I})}
+              + \underbrace{\big|\beta_{N+1} a_{n-N-1} + \cdots + \beta_n a_0\big|}_{(\mathrm{II})}.$$
+  <p>$(\mathrm{II})$의 $\beta$ 첨자는 모두 $\ge N+1$이라 $|\beta| \le \varepsilon$이므로
+  $(\mathrm{II}) \le \varepsilon\big(|a_0| + \cdots + |a_{n-N-1}|\big) \le \varepsilon\alpha$.
+  $(\mathrm{I})$은 $\beta_0, \dots, \beta_N$이 고정된 유한 개의 항이고
+  $a_n, a_{n-1}, \dots \to 0$ ($\sum a_n$ 수렴 $\Rightarrow a_n\to0$)이므로 $n\to\infty$일 때
+  $(\mathrm{I}) \to 0$. 따라서 $\limsup_{n\to\infty} |\gamma_n| \le \varepsilon\alpha$.
+  $\varepsilon$이 임의였으므로 $\gamma_n \to 0$, 즉 $C_n \to AB$.</p>
+  <p class="qed"></p>
+</details>
+
+<div class="box box-intuition">
+  <span class="box-label">8장으로 가는 다리</span>
+  <p>지수함수를 급수 $E(z) = \sum_{n=0}^\infty \dfrac{z^n}{n!}$로 정의하면 ($E$는 모든 $z$에서
+  절대수렴), $E(z)$와 $E(w)$의 코시 곱의 $n$째 항은 이항정리로</p>
+  $$c_n = \sum_{k=0}^{n} \frac{z^k}{k!}\cdot\frac{w^{n-k}}{(n-k)!}
+        = \frac{1}{n!}\sum_{k=0}^{n}\binom{n}{k} z^k w^{n-k} = \frac{(z+w)^n}{n!}.$$
+  <p>한쪽(사실 양쪽)이 절대수렴하므로 메르텐스 정리(정리 3.50)로
+  $E(z)E(w) = \sum c_n = E(z+w)$ — 지수법칙 $e^{z+w}=e^z e^w$의 정체가 바로 코시 곱입니다.
+  (<a class="term" data-term="exp-function">지수함수</a>의 모든 대수 성질이 여기서 출발해요 — 8장에서 본격적으로.)</p>
+</div>
+
 <h2 id="sec-summary">한 장 요약</h2>
 
 <div class="box box-intuition">
@@ -400,7 +531,11 @@
   → <a class="term" data-term="limsup-liminf">상극한·하극한</a>: 항상 존재하는 극한의 대용품
   → <a class="term" data-term="series">급수</a> = 부분합의 극한, 판정법 무기고
   (비교 → 기하·$p$-급수를 기준으로 → 근·비판정법은 $\limsup$으로 작동, 교대급수는 라이프니츠)
-  → <a class="term" data-term="absolute-convergence">절대수렴</a>만이 재배열을 견딘다 (리만).</p>
+  → <a class="term" data-term="absolute-convergence">절대수렴</a>만이 재배열을 견딘다 (리만)
+  → <a class="term" data-term="number-e">수 $e$</a>는 급수 $\sum \frac1{n!}$로 정의되고
+  ($\lim(1+\frac1n)^n$과 동치, 무리수)
+  → 두 급수의 <a class="term" data-term="cauchy-product">코시 곱</a>은 한쪽이 절대수렴이면
+  곱으로 수렴한다 (메르텐스 → 8장 지수법칙 $E(z)E(w)=E(z+w)$).</p>
   <p><strong>판정법 사용 순서 요령:</strong> ① $a_n \to 0$인가 (아니면 즉시 발산)
   ② 양항이면 비교/$p$-급수/응집 ③ 팩토리얼·지수 꼴이면 비판정 ④ $n$제곱 꼴이면 근판정
   ⑤ 부호 교대면 라이프니츠 ⑥ 마지막에 절대수렴 여부로 안정성 확인.</p>
@@ -562,6 +697,31 @@
     $p = \frac{1}{2} \le 1$인 $p$-급수라 발산 (정리 3.28).
     그러므로 수렴하지만 절대수렴은 아니다 — 조건수렴이며, 리만 정리(3.54)에 의해
     재배열로 합을 바꿀 수 있는 급수다.</p>
+  </details>
+</div>
+
+<div class="problem">
+  <div class="problem-meta">
+    <span class="badge badge-book">코시 곱 · Rudin 3장 기반</span>
+    <span class="difficulty">●●○</span>
+  </div>
+  <p>$|x| \lt 1$일 때 기하급수 $\displaystyle\sum_{n=0}^{\infty} x^n$과 <em>자기 자신</em>의 코시 곱을
+  계산하여 $\displaystyle\sum_{n=0}^{\infty}(n+1)x^n = \frac{1}{(1-x)^2}$임을 보여라.
+  메르텐스 정리의 적용이 정당한 이유도 밝혀라.</p>
+  <details class="hint">
+    <summary>힌트</summary>
+    <p>$a_n = b_n = x^n$이면 $c_n = \sum_{k=0}^n x^k\, x^{n-k}$. 합 안의 각 항이 모두 $x^n$으로
+    같음에 주목하라. 기하급수는 $|x|\lt1$에서 절대수렴한다.</p>
+  </details>
+  <details class="solution">
+    <summary>풀이</summary>
+    <p>$c_n = \sum_{k=0}^{n} x^k \cdot x^{n-k} = \sum_{k=0}^{n} x^n = (n+1)\,x^n$이다.
+    기하급수 $\sum x^n$은 $|x|\lt1$에서 절대수렴하므로 (한쪽이 절대수렴이면 충분) 메르텐스 정리
+    (정리 3.50)가 적용되어 코시 곱은 두 합의 곱으로 수렴한다:</p>
+    $$\sum_{n=0}^{\infty}(n+1)x^n = \left(\sum_{n=0}^{\infty} x^n\right)^{2}
+      = \left(\frac{1}{1-x}\right)^{2} = \frac{1}{(1-x)^2}.$$
+    <p>(정리 3.26의 기하급수 합을 제곱한 것 — 코시 곱이 “같은 차수의 계수를 모으는 곱셈”임을
+    보여주는 표본이다.)</p>
   </details>
 </div>
 
